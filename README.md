@@ -9,3 +9,10 @@
 - Responsable Repository : Christophe C
 - Forkers : Alexandre S, Gabriel B, David C
 
+## Quick Start
+
+Clone this repo
+
+```console
+ # git clone https://github.com/christophechevalier/MaderaMMB.git
+```
