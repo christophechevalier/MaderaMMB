@@ -86,6 +86,9 @@
     <Compile Include="View_Crtl\Authentification.xaml.cs">
       <DependentUpon>Authentification.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View_Crtl\ParametresPlan.xaml.cs">
+      <DependentUpon>ParametresPlan.xaml</DependentUpon>
+    </Compile>
     <Page Include="View_Crtl\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -96,6 +99,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View_Crtl\Authentification.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View_Crtl\ParametresPlan.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
