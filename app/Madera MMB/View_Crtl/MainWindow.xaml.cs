@@ -29,14 +29,9 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
 
 
-
-            //Logo.Source = new BitmapImage(new Uri("Lib/logo_madera.png", UriKind.Absolute));
-
-            //Mainframe.Source = new Uri("View_Crtl/Authentification.xaml", UriKind.Absolute);
-
             Mainframe.Content = new View_Crtl.Authentification();
 
-            //MainFrame.NavigationService.Navigate(new View_Crtl.Authentification());
+
         }
 
     }
