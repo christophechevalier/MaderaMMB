@@ -12,17 +12,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Markup;
 
 namespace Madera_MMB.View_Crtl
 {
     /// <summary>
     /// Logique d'interaction pour Page1.xaml
     /// </summary>
-    public partial class Page1 : Page
+    public partial class Authentification : Page, IComponentConnector
     {
-        public Page1()
+        public Authentification()
         {
             InitializeComponent();
+
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
