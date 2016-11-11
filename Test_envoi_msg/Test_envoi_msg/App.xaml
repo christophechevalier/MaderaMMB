@@ -1,4 +1,4 @@
-﻿<Application x:Class="Madera_MMB.App"
+﻿<Application x:Class="Test_envoi_msg.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml">
