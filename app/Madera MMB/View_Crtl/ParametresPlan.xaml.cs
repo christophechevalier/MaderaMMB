@@ -24,5 +24,11 @@ namespace Madera_MMB.View_Crtl
         {
             InitializeComponent();
         }
+
+        private void cp_Button_Click(object sender, RoutedEventArgs e)
+        {
+            forme.Visibility = System.Windows.Visibility.Visible;
+            taille.Visibility = System.Windows.Visibility.Visible;
+        }
     }
 }

@@ -7,7 +7,114 @@
       d:DesignHeight="300" d:DesignWidth="300"
 	Title="ParametresPlan">
 
-    <Grid>
-        
+    <!-- Début Déclaration Template-->
+    <Page.Resources>
+        <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png"/>
+    </Page.Resources>
+
+    <Grid x:Name="MainGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.25*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="0.25*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2" Margin="-15,0,-15,0"/>
+
+        <Grid x:Name="ImgContainer"  Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.30*" />
+                <ColumnDefinition Width="0.50*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Image Name="Logo" Grid.Column="0" Source="{StaticResource Logo}" Grid.Row="0" Width="{Binding ActualHeight, ElementName=rowDefinition0}" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10"/>
+            <Label Content="Paramètres du plan : " FontWeight="ExtraBold" FontSize="25" Grid.Column="1" HorizontalAlignment="Left" Height="50" VerticalAlignment="Center" Width="{Binding ActualHeight, ElementName=rowDefinition0}" Margin="10,10,10,10"/>
+
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="0" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.25*"/>
+            </Grid.ColumnDefinitions>
+
+        </Grid>
+
+        <!-- Début Déclaration Vue-->
+        <Grid x:Name="Params" Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=columnDefinition1}" Height="{Binding ActualHeight, ElementName=rowDefinition1}" Grid.RowSpan="2" Grid.ColumnSpan="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.30*"/>
+                <RowDefinition Height="0.30*"/>
+                <RowDefinition Height="0.30*"/>
+                <RowDefinition Height="0.30*"/>
+                <RowDefinition Height="0.30*"/>
+                <RowDefinition Height="0.30*"/>
+                <RowDefinition Height="0.30*"/>
+                <RowDefinition Height="0.30*"/>
+                <RowDefinition Height="0.30*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.25*"/>
+                <ColumnDefinition Width="0.30*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Margin="15,0,0,0" Grid.Row="1" Content="* Nom du plan : " FontWeight="Bold" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Label Margin="15,0,0,0" Grid.Row="2" Content="* Coupe de principe : " FontWeight="Bold" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Label Margin="15,0,0,0" Grid.Row="3" Content="* Type de couverture : " FontWeight="Bold" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Label Margin="15,0,0,0" Grid.Row="4" Content="* Type de plancher  : " FontWeight="Bold" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Label Margin="15,0,0,0" Grid.Row="5" Content="* Choix d'une gamme  : " FontWeight="Bold" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+            <Label Grid.Row="10" Content="* Champs obligatoires " FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+
+            <TextBox Text="Plan 5 Base Carré " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1"  TextWrapping="WrapWithOverflow" VerticalAlignment="Center" Width="200"/>
+            <Button Content=" Choisir une coupe " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="2"   VerticalAlignment="Center" Click="cp_Button_Click" />
+            <Button Content=" Choisir une couverture " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="3"   VerticalAlignment="Center" />
+            <Button Content=" Choisir un plancher " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="4"   VerticalAlignment="Center" />
+            <Button Content=" Choisir une gamme " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="5"   VerticalAlignment="Center" />
+
+            <GroupBox x:Name="forme" Visibility="Hidden" Header="Sélection d'une forme"  Grid.Column="2" Grid.Row="1" Grid.RowSpan="4"
+                      Height="{Binding ActualHeight, ElementName=rowDefinition1}"
+                      Margin="25,0,25,0">
+                <WrapPanel >
+                    <Button
+                        Background="White"
+                        Margin="50 50 50 50"
+                        Width="150"
+                        Height="180">
+                        <StackPanel>
+                            <Image Source="../Lib/carre.png" VerticalAlignment="Top" Height="80" Width="100"/>
+                            <TextBlock HorizontalAlignment="Center" Text="Carré" VerticalAlignment="Bottom"/>
+                        </StackPanel>
+                    </Button>
+                </WrapPanel>
+            </GroupBox>
+
+            <GroupBox x:Name="taille" Visibility="Hidden" Header="Sélection d'une taille"  Grid.Column="2" Grid.Row="6" Grid.RowSpan="4"
+                      Height="{Binding ActualHeight, ElementName=rowDefinition1}"
+                      Margin="25,0,25,0">
+                <WrapPanel>
+                    
+                </WrapPanel>
+            </GroupBox>
+
+
+
+
+        </Grid>
+        <!-- Fin Déclaration Vue -->
+
     </Grid>
+    <!-- Fin Déclaration Template -->
 </Page>
