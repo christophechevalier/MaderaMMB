@@ -34,6 +34,7 @@ namespace Madera_MMB.View_Crtl
             initialize_cp_wrappers();
             initialize_couv_wrapper();
             initialize_planch_wrapper();
+            initialize_gamme_wrapper();
         }
 
         #region Initialisation des conteneurs
@@ -231,6 +232,58 @@ namespace Madera_MMB.View_Crtl
                 wrapplanch.Children.Add(Unplanch);
             }
         }
+        private void initialize_gamme_wrapper()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                ToggleButton Unegam = new ToggleButton();
+                Unegam.Background = Brushes.White;
+                Unegam.Width = 150;
+                Unegam.Height = 170;
+                Thickness margin = Unegam.Margin;
+                margin.Left = 30;
+                margin.Right = 30;
+                margin.Bottom = 10;
+                margin.Top = 10;
+                Unegam.Margin = margin;
+
+                Image img = new Image();
+                img.Width = 150;
+                img.Height = 130;
+                img.VerticalAlignment = VerticalAlignment.Top;
+                string source = "../Lib/bois.png";
+                Uri imageUri = new Uri(source, UriKind.Relative);
+                BitmapImage imageBitmap = new BitmapImage(imageUri);
+                img.Source = imageBitmap;
+
+                TextBlock tb = new TextBlock();
+                tb.Text = "Tout en bois";
+                tb.VerticalAlignment = VerticalAlignment.Bottom;
+                tb.HorizontalAlignment = HorizontalAlignment.Center;
+                tb.Height = 40;
+
+                StackPanel sp = new StackPanel();
+                sp.Children.Add(img);
+                sp.Children.Add(tb);
+
+                Unegam.Content = sp;
+
+                Unegam.Click += delegate(object sender, RoutedEventArgs e)
+                {
+                    ToggleButton active = sender as ToggleButton;
+                    foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wrapgamme))
+                    {
+                        tgbt.IsChecked = false;
+
+                    }
+                    plancher = tb.Text;
+                    active.IsChecked = true;
+                    btnchoix4.Content = plancher;
+                };
+
+                wrapgamme.Children.Add(Unegam);
+            }
+        }
         #endregion
 
         #region listeners
@@ -286,6 +339,23 @@ namespace Madera_MMB.View_Crtl
             btn.IsChecked = true;
 
         }
+        private void gamme_Button_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleButton btn = sender as ToggleButton;
+            if (gam.Visibility == System.Windows.Visibility.Hidden)
+            {
+                clearAll();
+                gam.Visibility = System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                clearAll();
+            }
+
+            disableButtons();
+            btn.IsChecked = true;
+
+        }
         #endregion
 
         #region Tools
@@ -321,6 +391,7 @@ namespace Madera_MMB.View_Crtl
             taille.Visibility = Visibility.Hidden;
             couv.Visibility = Visibility.Hidden;
             planch.Visibility = Visibility.Hidden;
+            gam.Visibility = Visibility.Hidden;
         }
         #endregion
 

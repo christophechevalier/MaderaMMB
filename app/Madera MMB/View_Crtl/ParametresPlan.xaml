@@ -37,7 +37,9 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Image Name="Logo" Grid.Column="0" Source="{StaticResource Logo}" Grid.Row="0" Width="{Binding ActualHeight, ElementName=rowDefinition0}" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10"/>
-            <Label Content="Paramètres du plan : " FontWeight="ExtraBold" FontSize="15" Grid.Column="1" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="{Binding ActualHeight, ElementName=rowDefinition0}" Margin="10,10,10,10"/>
+            <Viewbox Grid.Column="1" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="{Binding ActualHeight, ElementName=rowDefinition0}" Margin="10,10,10,10">
+                <Label Content="Paramètres du plan : " FontWeight="ExtraBold" FontSize="10"/>
+            </Viewbox>
         </Grid>
 
         <Grid Grid.Row="2" Grid.Column="0" >
@@ -55,13 +57,26 @@
 
             <Border  BorderBrush="Black" BorderThickness="2" Grid.Column="0" Grid.RowSpan="2" Margin="-5,0,0,0"/>
 
-            <Button HorizontalAlignment="Stretch" Grid.Row="0" Height="{Binding ActualHeight, ElementName=columnDefinition0}" Width="{Binding ActualWidth, ElementName=rowDefinition0}" VerticalAlignment="Stretch" Margin="10,10,10,10" Content="Confirmer"/>
-            <Button HorizontalAlignment="Stretch" Grid.Row="1" Height="{Binding ActualHeight, ElementName=columnDefinition0}" Width="{Binding ActualWidth, ElementName=rowDefinition0}" VerticalAlignment="Stretch" Margin="10,10,10,10" Content="Retour"/>
 
-            <Label Grid.Row="0" Grid.Column="1" Content=" Nom du client : " FontWeight="Bold" FontSize="15" Width="{Binding ActualWidth, ElementName=rowDefinition0}" Height="{Binding ActualHeight, ElementName=columnDefinition0}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Grid.Row="1" Grid.Column="1" Content=" Statut actuel : " FontWeight="Bold" FontSize="15" Width="{Binding ActualWidth, ElementName=rowDefinition0}" Height="{Binding ActualHeight, ElementName=columnDefinition0}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Grid.Row="0" Grid.Column="3" Content=" Date de création : " FontWeight="Bold" FontSize="15" Width="{Binding ActualWidth, ElementName=rowDefinition0}" Height="{Binding ActualHeight, ElementName=columnDefinition0}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Grid.Row="1" Grid.Column="3" Content=" Nom du Commercial : " FontWeight="Bold" FontSize="15" Width="{Binding ActualWidth, ElementName=rowDefinition0}" Height="{Binding ActualHeight, ElementName=columnDefinition0}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Button HorizontalAlignment="Stretch" Grid.Row="0" Height="{Binding ActualHeight, ElementName=columnDefinition0}" Width="{Binding ActualWidth, ElementName=rowDefinition0}" VerticalAlignment="Stretch" Margin="10,10,10,10" Content="Confirmer"/>
+            <Button Content="Retour" HorizontalAlignment="Stretch" Grid.Row="1" Height="{Binding ActualHeight, ElementName=columnDefinition0}" Width="{Binding ActualWidth, ElementName=rowDefinition0}" VerticalAlignment="Stretch" Margin="10,10,10,10"/>
+            
+            <Viewbox  Grid.Row="0" Grid.Column="1"  Width="{Binding ActualWidth, ElementName=rowDefinition0}" Height="{Binding ActualHeight, ElementName=columnDefinition0}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Label Content=" Nom du client : " FontWeight="Bold" FontSize="5"/>
+            </Viewbox>
+            
+            <Viewbox  Grid.Row="1" Grid.Column="1"  Width="{Binding ActualWidth, ElementName=rowDefinition0}" Height="{Binding ActualHeight, ElementName=columnDefinition0}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Label Content=" Statut actuel : " FontWeight="Bold" FontSize="5"/>
+            </Viewbox>
+
+            <Viewbox Grid.Row="0" Grid.Column="3"  Width="{Binding ActualWidth, ElementName=rowDefinition0}" Height="{Binding ActualHeight, ElementName=columnDefinition0}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Label  Content=" Date de création : " FontWeight="Bold" FontSize="5"/>
+            </Viewbox>
+
+            <Viewbox Grid.Row="1" Grid.Column="3"  Width="{Binding ActualWidth, ElementName=rowDefinition0}" Height="{Binding ActualHeight, ElementName=columnDefinition0}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Label Content=" Nom du Commercial : " FontWeight="Bold" FontSize="5"/>
+            </Viewbox>
+            
         </Grid>
 
         <!-- Début Déclaration Vue-->
@@ -84,20 +99,38 @@
                 <ColumnDefinition Width="0.30*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            
+            <Viewbox Margin="15,0,0,0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Label  Content="* Nom du plan : " FontWeight="Bold" FontSize="5" />
+            </Viewbox>
 
-            <Label Margin="15,0,0,0" Grid.Row="2" Content="* Nom du plan : " FontWeight="Bold" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Label Margin="15,0,0,0" Grid.Row="3" Content="* Coupe de principe : " FontWeight="Bold" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Label Margin="15,0,0,0" Grid.Row="4" Content="* Type de couverture : " FontWeight="Bold" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Label Margin="15,0,0,0" Grid.Row="5" Content="* Type de plancher  : " FontWeight="Bold" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Label Margin="15,0,0,0" Grid.Row="6" Content="* Choix d'une gamme  : " FontWeight="Bold" FontSize="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Viewbox Margin="15,0,0,0" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Label  Content="* Coupe de principe : " FontWeight="Bold" FontSize="5" />
+            </Viewbox>
 
-            <Label Grid.Row="10" Content="* Champs obligatoires " FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+            <Viewbox Margin="15,0,0,0" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Label  Content="* Type de couverture : " FontWeight="Bold" FontSize="5" />
+            </Viewbox>
 
+            <Viewbox Margin="15,0,0,0" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <Label  Content="* Type de plancher  : " FontWeight="Bold" FontSize="5" />
+            </Viewbox>
+
+            <Viewbox Margin="15,0,0,0" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Label  Content="* Choix d'une gamme  : " FontWeight="Bold" FontSize="5" />
+            </Viewbox>
+
+            <Viewbox Grid.Row="10" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                <Label Content="* Champs obligatoires " FontWeight="Bold" FontSize="4"/>
+            </Viewbox>
+            
+           
             <TextBox Text="Plan 5 Base Carré " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="2"  TextWrapping="WrapWithOverflow" VerticalAlignment="Center" Width="200"/>
-            <ToggleButton x:Name="btnchoix1" Content=" Choisir une coupe " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="3"   VerticalAlignment="Center" Click="cp_Button_Click" />
+            
+            <ToggleButton HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="3" x:Name="btnchoix1" Content=" Choisir une coupe " Height="30"   VerticalAlignment="Center" Click="cp_Button_Click" />
             <ToggleButton x:Name="btnchoix2" Content=" Choisir une couverture " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="4"   VerticalAlignment="Center"  Click="couv_Button_Click"/>
             <ToggleButton x:Name="btnchoix3" Content=" Choisir un plancher " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="5"   VerticalAlignment="Center" Click="planc_Button_Click" />
-            <ToggleButton x:Name="btnchoix4" Content=" Choisir une gamme " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="6"   VerticalAlignment="Center" />
+            <ToggleButton x:Name="btnchoix4" Content=" Choisir une gamme " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="6"   VerticalAlignment="Center" Click="gamme_Button_Click" />
 
             <GroupBox x:Name="forme" Visibility="Hidden" Header="Sélection d'une forme"  Grid.Column="2" Grid.Row="0" Grid.RowSpan="5"
                       Height="{Binding ActualHeight, ElementName=rowDefinition1}"
@@ -105,15 +138,15 @@
                 <WrapPanel x:Name="wrapformes"/>
             </GroupBox>
 
-            <GroupBox x:Name="taille" Visibility="Hidden" Header="Sélection d'une taille"  Grid.Column="2" Grid.Row="5" Grid.RowSpan="5"
-                      Height="{Binding ActualHeight, ElementName=rowDefinition1}"
-                      Margin="25,0,25,0">
-                <StackPanel  Width="{Binding ActualWidth, ElementName=columnDefinition1}">
+            <GroupBox Grid.Column="2" Grid.Row="5" Grid.RowSpan="5"
+                    Margin="25,0,25,0" x:Name="taille" Visibility="Hidden" Header="Sélection d'une taille" >
+                <StackPanel  
+                                Height="{Binding ActualHeight, ElementName=columnDefinition2}">
                     <WrapPanel x:Name="wraptailles"/>
                     <ScrollBar Height="{Binding ActualHeight, ElementName=rowDefinition1}" HorizontalAlignment="Right"/>
                 </StackPanel>
             </GroupBox>
-
+            
             <GroupBox x:Name="couv" Visibility="Hidden" Header="Sélection d'une couverture"  Grid.Column="2" Grid.Row="1" Grid.RowSpan="5"
                       Height="{Binding ActualHeight, ElementName=rowDefinition1}"
                       Margin="25,0,25,0">
@@ -128,6 +161,15 @@
                       Margin="25,0,25,0">
                 <StackPanel  Width="{Binding ActualWidth, ElementName=columnDefinition1}">
                     <WrapPanel x:Name="wrapplanch"/>
+                    <ScrollBar Height="{Binding ActualHeight, ElementName=rowDefinition1}" HorizontalAlignment="Right"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox x:Name="gam" Visibility="Hidden" Header="Sélection d'une gamme"  Grid.Column="2" Grid.Row="1" Grid.RowSpan="5"
+                      Height="{Binding ActualHeight, ElementName=rowDefinition1}"
+                      Margin="25,0,25,0">
+                <StackPanel  Width="{Binding ActualWidth, ElementName=columnDefinition1}">
+                    <WrapPanel x:Name="wrapgamme"/>
                     <ScrollBar Height="{Binding ActualHeight, ElementName=rowDefinition1}" HorizontalAlignment="Right"/>
                 </StackPanel>
             </GroupBox>
