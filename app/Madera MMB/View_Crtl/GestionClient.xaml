@@ -22,12 +22,30 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="bdr" CornerRadius="90" Margin="3" Background="LightGray">
+                        <Border x:Name="bdr" CornerRadius="2" Margin="3" Background="LightGray">
                             <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="bdr" Property="Background" Value="YellowGreen"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type ToggleButton}">
+            <!-- Toggle Bouton style -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border x:Name="bdr" CornerRadius="90" Margin="3" Background="LightGray">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -90,44 +108,50 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Partie de gauche -->
-                <Label Content="Nom du client :"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        VerticalAlignment="Stretch" 
-                        HorizontalAlignment="Stretch">
-                </Label>
-                <Label Content="Date de création :"
-                        Grid.Row="3"
-                        Grid.Column="1"
-                        VerticalAlignment="Stretch" 
-                        HorizontalAlignment="Stretch">
-                </Label>
-                <Label Content="Statut actuel :"
-                        Grid.Row="5"
-                        Grid.Column="1"
-                        VerticalAlignment="Stretch" 
-                        HorizontalAlignment="Stretch">
-                </Label>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="1"
+                         Grid.Column="1" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label Content="Nom du client :" FontSize="6"/>
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="1" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label Content="Date de création :" FontSize="6"/>
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="5"
+                         Grid.Column="1" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label Content="Statut actuel :" FontSize="6"/>
+                </Viewbox>
 
                 <!-- Partie de droite -->
-                <Label Content="Nombre de plan :"
-                        Grid.Row="1"
-                        Grid.Column="3"
-                        VerticalAlignment="Stretch" 
-                        HorizontalAlignment="Stretch">
-                </Label>
-                <Label Content="Dernière mise à jour :"
-                        Grid.Row="3"
-                        Grid.Column="3"
-                        VerticalAlignment="Stretch" 
-                        HorizontalAlignment="Stretch">
-                </Label>
-                <Label Content="Nom du commercial : José Répos"
-                        Grid.Row="5"
-                        Grid.Column="3"
-                        VerticalAlignment="Stretch" 
-                        HorizontalAlignment="Stretch">
-                </Label>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="1"
+                         Grid.Column="3" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label Content="Nombre de plan :" FontSize="6"/>
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="3" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label Content="Dernière mise à jour :" FontSize="6"/>
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="5"
+                         Grid.Column="3" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label Content="Nom du commercial :" FontSize="6"/>
+                </Viewbox>
 
             </Grid>
 
@@ -170,7 +194,8 @@
             </Grid.ColumnDefinitions>
 
             <!-- Début Déclaration Menu Gestion Client-->
-            <Grid Background="DimGray"  
+            <Grid x:Name="Menu"
+                  Background="DimGray"  
                   Grid.Column="1" 
                   Grid.Row="0" 
                   VerticalAlignment="Stretch" 
@@ -181,21 +206,25 @@
                   Grid.ColumnSpan="1">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.2*" />
+                    <RowDefinition Height="0.1*" />
                     <RowDefinition Height="0.5*" />
-                    <RowDefinition Height="0.2*" />
+                    <RowDefinition Height="0.1*" />
                     <RowDefinition Height="0.5*" />
-                    <RowDefinition Height="0.2*" />
+                    <RowDefinition Height="0.1*" />
                     <RowDefinition Height="0.5*" />
-                    <RowDefinition Height="0.2*" />
+                    <RowDefinition Height="0.1*" />
                     <RowDefinition Height="0.5*" />
-                    <RowDefinition Height="0.2*" />
+                    <RowDefinition Height="0.1*" />
                     <RowDefinition Height="0.5*" />
-                    <RowDefinition Height="0.2*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="0*" />
+                    <RowDefinition Height="0.1*" />
                     <RowDefinition Height="0.5*" />
-                    <RowDefinition Height="0.2*" />
+                    <RowDefinition Height="0.1*" />
                     <RowDefinition Height="0.5*" />
-                    <RowDefinition Height="0.2*" />
+                    <RowDefinition Height="0.1*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.1*" />
@@ -203,42 +232,63 @@
                     <ColumnDefinition Width="0.1*" />
                 </Grid.ColumnDefinitions>
 
-                <Button Content="Liste des clients"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        VerticalAlignment="Stretch" 
-                        HorizontalAlignment="Stretch"
-                        Click="Btn_List_Client_Click">
-                </Button>
-                <Button Content="Créer un client"
-                        Grid.Row="3"
-                        Grid.Column="1"
-                        VerticalAlignment="Stretch" 
-                        HorizontalAlignment="Stretch"
-                        Click="Btn_Creer_Client_Click">
-                </Button>
-                <Button x:Name="btn_creer_projet" 
-                        Content="Créer un projet"
-                        Grid.Row="5"
-                        Grid.Column="1"
-                        VerticalAlignment="Stretch" 
-                        HorizontalAlignment="Stretch"
-                        Click="Btn_Creer_Projet_Click">
-                </Button>
-                <Button Content="Ouvrir le projet"
-                        Grid.Row="7"
-                        Grid.Column="1"
-                        VerticalAlignment="Stretch" 
-                        HorizontalAlignment="Stretch"
-                        Click="Btn_Ouvrir_Projet_Click">
-                </Button>
-                <Button Content="Déconnexion"
-                        Grid.Row="13"
-                        Grid.Column="1"
-                        VerticalAlignment="Stretch" 
-                        HorizontalAlignment="Stretch"
-                        Click="Btn_Se_Deconnecter_Click">
-                </Button>
+                <Viewbox Grid.Row="1"
+                         Grid.Column="1"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button x:Name="BtnListeClient"
+                            FontSize="20"
+                            Width="400"
+                            Height="60"
+                            Content="Liste des clients"
+                            Click="Btn_List_Client_Click">
+                    </Button>
+                </Viewbox>
+                <Viewbox Grid.Row="3"
+                         Grid.Column="1"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button FontSize="20"
+                            Width="400"
+                            Height="60"
+                            Content="Créer un client"
+                            Click="Btn_Creer_Client_Click">
+                    </Button>
+                </Viewbox>
+                <Viewbox Grid.Row="5"
+                         Grid.Column="1"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button x:Name="btn_creer_projet"
+                            FontSize="20"
+                            Width="400"
+                            Height="60"
+                            Content="Créer un projet"
+                            Click="Btn_Creer_Projet_Click">
+                    </Button>
+                </Viewbox>
+                <Viewbox Grid.Row="7"
+                         Grid.Column="1"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button FontSize="20"
+                            Width="400"
+                            Height="60"
+                            Content="Ouvrir le projet"
+                            Click="Btn_Ouvrir_Projet_Click">
+                    </Button>
+                </Viewbox>
+                <Viewbox Grid.Row="17"
+                         Grid.Column="1"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button FontSize="20"
+                            Width="400"
+                            Height="60"
+                            Content="Déconnexion"
+                            Click="Btn_Se_Deconnecter_Click">
+                    </Button>
+                </Viewbox>
             </Grid>
             <!-- Fin Déclaration Menu Gestion Client -->
             <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1 2 2 1" />
@@ -263,6 +313,8 @@
             </Grid.ColumnDefinitions>
 
             <Grid x:Name="ModalCreationNouveauProjet"
+                  Visibility="Hidden"
+                  Panel.ZIndex="99"
                   Background="DimGray"  
                   Grid.Column="1" 
                   Grid.Row="1" 
@@ -313,25 +365,33 @@
                     <Label>NOYER Thierry</Label>
                     <Label>SAULE Florian</Label>
                 </ComboBox>
-                <Button Content="Retour"                        
-                        Grid.Row="5"
-                        Grid.Column="1"
-                        VerticalAlignment="Stretch" 
-                        HorizontalAlignment="Stretch"
-                        Click="Btn_Retour_Click">
-                </Button>
-                <Button Content="Valider"
-                        Grid.Row="5"
-                        Grid.Column="3"
-                        VerticalAlignment="Stretch" 
-                        HorizontalAlignment="Stretch"
-                        Click="Btn_Valider_Click">
-                </Button>
+                <Viewbox Grid.Row="5"
+                         Grid.Column="1"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button FontSize="20"
+                            Width="200"
+                            Height="60"
+                            Content="Retour"
+                            Click="Btn_Retour_Click">
+                    </Button>
+                </Viewbox>
+                <Viewbox Grid.Row="5"
+                         Grid.Column="3"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button FontSize="20"
+                            Width="200"
+                            Height="60"
+                            Content="Valider"
+                            Click="Btn_Valider_Click">
+                    </Button>
+                </Viewbox>
             </Grid>
         </Grid>
         <!-- Fin Déclaration Modal Creation Nouveau Projet Client -->
 
-        <!-- Début Déclaration Liste Gestion Client-->
+        <!-- Début Déclaration Liste Sélection Gestion Client -->
         <Grid x:Name="GestionProjetClient"
               Grid.Column="1"
               Grid.Row="0" 
@@ -347,92 +407,24 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <WrapPanel>
 
-                <Button Margin="20"
-                        Width="150"
-                        Height="150"
-                        Click="Btn_Retour_Click">
-                    <StackPanel>
-                        <Image Source="../Lib/Images/folder.png" VerticalAlignment="Top" Height="80" Width="80"/>
-                        <TextBlock Margin="10" HorizontalAlignment="Center" TextWrapping="Wrap" Text="CERISER M" VerticalAlignment="Top" FontFamily="Segoe WP Black" FontSize="14"/>
-                    </StackPanel>
-                </Button>
-                <Button Margin="20"
-                        Width="150"
-                        Height="150"
-                        Click="Btn_Retour_Click">
-                    <StackPanel>
-                        <Image Source="../Lib/Images/existing_folder.png" VerticalAlignment="Top" Height="80" Width="80"/>
-                        <TextBlock Margin="10" HorizontalAlignment="Center" TextWrapping="Wrap" Text="CHENE Y" VerticalAlignment="Top" FontFamily="Segoe WP Black" FontSize="14"/>
-                    </StackPanel>
-                </Button>
-                <Button Margin="20"
-                        Width="150"
-                        Height="150"
-                        Click="Btn_Retour_Click">
-                    <StackPanel>
-                        <Image Source="../Lib/Images/empty_folder.png" VerticalAlignment="Top" Height="80" Width="80"/>
-                        <TextBlock Margin="10" HorizontalAlignment="Center" TextWrapping="Wrap" Text="NOISETTIER L" VerticalAlignment="Top" FontFamily="Segoe WP Black" FontSize="14"/>
-                    </StackPanel>
-                </Button>
-                <Button Margin="20"
-                        Width="150"
-                        Height="150"
-                        Click="Btn_Retour_Click">
-                    <StackPanel>
-                        <Image Source="../Lib/Images/folder.png" VerticalAlignment="Top" Height="80" Width="80"/>
-                        <TextBlock Margin="10" HorizontalAlignment="Center" TextWrapping="Wrap" Text="TILLEULE B" VerticalAlignment="Top" FontFamily="Segoe WP Black" FontSize="14"/>
-                    </StackPanel>
-                </Button>
-                <Button Margin="20"
-                        Width="150"
-                        Height="150"
-                        Click="Btn_Retour_Click">
-                    <StackPanel>
-                        <Image Source="../Lib/Images/empty_folder.png" VerticalAlignment="Top" Height="80" Width="80"/>
-                        <TextBlock Margin="10" HorizontalAlignment="Center" TextWrapping="Wrap" Text="SAPIN L" VerticalAlignment="Top" FontFamily="Segoe WP Black" FontSize="14"/>
-                    </StackPanel>
-                </Button>
-                <Button Margin="20"
-                        Width="150"
-                        Height="150"
-                        Click="Btn_Retour_Click">
-                    <StackPanel>
-                        <Image Source="../Lib/Images/folder.png" VerticalAlignment="Top" Height="80" Width="80"/>
-                        <TextBlock Margin="10" HorizontalAlignment="Center" TextWrapping="Wrap" Text="POIRIER J" VerticalAlignment="Top" FontFamily="Segoe WP Black" FontSize="14"/>
-                    </StackPanel>
-                </Button>
-                <Button Margin="20"
-                        Width="150"
-                        Height="150"
-                        Click="Btn_Retour_Click">
-                    <StackPanel>
-                        <Image Source="../Lib/Images/existing_folder.png" VerticalAlignment="Top" Height="80" Width="80"/>
-                        <TextBlock Margin="10" HorizontalAlignment="Center" TextWrapping="Wrap" Text="PRUNIER M" VerticalAlignment="Top" FontFamily="Segoe WP Black" FontSize="14"/>
-                    </StackPanel>
-                </Button>
-                <Button Margin="20"
-                        Width="150"
-                        Height="150"
-                        Click="Btn_Retour_Click">
-                    <StackPanel>
-                        <Image Source="../Lib/Images/existing_folder.png" VerticalAlignment="Top" Height="80" Width="80"/>
-                        <TextBlock Margin="10" HorizontalAlignment="Center" TextWrapping="Wrap" Text="NOYER T" VerticalAlignment="Top" FontFamily="Segoe WP Black" FontSize="14"/>
-                    </StackPanel>
-                </Button>
-                <Button Margin="20"
-                        Width="150"
-                        Height="150"
-                        Click="Btn_Retour_Click">
-                    <StackPanel>
-                        <Image Source="../Lib/Images/folder.png" VerticalAlignment="Top" Height="80" Width="80"/>
-                        <TextBlock Margin="10" HorizontalAlignment="Center" TextWrapping="Wrap" Text="SAULE F" VerticalAlignment="Top" FontFamily="Segoe WP Black" FontSize="14"/>
-                    </StackPanel>
-                </Button>
-            </WrapPanel>
+            <GroupBox x:Name="Clients"
+                      Header="Liste Projets Clients"
+                      Grid.Column="1"
+                      Grid.Row="0" 
+                      VerticalAlignment="Stretch" 
+                      HorizontalAlignment="Stretch" 
+                      Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
+                      Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
+                      Grid.RowSpan="2" 
+                      Grid.ColumnSpan="1"
+                      >
+                <StackPanel Width="{Binding ActualWidth, ElementName=columnDefinition1}">
+                    <WrapPanel x:Name="WrapClients"/>
+                </StackPanel>
+            </GroupBox>
         </Grid>
-        <!-- Fin Déclaration Liste Gestion Client -->
+        <!-- Fin Déclaration Liste Sélection Gestion Client -->
 
     </Grid>
 
