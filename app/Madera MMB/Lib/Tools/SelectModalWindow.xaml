@@ -1,0 +1,32 @@
+﻿<Window x:Class="Madera_MMB.Lib.Tools.SelectModalWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Height="300" Width="450"
+        WindowStartupLocation="CenterScreen"
+        >
+    <Grid Background="Gray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.15*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.15*"/>               
+        </Grid.RowDefinitions>
+        <Label FontWeight="Bold" FontSize="15"  x:Name="Titlelabel" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+        <Viewbox  Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button Width="75" Content="Valider" x:Name="Valider"/>
+        </Viewbox>
+        <Viewbox Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Button Width="75" Content="Retour" x:Name="Retour" />
+        </Viewbox>
+        
+        <ComboBox x:Name="DataSelect"
+            TabIndex="0"
+            Width="150" 
+            Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
+            HorizontalAlignment="Center" Margin="25,25,25,25" Grid.Row="1" VerticalAlignment="Center" 
+            IsEditable="True" IsReadOnly="True"/>
+    </Grid>
+</Window>

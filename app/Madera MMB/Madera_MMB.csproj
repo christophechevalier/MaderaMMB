@@ -67,6 +67,12 @@
     <Compile Include="CAD\PlancherCAD.cs" />
     <Compile Include="CAD\ProjetCAD.cs" />
     <Compile Include="CAD\SlotCAD.cs" />
+    <Compile Include="Lib\Tools\ErrorModalWindow.xaml.cs">
+      <DependentUpon>ErrorModalWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Lib\Tools\SelectModalWindow.xaml.cs">
+      <DependentUpon>SelectModalWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View_Crtl\App.cs" />
     <Compile Include="Model\Client.cs" />
     <Compile Include="Model\Commercial.cs" />
@@ -86,18 +92,19 @@
     <Compile Include="View_Crtl\Authentification.xaml.cs">
       <DependentUpon>Authentification.xaml</DependentUpon>
     </Compile>
-    <Page Include="View_Crtl\GestionProjet.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Lib\Tools\ErrorModalWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Lib\Tools\SelectModalWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View_Crtl\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="CAD\ClientCAD.cs" />
-    <Compile Include="View_Crtl\GestionProjet.xaml.cs">
-      <DependentUpon>GestionProjet.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View_Crtl\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
