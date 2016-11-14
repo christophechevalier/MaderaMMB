@@ -67,6 +67,12 @@
     <Compile Include="CAD\PlancherCAD.cs" />
     <Compile Include="CAD\ProjetCAD.cs" />
     <Compile Include="CAD\SlotCAD.cs" />
+    <Compile Include="Lib\Tools\ErrorModalWindow.xaml.cs">
+      <DependentUpon>ErrorModalWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Lib\Tools\SelectModalWindow.xaml.cs">
+      <DependentUpon>SelectModalWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View_Crtl\App.cs" />
     <Compile Include="Model\Client.cs" />
     <Compile Include="Model\Commercial.cs" />
@@ -86,6 +92,14 @@
     <Compile Include="View_Crtl\Authentification.xaml.cs">
       <DependentUpon>Authentification.xaml</DependentUpon>
     </Compile>
+    <Page Include="Lib\Tools\ErrorModalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Lib\Tools\SelectModalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View_Crtl\GestionClient.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Madera_MMB.Lib.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -91,6 +92,34 @@ namespace Madera_MMB.View_Crtl
         {
             // TODO : Faire en sorte que les boutons du menu soit activé lorsqu'on clic dessus
         }
+
+        private void Initialize_Dialog_Creation_Projet()
+        {
+            var window = new SelectModalWindow();
+            window.Title = "Nouveau Projet ";
+            window.Titlelabel.Content = " Nouveau Projet ";
+
+            window.Retour.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                window.Close();
+            };
+
+            window.Valider.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                window.Close();
+            };
+
+            window.DataSelect.Text = "-- Choisir Client --";
+            window.DataSelect.Items.Add("CERISIER Madeleine");
+            window.DataSelect.Items.Add("XXX XXX");
+            window.DataSelect.Items.Add("XXX XXX");
+            window.DataSelect.Items.Add("XXX XXX");
+            window.DataSelect.Items.Add("XXX XXX");
+            window.DataSelect.Items.Add("XXX XXX");
+            window.DataSelect.Items.Add("XXX XXX");
+
+            window.ShowDialog();
+        }
         #endregion
 
         #region Listeners
@@ -98,46 +127,39 @@ namespace Madera_MMB.View_Crtl
         private void Btn_List_Client_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            ModalCreationNouveauProjet.Visibility = System.Windows.Visibility.Hidden;
         }
         // Créer un nouveau client
         private void Btn_Creer_Client_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            ModalCreationNouveauProjet.Visibility = System.Windows.Visibility.Hidden;
         }
         // Créer un nouveau projet
         private void Btn_Creer_Projet_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            ModalCreationNouveauProjet.Visibility = System.Windows.Visibility.Visible;
+            Initialize_Dialog_Creation_Projet();
         }
         // Ouvrir un projet client déjà selectionner
         private void Btn_Ouvrir_Projet_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            ModalCreationNouveauProjet.Visibility = System.Windows.Visibility.Hidden;
         }
         // Se déconnecter
         private void Btn_Se_Deconnecter_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            ModalCreationNouveauProjet.Visibility = System.Windows.Visibility.Hidden;
         }
         // Valider - Suivant
         private void Btn_Valider_Click(object sender, RoutedEventArgs e)
         {
-            ModalCreationNouveauProjet.Visibility = System.Windows.Visibility.Collapsed;
         }
         // Retour - Précedent
         private void Btn_Retour_Click(object sender, RoutedEventArgs e)
         {
-            ModalCreationNouveauProjet.Visibility = System.Windows.Visibility.Hidden;
         }
         // Sélectionner un client pour créer un projet
         private void Select_Nom_Client_Click(object sender, RoutedEventArgs e)
         {
-            CbSelectNomClient.SelectedIndex = 0;
         }
         // Editer un client
         private void Btn_Editer_Client_Click(object sender, RoutedEventArgs e)

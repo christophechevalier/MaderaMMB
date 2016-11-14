@@ -296,101 +296,6 @@
         </Grid>
         <!-- Fin Déclaration Menu Gestion Client -->
 
-        <!-- Fin Déclaration Modal Creation Nouveau Projet Client -->
-        <Grid Grid.Column="1"
-              Grid.Row="1" 
-              Grid.RowSpan="1">
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.5*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="0.5*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.5*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="0.7*"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid x:Name="ModalCreationNouveauProjet"
-                  Visibility="Hidden"
-                  Panel.ZIndex="99"
-                  Background="DimGray"  
-                  Grid.Column="1" 
-                  Grid.Row="1" 
-                  VerticalAlignment="Stretch" 
-                  HorizontalAlignment="Stretch" 
-                  Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                  Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
-                  Grid.RowSpan="1" 
-                  Grid.ColumnSpan="1">
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="0.1*" />
-                    <RowDefinition Height="0.2*" />
-                    <RowDefinition Height="0.2*" />
-                    <RowDefinition Height="0.3*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="0.3*" />
-                    <RowDefinition Height="0.1*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.1*" />
-                    <ColumnDefinition Width="0.5*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="0.5*" />
-                    <ColumnDefinition Width="0.1*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock TextWrapping="Wrap"
-                           FontSize="18"
-                           Grid.Row="1"
-                           Grid.Column="1">
-                    Nouveau Projet
-                </TextBlock>
-                <ComboBox Name="CbSelectNomClient"
-                          SelectedIndex="0"
-                          MaxWidth="250"
-                          Grid.Row="2"
-                          Grid.Column="2"
-                          VerticalAlignment="Stretch"
-                          HorizontalAlignment="Stretch">
-                    <Label>--- Sélectionner ---</Label>
-                    <Label>CERISIER Madeleine</Label>
-                    <Label>CHENE Yves</Label>
-                    <Label>NOISETTIER Louise</Label>
-                    <Label>TILLEULE Bertrand</Label>
-                    <Label>SAPIN Léa</Label>
-                    <Label>POIRIER José</Label>
-                    <Label>NOYER Thierry</Label>
-                    <Label>SAULE Florian</Label>
-                </ComboBox>
-                <Viewbox Grid.Row="5"
-                         Grid.Column="1"
-                         VerticalAlignment="Stretch" 
-                         HorizontalAlignment="Stretch">
-                    <Button FontSize="20"
-                            Width="200"
-                            Height="60"
-                            Content="Retour"
-                            Click="Btn_Retour_Click">
-                    </Button>
-                </Viewbox>
-                <Viewbox Grid.Row="5"
-                         Grid.Column="3"
-                         VerticalAlignment="Stretch" 
-                         HorizontalAlignment="Stretch">
-                    <Button FontSize="20"
-                            Width="200"
-                            Height="60"
-                            Content="Valider"
-                            Click="Btn_Valider_Click">
-                    </Button>
-                </Viewbox>
-            </Grid>
-        </Grid>
-        <!-- Fin Déclaration Modal Creation Nouveau Projet Client -->
-
         <!-- Début Déclaration Liste Sélection Gestion Client -->
         <Grid x:Name="GestionProjetClient"
               Grid.Column="1"
@@ -400,7 +305,8 @@
               Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
               Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
               Grid.RowSpan="2" 
-              Grid.ColumnSpan="1">
+              Grid.ColumnSpan="1"
+              >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -412,6 +318,7 @@
                       Header="Liste Projets Clients"
                       Grid.Column="1"
                       Grid.Row="0" 
+                      Panel.ZIndex="1"
                       VerticalAlignment="Stretch" 
                       HorizontalAlignment="Stretch" 
                       Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
