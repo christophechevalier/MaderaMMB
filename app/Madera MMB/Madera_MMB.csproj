@@ -100,11 +100,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View_Crtl\GestionProjet.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View_Crtl\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="CAD\ClientCAD.cs" />
+    <Compile Include="View_Crtl\GestionProjet.xaml.cs">
+      <DependentUpon>GestionProjet.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View_Crtl\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
