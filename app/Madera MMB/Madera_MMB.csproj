@@ -100,6 +100,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View_Crtl\GestionPlan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View_Crtl\GestionProjet.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -109,6 +113,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="CAD\ClientCAD.cs" />
+    <Compile Include="View_Crtl\GestionPlan.xaml.cs">
+      <DependentUpon>GestionPlan.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View_Crtl\GestionProjet.xaml.cs">
       <DependentUpon>GestionProjet.xaml</DependentUpon>
     </Compile>
@@ -160,6 +167,10 @@
     <Resource Include="Lib\Images\empty_folder.png" />
     <Resource Include="Lib\Images\existing_folder.png" />
     <Resource Include="Lib\Images\folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Lib\Images\house_black.png" />
+    <Resource Include="Lib\Images\house_green.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
