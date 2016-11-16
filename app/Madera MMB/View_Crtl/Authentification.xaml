@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="1661.667" d:DesignWidth="2650.333"
 	Title="Authentification">
 
 
@@ -13,9 +13,9 @@
         <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png"/>
     </Page.Resources>
 
-    <Grid x:Name="MainGrid">
+    <Grid x:Name="MainGrid" Background="White">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.25*" />
+            <ColumnDefinition Width="0.15*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
@@ -25,7 +25,6 @@
             <RowDefinition Height="0.25*" />
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2" Grid.Column="1" />
 
         <Grid x:Name="ImgContainer"  Grid.Row="0">
 
@@ -48,16 +47,37 @@
                 <ColumnDefinition Width="0.25*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" Grid.Column="1" />
 
         </Grid>
 
         <!-- Début Déclaration Vue-->
-        <Grid Background="LightGray"  Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=columnDefinition1}" Height="{Binding ActualHeight, ElementName=rowDefinition1}" Grid.RowSpan="2" Grid.ColumnSpan="1">
-            <Button Content="Valider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="107" Margin="88,216,0,0" Height="32" Click="Button_Click"/>
-            <Label Content="S'authentifier" HorizontalAlignment="Center" Height="28" Margin="117,33,95,0" VerticalAlignment="Top" Width="88"/>
-            <TextBox HorizontalAlignment="Left" Height="42" Margin="88,81,0,0" TextWrapping="Wrap" Text="UserName" VerticalAlignment="Top" Width="133"/>
-            <TextBox HorizontalAlignment="Left" Height="42" Margin="88,144,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Width="133" TextChanged="TextBox_TextChanged"/>
+        <Grid Background="White"  Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=columnDefinition1}" Height="{Binding ActualHeight, ElementName=rowDefinition1}" Grid.RowSpan="2" Grid.ColumnSpan="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.25*"/>
+            </Grid.ColumnDefinitions>
+
+            <Viewbox Grid.Row="0" Height="100" Width="250" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Label FontWeight="ExtraBold" Content="S'authentifier" Height="100" Width="250"/>
+            </Viewbox>
+
+            <Viewbox Grid.Row="1" Grid.Column="0" Height="100" Width="250" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <TextBox Height="100" Width="250" TextWrapping="Wrap" Text="UserName" />
+            </Viewbox>
+
+            <Viewbox Grid.Row="2"  Height="100" Width="250" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBox TextWrapping="Wrap" Text="Password" Height="100" Width="250" TextChanged="TextBox_TextChanged"/>
+            </Viewbox>
+
+            <Viewbox Grid.Row="3" Grid.Column="0" Height="100" Width="250" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <Button Content="Valider" Height="100" Width="250" Click="Button_Click"/>
+            </Viewbox>
+
         </Grid>
         <!-- Fin Déclaration Vue -->
 
