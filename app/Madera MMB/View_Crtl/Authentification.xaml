@@ -54,33 +54,43 @@
         <Grid Background="White"  Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=columnDefinition1}" Height="{Binding ActualHeight, ElementName=rowDefinition1}" Grid.RowSpan="2" Grid.ColumnSpan="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.40*"/>
+                <RowDefinition Height="0.40*"/>
+                <RowDefinition Height="0.40*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.25*"/>
+                <ColumnDefinition Width="0.50*"/>
+                <ColumnDefinition Width="0.40*"/>
             </Grid.ColumnDefinitions>
 
-            <Viewbox Grid.Row="0" Height="100" Width="250" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Label FontWeight="ExtraBold" Content="S'authentifier" Height="100" Width="250"/>
+            <Viewbox Grid.Row="0" Grid.Column="1" Height="100" Width="250" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Label  FontWeight="ExtraBold" FontSize="25" Content="S'authentifier" Height="100" Width="250"/>
             </Viewbox>
 
-            <Viewbox Grid.Row="1" Grid.Column="0" Height="100" Width="250" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <TextBox Height="100" Width="250" TextWrapping="Wrap" Text="UserName" />
+            <Viewbox Margin="20,0,20,40" Grid.Row="1"  Height="50" Width="250" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center">
+                <Label Content="Nom d'utilisateur" />
+            </Viewbox>
+            <Viewbox Margin="20,20,20,20" Grid.Row="1" Grid.Column="1" Height="45" Width="250" HorizontalAlignment="Center" VerticalAlignment="Bottom" >
+                <TextBox x:Name="username"  Height="45" Width="250" TextWrapping="Wrap" Text="Votre nom d'utilisateur ..."/>
             </Viewbox>
 
-            <Viewbox Grid.Row="2"  Height="100" Width="250" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBox TextWrapping="Wrap" Text="Password" Height="100" Width="250" TextChanged="TextBox_TextChanged"/>
+            <Viewbox Margin="20,0,20,40" Grid.Row="2"  Height="50" Width="250" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center">
+                <Label Content="Mot de passe" />
+            </Viewbox>
+            <Viewbox Margin="20,20,20,20" Grid.Row="2"  Height="45" Width="250" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                <PasswordBox x:Name="password" Height="45" Width="250" />
             </Viewbox>
 
-            <Viewbox Grid.Row="3" Grid.Column="0" Height="100" Width="250" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <Button Content="Valider" Height="100" Width="250" Click="Button_Click"/>
+            <Viewbox Grid.Row="3" Grid.Column="1" Height="100" Width="250" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <Button Content="Valider" FontSize="15" Height="50" Width="250" Click="Button_Click"/>
             </Viewbox>
 
         </Grid>
         <!-- Fin Déclaration Vue -->
 
+        
     </Grid>
     <!-- Fin Déclaration Template -->
 

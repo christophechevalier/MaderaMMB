@@ -24,18 +24,15 @@ namespace Madera_MMB.View_Crtl
         public Authentification()
         {
             InitializeComponent();
-
-
         }
 
+        #region listeners
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
         }
+        #endregion
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
 
-        }
     }
 }
