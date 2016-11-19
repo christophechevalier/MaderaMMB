@@ -4,9 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="1661.667" d:DesignWidth="2650.333"
-      Title="GestionClient"
-      FontFamily="Segoe UI Semibold">
+      d:DesignHeight="300" d:DesignWidth="300"
+	Title="GestionClient">
 
     <!-- Début Déclaration Template-->
     <Page.Resources>
@@ -34,24 +33,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <Style TargetType="{x:Type ToggleButton}">
-            <!-- Toggle Bouton style -->
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border x:Name="bdr" CornerRadius="90" Margin="3" Background="LightGray">
-                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Page.Resources>
     <!-- Fin Déclaration Template-->
 
@@ -67,7 +48,7 @@
             <RowDefinition Height="0.25*" />
         </Grid.RowDefinitions>
 
-        <!-- Début Déclaration Footer Gestion Client-->
+        <!-- Début Déclaration Footer Gestion Liste Client-->
         <Grid Grid.Row="2"
               Margin="0 5 5 5"
               Grid.Column="2"
@@ -113,44 +94,30 @@
                          Grid.Column="1" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label Content="Nom du client :" FontSize="6"/>
+                    <Label x:Name="nomClient" Content="Nom du client : " FontSize="6"/>
                 </Viewbox>
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="3"
                          Grid.Column="1" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label Content="Date de création :" FontSize="6"/>
-                </Viewbox>
-                <Viewbox Margin="15,0,0,0"
-                         Grid.Row="5"
-                         Grid.Column="1" 
-                         HorizontalAlignment="Left" 
-                         VerticalAlignment="Center">
-                    <Label Content="Statut actuel :" FontSize="6"/>
+                    <Label x:Name="dateCréation"  Content="Date de création : " FontSize="6"/>
                 </Viewbox>
 
                 <!-- Partie de droite -->
                 <Viewbox Margin="15,0,0,0"
-                         Grid.Row="1"
-                         Grid.Column="3" 
-                         HorizontalAlignment="Left" 
-                         VerticalAlignment="Center">
-                    <Label Content="Nombre de plan :" FontSize="6"/>
-                </Viewbox>
-                <Viewbox Margin="15,0,0,0"
                          Grid.Row="3"
                          Grid.Column="3" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label Content="Dernière mise à jour :" FontSize="6"/>
+                    <Label x:Name="dateMaj"  Content="Dernière mise à jour : " FontSize="6"/>
                 </Viewbox>
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="5"
                          Grid.Column="3" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label Content="Nom du commercial :" FontSize="6"/>
+                    <Label x:Name="nomCommercial" Content="Nom du commercial : " FontSize="6"/>
                 </Viewbox>
 
             </Grid>
@@ -158,7 +125,7 @@
             <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1 2 2 1" Grid.Column="1" />
 
         </Grid>
-        <!-- Fin Déclaration Footer Gestion Client-->
+        <!-- Fin Déclaration Footer Gestion Liste Client-->
 
         <!-- Début Déclaration Logo Madera -->
         <Grid x:Name="ImgContainer"  Grid.Row="0">
@@ -179,7 +146,7 @@
         </Grid>
         <!-- Fin Déclaration Logo Madera -->
 
-        <!-- Début Déclaration Menu Gestion Client-->
+        <!-- Début Déclaration Menu Gestion Liste Client-->
         <Grid x:Name="MenuGestionClient"
               Margin="5 0 5 5"
               Grid.Row="1"
@@ -193,7 +160,7 @@
                 <ColumnDefinition Width="0.25*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Début Déclaration Menu Gestion Client-->
+            <!-- Début Déclaration Menu Gestion Liste Client -->
             <Grid x:Name="Menu"
                   Background="DimGray"  
                   Grid.Column="1" 
@@ -236,102 +203,46 @@
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 
                          HorizontalAlignment="Stretch">
-                    <Button x:Name="BtnListeClient"
+                    <Button x:Name="BtnEditerClient"
                             FontSize="20"
                             Width="400"
                             Height="60"
-                            Content="Liste des clients"
-                            Click="Btn_List_Client_Click">
+                            Content="Editer un client"
+                            Click="BtnEditerClient_Click">
                     </Button>
                 </Viewbox>
                 <Viewbox Grid.Row="3"
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 
                          HorizontalAlignment="Stretch">
-                    <Button FontSize="20"
-                            Width="400"
-                            Height="60"
-                            Content="Créer un client"
-                            Click="Btn_Creer_Client_Click">
-                    </Button>
-                </Viewbox>
-                <Viewbox Grid.Row="5"
-                         Grid.Column="1"
-                         VerticalAlignment="Stretch" 
-                         HorizontalAlignment="Stretch">
-                    <Button x:Name="btn_creer_projet"
+                    <Button 
+                            x:Name="BtnCreerClient"
                             FontSize="20"
                             Width="400"
                             Height="60"
-                            Content="Créer un projet"
-                            Click="Btn_Creer_Projet_Click">
-                    </Button>
-                </Viewbox>
-                <Viewbox Grid.Row="7"
-                         Grid.Column="1"
-                         VerticalAlignment="Stretch" 
-                         HorizontalAlignment="Stretch">
-                    <Button FontSize="20"
-                            Width="400"
-                            Height="60"
-                            Content="Ouvrir le projet"
-                            Click="Btn_Ouvrir_Projet_Click">
+                            Content="Créer un client"
+                            Click="BtnCreerClient_Click">
                     </Button>
                 </Viewbox>
                 <Viewbox Grid.Row="17"
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 
                          HorizontalAlignment="Stretch">
-                    <Button FontSize="20"
+                    <Button 
+                            x:Name="BtnRetourListeProjet"
+                            FontSize="20"
                             Width="400"
                             Height="60"
-                            Content="Déconnexion"
-                            Click="Btn_Se_Deconnecter_Click">
+                            Content="Retour"
+                            Click="BtnRetourListeProjet_Click">
                     </Button>
                 </Viewbox>
             </Grid>
-            <!-- Fin Déclaration Menu Gestion Client -->
+            <!-- Fin Déclaration Menu Gestion Liste Client -->
             <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1 2 2 1" />
 
         </Grid>
-        <!-- Fin Déclaration Menu Gestion Client -->
-
-        <!-- Début Déclaration Liste Sélection Gestion Client -->
-        <Grid x:Name="GestionProjetClient"
-              Grid.Column="1"
-              Grid.Row="0" 
-              VerticalAlignment="Stretch" 
-              HorizontalAlignment="Stretch" 
-              Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-              Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
-              Grid.RowSpan="2" 
-              Grid.ColumnSpan="1"
-              >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <GroupBox x:Name="Clients"
-                      Header="Liste Projets Clients"
-                      Grid.Column="1"
-                      Grid.Row="0" 
-                      Panel.ZIndex="1"
-                      VerticalAlignment="Stretch" 
-                      HorizontalAlignment="Stretch" 
-                      Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                      Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
-                      Grid.RowSpan="2" 
-                      Grid.ColumnSpan="1"
-                      >
-                <StackPanel Width="{Binding ActualWidth, ElementName=columnDefinition1}">
-                    <WrapPanel x:Name="WrapClients"/>
-                </StackPanel>
-            </GroupBox>
-        </Grid>
-        <!-- Fin Déclaration Liste Sélection Gestion Client -->
+        <!-- Fin Déclaration Menu Gestion Liste Client -->
 
     </Grid>
 
