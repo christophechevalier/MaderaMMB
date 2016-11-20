@@ -17,7 +17,7 @@ using System.Windows.Markup;
 namespace Madera_MMB.View_Crtl
 {
     /// <summary>
-    /// Logique d'interaction pour Page1.xaml
+    /// Logique d'interaction pour Authentification.xaml
     /// </summary>
     public partial class Authentification : Page, IComponentConnector
     {
