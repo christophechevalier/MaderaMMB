@@ -26,11 +26,13 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
         }
 
-        #region listeners
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Quitter(object sender, RoutedEventArgs e)
         {
-            Button btn = sender as Button;
+            Application.Current.Shutdown();
         }
+
+        #region listeners
+
         #endregion
 
 
