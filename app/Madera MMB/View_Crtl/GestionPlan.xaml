@@ -22,7 +22,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="bdr" CornerRadius="2" Margin="3" Background="LightGray">
+                        <Border x:Name="bdr" BorderBrush="Black" BorderThickness="1 2 2 1" CornerRadius="2" Margin="3" Background="LightGray">
                             <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
                         </Border>
                         <ControlTemplate.Triggers>
@@ -179,8 +179,8 @@
         </Grid>
         <!-- Fin Déclaration Logo Madera -->
 
-        <!-- Début Déclaration Menu Gestion Projet-->
-        <Grid x:Name="MenuGestionClient"
+        <!-- Début Déclaration Menu Gestion Plan-->
+        <Grid x:Name="MenuGestionPlan"
               Margin="5 0 5 5"
               Grid.Row="1"
               Grid.Column="0" 
@@ -248,8 +248,7 @@
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 
                          HorizontalAlignment="Stretch">
-                    <Button 
-                            x:Name="BtnOuvrirPlan"
+                    <Button x:Name="BtnOuvrirPlan"
                             FontSize="20"
                             Width="400"
                             Height="60"
@@ -273,8 +272,7 @@
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 
                          HorizontalAlignment="Stretch">
-                    <Button 
-                            x:Name="BtnCopierPlan"
+                    <Button x:Name="BtnCopierPlan"
                             FontSize="20"
                             Width="400"
                             Height="60"
@@ -286,8 +284,7 @@
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 
                          HorizontalAlignment="Stretch">
-                    <Button 
-                            x:Name="BtnRetour"
+                    <Button x:Name="BtnRetour"
                             FontSize="20"
                             Width="400"
                             Height="60"
@@ -296,14 +293,14 @@
                     </Button>
                 </Viewbox>
             </Grid>
-            <!-- Fin Déclaration Menu Gestion Projet -->
+            <!-- Fin Déclaration Menu Gestion Plan -->
             <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1 2 2 1" />
 
         </Grid>
-        <!-- Fin Déclaration Menu Gestion Projet -->
+        <!-- Fin Déclaration Menu Gestion Plan -->
 
-        <!-- Début Déclaration Liste Sélection Gestion Projet -->
-        <Grid x:Name="GestionProjetClient"
+        <!-- Début Déclaration Liste Sélection Gestion Plan -->
+        <Grid x:Name="GestionPlans"
               Grid.Column="1"
               Grid.Row="0" 
               VerticalAlignment="Stretch" 
@@ -320,7 +317,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <GroupBox x:Name="Clients"
+            <GroupBox x:Name="Plans"
                       Header="Liste des plans"
                       Grid.Column="1"
                       Grid.Row="0" 

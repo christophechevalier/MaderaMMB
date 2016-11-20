@@ -40,7 +40,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border x:Name="bdr" CornerRadius="90" Margin="3" Background="LightGray">
+                        <Border x:Name="bdr" BorderBrush="Black" BorderThickness="1 2 2 1" CornerRadius="90" Margin="3" Background="LightGray">
                             <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
                         </Border>
                         <ControlTemplate.Triggers>
@@ -180,7 +180,7 @@
         <!-- Fin Déclaration Logo Madera -->
 
         <!-- Début Déclaration Menu Gestion Projet-->
-        <Grid x:Name="MenuGestionClient"
+        <Grid x:Name="MenuGestionProjet"
               Margin="5 0 5 5"
               Grid.Row="1"
               Grid.Column="0" 
@@ -236,7 +236,7 @@
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 
                          HorizontalAlignment="Stretch">
-                    <Button x:Name="BtnListeClient"
+                    <Button x:Name="BoutonListeClient"
                             FontSize="20"
                             Width="400"
                             Height="60"
@@ -259,7 +259,7 @@
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 
                          HorizontalAlignment="Stretch">
-                    <Button x:Name="btn_creer_projet"
+                    <Button x:Name="BoutonCreationProjet"
                             FontSize="20"
                             Width="400"
                             Height="60"

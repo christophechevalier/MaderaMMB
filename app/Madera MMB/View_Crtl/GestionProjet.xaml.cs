@@ -164,8 +164,6 @@ namespace Madera_MMB.View_Crtl
         // Editer un client
         private void Btn_Editer_Client_Click(object sender, RoutedEventArgs e)
         {
-            //BtnEditerClient.Visibility = System.Windows.Visibility.Visible;
-            //BtnListeClient.Visibility = System.Windows.Visibility.Hidden;
         }
         // Ouvrir un projet client
         private void Btn_Select_Projet_Client_Click(object sender, RoutedEventArgs e)

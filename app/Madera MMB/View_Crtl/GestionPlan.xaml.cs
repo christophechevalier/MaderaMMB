@@ -99,7 +99,7 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Labels()
         {
             nomClient.Content += "NOYER Thierry";
-            nomCommercial.Content += "José Répas";   
+            nomCommercial.Content += "José Répas";
         }
 
         #endregion
