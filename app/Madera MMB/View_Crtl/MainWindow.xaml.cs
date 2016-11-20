@@ -29,7 +29,7 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
 
 
-            Mainframe.Content = new View_Crtl.Authentification();
+            Mainframe.Content = new View_Crtl.GestionProjet();
 
 
         }
