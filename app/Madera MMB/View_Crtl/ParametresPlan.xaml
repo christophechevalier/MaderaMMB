@@ -9,9 +9,49 @@
 
     <!-- Début Déclaration Template-->
     <Page.Resources>
+        <!-- Image Logo -->
         <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png"/>
+        <!-- Label style -->
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+
+        <Style TargetType="{x:Type Button}">
+            <!-- Bouton style -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="bdr" BorderBrush="Black" BorderThickness="1 2 2 1" Margin="3" Background="White">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type ToggleButton}">
+            <!-- Toggle Bouton style -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border x:Name="bdr" BorderBrush="Black" BorderThickness="1 2 2 1" Margin="3" Background="White">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
-    
 
 
     <Grid x:Name="MainGrid">
@@ -126,11 +166,11 @@
             
            
             <TextBox Text="Plan 5 Base Carré " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="2"  TextWrapping="WrapWithOverflow" VerticalAlignment="Center" Width="200"/>
-            
-            <ToggleButton HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="3" x:Name="btnchoix1" Content=" Choisir une coupe " Height="30"   VerticalAlignment="Center" Click="cp_Button_Click" />
-            <ToggleButton x:Name="btnchoix2" Content=" Choisir une couverture " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="4"   VerticalAlignment="Center"  Click="couv_Button_Click"/>
-            <ToggleButton x:Name="btnchoix3" Content=" Choisir un plancher " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="5"   VerticalAlignment="Center" Click="planc_Button_Click" />
-            <ToggleButton x:Name="btnchoix4" Content=" Choisir une gamme " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="6"   VerticalAlignment="Center" Click="gamme_Button_Click" />
+
+            <ToggleButton x:Name="BoutonChoixCoupe" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="3" Content=" Choisir une coupe " Height="30"   VerticalAlignment="Center" Click="cp_Button_Click" />
+            <ToggleButton x:Name="BoutonChoixCouverture" Content=" Choisir une couverture " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="4"   VerticalAlignment="Center"  Click="couv_Button_Click"/>
+            <ToggleButton x:Name="BoutonChoixPlancher" Content=" Choisir un plancher " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="5"   VerticalAlignment="Center" Click="planc_Button_Click" />
+            <ToggleButton x:Name="BoutonChoixGamme" Content=" Choisir une gamme " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="6"   VerticalAlignment="Center" Click="gamme_Button_Click" />
 
             <GroupBox x:Name="forme" Visibility="Hidden" Header="Sélection d'une forme"  Grid.Column="2" Grid.Row="0" Grid.RowSpan="5"
                       Height="{Binding ActualHeight, ElementName=rowDefinition1}"

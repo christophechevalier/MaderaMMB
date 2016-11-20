@@ -83,7 +83,7 @@ namespace Madera_MMB.View_Crtl
                     }
                     type_forme = tb.Text;
                     active.IsChecked = true;
-                    btnchoix1.Content = type_forme + " " + taille_choisie;
+                    BoutonChoixCoupe.Content = type_forme + " " + taille_choisie;
                 };
 
                 wrapformes.Children.Add(Uneforme);
@@ -122,7 +122,7 @@ namespace Madera_MMB.View_Crtl
                     }
                     taille_choisie = tb.Text;
                     active.IsChecked = true;
-                    btnchoix1.Content = type_forme + " " + taille_choisie;
+                    BoutonChoixCoupe.Content = type_forme + " " + taille_choisie;
                 };
 
                 wraptailles.Children.Add(Unetaille);
@@ -174,7 +174,7 @@ namespace Madera_MMB.View_Crtl
                     }
                     couverture = tb.Text;
                     active.IsChecked = true;
-                    btnchoix2.Content = couverture;
+                    BoutonChoixCouverture.Content = couverture;
                 };
 
                 wrapcouv.Children.Add(Unetuile);
@@ -226,7 +226,7 @@ namespace Madera_MMB.View_Crtl
                     }
                     plancher = tb.Text;
                     active.IsChecked = true;
-                    btnchoix3.Content = plancher;
+                    BoutonChoixPlancher.Content = plancher;
                 };
 
                 wrapplanch.Children.Add(Unplanch);
@@ -278,7 +278,7 @@ namespace Madera_MMB.View_Crtl
                     }
                     plancher = tb.Text;
                     active.IsChecked = true;
-                    btnchoix4.Content = plancher;
+                    BoutonChoixGamme.Content = plancher;
                 };
 
                 wrapgamme.Children.Add(Unegam);
@@ -380,10 +380,10 @@ namespace Madera_MMB.View_Crtl
         }
         private void disableButtons()
         {
-            btnchoix1.IsChecked = false;
-            btnchoix2.IsChecked = false;
-            btnchoix3.IsChecked = false;
-            btnchoix4.IsChecked = false;
+            BoutonChoixCoupe.IsChecked = false;
+            BoutonChoixCouverture.IsChecked = false;
+            BoutonChoixPlancher.IsChecked = false;
+            BoutonChoixGamme.IsChecked = false;
         }
         private void clearAll()
         {
