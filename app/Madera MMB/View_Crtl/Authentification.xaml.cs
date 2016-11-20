@@ -29,7 +29,7 @@ namespace Madera_MMB.View_Crtl
         #region listeners
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            Button btn = sender as Button;
         }
         #endregion
 
