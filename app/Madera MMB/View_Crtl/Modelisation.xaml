@@ -22,10 +22,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="0.25*" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="0.25*" />
         </Grid.RowDefinitions>
-
-        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2" Grid.Column="1" />
 
         <Grid x:Name="ImgContainer"  Grid.Row="0">
 
@@ -53,9 +50,52 @@
         </Grid>
 
         <!-- Début Déclaration Vue-->
-        
-        
-        
+        <Grid x:Name="Model" ShowGridLines="True" Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=columnDefinition1}" Height="{Binding ActualHeight, ElementName=rowDefinition1}" Grid.RowSpan="2" Grid.ColumnSpan="1">
+            <!--<Grid.Background>
+                <ImageBrush ImageSource="\Madera_MMB\Lib\grille.png"/>
+            </Grid.Background>-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!--<TextBox Text="Plan 5 Base Carré " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1"  TextWrapping="WrapWithOverflow" VerticalAlignment="Center" Width="200"/>
+            <Button Content=" Choisir une coupe " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="2"   VerticalAlignment="Center" />-->
+        </Grid>
+
         <!-- Fin Déclaration Vue -->
 
     </Grid>

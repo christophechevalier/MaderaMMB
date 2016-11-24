@@ -23,6 +23,7 @@ namespace Madera_MMB.View_Crtl
         public Modelisation()
         {
             InitializeComponent();
+            Model.get
         }
     }
 }
