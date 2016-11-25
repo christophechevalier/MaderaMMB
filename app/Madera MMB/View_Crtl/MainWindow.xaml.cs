@@ -22,17 +22,43 @@ namespace Madera_MMB.View_Crtl
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+        View_Crtl.Authentification Authentification = new Authentification();
+        View_Crtl.GestionProjet GestionProjet = new GestionProjet();
+        View_Crtl.GestionClient GestionClient = new GestionClient();
+        View_Crtl.ParametresClient ParametresClient = new ParametresClient();
       
         public MainWindow()
         {
             InitializeComponent();
+            Initialize_listeners();
 
-
-            Mainframe.Content = new View_Crtl.GestionPlan();
+            Mainframe.Content = new View_Crtl.GestionProjet();
 
 
         }
+
+        #region Initialisation
+        private void Initialize_listeners()
+        {
+            Authentification.validAuth.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                Mainframe.Content = GestionProjet;
+            };
+            GestionProjet.BtnListeClient.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                Mainframe.Content = GestionClient;
+            };
+            GestionClient.BtnEditerClient.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                Mainframe.Content = ParametresClient;
+            };
+            GestionClient.BtnCreerClient.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                Mainframe.Content = ParametresClient;
+
+            };
+        }
+        #endregion
 
     }
 }
