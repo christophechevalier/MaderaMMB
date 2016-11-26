@@ -26,7 +26,8 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
         }
 
-        private void Quitter(object sender, RoutedEventArgs e)
+        // Quitter l'application
+        private void Btn_Quitter_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
