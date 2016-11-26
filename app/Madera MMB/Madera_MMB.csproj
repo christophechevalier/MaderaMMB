@@ -92,6 +92,9 @@
     <Compile Include="View_Crtl\Authentification.xaml.cs">
       <DependentUpon>Authentification.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View_Crtl\ParametresClient.xaml.cs">
+      <DependentUpon>ParametresClient.xaml</DependentUpon>
+    </Compile>
     <Page Include="Lib\Tools\ErrorModalWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -99,6 +102,10 @@
     <Page Include="Lib\Tools\SelectModalWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View_Crtl\GestionClient.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View_Crtl\GestionPlan.xaml">
       <SubType>Designer</SubType>
@@ -113,6 +120,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="CAD\ClientCAD.cs" />
+    <Compile Include="View_Crtl\GestionClient.xaml.cs">
+      <DependentUpon>GestionClient.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View_Crtl\GestionPlan.xaml.cs">
       <DependentUpon>GestionPlan.xaml</DependentUpon>
     </Compile>
@@ -124,6 +134,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View_Crtl\Authentification.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View_Crtl\ParametresClient.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
