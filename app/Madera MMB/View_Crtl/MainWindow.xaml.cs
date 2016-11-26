@@ -83,6 +83,11 @@ namespace Madera_MMB.View_Crtl
             {
                 Mainframe.Content = ParametresClient;
             };
+            // Click sur le bouton se déconnecter de l'application pour aller dans la Vue Auth
+            GestionProjet.BtnSeDeconnecter.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                Mainframe.Content = Authentification;
+            };
         }
         #endregion
 
@@ -98,11 +103,6 @@ namespace Madera_MMB.View_Crtl
             GestionClient.BtnCreerClient.Click += delegate(object sender, RoutedEventArgs e)
             {
                 Mainframe.Content = ParametresClient;
-            };
-            // Click sur le bouton se déconnecter de l'application pour aller dans la Vue Auth
-            GestionClient.BtnSeDeconnecter.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = Authentification;
             };
         }
         #endregion
