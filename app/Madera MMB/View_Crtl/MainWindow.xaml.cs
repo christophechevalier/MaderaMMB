@@ -127,7 +127,7 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Listeners_GestionPlan()
         {
             // Click sur le bouton créer un nouveau plan pour aller dans la Vue Paramètres Plan
-            GestionPlan.BtnCreerPlan.Click += delegate(object sender, RoutedEventArgs e)
+            GestionPlan.BtnCréerPlan.Click += delegate(object sender, RoutedEventArgs e)
             {
                 Mainframe.Content = ParametresPlan;
             };
@@ -169,7 +169,7 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Listeners_Modelisation()
         {
             // Click sur le bouton quitter modélisation pour aller dans la Vue Gestion Plan
-            Authentification.BtnQuitterModelisation.Click += delegate(object sender, RoutedEventArgs e)
+            Modelisation.BtnQuitterModelisation.Click += delegate(object sender, RoutedEventArgs e)
             {
                 Mainframe.Content = GestionPlan;
             };
