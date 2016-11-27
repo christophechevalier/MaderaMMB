@@ -20,10 +20,23 @@ namespace Madera_MMB.View_Crtl
     /// </summary>
     public partial class Modelisation : Page
     {
+        #region Constructeur
         public Modelisation()
         {
             InitializeComponent();
-            Model.get
         }
+        #endregion
+
+        #region Listeners
+        private void BtnQuitterModelisation_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnSauvegarder_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
     }
 }
