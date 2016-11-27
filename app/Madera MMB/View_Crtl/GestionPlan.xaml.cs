@@ -42,8 +42,8 @@ namespace Madera_MMB.View_Crtl
             {
                 ToggleButton UnPlan = new ToggleButton();
                 UnPlan.Background = Brushes.White;
-                UnPlan.Width = 150;
-                UnPlan.Height = 150;
+                UnPlan.Width = 120;
+                UnPlan.Height = 120;
                 Thickness margin = UnPlan.Margin;
                 margin.Left = 20;
                 margin.Right = 20;
@@ -52,8 +52,8 @@ namespace Madera_MMB.View_Crtl
                 UnPlan.Margin = margin;
 
                 Image img = new Image();
-                img.Width = 100;
-                img.Height = 100;
+                img.Width = 70;
+                img.Height = 70;
                 img.VerticalAlignment = VerticalAlignment.Top;
                 string source = "../Lib/Images/house_black.png";
                 Uri imageUri = new Uri(source, UriKind.Relative);

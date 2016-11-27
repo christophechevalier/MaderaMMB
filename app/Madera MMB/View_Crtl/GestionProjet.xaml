@@ -5,8 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
       d:DesignHeight="1661.667" d:DesignWidth="2650.333"
-      Title="GestionProjet"
-      FontFamily="Segoe UI Semibold">
+      Title="GestionProjet">
 
     <!-- Début Déclaration Template-->
     <Page.Resources>

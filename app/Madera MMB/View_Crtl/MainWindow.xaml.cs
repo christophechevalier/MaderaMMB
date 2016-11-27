@@ -104,6 +104,11 @@ namespace Madera_MMB.View_Crtl
             {
                 Mainframe.Content = ParametresClient;
             };
+            // Click sur le bouton retour pour aller dans la Vue Gestion Projet
+            GestionClient.BtnRetourListeProjet.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                Mainframe.Content = GestionProjet;
+            };
         }
         #endregion
 
@@ -137,7 +142,7 @@ namespace Madera_MMB.View_Crtl
                 Mainframe.Content = Modelisation;
             };
             // Click sur le bouton consulter le devis pour aller dans la Vue Gestion Devis
-            GestionPlan.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
+            GestionPlan.BtnConsulterDevis.Click += delegate(object sender, RoutedEventArgs e)
             {
                 Mainframe.Content = GestionDevis;
             };
