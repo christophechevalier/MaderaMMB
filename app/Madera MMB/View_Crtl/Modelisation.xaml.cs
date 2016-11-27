@@ -12,30 +12,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Markup;
 
 namespace Madera_MMB.View_Crtl
 {
     /// <summary>
-    /// Logique d'interaction pour Authentification.xaml
+    /// Logique d'interaction pour Modelisation.xaml
     /// </summary>
-    public partial class Authentification : Page, IComponentConnector
+    public partial class Modelisation : Page
     {
-        public Authentification()
+        public Modelisation()
         {
             InitializeComponent();
+            Model.get
         }
-
-        // Quitter l'application
-        private void Btn_Quitter_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-        #region listeners
-
-        #endregion
-
-
     }
 }
