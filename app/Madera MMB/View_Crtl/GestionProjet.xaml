@@ -11,7 +11,7 @@
     <!-- Début Déclaration Template-->
     <Page.Resources>
         <!-- Image Logo -->
-        <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png"/>
+        <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png" />
         <!-- Label style -->
         <Style TargetType="{x:Type Label}">
             <Setter Property="FontSize" Value="12" />
@@ -22,12 +22,12 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="bdr" CornerRadius="2" Margin="3" Background="LightGray">
+                        <Border x:Name="bdr" CornerRadius="2" Margin="3" Background="LightGray" BorderBrush="Black" BorderThickness="1 1 2 2">
                             <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen"/>
+                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -40,7 +40,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border x:Name="bdr" CornerRadius="90" Margin="3" Background="LightGray">
+                        <Border x:Name="bdr" BorderBrush="Black" BorderThickness="1 2 2 1" CornerRadius="90" Margin="3" Background="LightGray">
                             <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
                         </Border>
                         <ControlTemplate.Triggers>
@@ -53,7 +53,7 @@
             </Setter>
         </Style>
     </Page.Resources>
-    <!-- Fin Déclaration Template-->
+    <!-- Fin Déclaration Template -->
 
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
@@ -67,17 +67,17 @@
             <RowDefinition Height="0.25*" />
         </Grid.RowDefinitions>
 
-        <!-- Début Déclaration Footer Gestion Projet-->
+        <!-- Début Déclaration Footer Gestion Projet -->
         <Grid Grid.Row="2"
               Margin="0 5 5 5"
               Grid.Column="2"
               Grid.RowSpan="1">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.25*"/>
+                <RowDefinition Height="0.25*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Grid Background="DimGray"
@@ -91,20 +91,20 @@
                   Grid.ColumnSpan="2">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.05*"/>
-                    <RowDefinition Height="0.25*"/>
-                    <RowDefinition Height="0.05*"/>
-                    <RowDefinition Height="0.25*"/>
-                    <RowDefinition Height="0.05*"/>
-                    <RowDefinition Height="0.25*"/>
-                    <RowDefinition Height="0.05*"/>
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.05*"/>
-                    <ColumnDefinition Width="0.4*"/>
-                    <ColumnDefinition Width="0.05*"/>
-                    <ColumnDefinition Width="0.4*"/>
-                    <ColumnDefinition Width="0.05*"/>
+                    <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.4*" />
+                    <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.4*" />
+                    <ColumnDefinition Width="0.05*" />
                 </Grid.ColumnDefinitions>
 
                 <!-- Partie de gauche -->
@@ -113,21 +113,21 @@
                          Grid.Column="1" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label Content="Nom du client :" FontSize="6"/>
+                    <Label Content="Nom du client :" FontSize="6" />
                 </Viewbox>
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="3"
                          Grid.Column="1" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label Content="Date de création :" FontSize="6"/>
+                    <Label Content="Date de création :" FontSize="6" />
                 </Viewbox>
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="5"
                          Grid.Column="1" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label Content="Statut actuel :" FontSize="6"/>
+                    <Label Content="Statut actuel :" FontSize="6" />
                 </Viewbox>
 
                 <!-- Partie de droite -->
@@ -136,21 +136,21 @@
                          Grid.Column="3" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label Content="Nombre de plan :" FontSize="6"/>
+                    <Label Content="Nombre de plan :" FontSize="6" />
                 </Viewbox>
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="3"
                          Grid.Column="3" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label Content="Dernière mise à jour :" FontSize="6"/>
+                    <Label Content="Dernière mise à jour :" FontSize="6" />
                 </Viewbox>
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="5"
                          Grid.Column="3" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label Content="Nom du commercial :" FontSize="6"/>
+                    <Label Content="Nom du commercial :" FontSize="6" />
                 </Viewbox>
 
             </Grid>
@@ -158,7 +158,7 @@
             <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1 2 2 1" Grid.Column="1" />
 
         </Grid>
-        <!-- Fin Déclaration Footer Gestion Projet-->
+        <!-- Fin Déclaration Footer Gestion Projet -->
 
         <!-- Début Déclaration Logo Madera -->
         <Grid x:Name="ImgContainer"  Grid.Row="0">
@@ -175,25 +175,25 @@
                    Source="{StaticResource Logo}" 
                    Grid.Row="0" 
                    Width="{Binding ActualHeight, ElementName=rowDefinition0}" 
-                   Margin="10"/>
+                   Margin="10" />
         </Grid>
         <!-- Fin Déclaration Logo Madera -->
 
-        <!-- Début Déclaration Menu Gestion Projet-->
-        <Grid x:Name="MenuGestionClient"
+        <!-- Début Déclaration Menu Gestion Projet -->
+        <Grid x:Name="MenuGestionProjet"
               Margin="5 0 5 5"
               Grid.Row="1"
               Grid.Column="0" 
               Grid.RowSpan="2">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.25*"/>
+                <ColumnDefinition Width="0.25*" />
             </Grid.ColumnDefinitions>
 
-            <!-- Début Déclaration Menu Gestion Projet-->
+            <!-- Début Déclaration Menu Gestion Projet -->
             <Grid x:Name="Menu"
                   Background="DimGray"  
                   Grid.Column="1" 
@@ -248,7 +248,8 @@
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 
                          HorizontalAlignment="Stretch">
-                    <Button FontSize="20"
+                    <Button x:Name="BtnCreerClient"
+                            FontSize="20"
                             Width="400"
                             Height="60"
                             Content="Créer un client"
@@ -259,7 +260,7 @@
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 
                          HorizontalAlignment="Stretch">
-                    <Button x:Name="btn_creer_projet"
+                    <Button x:Name="BtnCreerProjet"
                             FontSize="20"
                             Width="400"
                             Height="60"
@@ -271,7 +272,8 @@
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 
                          HorizontalAlignment="Stretch">
-                    <Button FontSize="20"
+                    <Button x:Name="BtnOuvrirProjet"
+                            FontSize="20"
                             Width="400"
                             Height="60"
                             Content="Ouvrir le projet"
@@ -282,7 +284,8 @@
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 
                          HorizontalAlignment="Stretch">
-                    <Button FontSize="20"
+                    <Button x:Name="BtnSeDeconnecter"
+                            FontSize="20"
                             Width="400"
                             Height="60"
                             Content="Déconnexion"
@@ -308,10 +311,10 @@
               Grid.ColumnSpan="1"
               >
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <GroupBox x:Name="Clients"
@@ -327,7 +330,7 @@
                       Grid.ColumnSpan="1"
                       >
                 <StackPanel Width="{Binding ActualWidth, ElementName=columnDefinition1}">
-                    <WrapPanel x:Name="WrapClients"/>
+                    <WrapPanel x:Name="WrapClients" />
                 </StackPanel>
             </GroupBox>
         </Grid>

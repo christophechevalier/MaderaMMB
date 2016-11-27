@@ -97,7 +97,7 @@ namespace Madera_MMB.View_Crtl
         {
             var window = new SelectModalWindow();
             window.Title = "Nouveau Projet ";
-            window.Titlelabel.Content = " Nouveau Projet ";
+            window.Titlelabel.Content = " Sélectionner un client pour votre nouveau projet ";
 
             window.Retour.Click += delegate(object sender, RoutedEventArgs e)
             {
@@ -109,14 +109,14 @@ namespace Madera_MMB.View_Crtl
                 window.Close();
             };
 
-            window.DataSelect.Text = "-- Choisir Client --";
+            window.DataSelect.Text = "-- Choisir un client --";
             window.DataSelect.Items.Add("CERISIER Madeleine");
-            window.DataSelect.Items.Add("XXX XXX");
-            window.DataSelect.Items.Add("XXX XXX");
-            window.DataSelect.Items.Add("XXX XXX");
-            window.DataSelect.Items.Add("XXX XXX");
-            window.DataSelect.Items.Add("XXX XXX");
-            window.DataSelect.Items.Add("XXX XXX");
+            window.DataSelect.Items.Add("CHENES Yves");
+            window.DataSelect.Items.Add("NOISETTIER Louise");
+            window.DataSelect.Items.Add("TILLEULE Bertrand");
+            window.DataSelect.Items.Add("SAPIN Léo");
+            window.DataSelect.Items.Add("PORIER José");
+            window.DataSelect.Items.Add("PRUNIER Marion");
 
             window.ShowDialog();
         }
@@ -164,8 +164,6 @@ namespace Madera_MMB.View_Crtl
         // Editer un client
         private void Btn_Editer_Client_Click(object sender, RoutedEventArgs e)
         {
-            //BtnEditerClient.Visibility = System.Windows.Visibility.Visible;
-            //BtnListeClient.Visibility = System.Windows.Visibility.Hidden;
         }
         // Ouvrir un projet client
         private void Btn_Select_Projet_Client_Click(object sender, RoutedEventArgs e)
