@@ -22,7 +22,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="0.25*" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="0.30*" />
         </Grid.RowDefinitions>
 
         <Grid x:Name="ImgContainer"  Grid.Row="0">
@@ -38,7 +37,7 @@
 
         </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="0" >
+        <Grid Grid.Row="1" Grid.Column="0" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -46,29 +45,12 @@
                 <ColumnDefinition Width="0.25*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Row="0" Grid.Column="1" />
-
-            <Button Content="Tracer un slot" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Width="250" Height="55" Grid.Row="2" Grid.Column="0"/>
-            <Button Content="Supprimer un slot" HorizontalAlignment="center" Margin="0,100,0,0" VerticalAlignment="Top" Width="250" Height="55" Grid.Row="2" Grid.Column="0"/>
-
-        </Grid>
-
-        <Grid Grid.Row="2" Grid.Column="0" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.25*"/>
-            </Grid.ColumnDefinitions>
-
-            <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" Grid.Column="1" Margin="5" />
-            <Button Content="Sauvegarder" HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Top" Width="250" Height="55" Grid.Row="2" Grid.Column="0"/>
-            <Button Content="Quitter" HorizontalAlignment="center" Margin="0,0,0,25" VerticalAlignment="Bottom" Width="250" Height="55" Grid.Row="2" Grid.Column="0"/>
+            <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" Grid.Column="1" />
 
         </Grid>
 
         <!-- Début Déclaration Vue-->
-        <Grid x:Name="Model" ShowGridLines="True" Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=columnDefinition1}" Height="{Binding ActualHeight, ElementName=rowDefinition1}" Grid.RowSpan="3" Grid.ColumnSpan="1">
+        <Grid x:Name="Model" ShowGridLines="True" Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=columnDefinition1}" Height="{Binding ActualHeight, ElementName=rowDefinition1}" Grid.RowSpan="2" Grid.ColumnSpan="1">
             <!--<Grid.Background>
                 <ImageBrush ImageSource="\Madera_MMB\Lib\grille.png"/>
             </Grid.Background>-->
