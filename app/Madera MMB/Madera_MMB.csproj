@@ -95,6 +95,9 @@
     <Compile Include="View_Crtl\ParametresClient.xaml.cs">
       <DependentUpon>ParametresClient.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View_Crtl\ParametresPlan.xaml.cs">
+      <DependentUpon>ParametresPlan.xaml</DependentUpon>
+    </Compile>
     <Page Include="Lib\Tools\ErrorModalWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -138,6 +141,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View_Crtl\ParametresClient.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View_Crtl\ParametresPlan.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
