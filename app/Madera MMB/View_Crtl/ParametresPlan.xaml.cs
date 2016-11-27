@@ -28,6 +28,7 @@ namespace Madera_MMB.View_Crtl
         private string plancher { get; set; }
         #endregion
 
+        #region Constructeur
         public ParametresPlan()
         {
             InitializeComponent();
@@ -36,6 +37,7 @@ namespace Madera_MMB.View_Crtl
             initialize_planch_wrapper();
             initialize_gamme_wrapper();
         }
+        #endregion
 
         #region Initialisation des conteneurs
         private void initialize_cp_wrappers()
@@ -305,6 +307,7 @@ namespace Madera_MMB.View_Crtl
             btn.IsChecked = true;
 
         }
+
         private void couv_Button_Click(object sender, RoutedEventArgs e)
         {
             ToggleButton btn = sender as ToggleButton;
@@ -322,6 +325,7 @@ namespace Madera_MMB.View_Crtl
             btn.IsChecked = true;
 
         }
+
         private void planc_Button_Click(object sender, RoutedEventArgs e)
         {
             ToggleButton btn = sender as ToggleButton;
@@ -339,6 +343,7 @@ namespace Madera_MMB.View_Crtl
             btn.IsChecked = true;
 
         }
+
         private void gamme_Button_Click(object sender, RoutedEventArgs e)
         {
             ToggleButton btn = sender as ToggleButton;
@@ -354,6 +359,16 @@ namespace Madera_MMB.View_Crtl
 
             disableButtons();
             btn.IsChecked = true;
+
+        }
+
+        private void BtnConfirmerParamPlan_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnRetour_Click(object sender, RoutedEventArgs e)
+        {
 
         }
         #endregion
