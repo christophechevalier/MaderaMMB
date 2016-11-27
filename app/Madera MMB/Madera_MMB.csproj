@@ -67,6 +67,12 @@
     <Compile Include="CAD\PlancherCAD.cs" />
     <Compile Include="CAD\ProjetCAD.cs" />
     <Compile Include="CAD\SlotCAD.cs" />
+    <Compile Include="Lib\Tools\ErrorModalWindow.xaml.cs">
+      <DependentUpon>ErrorModalWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Lib\Tools\SelectModalWindow.xaml.cs">
+      <DependentUpon>SelectModalWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View_Crtl\App.cs" />
     <Compile Include="Model\Client.cs" />
     <Compile Include="Model\Commercial.cs" />
@@ -86,17 +92,43 @@
     <Compile Include="View_Crtl\Authentification.xaml.cs">
       <DependentUpon>Authentification.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View_Crtl\Modelisation.xaml.cs">
-      <DependentUpon>Modelisation.xaml</DependentUpon>
+    <Compile Include="View_Crtl\ParametresClient.xaml.cs">
+      <DependentUpon>ParametresClient.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View_Crtl\ParametresPlan.xaml.cs">
-      <DependentUpon>ParametresPlan.xaml</DependentUpon>
-    </Compile>
+    <Page Include="Lib\Tools\ErrorModalWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Lib\Tools\SelectModalWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View_Crtl\GestionClient.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View_Crtl\GestionPlan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View_Crtl\GestionProjet.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View_Crtl\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="CAD\ClientCAD.cs" />
+    <Compile Include="View_Crtl\GestionClient.xaml.cs">
+      <DependentUpon>GestionClient.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View_Crtl\GestionPlan.xaml.cs">
+      <DependentUpon>GestionPlan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View_Crtl\GestionProjet.xaml.cs">
+      <DependentUpon>GestionProjet.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View_Crtl\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -105,11 +137,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View_Crtl\Modelisation.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View_Crtl\ParametresPlan.xaml">
+    <Page Include="View_Crtl\ParametresClient.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -150,21 +178,13 @@
     <Resource Include="Lib\logo_madera.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Lib\L.png" />
-    <Resource Include="Lib\rectangle.png" />
-    <Resource Include="Lib\T.png" />
+    <Resource Include="Lib\Images\empty_folder.png" />
+    <Resource Include="Lib\Images\existing_folder.png" />
+    <Resource Include="Lib\Images\folder.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Lib\carre.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Lib\tuile.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Lib\carrelage.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Lib\bois.png" />
+    <Resource Include="Lib\Images\house_black.png" />
+    <Resource Include="Lib\Images\house_green.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

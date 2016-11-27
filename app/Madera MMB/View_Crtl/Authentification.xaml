@@ -4,18 +4,60 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+
+      d:DesignHeight="1661.667" d:DesignWidth="2650.333"
 	Title="Authentification">
 
 
     <!-- Début Déclaration Template-->
     <Page.Resources>
+        <!-- Image Logo -->
         <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png"/>
+        <!-- Label style -->
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+
+        <Style TargetType="{x:Type Button}">
+            <!-- Bouton style -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="bdr" BorderBrush="Black" BorderThickness="1 2 2 1" CornerRadius="2" Margin="3" Background="LightGray">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type ToggleButton}">
+            <!-- Toggle Bouton style -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border x:Name="bdr" CornerRadius="90" Margin="3" Background="LightGray">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
-    <Grid x:Name="MainGrid">
+    <Grid x:Name="MainGrid" Background="White">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.25*" />
+            <ColumnDefinition Width="0.15*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
@@ -25,41 +67,102 @@
             <RowDefinition Height="0.25*" />
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2" Grid.Column="1" />
 
-        <Grid x:Name="ImgContainer"  Grid.Row="0">
-
+        <Grid x:Name="ImgContainer"  Grid.Row="0" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />                
             </Grid.ColumnDefinitions>
-
+            
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Image Name="Logo" Grid.Column="0" Source="{StaticResource Logo}" Grid.Row="0" Width="{Binding ActualHeight, ElementName=rowDefinition0}" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10"/>
-
+            </Grid.RowDefinitions>           
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="0" Grid.RowSpan="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.25*"/>
+                <ColumnDefinition Width="0.25*" />
             </Grid.ColumnDefinitions>
-
-            <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" Grid.Column="1" />
-
         </Grid>
 
         <!-- Début Déclaration Vue-->
-        <Grid Background="LightGray"  Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=columnDefinition1}" Height="{Binding ActualHeight, ElementName=rowDefinition1}" Grid.RowSpan="2" Grid.ColumnSpan="1">
-            <Button Content="Valider" HorizontalAlignment="Left" VerticalAlignment="Top" Width="107" Margin="88,216,0,0" Height="32" Click="Button_Click"/>
-            <Label Content="S'authentifier" HorizontalAlignment="Center" Height="28" Margin="117,33,95,0" VerticalAlignment="Top" Width="88"/>
-            <TextBox HorizontalAlignment="Left" Height="42" Margin="88,81,0,0" TextWrapping="Wrap" Text="UserName" VerticalAlignment="Top" Width="133"/>
-            <TextBox HorizontalAlignment="Left" Height="42" Margin="88,144,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Width="133" TextChanged="TextBox_TextChanged"/>
+        <Grid Background="White"  Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=columnDefinition1}" Height="{Binding ActualHeight, ElementName=rowDefinition1}" Grid.RowSpan="2" Grid.ColumnSpan="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="0.40*" />
+                <RowDefinition Height="0.40*" />
+                <RowDefinition Height="0.40*" />
+                <RowDefinition Height="0.40*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.40*"/>
+                <ColumnDefinition Width="0.60*"/>
+                <ColumnDefinition Width="0.40*"/>
+                <ColumnDefinition Width="0.20*"/>
+            </Grid.ColumnDefinitions>
+
+            <Image Name="Logo" Grid.Column="1" Source="{StaticResource Logo}" Grid.Row="0" Width="{Binding ActualHeight, ElementName=rowDefinition0}" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10"/>
+
+            <Viewbox Margin="20,0,20,0" 
+                     Grid.Row="1"
+                     Grid.Column="1"
+                     VerticalAlignment="Center" 
+                     HorizontalAlignment="Center">
+                <Label Content="Nom d'utilisateur : " />
+            </Viewbox>
+            <Viewbox Grid.Row="2" 
+                     Grid.Column="1" 
+                     HorizontalAlignment="Center" 
+                     VerticalAlignment="Center">
+                <TextBox x:Name="username"
+                         Height="45" 
+                         Width="250" 
+                         TextWrapping="Wrap" />
+            </Viewbox>
+            <Viewbox Margin="20,0,20,0" 
+                     Grid.Row="3"  
+                     Grid.Column="1" 
+                     VerticalAlignment="Center" 
+                     HorizontalAlignment="Center">
+                <Label Content="Mot de passe : " />
+            </Viewbox>          
+            <Viewbox Grid.Row="4"
+                     Grid.Column="1"
+                     VerticalAlignment="Center" 
+                     HorizontalAlignment="Center">
+                <PasswordBox x:Name="password"
+                             Height="45"
+                             Width="250" />
+            </Viewbox>
+            <Viewbox Grid.Row="5" 
+                     Grid.Column="2" 
+                     HorizontalAlignment="Left" 
+                     VerticalAlignment="Center">
+                <Button x:Name="BtnValiderAuth"
+                        Content="Valider"
+                        FontSize="15"
+                        Height="50"
+                        Width="250" />
+            </Viewbox>
+            <Viewbox Grid.Row="5" 
+                     Grid.Column="0" 
+                     HorizontalAlignment="Right" 
+                     VerticalAlignment="Center">
+                <Button x:Name="BtnQuitter"
+                        Content="Quitter" 
+                        FontSize="15" 
+                        Height="50" 
+                        Width="250" 
+                        Click="Btn_Quitter_Click" />
+            </Viewbox>
         </Grid>
         <!-- Fin Déclaration Vue -->
+
 
     </Grid>
     <!-- Fin Déclaration Template -->

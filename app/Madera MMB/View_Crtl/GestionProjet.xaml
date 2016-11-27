@@ -1,0 +1,340 @@
+﻿<Page x:Class="Madera_MMB.View_Crtl.GestionProjet"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="1661.667" d:DesignWidth="2650.333"
+      Title="GestionProjet">
+
+    <!-- Début Déclaration Template-->
+    <Page.Resources>
+        <!-- Image Logo -->
+        <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png" />
+        <!-- Label style -->
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+
+        <Style TargetType="{x:Type Button}">
+            <!-- Bouton style -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="bdr" CornerRadius="2" Margin="3" Background="LightGray" BorderBrush="Black" BorderThickness="1 1 2 2">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type ToggleButton}">
+            <!-- Toggle Bouton style -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border x:Name="bdr" BorderBrush="Black" BorderThickness="1 2 2 1" CornerRadius="90" Margin="3" Background="LightGray">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <!-- Fin Déclaration Template -->
+
+    <Grid x:Name="MainGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.25*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.25*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="0.25*" />
+        </Grid.RowDefinitions>
+
+        <!-- Début Déclaration Footer Gestion Projet -->
+        <Grid Grid.Row="2"
+              Margin="0 5 5 5"
+              Grid.Column="2"
+              Grid.RowSpan="1">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.25*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Background="DimGray"
+                  Grid.Column="0" 
+                  Grid.Row="1" 
+                  VerticalAlignment="Stretch" 
+                  HorizontalAlignment="Stretch" 
+                  Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
+                  Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
+                  Grid.RowSpan="2" 
+                  Grid.ColumnSpan="2">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.4*" />
+                    <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.4*" />
+                    <ColumnDefinition Width="0.05*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Partie de gauche -->
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="1"
+                         Grid.Column="1" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label Content="Nom du client :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="1" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label Content="Date de création :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="5"
+                         Grid.Column="1" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label Content="Statut actuel :" FontSize="6" />
+                </Viewbox>
+
+                <!-- Partie de droite -->
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="1"
+                         Grid.Column="3" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label Content="Nombre de plan :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="3" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label Content="Dernière mise à jour :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="5"
+                         Grid.Column="3" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label Content="Nom du commercial :" FontSize="6" />
+                </Viewbox>
+
+            </Grid>
+
+            <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1 2 2 1" Grid.Column="1" />
+
+        </Grid>
+        <!-- Fin Déclaration Footer Gestion Projet -->
+
+        <!-- Début Déclaration Logo Madera -->
+        <Grid x:Name="ImgContainer"  Grid.Row="0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Image Name="Logo" 
+                   Grid.Column="0" 
+                   Source="{StaticResource Logo}" 
+                   Grid.Row="0" 
+                   Width="{Binding ActualHeight, ElementName=rowDefinition0}" 
+                   Margin="10" />
+        </Grid>
+        <!-- Fin Déclaration Logo Madera -->
+
+        <!-- Début Déclaration Menu Gestion Projet -->
+        <Grid x:Name="MenuGestionProjet"
+              Margin="5 0 5 5"
+              Grid.Row="1"
+              Grid.Column="0" 
+              Grid.RowSpan="2">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.25*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Début Déclaration Menu Gestion Projet -->
+            <Grid x:Name="Menu"
+                  Background="DimGray"  
+                  Grid.Column="1" 
+                  Grid.Row="0" 
+                  VerticalAlignment="Stretch" 
+                  HorizontalAlignment="Stretch" 
+                  Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
+                  Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
+                  Grid.RowSpan="2" 
+                  Grid.ColumnSpan="1">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.1*" />
+                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="0.1*" />
+                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="0.1*" />
+                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="0.1*" />
+                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="0.1*" />
+                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="0*" />
+                    <RowDefinition Height="0.1*" />
+                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="0.1*" />
+                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="0.1*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.1*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="0.1*" />
+                </Grid.ColumnDefinitions>
+
+                <Viewbox Grid.Row="1"
+                         Grid.Column="1"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button x:Name="BtnListeClient"
+                            FontSize="20"
+                            Width="400"
+                            Height="60"
+                            Content="Liste des clients"
+                            Click="Btn_List_Client_Click">
+                    </Button>
+                </Viewbox>
+                <Viewbox Grid.Row="3"
+                         Grid.Column="1"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button x:Name="BtnCreerClient"
+                            FontSize="20"
+                            Width="400"
+                            Height="60"
+                            Content="Créer un client"
+                            Click="Btn_Creer_Client_Click">
+                    </Button>
+                </Viewbox>
+                <Viewbox Grid.Row="5"
+                         Grid.Column="1"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button x:Name="BtnCreerProjet"
+                            FontSize="20"
+                            Width="400"
+                            Height="60"
+                            Content="Créer un projet"
+                            Click="Btn_Creer_Projet_Click">
+                    </Button>
+                </Viewbox>
+                <Viewbox Grid.Row="7"
+                         Grid.Column="1"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button x:Name="BtnOuvrirProjet"
+                            FontSize="20"
+                            Width="400"
+                            Height="60"
+                            Content="Ouvrir le projet"
+                            Click="Btn_Ouvrir_Projet_Click">
+                    </Button>
+                </Viewbox>
+                <Viewbox Grid.Row="17"
+                         Grid.Column="1"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button x:Name="BtnSeDeconnecter"
+                            FontSize="20"
+                            Width="400"
+                            Height="60"
+                            Content="Déconnexion"
+                            Click="Btn_Se_Deconnecter_Click">
+                    </Button>
+                </Viewbox>
+            </Grid>
+            <!-- Fin Déclaration Menu Gestion Projet -->
+            <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1 2 2 1" />
+
+        </Grid>
+        <!-- Fin Déclaration Menu Gestion Projet -->
+
+        <!-- Début Déclaration Liste Sélection Gestion Projet -->
+        <Grid x:Name="GestionProjetClient"
+              Grid.Column="1"
+              Grid.Row="0" 
+              VerticalAlignment="Stretch" 
+              HorizontalAlignment="Stretch" 
+              Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
+              Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
+              Grid.RowSpan="2" 
+              Grid.ColumnSpan="1"
+              >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <GroupBox x:Name="Clients"
+                      Header="Liste Projets Clients"
+                      Grid.Column="1"
+                      Grid.Row="0" 
+                      Panel.ZIndex="1"
+                      VerticalAlignment="Stretch" 
+                      HorizontalAlignment="Stretch" 
+                      Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
+                      Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
+                      Grid.RowSpan="2" 
+                      Grid.ColumnSpan="1"
+                      >
+                <StackPanel Width="{Binding ActualWidth, ElementName=columnDefinition1}">
+                    <WrapPanel x:Name="WrapClients" />
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+        <!-- Fin Déclaration Liste Sélection Gestion Projet -->
+
+    </Grid>
+
+</Page>

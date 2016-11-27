@@ -17,25 +17,25 @@ using System.Windows.Markup;
 namespace Madera_MMB.View_Crtl
 {
     /// <summary>
-    /// Logique d'interaction pour Page1.xaml
+    /// Logique d'interaction pour Authentification.xaml
     /// </summary>
     public partial class Authentification : Page, IComponentConnector
     {
         public Authentification()
         {
             InitializeComponent();
-
-
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        // Quitter l'application
+        private void Btn_Quitter_Click(object sender, RoutedEventArgs e)
         {
-
+            Application.Current.Shutdown();
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
+        #region listeners
 
-        }
+        #endregion
+
+
     }
 }
