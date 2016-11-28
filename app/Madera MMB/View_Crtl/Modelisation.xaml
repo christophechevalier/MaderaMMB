@@ -5,11 +5,12 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
-	  Title="Modelisation">
+	Title="Modelisation">
+
 
     <!-- Début Déclaration Template-->
     <Page.Resources>
-        <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png" />
+        <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png"/>
     </Page.Resources>
 
     <Grid x:Name="MainGrid">
@@ -33,115 +34,42 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Image Name="Logo" Grid.Column="0" Source="{StaticResource Logo}" Grid.Row="0" Width="{Binding ActualHeight, ElementName=rowDefinition0}" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10" />
+            <Image Name="Logo" Grid.Column="0" Source="{StaticResource Logo}" Grid.Row="0" Width="{Binding ActualHeight, ElementName=rowDefinition0}" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10"/>
 
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="0" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.25*" />
+                <ColumnDefinition Width="0.25*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Row="0" Grid.Column="1" />
+            <Border BorderBrush="Black" BorderThickness="2" Margin="5"/>
 
-            <Button Content="Tracer un slot" 
-                    HorizontalAlignment="Center" 
-                    Margin="0,20,0,0" 
-                    VerticalAlignment="Top" 
-                    Width="250" 
-                    Height="55" 
-                    Grid.Row="2" 
-                    Grid.Column="0"/>
-            <Button Content="Supprimer un slot" 
-                    HorizontalAlignment="center" 
-                    Margin="0,100,0,0" 
-                    VerticalAlignment="Top" 
-                    Width="250" 
-                    Height="55" 
-                    Grid.Row="2" 
-                    Grid.Column="0"/>
+            <Button Content="Tracer un slot" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Width="250" Height="55" Grid.Row="2" Grid.Column="0"/>
+            <Button Content="Supprimer un slot" HorizontalAlignment="center" Margin="0,100,0,0" VerticalAlignment="Top" Width="250" Height="55" Grid.Row="2" Grid.Column="0"/>
 
         </Grid>
 
         <Grid Grid.Row="2" Grid.Column="0" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.25*" />
+                <ColumnDefinition Width="0.25*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" Grid.Column="1" Margin="5" />
-            <Button x:Name="BtnSauvegarder"
-                    Content="Sauvegarder" 
-                    HorizontalAlignment="Center" 
-                    Margin="0,25,0,0" 
-                    VerticalAlignment="Top" 
-                    Width="250" 
-                    Height="55" 
-                    Grid.Row="2" 
-                    Grid.Column="0" 
-                    Click="BtnSauvegarder_Click" />
-            
-            <Button x:Name="BtnQuitterModelisation"
-                    Content="Quitter" 
-                    HorizontalAlignment="center" 
-                    Margin="0,0,0,25" 
-                    VerticalAlignment="Bottom" 
-                    Width="250" 
-                    Height="55" 
-                    Grid.Row="2" 
-                    Grid.Column="0" Click="BtnQuitterModelisation_Click" />
+            <Border BorderBrush="Black" BorderThickness="2" Margin="5" />
+            <Button Content="Sauvegarder" HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Top" Width="250" Height="55" Grid.Row="2" Grid.Column="0"/>
+            <Button Content="Quitter" HorizontalAlignment="center" Margin="0,0,0,25" VerticalAlignment="Bottom" Width="250" Height="55" Grid.Row="2" Grid.Column="0"/>
+
         </Grid>
 
         <!-- Début Déclaration Vue-->
-        <Grid x:Name="Model" ShowGridLines="True" Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=columnDefinition1}" Height="{Binding ActualHeight, ElementName=rowDefinition1}" Grid.RowSpan="3" Grid.ColumnSpan="1">
-            <!--<Grid.Background>
-                <ImageBrush ImageSource="\Madera_MMB\Lib\grille.png"/>
-            </Grid.Background>-->
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <!--<TextBox Text="Plan 5 Base Carré " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1"  TextWrapping="WrapWithOverflow" VerticalAlignment="Center" Width="200"/>
-            <Button Content=" Choisir une coupe " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="2"   VerticalAlignment="Center" />-->
+        <Grid x:Name="contenaire" Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=columnDefinition1}" Height="{Binding ActualHeight, ElementName=rowDefinition1}" Grid.RowSpan="3" Grid.ColumnSpan="1">
+            <Border BorderBrush="Black" BorderThickness="2" Margin="5" />
         </Grid>
 
         <!-- Fin Déclaration Vue -->
