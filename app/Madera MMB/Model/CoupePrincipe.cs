@@ -13,6 +13,7 @@ namespace Madera_MMB.Model
         public int longueur { get; set; }
         public int largeur { get; set; }
         public int prixHT { get; set; }
+        public string forme { get; set; }
         #endregion
 
         #region Ctor
