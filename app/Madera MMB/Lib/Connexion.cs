@@ -10,9 +10,7 @@ namespace Madera_MMB.Lib
 {
     class Connexion
     {
-        Connexion()
-        {
-        }
+        Connexion() {}
 
         private void SQLiteLocalConnexion()
         {
