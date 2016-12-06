@@ -63,7 +63,7 @@
 
             <Border BorderBrush="Black" BorderThickness="2" Margin="5" />
             <Button Content="Sauvegarder" HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Top" Width="250" Height="55" Grid.Row="2" Grid.Column="0"/>
-            <Button Content="Quitter" HorizontalAlignment="center" Margin="0,0,0,25" VerticalAlignment="Bottom" Width="250" Height="55" Grid.Row="2" Grid.Column="0"/>
+            <Button Content="Quitter" Name="BtnQuitterModelisation" HorizontalAlignment="center" Margin="0,0,0,25" VerticalAlignment="Bottom" Width="250" Height="55" Grid.Row="2" Grid.Column="0"/>
 
         </Grid>
 
