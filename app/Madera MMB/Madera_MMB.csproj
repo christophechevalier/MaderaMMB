@@ -92,6 +92,9 @@
     <Compile Include="View_Crtl\Authentification.xaml.cs">
       <DependentUpon>Authentification.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View_Crtl\GestionDevis.xaml.cs">
+      <DependentUpon>GestionDevis.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View_Crtl\Modelisation.xaml.cs">
       <DependentUpon>Modelisation.xaml</DependentUpon>
     </Compile>
@@ -110,6 +113,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View_Crtl\GestionClient.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View_Crtl\GestionDevis.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
