@@ -40,7 +40,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite">
+    <Reference Include="System.Data.SQLite, Version=1.0.103.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
@@ -70,6 +71,7 @@
     <Compile Include="CAD\PlancherCAD.cs" />
     <Compile Include="CAD\ProjetCAD.cs" />
     <Compile Include="CAD\SlotCAD.cs" />
+    <Compile Include="Lib\Connexion.cs" />
     <Compile Include="Lib\Tools\ErrorModalWindow.xaml.cs">
       <DependentUpon>ErrorModalWindow.xaml</DependentUpon>
     </Compile>
@@ -202,15 +204,6 @@
   <ItemGroup>
     <Resource Include="Lib\Images\house_black.png" />
     <Resource Include="Lib\Images\house_green.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Lib\Images\angle_bd.png" />
-    <Resource Include="Lib\Images\angle_bg.png" />
-    <Resource Include="Lib\Images\angle_hd.png" />
-    <Resource Include="Lib\Images\angle_hg.png" />
-    <Resource Include="Lib\Images\croix.png" />
-    <Resource Include="Lib\Images\mur_horizontal.png" />
-    <Resource Include="Lib\Images\mur_vertical.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -65,9 +65,7 @@ namespace Madera_MMB.View_Crtl
         private void initializeImage()
         {
 
-
             List<Uri> imagesUri = new List<Uri>();
-
 
             Uri Uricroix = new Uri("../Lib/Images/Croix.png", UriKind.Relative);
             Uri Urimurh = new Uri("../Lib/Images/mur_horizontal.png", UriKind.Relative);
@@ -109,10 +107,6 @@ namespace Madera_MMB.View_Crtl
             margin.Bottom = -3;
             margin.Top = -3;
             croix.Margin = margin;
-
-
-
-
 
         }
 

@@ -10,16 +10,16 @@ namespace Madera_MMB.Lib
 {
     class Connexion
     {
-        Connexion() {}
+        Connexion() { }
 
         private void SQLiteLocalConnexion()
         {
             SQLiteConnection liteConn = new SQLiteConnection("Data Source=MyDatabase.sqlite;Version=3;");
             liteConn.Open();
 
-           // Pour exécuter une requête sur une base SQLite //
-           // SQLiteCommand command = new SQLiteCommand("tapper requête ici", liteConn);
-           // command.ExecuteNonQuery();
+            // Pour exécuter une requête sur une base SQLite //
+            // SQLiteCommand command = new SQLiteCommand("tapper requête ici", liteConn);
+            // command.ExecuteNonQuery();
         }
 
         private void SQLRemoteConnexion()
@@ -33,7 +33,7 @@ namespace Madera_MMB.Lib
             "Stmt=;" +
             "DataBase=DataBaseName;" +
             "Uid=UserName;" +
-            "Pwd=Secret"; 
+            "Pwd=Secret";
             conn.Open();
         }
 
