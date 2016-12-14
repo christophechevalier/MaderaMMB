@@ -205,6 +205,26 @@
     <Resource Include="Lib\Images\house_black.png" />
     <Resource Include="Lib\Images\house_green.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Lib\Images\fenetre_4carreaux.jpg" />
+    <Resource Include="Lib\Images\fenetre_grande.jpg" />
+    <Resource Include="Lib\Images\fenetre_hublot.jpg" />
+    <Resource Include="Lib\Images\mue_brique.jpg" />
+    <Resource Include="Lib\Images\mur_beton.jpg" />
+    <Resource Include="Lib\Images\mur_bois.jpg" />
+    <Resource Include="Lib\Images\porte_demi_vitre.jpg" />
+    <Resource Include="Lib\Images\porte_double.jpg" />
+    <Resource Include="Lib\Images\porte_simple.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Lib\Images\angle_bd.png" />
+    <Resource Include="Lib\Images\angle_bg.png" />
+    <Resource Include="Lib\Images\angle_hd.png" />
+    <Resource Include="Lib\Images\angle_hg.png" />
+    <Resource Include="Lib\Images\croix.png" />
+    <Resource Include="Lib\Images\mur_horizontal.png" />
+    <Resource Include="Lib\Images\mur_vertical.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
