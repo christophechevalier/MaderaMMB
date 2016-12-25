@@ -4,22 +4,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Madera_MMB.Lib;
+using System.Data.Odbc;
+using System.Data.SQLite;
 
 namespace Madera_MMB.CAD
 {
     class PlanCAD
     {
         #region properties
-        private List<Plan> listeprojet { get; set; }
-
+        public List<Plan> listePlanParProjet { get; set; }
+        public Connexion conn { get; set; }
+        public String refProjet { get; set; }
         #endregion
 
         #region Ctor
-
+        public PlanCAD(String uneref)
+        {
+            this.refProjet = uneref;
+            Connexion conn = new Connexion();
+        }
         #endregion
 
         #region privates methods
-        private void listAllClient() { }
+        private void getPlans()
+        {
+
+        }
         private void insertClient() { }
 
         #endregion
