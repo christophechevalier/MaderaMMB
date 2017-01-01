@@ -86,52 +86,113 @@ namespace Madera_MMB.View_Crtl
             }
 
         }
+        private void Initialize_Dialog_Modification_Devis()
+        {
+            var window = new SelectModalWindow();
+            window.Titlelabel.Content = " Sélectionner l'état du devis";
+
+            window.Retour.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                window.Close();
+            };
+
+            window.Valider.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                window.Close();
+            };
+
+            window.DataSelect.Text = "-- Choisir un état --";
+            window.DataSelect.Items.Add("Accepté");
+            window.DataSelect.Items.Add("Refusé");
+            window.DataSelect.Items.Add("Facturé");
+            window.DataSelect.Items.Add("En attente de paiement");
+            window.DataSelect.Items.Add("Nouveau");
+            window.DataSelect.Items.Add("Brouillon");
+
+            window.ShowDialog();
+        }
+        private void Initialize_Dialog_Remise_Devis()
+        {
+            var window = new InputModalWindow();
+
+            window.Retour.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                window.Close();
+            };
+
+            window.Valider.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                window.Close();
+            };
+
+            window.ShowDialog();
+        }
+        private void TreeView_Loaded(object sender, RoutedEventArgs e)
+        {
+            // ... Create a TreeViewItem.
+            TreeViewItem item = new TreeViewItem();
+            item.Header = "Porte";
+            item.ItemsSource = new string[] { "Porte Bois 200x70", "Porte Metal 200x150", "Porte PVC 200x90" };
+            item.IsExpanded = true;
+
+            // ... Create a second TreeViewItem.
+            TreeViewItem item2 = new TreeViewItem();
+            item2.Header = "Mur";
+            item2.ItemsSource = new string[] { "Mur 500x250", "Mur 1500x750", "Mur 2500x1000" };
+            item2.IsExpanded = true;
+
+            // ... Create a third TreeViewItem.
+            TreeViewItem item3 = new TreeViewItem();
+            item3.Header = "Fenetre";
+            item3.ItemsSource = new string[] { "Double 75x50", "Triple 80x90", "Simple 150x90"};
+            item3.IsExpanded = true;
+
+            TreeViewItem main = new TreeViewItem();
+            main.Header = "Base en L Dimension 15x10x5";
+            main.IsExpanded = true;
+
+            // ... Get TreeView reference and add both items.
+            var coupe = sender as TreeView;
+            
+            main.Items.Add(item);
+            main.Items.Add(item2);
+            main.Items.Add(item3);
+
+            coupe.Items.Add(main);
+
+        }
+        private void TreeView_SelectedItemChanged(object sender,
+            RoutedPropertyChangedEventArgs<object> e)
+        {
+            var tree = sender as TreeView;
+
+            // ... Determine type of SelectedItem.
+            if (tree.SelectedItem is TreeViewItem)
+            {
+                // ... Handle a TreeViewItem.
+                var item = tree.SelectedItem as TreeViewItem;
+                this.Title = "Selected header: " + item.Header.ToString();
+            }
+            else if (tree.SelectedItem is string)
+            {
+                // ... Handle a string.
+                this.Title = "Selected: " + tree.SelectedItem.ToString();
+            }
+        }
         #endregion
 
         #region Listeners
-        //EVENT ON "Changer l'état"
+        // Modification de l'état du devis
         private void BtnChangeStatusDevis_Click(object sender, RoutedEventArgs e)
         {
-            //SHOW MODAL
+            Button btn = sender as Button;
+            Initialize_Dialog_Modification_Devis();
         }
 
-        //COMBO BOX DISPLAY CHOICE
-        private void ComboBox_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Initialize Status list
-            List<string> data = new List<string>();
-            data.Add("Brouillon");
-            data.Add("Accepté");
-            data.Add("Refusé");
-            data.Add("En attente");
-            data.Add("Facturé");
-
-            // ... Get the ComboBox reference.
-            var comboBox = sender as ComboBox;
-
-            // ... Assign the ItemsSource to the List.
-            comboBox.ItemsSource = data;
-
-            // ... Make the first item selected.
-            comboBox.SelectedIndex = 0;
-        }
-
-        //DISPLAY SELECTED CHOICE IN COMBO BOX
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // ... Get the ComboBox.
-            var comboBox = sender as ComboBox;
-
-            // ... Set SelectedItem as Window Title.
-            string value = comboBox.SelectedItem as string;
-            this.Title = "Selected: " + value;
-        }
-
-
-        //EVENT ON "Appliquer remise"
         private void BtnAppliquerRemise_Click(object sender, RoutedEventArgs e)
         {
-            //SHOW MODAL
+            Button btn = sender as Button;
+            Initialize_Dialog_Remise_Devis();
         }
 
         //EVENT ON "Export"
@@ -144,7 +205,17 @@ namespace Madera_MMB.View_Crtl
         private void BtnVoirDT_Click(object sender, RoutedEventArgs e)
         {
             //TOGGLE GRID AffichageDevis
-
+            if (AffichageDevis.Visibility == Visibility.Visible)
+            {
+                AffichageDevis.Visibility = System.Windows.Visibility.Hidden;
+                AfficherDevisTechnique.Visibility = System.Windows.Visibility.Visible;
+            }
+            else
+            {
+                AffichageDevis.Visibility = System.Windows.Visibility.Visible;
+                AfficherDevisTechnique.Visibility = System.Windows.Visibility.Hidden;
+            }
+            
         }
 
         //EVENT ON "Retour"
@@ -177,16 +248,5 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
     }
-
-    //MODAL REMISE
-    public partial class ModalRemise : Window
-    {
-
-    }
-
-    //MODAL ETAT
-    public partial class ModalEtat : Window
-    {
-
-    }
+    
 }

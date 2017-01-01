@@ -256,7 +256,7 @@
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 
                          HorizontalAlignment="Stretch">
-                    <Button x:Name="BtnExport"
+                    <Button x:Name="BtnExportDevis"
                             FontSize="20"
                             Width="400"
                             Height="60"
@@ -280,7 +280,8 @@
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 
                          HorizontalAlignment="Stretch">
-                    <Button FontSize="20"
+                    <Button x:Name="BtnRetour" 
+                            FontSize="20"
                             Width="400"
                             Height="60"
                             Content="Retour"
@@ -566,9 +567,10 @@
 
         </Grid>
 
-        <!--  -->
+        <!-- Début Déclaration Affichage Devis Technique -->
+        
         <Grid x:Name="AfficherDevisTechnique"
-              Visibility="Visible"
+              Visibility="Hidden"
               Grid.Column="1"
               Grid.Row="0" 
               VerticalAlignment="Stretch" 
@@ -578,60 +580,19 @@
               Grid.RowSpan="2" 
               Grid.ColumnSpan="1"
               >
-
+            <TreeView
+	            HorizontalAlignment="Center"
+	            Height="200"
+	            Margin="10,10,0,0"
+	            VerticalAlignment="Top"
+	            Width="300"
+	            Loaded="TreeView_Loaded"
+	            SelectedItemChanged="TreeView_SelectedItemChanged"
+	            Background="AliceBlue"/>
         </Grid>
-
-        <!-- Début Déclaration Affichage Devis Technique -->
-
+        
         <!-- Fin Déclaration Affichage Devis Technique -->
 
         <!-- Fin Déclaration Gestion Devis -->
     </Grid>
 </Page>
-
-<!--
-    
-Fenetre de remise / Etat devis ==> à refaire car l'utilisation d'une seconde Window n'est pas autorisé
-
-    <Window
-        Title="ModalRemise" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen"
-        ContentRendered="Window_ContentRendered">
-    <Grid Margin="15">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
-        <Label Name="lblQuestion" Grid.Column="1">Appliquer une remise: </Label>
-        <TextBox Name="txtAnswer" Grid.Column="1" Grid.Row="1" MinWidth="250"></TextBox>
-
-        <WrapPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,15,0,0">
-            <Button IsDefault="True" Name="btnDialogOk" Click="btnDialogOk_Click" MinWidth="60" Margin="0,0,10,0">Ok</Button>
-            <Button IsCancel="True" MinWidth="60">Cancel</Button>
-        </WrapPanel>
-    </Grid>
-</Window>
-
-    
-    
-<Window 
-	Title="ModalStatus" Height="350" Width="525">
-    <Grid>
-	<ComboBox
-	    HorizontalAlignment="Left"
-	    Margin="10,10,0,0"
-	    VerticalAlignment="Top"
-	    Width="120"
-	    Loaded="ComboBox_Loaded"
-	    SelectionChanged="ComboBox_SelectionChanged"/>
-    </Grid>
-</Window>    
-    
--->
-    
-    
