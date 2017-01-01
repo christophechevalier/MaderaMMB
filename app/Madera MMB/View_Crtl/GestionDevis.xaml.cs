@@ -209,11 +209,13 @@ namespace Madera_MMB.View_Crtl
             {
                 AffichageDevis.Visibility = System.Windows.Visibility.Hidden;
                 AfficherDevisTechnique.Visibility = System.Windows.Visibility.Visible;
+                BtnVoirDT.Content = "Voir Devis Détaillé";
             }
             else
             {
                 AffichageDevis.Visibility = System.Windows.Visibility.Visible;
                 AfficherDevisTechnique.Visibility = System.Windows.Visibility.Hidden;
+                BtnVoirDT.Content = "Voir Devis Technique";
             }
             
         }
