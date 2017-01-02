@@ -19,17 +19,17 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region Ctor
-        public PlanCAD(String uneref)
+        public PlanCAD(Connexion laConnexion, String uneref)
         {
             this.refProjet = uneref;
-            Connexion conn = new Connexion();
+            Connexion conn = laConnexion;
         }
         #endregion
 
         #region privates methods
         private void getPlans()
         {
-
+            string SQLQuery = "SELECT * FROM Plan WHERE ";
         }
         private void insertClient() { }
 
