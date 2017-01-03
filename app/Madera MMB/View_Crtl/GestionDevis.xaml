@@ -298,7 +298,7 @@
         <!-- Début Déclaration Affichage Devis -->
 
         <Grid x:Name="AffichageDevis"
-              Visibility="Visible"
+              Visibility="Hidden"
               Grid.Column="1"
               Grid.Row="0" 
               VerticalAlignment="Stretch" 
@@ -568,9 +568,9 @@
         </Grid>
 
         <!-- Début Déclaration Affichage Dosiier Technique -->
-        
+
         <Grid x:Name="AfficherDevisTechnique"
-              Visibility="Hidden"
+              Visibility="Visible"
               Grid.Column="1"
               Grid.Row="0" 
               VerticalAlignment="Stretch" 
@@ -615,8 +615,9 @@
 	                SelectedItemChanged="TreeView_SelectedItemChanged"
 	                Background="AliceBlue"/>
             </Grid>
+            <Border Grid.Row="2" BorderBrush="Green" BorderThickness="1 2 2 1" Grid.Column="1" />
         </Grid>
-        
+
         <!-- Fin Déclaration Affichage Dossier Technique -->
 
         <!-- Fin Déclaration Gestion Devis -->
