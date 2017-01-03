@@ -272,7 +272,7 @@
                             FontSize="20"
                             Width="400"
                             Height="60"
-                            Content="Voir Devis Technique"
+                            Content="Voir Dossier Technique"
                             Click="BtnVoirDT_Click">
                     </Button>
                 </Viewbox>
@@ -567,7 +567,7 @@
 
         </Grid>
 
-        <!-- Début Déclaration Affichage Devis Technique -->
+        <!-- Début Déclaration Affichage Dosiier Technique -->
         
         <Grid x:Name="AfficherDevisTechnique"
               Visibility="Hidden"
@@ -576,22 +576,48 @@
               VerticalAlignment="Stretch" 
               HorizontalAlignment="Stretch" 
               Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-              Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
+              Height="{Binding ActualHeight, ElementName=rowDefinition1}"
               Grid.RowSpan="2" 
               Grid.ColumnSpan="1"
               >
-            <TreeView
-	            HorizontalAlignment="Center"
-	            Height="200"
-	            Margin="10,10,0,0"
-	            VerticalAlignment="Top"
-	            Width="300"
-	            Loaded="TreeView_Loaded"
-	            SelectedItemChanged="TreeView_SelectedItemChanged"
-	            Background="AliceBlue"/>
+            <Grid x:Name="DetailDossier">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.2*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="0.05*" />
+                </Grid.RowDefinitions>
+
+                <!-- TITRE DOSSIER -->
+                <Viewbox 
+                         Grid.Row="0"
+                         Grid.Column="0" 
+                         HorizontalAlignment="Center" 
+                         VerticalAlignment="Center">
+                    <Label FontSize="5">
+                        <TextBlock TextDecorations="Underline">Dossier technique</TextBlock>
+                    </Label>
+                </Viewbox>
+
+                <!-- DETAIL DOSSIER TECHNIQUE -->
+                <TreeView
+                    Grid.Row="1"
+                    Grid.Column="0" 
+	                HorizontalAlignment="Center"
+	                Height="400"
+	                Margin="10,10,0,0"
+	                VerticalAlignment="Center"
+	                Width="500"
+	                Loaded="TreeView_Loaded"
+	                SelectedItemChanged="TreeView_SelectedItemChanged"
+	                Background="AliceBlue"/>
+            </Grid>
         </Grid>
         
-        <!-- Fin Déclaration Affichage Devis Technique -->
+        <!-- Fin Déclaration Affichage Dossier Technique -->
 
         <!-- Fin Déclaration Gestion Devis -->
     </Grid>

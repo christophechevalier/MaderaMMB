@@ -215,7 +215,7 @@ namespace Madera_MMB.View_Crtl
             {
                 AffichageDevis.Visibility = System.Windows.Visibility.Visible;
                 AfficherDevisTechnique.Visibility = System.Windows.Visibility.Hidden;
-                BtnVoirDT.Content = "Voir Devis Technique";
+                BtnVoirDT.Content = "Voir Dossier Technique";
             }
             
         }
