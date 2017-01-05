@@ -20,21 +20,20 @@ namespace Madera_MMB.Model
     class Plan
     {
         #region properties
-        public int reference { get; set; }
+        public string reference { get; set; }
         public string label { get; set; }
         public Projet projet { get; set; }
         public DateTime creation { get; set; }
         public DateTime modification { get; set; }
-        public Gamme gamme { get; set; }
-        public Plancher plancher { get;set;}
-        public CoupePrincipe coupePrincipe { get; set; }
         public Couverture couverture { get; set; }
-        public List<Slot> slots { get; set; }
+        public CoupePrincipe coupePrincipe { get; set; }
+        public Plancher plancher { get; set; }
+        public Gamme gamme { get; set; }
         public List<Module> modules { get; set; }
         #endregion
 
         #region Ctor
-        Plan(Projet unprojet,Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, Gamme unegamme)
+        public Plan(Projet unprojet,Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, Gamme unegamme)
         {
             this.projet = unprojet;
             this.plancher = unplancher;
@@ -42,6 +41,7 @@ namespace Madera_MMB.Model
             this.coupePrincipe = unecoupe;
             this.gamme = unegamme;
         }
+        public Plan() { }
         #endregion
 
         #region privates methods

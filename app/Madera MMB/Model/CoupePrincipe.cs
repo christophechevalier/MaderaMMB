@@ -15,11 +15,17 @@ namespace Madera_MMB.Model
         public int longueur { get; set; }
         public int largeur { get; set; }
         public int prixHT { get; set; }
-        public string forme { get; set; }
         #endregion
 
         #region Ctor
-
+        public CoupePrincipe(int id, string label, int longueur, int largeur, int prix)
+        {
+            this.id = id;
+            this.label = label;
+            this.longueur = longueur;
+            this.largeur = largeur;
+            this.prixHT = prix;
+        }
         #endregion
 
         #region privates methods

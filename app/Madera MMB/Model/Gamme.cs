@@ -19,7 +19,14 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
-
+        public Gamme(string nom, int offre, string isolant, string finition, string huisserie )
+        {
+            this.nom = nom;
+            this.offrePromo = offre;
+            this.typeIsolant = isolant;
+            this.typeFinition = finition;
+            this.qualiteHuisserie = huisserie;
+        }
         #endregion
 
         #region privates methods

@@ -15,6 +15,7 @@ namespace Madera_MMB.Lib
         public SQLiteConnection LiteCo { get; set; }
         public MySqlConnection MySQLCo { get; set; }
         public bool MySQLconnected { get; set; }
+        public SQLiteDataAdapter DataAdapter { get; set; }
         #endregion 
 
         #region Ctor
@@ -88,8 +89,7 @@ namespace Madera_MMB.Lib
                 return false;
             }
         }
-
-        public void ExecSQliteQuery(string query)
+        public void InsertSQliteQuery(string query)
         {
             try
             {
@@ -103,9 +103,7 @@ namespace Madera_MMB.Lib
         }
         #endregion
 
-
         #region Privates Methods
-
         private bool CreateSQLiteBase()
         {
             if(File.Exists("SQLiteScript.sql"))
@@ -138,8 +136,6 @@ namespace Madera_MMB.Lib
             }
 
         }
-
-
         // Partie MySQL //
         private bool OpenMySQLConnection()
         {
@@ -170,9 +166,6 @@ namespace Madera_MMB.Lib
                 return false;
             }
         }
-
-
-
         #endregion
     }
 }
