@@ -12,8 +12,8 @@ namespace Madera_MMB.Model
         #region properties
         public string nom { get; set; }
         public int offrePromo { get; set; }
-        public string typeisolant { get;set;}
-        public string typefinition { get;set; }
+        public string typeIsolant { get; set; }
+        public string typeFinition { get; set; }
         public string qualiteHuisserie { get; set; }
 
         #endregion

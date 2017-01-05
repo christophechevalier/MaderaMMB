@@ -9,7 +9,7 @@ namespace Madera_MMB.Model
     class FamilleDeComposant
     {
         #region properties
-        public string nom { get; set; }
+        public string nomFamille { get; set; }
 
         #endregion
 

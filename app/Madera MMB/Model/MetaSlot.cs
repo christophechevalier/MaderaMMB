@@ -15,7 +15,6 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
-
         #endregion
 
         #region privates methods
