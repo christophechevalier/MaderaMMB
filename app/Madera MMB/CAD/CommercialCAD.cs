@@ -12,18 +12,20 @@ namespace Madera_MMB.CAD
 
         #region properties
 
-        private List<Commercial> listcommerciaux{get;set;}
+        private List<Commercial> listcommerciaux { get; set; }
         #endregion
 
         #region Ctor
 
         #endregion
 
-        //#region privates methods
-        //private void listAllCommerciaux();
+        #region privates methods
+        private void getCommercial() 
+        {
+            
+        }
+        #endregion
 
-        //#endregion
 
-        
     }
 }

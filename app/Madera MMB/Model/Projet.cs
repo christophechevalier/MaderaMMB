@@ -20,11 +20,10 @@ namespace Madera_MMB.Model
 
         #region Ctor
 
-        #endregion
+        // projet existant depuis la base
 
-        //#region privates methods
-        //private void creerPlan();
-        //private void ouvrirPlan();
-        //#endregion
+        // nouveau projet (connaitre déjà le commercial et le client)
+
+        #endregion
     }
 }
