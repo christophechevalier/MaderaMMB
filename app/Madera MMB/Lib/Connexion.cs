@@ -88,6 +88,19 @@ namespace Madera_MMB.Lib
                 return false;
             }
         }
+
+        public void ExecSQliteQuery(string query)
+        {
+            try
+            {
+                SQLiteCommand command = new SQLiteCommand(query,LiteCo);
+                command.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.Write(ex.ToString());
+            }
+        }
         #endregion
 
 

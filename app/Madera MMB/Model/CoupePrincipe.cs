@@ -9,6 +9,8 @@ namespace Madera_MMB.Model
     class CoupePrincipe
     {
         #region properties
+
+        public int id { get; set; }
         public string label { get; set; }
         public int longueur { get; set; }
         public int largeur { get; set; }

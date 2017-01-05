@@ -24,6 +24,7 @@ namespace Madera_MMB.Model
         public string label { get; set; }
         public Projet projet { get; set; }
         public DateTime creation { get; set; }
+        public DateTime modification { get; set; }
         public Gamme gamme { get; set; }
         public Plancher plancher { get;set;}
         public CoupePrincipe coupePrincipe { get; set; }

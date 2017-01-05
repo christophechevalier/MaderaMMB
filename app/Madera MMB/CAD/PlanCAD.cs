@@ -15,7 +15,8 @@ namespace Madera_MMB.CAD
         #region properties
         public List<Plan> listePlanParProjet { get; set; }
         public Connexion conn { get; set; }
-        public String refProjet { get; set; }
+        public string refProjet { get; set; }
+        public string SQLQuery{get; set;}
         #endregion
 
         #region Ctor
@@ -29,9 +30,15 @@ namespace Madera_MMB.CAD
         #region privates methods
         private void getPlans()
         {
-            string SQLQuery = "SELECT * FROM Plan WHERE ";
+            SQLQuery = "SELECT * FROM Plan WHERE refProjet = " + refProjet;
+            this.conn.ExecSQliteQuery(SQLQuery);
         }
-        private void insertClient() { }
+        private void insertPlan(Plan plan, string refClient, string refCommercial) 
+        {
+            SQLQuery = "INSERT INTO `plan` (`refPlan`, `label`, `dateCreation`, `dateModification`, `refProjet`, `refClient`, `refCommercial`, `typeCouverture`, `id_coupe`, `typePlancher`, `nomGamme`)"+
+            "VALUES ("+plan.reference+","+plan.label+","+plan.creation+","+plan.modification+","+plan.projet.reference+","+refClient+","+refCommercial+","+plan.couverture.type+","+plan.coupePrincipe.id+","+plan.plancher.type+","+plan.gamme.nom+";";
+            this.conn.ExecSQliteQuery(SQLQuery);
+        }
 
         #endregion
     }
