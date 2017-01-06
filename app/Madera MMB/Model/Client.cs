@@ -20,11 +20,18 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
-
-        // client existant depuis la base
-
-        // nouveau client
-
+        public Client(string reference, string nom, string prenom, string adresse, string codePostal, string ville, string email,  string telephone)
+        {
+            this.reference = reference;
+            this.nom = nom;
+            this.prenom = prenom;
+            this.adresse = adresse;
+            this.codePostal = codePostal;
+            this.ville = ville;
+            this.email = email;
+            this.telephone = telephone;
+        }
+        public Client() { }
         #endregion
     }
 }
