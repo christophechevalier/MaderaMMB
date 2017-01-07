@@ -9,15 +9,19 @@ namespace Madera_MMB.Model
     class Module
     {
         #region properties
-        public int positionY { get; set; }
-        public int positionX { get; set; }
+        public string nom { get; set; }
+        public int debutPositionX { get;set; }
+        public int debutPositionY { get; set; }
+        public int finPositionY { get; set; }
+        public int finPositionX { get; set; }
+        public int nbSlot { get; set; }
         public MetaModule metaModule { get; set; }
         public List<Slot> slotsContenus { get; set; }
         public Slot slotParent { get; set; }
         #endregion
 
         #region Ctor
-        Module(MetaModule meta)
+        public Module(MetaModule meta)
         {
             this.metaModule = meta;
             foreach(MetaSlot a in meta.metaslots)
@@ -26,7 +30,15 @@ namespace Madera_MMB.Model
                 this.slotsContenus.Add(slot);
             }
         }
-        public Module() { }
+        public Module(string nom, int posXD, int posYD, int posXF, int posYF, MetaModule metaModule) 
+        {
+            this.nom = nom;
+            this.debutPositionX = posXD;
+            this.debutPositionY = posYD;
+            this.finPositionY = posYF;
+            this.finPositionX = posXF;
+            this.metaModule = metaModule;  
+        }
         #endregion
 
         #region privates methods
@@ -36,16 +48,17 @@ namespace Madera_MMB.Model
         #region public methods
         public int getPrixHT()
         {
-            return this.metaModule.prixHT ;
+            return this.metaModule.prixHT;
         }
         public int getNbSlot()
         {
             return this.metaModule.nbSlot;
         }
-        public string getLabel()
+        public string getRefMetaModule()
         {
-            return this.metaModule.label;
+            return this.metaModule.reference;
         }
+
         #endregion
     }
 }

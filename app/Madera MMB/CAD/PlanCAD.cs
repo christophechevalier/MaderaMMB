@@ -15,16 +15,17 @@ namespace Madera_MMB.CAD
         public List<Plan> listePlanParProjet { get; set; }
         public Connexion conn { get; set; }
         public Projet projet { get; set; }
-        public string SQLQuery{get; set;}
-        public CouvertureCAD couvCAD {get;set;}
+        public string SQLQuery {get; set;}
+        public CouvertureCAD couvCAD {get; set; }
         public CoupePrincipeCAD coupeCAD { get; set; }
         public PlancherCAD plancherCAD { get; set; }
         public GammeCAD gammeCAD { get; set; }
+        public MetamoduleCAD metamodCAD { get; set; }
 
         #endregion
 
         #region Ctor
-        public PlanCAD(Connexion laConnexion, Projet unprojet, CouvertureCAD couvCAD, CoupePrincipeCAD coupeCAD, PlancherCAD plancherCAD, GammeCAD gammeCAD)
+        public PlanCAD(Connexion laConnexion, Projet unprojet, CouvertureCAD couvCAD, CoupePrincipeCAD coupeCAD, PlancherCAD plancherCAD, GammeCAD gammeCAD, MetamoduleCAD metaCAD)
         {
             this.projet = unprojet;
             Connexion conn = laConnexion;
@@ -33,6 +34,7 @@ namespace Madera_MMB.CAD
             this.coupeCAD = coupeCAD;
             this.plancherCAD = plancherCAD;
             this.gammeCAD = gammeCAD;
+            this.metamodCAD = metaCAD;
             
         }
         #endregion
@@ -49,16 +51,18 @@ namespace Madera_MMB.CAD
             {
                 while (reader.Read())
                 {
-                    Plan plan = new Plan();
-                    plan.reference = reader.GetString(0);
-                    plan.label = reader.GetString(1);
-                    plan.creation = reader.GetDateTime(2);
-                    plan.modification = reader.GetDateTime(3);
-                    plan.projet = this.projet;
-                    plan.couverture = couvCAD.getCouvbyType(reader.GetString(7));
-                    plan.coupePrincipe = coupeCAD.getCoupebyId(8);
-                    plan.plancher = plancherCAD.getPlancherbyType(reader.GetString(9));
-                    plan.gamme = gammeCAD.getGammebyNom(reader.GetString(10));
+                    Plan plan = new Plan(
+                        reader.GetString(0),
+                        reader.GetString(1),
+                        reader.GetString(2),
+                        reader.GetString(3),
+                        this.projet,
+                        plancherCAD.getPlancherbyType(reader.GetString(9)),
+                        couvCAD.getCouvbyType(reader.GetString(7)),
+                        coupeCAD.getCoupebyId(8),
+                        gammeCAD.getGammebyNom(reader.GetString(10)),
+                        getModulesByRefPlan(reader.GetString(0))
+                        );
 
                     listePlanParProjet.Add(plan);
                 }
@@ -68,10 +72,50 @@ namespace Madera_MMB.CAD
                 reader.Close();
             }
         }
-        private void insertPlan(Plan plan, string refClient, string refCommercial) 
+        private List<Module> getModulesByRefPlan(string refPlan)
         {
-            SQLQuery = "INSERT INTO `plan` (`refPlan`, `label`, `dateCreation`, `dateModification`, `refProjet`, `refClient`, `refCommercial`, `typeCouverture`, `id_coupe`, `typePlancher`, `nomGamme`)"+
-            "VALUES ("+plan.reference+","+plan.label+","+plan.creation+","+plan.modification+","+plan.projet.reference+","+refClient+","+refCommercial+","+plan.couverture.type+","+plan.coupePrincipe.id+","+plan.plancher.type+","+plan.gamme.nom+";";
+            SQLQuery = "SELECT * FROM module WHERE refPlan = " + refPlan;
+            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
+            command.CommandText = SQLQuery;
+            SQLiteDataReader reader = command.ExecuteReader();
+            List<Module> modules = new List<Module>();
+            try
+            {
+                while (reader.Read())
+                {
+
+                    Module module = new Module(
+                    reader.GetString(0), 
+                    reader.GetInt32(1),
+                    reader.GetInt32(2),
+                    reader.GetInt32(3),
+                    reader.GetInt32(4),
+                    this.metamodCAD.getMetaModuleByRef(refPlan)
+                    );
+
+                    modules.Add(module);
+                }
+            }
+            finally
+            {
+                reader.Close();
+            }
+            return modules;
+        }
+        private void insertPlan(Plan plan, string refClient, string refCommercial)
+        {
+            SQLQuery = "INSERT INTO plan (refPlan, label, dateCreation, dateModification, refProjet, refClient, refCommercial, typeCouverture, id_coupe, typePlancher, nomGamme)" +
+            "VALUES (" + plan.reference + "," + plan.label + "," + plan.creation + "," + plan.modification + "," + plan.projet.reference + "," + refClient + "," + refCommercial + "," + plan.couverture.type + "," + plan.coupePrincipe.id + "," + plan.plancher.type + "," + plan.gamme.nom + ";";
+            conn.InsertSQliteQuery(SQLQuery);
+            foreach(Module module in plan.modules)
+            {
+                insertModule(module, plan.reference);
+            }
+        }
+        private void insertModule(Module module,string refplan) 
+        {
+            SQLQuery = "INSERT INTO module (nom, prixHT, nbSlot, coordonneeDebutX , coordonneeDebutY, coordonneeFinX, coordonneeFinY, refMetaModule, refPlan)" +
+            "VALUES (" + module.nom + "," + module.getPrixHT + "," + module.getNbSlot + "," + module.debutPositionX + "," + module.debutPositionY + "," + module.finPositionX + "," + module.finPositionY + "," + module.getRefMetaModule + "," + refplan + ";";
             conn.InsertSQliteQuery(SQLQuery);
         }
         #endregion
