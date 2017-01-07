@@ -75,6 +75,9 @@
     <Compile Include="Lib\Tools\ErrorModalWindow.xaml.cs">
       <DependentUpon>ErrorModalWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Lib\Tools\InputModalWindow.xaml.cs">
+      <DependentUpon>InputModalWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Lib\Tools\SelectModalWindow.xaml.cs">
       <DependentUpon>SelectModalWindow.xaml</DependentUpon>
     </Compile>
@@ -97,6 +100,9 @@
     <Compile Include="View_Crtl\Authentification.xaml.cs">
       <DependentUpon>Authentification.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View_Crtl\GestionDevis.xaml.cs">
+      <DependentUpon>GestionDevis.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View_Crtl\Modelisation.xaml.cs">
       <DependentUpon>Modelisation.xaml</DependentUpon>
     </Compile>
@@ -110,11 +116,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Lib\Tools\InputModalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Lib\Tools\SelectModalWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View_Crtl\GestionClient.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View_Crtl\GestionDevis.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
