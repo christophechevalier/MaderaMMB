@@ -14,11 +14,16 @@ namespace Madera_MMB.Model
         public int prixHT { get; set; }
         public int nbSlot { get; set; }
         public Gamme gamme { get; set; }
+        public List<MetaSlot> metaslots { get; set; }
+        public List<Composant> composants { get; set; }
 
         #endregion
 
         #region Ctor
-
+        public MetaModule(List<Composant> composants)
+        {
+            this.composants = composants;
+        }
         #endregion
 
         #region privates methods

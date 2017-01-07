@@ -9,12 +9,16 @@ namespace Madera_MMB.Model
     class Composant
     {
         #region properties
-        public string nom { get; set; }
+        public string nomComposant { get; set; }
         public FamilleDeComposant famille { get; set; }
         #endregion
 
         #region Ctor
-
+        public Composant(FamilleDeComposant fam)
+        {
+            this.famille = fam;
+        }
+        public Composant() { }
         #endregion
 
         #region privates methods
