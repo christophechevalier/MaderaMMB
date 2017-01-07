@@ -11,7 +11,7 @@
     <!-- Début Déclaration Template-->
     <Page.Resources>
         <!-- Image Logo -->
-        <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png"/>
+        <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png" />
         <!-- Label style -->
         <Style TargetType="{x:Type Label}">
             <Setter Property="FontSize" Value="12" />
@@ -27,7 +27,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen"/>
+                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -74,10 +74,10 @@
               Grid.RowSpan="1">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="267"/>
+                <RowDefinition Height="0.25*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Grid Background="DimGray"
@@ -91,20 +91,20 @@
                   Grid.ColumnSpan="2">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.05*"/>
-                    <RowDefinition Height="0.25*"/>
-                    <RowDefinition Height="0.05*"/>
-                    <RowDefinition Height="0.25*"/>
-                    <RowDefinition Height="0.05*"/>
-                    <RowDefinition Height="0.25*"/>
-                    <RowDefinition Height="0.05*"/>
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.05*"/>
-                    <ColumnDefinition Width="0.4*"/>
-                    <ColumnDefinition Width="0.05*"/>
-                    <ColumnDefinition Width="0.4*"/>
-                    <ColumnDefinition Width="0.05*"/>
+                    <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.4*" />
+                    <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.4*" />
+                    <ColumnDefinition Width="0.05*" />
                 </Grid.ColumnDefinitions>
 
                 <!-- Partie de gauche -->
@@ -114,7 +114,7 @@
                          Grid.Column="1" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label x:Name="nomClient" Content="Nom du client : " FontSize="6"/>
+                    <Label x:Name="nomClient" Content="Nom du client : " FontSize="6" />
                 </Viewbox>
                 <!-- Creation Date -->
                 <Viewbox Margin="15,0,0,0"
@@ -122,7 +122,7 @@
                          Grid.Column="1" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label x:Name="dateCreation" Content="Date de création : " FontSize="6"/>
+                    <Label x:Name="dateCreation" Content="Date de création : " FontSize="6" />
                 </Viewbox>
                 <!-- Current Status -->
                 <Viewbox Margin="15,0,0,0"
@@ -130,7 +130,7 @@
                          Grid.Column="1" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label x:Name="currentStatus" Content="Statut actuel : " FontSize="6"/>
+                    <Label x:Name="currentStatus" Content="Statut actuel : " FontSize="6" />
                 </Viewbox>
 
                 <!-- Partie de droite -->
@@ -140,7 +140,7 @@
                          Grid.Column="3" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label x:Name="lastUpdate" Content="Dernière mise à jour : " FontSize="6"/>
+                    <Label x:Name="lastUpdate" Content="Dernière mise à jour : " FontSize="6" />
                 </Viewbox>
                 <!-- Nom Commercial -->
                 <Viewbox Margin="15,0,0,0"
@@ -148,7 +148,7 @@
                          Grid.Column="3" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label x:Name="nomCommercial" Content="Nom du commercial : " FontSize="6"/>
+                    <Label x:Name="nomCommercial" Content="Nom du commercial : " FontSize="6" />
                 </Viewbox>
 
             </Grid>
@@ -185,10 +185,10 @@
               Grid.RowSpan="2">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.25*"/>
+                <ColumnDefinition Width="0.25*" />
             </Grid.ColumnDefinitions>
 
             <!-- Début Déclaration Menu Gestion Devis-->
@@ -308,40 +308,31 @@
               Grid.RowSpan="2" 
               Grid.ColumnSpan="1"
               >
-            <ScrollViewer HorizontalScrollBarVisibility="Hidden">
-                <Grid x:Name="Devis"
-                      Grid.Column="1"
-                      Grid.Row="0" 
-                      Panel.ZIndex="1"
-                      VerticalAlignment="Stretch" 
-                      HorizontalAlignment="Stretch" 
-                      Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                      Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
-                      >
+            
+            <Grid x:Name="DetailDevis">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-                    <Grid x:Name="DetailDevis">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.2*" />
+                    <RowDefinition Height="0.75*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="0.05*" />
+                </Grid.RowDefinitions>
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="0.2*" />
-                            <RowDefinition Height="0.75*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="0.05*" />
-                        </Grid.RowDefinitions>
-
-                        <!-- TITRE DEVIS -->
-                        <Viewbox 
-                         Grid.Row="0"
-                         Grid.Column="0" 
-                         HorizontalAlignment="Center" 
-                         VerticalAlignment="Center">
-                            <Label FontSize="20">
-                                <TextBlock TextDecorations="Underline">Devis estimatif</TextBlock>
-                            </Label>
-                        </Viewbox>
-                        <Grid x:Name="InfoDevis"
+                <!-- TITRE DEVIS -->
+                <Viewbox Grid.Row="0"
+                                 Grid.Column="0" 
+                                 HorizontalAlignment="Center" 
+                                 VerticalAlignment="Center"
+                                 >
+                    <Label FontSize="7">
+                        <TextBlock TextDecorations="Underline">Devis estimatif</TextBlock>
+                    </Label>
+                </Viewbox>
+                
+                <Grid x:Name="InfoDevis"
                               Grid.Column="0"
                               Grid.Row="1" 
                               VerticalAlignment="Stretch" 
@@ -349,134 +340,133 @@
                               Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
                               Height="{Binding ActualHeight, ElementName=rowDefinition1}"
                               >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.2*" />
-                                <ColumnDefinition Width="0.25*" />
-                                <ColumnDefinition Width="0.25*" />
-                                <ColumnDefinition Width="0.5*" />
-                                <ColumnDefinition Width="0.25*" />
-                                <ColumnDefinition Width="0.25*" />
-                                <ColumnDefinition Width="0.2*" />
-                            </Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.1*" />
+                        <ColumnDefinition Width="0.25*" />
+                        <ColumnDefinition Width="0.4*" />
+                        <ColumnDefinition Width="0.25*" />
+                        <ColumnDefinition Width="0.25*" />
+                        <ColumnDefinition Width="0.4*" />
+                        <ColumnDefinition Width="0.1*" />
+                    </Grid.ColumnDefinitions>
 
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="0.15*" />
-                                <RowDefinition Height="0.1*" />
-                                <RowDefinition Height="0.1*" />
-                                <RowDefinition Height="0.1*" />
-                                <RowDefinition Height="0.1*" />
-                                <RowDefinition Height="0.02*" />
-                            </Grid.RowDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.15*" />
+                        <RowDefinition Height="0.1*" />
+                        <RowDefinition Height="0.1*" />
+                        <RowDefinition Height="0.1*" />
+                        <RowDefinition Height="0.1*" />
+                        <RowDefinition Height="0.05*" />
+                    </Grid.RowDefinitions>
 
-                            <!-- CLIENT DEVIS -->
-                            <Viewbox 
+                    <!-- CLIENT DEVIS -->
+                    <Viewbox 
                              Grid.Row="1"
                              Grid.Column="1" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                                <Label Content="Client: " FontSize="15"/>
-                            </Viewbox>
-                            <Viewbox 
+                        <Label Content="Client: " FontSize="10" />
+                    </Viewbox>
+                    <Viewbox 
                              Grid.Row="1"
                              Grid.Column="2" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                                <Label x:Name="nomClientDevis" Content="" FontSize="12"/>
-                            </Viewbox>
-                            <!-- REFERENCE CLIENT DEVIS -->
-                            <Viewbox 
+                        <Label x:Name="nomClientDevis" Content="" FontSize="6" />
+                    </Viewbox>
+                    <!-- REFERENCE CLIENT DEVIS -->
+                    <Viewbox 
                              Grid.Row="2"
                              Grid.Column="1" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                                <Label Content="Référence: " FontSize="15"/>
-                            </Viewbox>
-                            <Viewbox 
+                        <Label Content="Référence: " FontSize="10" />
+                    </Viewbox>
+                    <Viewbox 
                              Grid.Row="2"
                              Grid.Column="2" 
                              HorizontalAlignment="Left" 
-                             VerticalAlignment="Center">
-                                <Label x:Name="referenceClientDevis" Content="" FontSize="12"/>
-                            </Viewbox>
-                            <!-- ADRESSE CLIENT DEVIS -->
-                            <Viewbox 
+                             VerticalAlignment="Stretch">
+                        <Label x:Name="referenceClientDevis" Content="" FontSize="6" />
+                    </Viewbox>
+                    <!-- ADRESSE CLIENT DEVIS -->
+                    <Viewbox 
                              Grid.Row="3"
                              Grid.Column="1" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                                <Label Content="Adresse: " FontSize="15"/>
-                            </Viewbox>
-                            <Viewbox 
+                        <Label Content="Adresse: " FontSize="10" />
+                    </Viewbox>
+                    <Viewbox 
                              Grid.Row="3"
                              Grid.Column="2" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                                <Label x:Name="adresseClientDevis" Content="" FontSize="12"/>
-                            </Viewbox>
-
-                            <!-- COMMERCIAL DEVIS -->
-                            <Viewbox 
+                        <Label x:Name="adresseClientDevis" Content="" FontSize="6" />
+                    </Viewbox>
+                    <!-- COMMERCIAL DEVIS -->
+                    <Viewbox 
                              Grid.Row="1"
                              Grid.Column="4" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                                <Label Content="Commercial: " FontSize="15"/>
-                            </Viewbox>
-                            <Viewbox 
+                        <Label Content="Commercial: " FontSize="10" />
+                    </Viewbox>
+                    <Viewbox 
                              Grid.Row="1"
                              Grid.Column="5" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                                <Label x:Name="nomCommerialDevis" Content="" FontSize="12"/>
-                            </Viewbox>
-                            <!-- REFERENCE COMMERCIAL DEVIS -->
-                            <Viewbox 
+                        <Label x:Name="nomCommerialDevis" Content="" FontSize="6" />
+                    </Viewbox>
+                    <!-- REFERENCE COMMERCIAL DEVIS -->
+                    <Viewbox 
                              Grid.Row="2"
                              Grid.Column="4" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                                <Label Content="Référence: " FontSize="15"/>
-                            </Viewbox>
-                            <Viewbox 
+                        <Label Content="Référence: " FontSize="10" />
+                    </Viewbox>
+                    <Viewbox 
                              Grid.Row="2"
                              Grid.Column="5" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                                <Label x:Name="referenceCommercialDevis" Content="" FontSize="12"/>
-                            </Viewbox>
-                            <!-- DATE DEVIS -->
-                            <Viewbox 
+                        <Label x:Name="referenceCommercialDevis" Content="" FontSize="6" />
+                    </Viewbox>
+                    <!-- DATE DEVIS -->
+                    <Viewbox 
                              Grid.Row="3"
                              Grid.Column="4" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                                <Label Content="Date: " FontSize="15"/>
-                            </Viewbox>
-                            <Viewbox 
+                        <Label Content="Date: " FontSize="10" />
+                    </Viewbox>
+                    <Viewbox 
                              Grid.Row="3"
                              Grid.Column="5" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                                <Label x:Name="dateDevis" Content="" FontSize="12"/>
-                            </Viewbox>
-                            <!-- PLAN DEVIS -->
-                            <Viewbox 
+                        <Label x:Name="dateDevis" Content="" FontSize="6" />
+                    </Viewbox>
+                    <!-- PLAN DEVIS -->
+                    <Viewbox 
                              Grid.Row="4"
                              Grid.Column="4" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                                <Label Content="Plan: " FontSize="15"/>
-                            </Viewbox>
-                            <Viewbox 
+                        <Label Content="Plan: " FontSize="10" />
+                    </Viewbox>
+                    <Viewbox 
                              Grid.Row="4"
                              Grid.Column="5" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                                <Label x:Name="planDevis" Content="" FontSize="12"/>
-                            </Viewbox>
-                        </Grid>
+                        <Label x:Name="planDevis" Content="" FontSize="6" />
+                    </Viewbox>
+                </Grid>
 
-                        <Grid x:Name="Detail"
+                <Grid x:Name="Detail"
                               Grid.Column="0"
                               Grid.Row="2" 
                               VerticalAlignment="Stretch" 
@@ -484,18 +474,18 @@
                               Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
                               Height="{Binding ActualHeight, ElementName=rowDefinition1}"
                               >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.1*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="0.1*" />
-                                <ColumnDefinition Width="0.12*" />
-                                <ColumnDefinition Width="0.15*" />
-                                <ColumnDefinition Width="0.2*" />
-                                <ColumnDefinition Width="0.1*" />
-                            </Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.1*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="0.1*" />
+                        <ColumnDefinition Width="0.12*" />
+                        <ColumnDefinition Width="0.15*" />
+                        <ColumnDefinition Width="0.2*" />
+                        <ColumnDefinition Width="0.1*" />
+                    </Grid.ColumnDefinitions>
 
-                            <!-- Liste composant devis -->
-                            <GroupBox x:Name="ListeComposants"
+                    <!-- Liste composant devis -->
+                    <GroupBox x:Name="ListeComposants"
                                 Header="Liste des composants"
                                 Grid.Column="1"
                                 Grid.Row="0" 
@@ -504,11 +494,10 @@
                                 Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
                                 Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
                                 >
-
-                            </GroupBox>
-
-                            <!-- Quantité devis -->
-                            <GroupBox x:Name="Quantité"
+                    </GroupBox>
+                    
+                    <!-- Quantité devis -->
+                    <GroupBox x:Name="Quantité"
                                 Header="Q"
                                 Grid.Column="2"
                                 Grid.Row="0" 
@@ -517,11 +506,10 @@
                                 Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
                                 Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
                                 >
+                    </GroupBox>
 
-                            </GroupBox>
-
-                            <!-- Prix HT devis -->
-                            <GroupBox x:Name="PrixHT"
+                    <!-- Prix HT devis -->
+                    <GroupBox x:Name="PrixHT"
                                 Header="Prix HT"
                                 Grid.Column="3"
                                 Grid.Row="0" 
@@ -530,11 +518,10 @@
                                 Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
                                 Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
                                 >
+                    </GroupBox>
 
-                            </GroupBox>
-
-                            <!-- Prix TTC devis -->
-                            <GroupBox x:Name="PrixTTC"
+                    <!-- Prix TTC devis -->
+                    <GroupBox x:Name="PrixTTC"
                                 Header="Prix TTC"
                                 Grid.Column="4"
                                 Grid.Row="0" 
@@ -543,11 +530,10 @@
                                 Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
                                 Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
                                 >
+                    </GroupBox>
 
-                            </GroupBox>
-
-                            <!-- Prix Total devis -->
-                            <GroupBox x:Name="PrixTotal"
+                    <!-- Prix Total devis -->
+                    <GroupBox x:Name="PrixTotal"
                                 Header="Prix Total"
                                 Grid.Column="5"
                                 Grid.Row="0" 
@@ -556,18 +542,13 @@
                                 Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
                                 Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
                                 >
-
-                            </GroupBox>
-                        </Grid>
-                    </Grid>
-                    <Border Grid.Row="2" BorderBrush="Green" BorderThickness="1 2 2 1" Grid.Column="1" />
+                    </GroupBox>
                 </Grid>
-
-            </ScrollViewer>
+            </Grid>
 
         </Grid>
 
-        <!-- Début Déclaration Affichage Dosiier Technique -->
+        <!-- Début Déclaration Affichage Dossier Technique -->
 
         <Grid x:Name="AfficherDevisTechnique"
               Visibility="Visible"
@@ -580,24 +561,24 @@
               Grid.RowSpan="2" 
               Grid.ColumnSpan="1"
               >
-            <Grid x:Name="DetailDossier">
+            <Grid x:Name="DetailDossier" Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.2*" />
+                    <RowDefinition Height="0.15*" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.01*" />
                 </Grid.RowDefinitions>
 
                 <!-- TITRE DOSSIER -->
-                <Viewbox 
-                         Grid.Row="0"
+                <Viewbox Grid.Row="0"
                          Grid.Column="0" 
                          HorizontalAlignment="Center" 
-                         VerticalAlignment="Center">
-                    <Label FontSize="5">
+                         VerticalAlignment="Center"
+                         >
+                    <Label FontSize="5" BorderThickness="0">
                         <TextBlock TextDecorations="Underline">Dossier technique</TextBlock>
                     </Label>
                 </Viewbox>
@@ -605,17 +586,16 @@
                 <!-- DETAIL DOSSIER TECHNIQUE -->
                 <TreeView
                     Grid.Row="1"
-                    Grid.Column="0" 
-	                HorizontalAlignment="Center"
-	                Height="400"
-	                Margin="10,10,0,0"
-	                VerticalAlignment="Center"
-	                Width="500"
+                    Grid.Column="0"
+	                Margin="20"
 	                Loaded="TreeView_Loaded"
-	                SelectedItemChanged="TreeView_SelectedItemChanged"
-	                Background="AliceBlue"/>
+	                SelectedItemChanged="TreeView_SelectedItemChanged" 
+                    Background="#3380B721" 
+                    BorderBrush="Black" 
+                    BorderThickness="0.5,1" 
+                    Foreground="#665ABB44" 
+                    />
             </Grid>
-            <Border Grid.Row="2" BorderBrush="Green" BorderThickness="1 2 2 1" Grid.Column="1" />
         </Grid>
 
         <!-- Fin Déclaration Affichage Dossier Technique -->
