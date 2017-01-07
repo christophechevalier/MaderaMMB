@@ -26,7 +26,7 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region privates methods
-        public void getCommercialbyRef()
+        public Commercial getCommercialbyRef(Commercial commercial)
         {
             SQLQuery = "SELECT nom, prenom FROM Commercial";
             SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
@@ -48,6 +48,7 @@ namespace Madera_MMB.CAD
             {
                 reader.Close();
             }
+            return commercial;
         }
         private void insertCommercial(Commercial commercial)
         {

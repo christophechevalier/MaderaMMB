@@ -26,7 +26,7 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region privates methods
-        public void getClientbyRef()
+        public Client getClientbyRef(Client client)
         {
             SQLQuery = "SELECT * FROM Client";
             SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
@@ -52,6 +52,7 @@ namespace Madera_MMB.CAD
             {
                 reader.Close();
             }
+            return client;
         }
         private void listAllClient()
         {
