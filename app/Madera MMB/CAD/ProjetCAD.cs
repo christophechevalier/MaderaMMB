@@ -47,15 +47,15 @@ namespace Madera_MMB.CAD
         //                (
         //                    //reader.GetString(0),
         //                    //reader.GetString(1),
-        //                    //reader.GetDateTime(2),
-        //                    //reader.GetDateTime(3),
+        //                    //reader.GetString(2),
+        //                    //reader.GetString(3),
         //                    //clientCAD.getClientbyRef(4),
         //                    //commercialCAD.getCommercialbyRef(5)
         //                );
         //            proj.reference = reader.GetString(0);
         //            proj.nom = reader.GetString(1);
-        //            proj.creation = reader.GetDateTime(2);
-        //            proj.modification = reader.GetDateTime(3);
+        //            proj.creation = reader.GetString(2);
+        //            proj.modification = reader.GetString(3);
         //            proj.client = clientCAD.getClientbyRef(reader.GetString(4));
         //            proj.commercial = commercialCAD.getCommercialbyRef(reader.GetString(5));
 

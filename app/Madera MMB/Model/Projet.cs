@@ -11,14 +11,14 @@ namespace Madera_MMB.Model
         #region properties
         public string reference { get; set; }
         public string nom { get; set; }
-        public DateTime creation { get; set; }
-        public DateTime modification { get; set; }
+        public string creation { get; set; }
+        public string modification { get; set; }
         public Commercial commercial { get; set; }
         public Client client { get; set; }
         #endregion
 
         #region Ctor
-        public Projet(string reference, string nom, DateTime creation, DateTime modification, Client client, Commercial commercial)
+        public Projet(string reference, string nom, string creation, string modification, Client client, Commercial commercial)
         {
             this.reference = reference;
             this.nom = nom;
