@@ -29,7 +29,7 @@ namespace Madera_MMB.View_Crtl
         View_Crtl.ParametresClient ParametresClient = new ParametresClient();
         View_Crtl.ParametresPlan ParametresPlan = new ParametresPlan();
         View_Crtl.Modelisation Modelisation = new Modelisation();
-        //View_Crtl.GestionDevis GestionDevis = new GestionDevis();
+        View_Crtl.GestionDevis GestionDevis = new GestionDevis();
       
         public MainWindow()
         {
@@ -50,7 +50,7 @@ namespace Madera_MMB.View_Crtl
             Initialize_Listeners_GestionPlan();
             Initialize_Listeners_ParametresPlan();
             Initialize_Listeners_Modelisation();
-            //Initialize_Listeners_Devis();
+            Initialize_Listeners_Devis();
         }
         #endregion
 
@@ -142,10 +142,10 @@ namespace Madera_MMB.View_Crtl
                 Mainframe.Content = Modelisation;
             };
             // Click sur le bouton consulter le devis pour aller dans la Vue Gestion Devis
-            //GestionPlan.BtnConsulterDevis.Click += delegate(object sender, RoutedEventArgs e)
-            //{
-            //    Mainframe.Content = GestionDevis;
-            //};
+            GestionPlan.BtnConsulterDevis.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                Mainframe.Content = GestionDevis;
+            };
             // Click sur le bouton copier plan pour aller dans la Vue ???
             GestionPlan.BtnCopierPlan.Click += delegate(object sender, RoutedEventArgs e)
             {
@@ -186,21 +186,20 @@ namespace Madera_MMB.View_Crtl
         }
         #endregion
 
-        //#region Initialisation Gestion Devis
-        //private void Initialize_Listeners_Devis()
-        //{
-        //    // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
-        //    GestionDevis.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
-        //    {
-        //        Mainframe.Content = GestionPlan;
-        //    };
-        //    // Click sur le bouton exporter un devis client pour ???
-        //    GestionDevis.BtnExportDevis.Click += delegate(object sender, RoutedEventArgs e)
-        //    {
+        #region Initialisation Gestion Devis
+        private void Initialize_Listeners_Devis()
+        {
+            // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
+            GestionDevis.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                Mainframe.Content = GestionPlan;
+            };
+            // Click sur le bouton exporter un devis client pour ???
+            GestionDevis.BtnExportDevis.Click += delegate(object sender, RoutedEventArgs e)
+            {
 
-        //    };
-        //}
-        //#endregion
-
+            };
+        }
+        #endregion
     }
 }
