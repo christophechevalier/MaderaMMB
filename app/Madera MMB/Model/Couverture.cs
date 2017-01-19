@@ -9,12 +9,16 @@ namespace Madera_MMB.Model
     class Couverture
     {
         #region properties
-        public string type { get;set; }
+        public string type { get; set; }
         public int prixHT { get; set; }
         #endregion
 
         #region Ctor
-
+        public Couverture(string type, int prix)
+        {
+            this.type = type;
+            this.prixHT = prix;
+        }
         #endregion
 
         #region privates methods

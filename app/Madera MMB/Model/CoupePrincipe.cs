@@ -9,6 +9,8 @@ namespace Madera_MMB.Model
     class CoupePrincipe
     {
         #region properties
+
+        public int id { get; set; }
         public string label { get; set; }
         public int longueur { get; set; }
         public int largeur { get; set; }
@@ -16,7 +18,14 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
-
+        public CoupePrincipe(int id, string label, int longueur, int largeur, int prix)
+        {
+            this.id = id;
+            this.label = label;
+            this.longueur = longueur;
+            this.largeur = largeur;
+            this.prixHT = prix;
+        }
         #endregion
 
         #region privates methods
