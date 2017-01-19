@@ -20,9 +20,7 @@ namespace Madera_MMB.CAD
 
         #region privates methods
         private void listAllDevis() { }
-        private void selectDevis(Devis devis) { }
         private void insertDevis(Devis devis) { }
-        private void updateDevis(Devis devis) { }
 
         #endregion
     }

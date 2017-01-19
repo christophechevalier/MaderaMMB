@@ -9,23 +9,21 @@ namespace Madera_MMB.Model
     class Commercial
     {
         #region properties
-        public string reference { get; set; }
+        public int reference { get; set; }
         public string nom { get; set; }
         public string prenom { get; set; }
-        public string motDePasse { get; set; }
+        public string motdepasse { get; set; }
+
         #endregion
 
         #region Ctor
-        public Commercial(string reference, string nom, string prenom, string motDePasse)
-        {
-            this.reference = reference;
-            this.nom = nom;
-            this.prenom = prenom;
-            this.motDePasse = motDePasse;
-        }
-        public Commercial() { }
+
         #endregion
+
+        #region privates methods
+        //private void creerProjet ();
+
+        #endregion
+
     }
-
-
 }

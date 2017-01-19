@@ -59,7 +59,7 @@ namespace Madera_MMB.View_Crtl
                 img.Width = 150;
                 img.Height = 130;
                 img.VerticalAlignment = VerticalAlignment.Top;
-                string source = "../Lib/Images/carre.png";
+                string source = "../Lib/carre.png";
                 Uri imageUri = new Uri(source, UriKind.Relative);
                 BitmapImage imageBitmap = new BitmapImage(imageUri);
                 img.Source = imageBitmap;
@@ -150,7 +150,7 @@ namespace Madera_MMB.View_Crtl
                 img.Width = 150;
                 img.Height = 130;
                 img.VerticalAlignment = VerticalAlignment.Top;
-                string source = "../Lib/Images/tuile.jpg";
+                string source = "../Lib/tuile.jpg";
                 Uri imageUri = new Uri(source, UriKind.Relative);
                 BitmapImage imageBitmap = new BitmapImage(imageUri);
                 img.Source = imageBitmap;
@@ -201,7 +201,7 @@ namespace Madera_MMB.View_Crtl
                 img.Width = 150;
                 img.Height = 130;
                 img.VerticalAlignment = VerticalAlignment.Top;
-                string source = "../Lib/Images/carrelage.jpg";
+                string source = "../Lib/carrelage.jpg";
                 Uri imageUri = new Uri(source, UriKind.Relative);
                 BitmapImage imageBitmap = new BitmapImage(imageUri);
                 img.Source = imageBitmap;
@@ -253,7 +253,7 @@ namespace Madera_MMB.View_Crtl
                 img.Width = 150;
                 img.Height = 130;
                 img.VerticalAlignment = VerticalAlignment.Top;
-                string source = "../Lib/Images/bois.png";
+                string source = "../Lib/bois.png";
                 Uri imageUri = new Uri(source, UriKind.Relative);
                 BitmapImage imageBitmap = new BitmapImage(imageUri);
                 img.Source = imageBitmap;

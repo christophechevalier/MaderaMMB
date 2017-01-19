@@ -15,11 +15,7 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
-        public Plancher(string type, int prix)
-        {
-            this.type = type;
-            this.prixHT = prix;
-        }
+
         #endregion
 
         #region privates methods
