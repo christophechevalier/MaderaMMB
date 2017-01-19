@@ -9,7 +9,7 @@ namespace Madera_MMB.Model
     class Client
     {
         #region properties
-        public int reference { get; set; }
+        public string reference { get; set; }
         public string nom { get; set; }
         public string prenom { get; set; }
         public string adresse { get; set; }
@@ -20,11 +20,18 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
-
-        #endregion
-
-        #region privates methods
-
+        public Client(string reference, string nom, string prenom, string adresse, string codePostal, string ville, string email,  string telephone)
+        {
+            this.reference = reference;
+            this.nom = nom;
+            this.prenom = prenom;
+            this.adresse = adresse;
+            this.codePostal = codePostal;
+            this.ville = ville;
+            this.email = email;
+            this.telephone = telephone;
+        }
+        public Client() { }
         #endregion
     }
 }
