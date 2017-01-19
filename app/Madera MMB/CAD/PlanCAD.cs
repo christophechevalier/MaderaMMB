@@ -114,9 +114,9 @@ namespace Madera_MMB.CAD
         }
         private void insertModule(Module module,string refplan) 
         {
-            SQLQuery = "INSERT INTO module (nom, prixHT, nbSlot, coordonneeDebutX , coordonneeDebutY, coordonneeFinX, coordonneeFinY, refMetaModule, refPlan)" +
-            "VALUES (" + module.nom + "," + module.getPrixHT + "," + module.getNbSlot + "," + module.debutPositionX + "," + module.debutPositionY + "," + module.finPositionX + "," + module.finPositionY + "," + module.getRefMetaModule + "," + refplan + ";";
-            conn.InsertSQliteQuery(SQLQuery);
+            //SQLQuery = "INSERT INTO module (nom, prixHT, nbSlot, coordonneeDebutX , coordonneeDebutY, coordonneeFinX, coordonneeFinY, refMetaModule, refPlan)" +
+            //"VALUES (" + module.nom + "," + module.getPrixHT + "," + module.getNbSlot + "," + module.debutPositionX + "," + module.debutPositionY + "," + module.finPositionX + "," + module.finPositionY + "," + module.getRefMetaModule + "," + refplan + ";";
+            //conn.InsertSQliteQuery(SQLQuery);
         }
         #endregion
     }

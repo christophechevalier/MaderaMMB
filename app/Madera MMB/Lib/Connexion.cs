@@ -28,8 +28,8 @@ namespace Madera_MMB.Lib
 
             if (File.Exists("Madera.bdd"))
             {
-                Console.Write("<--------------------------------------- Fichier SQLite déjà créé  --------------------------------------->");
-                Console.Write("<--------------------------------------- Suppression et re-génération  --------------------------------------->");
+                Console.Write("\n<--------------------------------------- Fichier SQLite déjà créé  --------------------------------------->\n");
+                Console.Write("\n<--------------------------------------- Suppression et re-génération  --------------------------------------->\n");
                 File.Delete("Madera.bdd");
                 CreateSQLiteBase();
             }
@@ -37,7 +37,7 @@ namespace Madera_MMB.Lib
             {
                 if (CreateSQLiteBase())
                 {
-                    Console.Write("<---------------------------------------  Fichier SQLite créé  --------------------------------------->");
+                    Console.Write("\n<---------------------------------------  Fichier SQLite créé  --------------------------------------->\n");
                 }
                 else
                 {
@@ -59,6 +59,7 @@ namespace Madera_MMB.Lib
         {
             if (MySQLconnected == true)
             {
+                Console.Write(" \n ################################################# MYSQL SERVER CONNECTED, BEGIN SYNCHRONISATION ... ################################################# \n");
                 MySqlDataReader Reader;
                 string query;
                 MySqlCommand selectMetaModules = new MySqlCommand("SELECT * FROM metamodule", MySQLCo);
@@ -126,6 +127,7 @@ namespace Madera_MMB.Lib
                 {
                     command.ExecuteNonQuery();
                     LiteCo.Close();
+                    Console.Write(" \n ################################################# CREATION BASE SQLITE SUCCESS ################################################# \n");
                     return true;
                 }
                 catch(System.Data.SQLite.SQLiteException ex)
