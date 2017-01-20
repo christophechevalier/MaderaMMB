@@ -62,11 +62,18 @@ namespace Madera_MMB.Lib
                 Console.Write(" \n ################################################# MYSQL SERVER CONNECTED, BEGIN SYNCHRONISATION ... ################################################# \n");
                 MySqlDataReader Reader;
                 string query;
+
+                //
                 MySqlCommand selectMetaModules = new MySqlCommand("SELECT * FROM metamodule", MySQLCo);
                 Reader = selectMetaModules.ExecuteReader();
                 int i = 0;
                 while (Reader.Read())
                 {
+                    for (int x = 0; x < Reader.VisibleFieldCount; x++)
+                    {
+                        Console.Write(" ############# " + Reader.GetValue(x).ToString() + " ############# \n");
+                    }
+
                     query = "insert into metamodule(refMetaModule, label, prixHT, nbSLot, image, nomGamme) values(" +
                     Reader.GetValue(0).ToString() + "," +
                     Reader.GetValue(1).ToString() + "," +
@@ -76,6 +83,7 @@ namespace Madera_MMB.Lib
                     Reader.GetValue(5).ToString() + ")";
 
                     SQLiteCommand command = new SQLiteCommand(query, LiteCo);
+                    LiteCo.Open();
                     try
                     {
                         i = i + command.ExecuteNonQuery();
@@ -83,6 +91,7 @@ namespace Madera_MMB.Lib
                     catch (System.Data.SQLite.SQLiteException e)
                     {
                         Console.Write(e.ToString());
+                        LiteCo.Close();
                         return false;
                     }
                 }
@@ -97,8 +106,25 @@ namespace Madera_MMB.Lib
         {
             try
             {
-                SQLiteCommand command = new SQLiteCommand(query, LiteCo);
-                command.ExecuteNonQuery();
+                LiteCo.Open();
+                SQLiteCommand command = (SQLiteCommand)this.LiteCo.CreateCommand();
+                command.CommandText = query;
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                //try
+                //{
+                //    while(reader.Read())
+                //    {
+                //       for(int i = 0; i < reader.VisibleFieldCount; i++)
+                //       {
+                //           Console.Write(" ############# " + reader.GetValue(i).ToString() + " ############# \n" );
+                //       }
+                //    }
+                //}
+                //finally
+                //{
+                //    reader.Close();
+                //}
             }
             catch (SQLiteException ex)
             {
