@@ -14,11 +14,11 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
-
+        public FamilleDeComposant(string nom)
+        {
+            this.nomFamille = nom;
+        }
         #endregion
 
-        #region privates methods
-
-        #endregion
     }
 }

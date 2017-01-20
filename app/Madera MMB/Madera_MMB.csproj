@@ -61,6 +61,7 @@
       <Private>True</Private>
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.104.0\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -83,7 +84,6 @@
     <Compile Include="CAD\GammeCAD.cs" />
     <Compile Include="CAD\MetamoduleCAD.cs" />
     <Compile Include="CAD\MetaSlotCAD.cs" />
-    <Compile Include="CAD\ModuleCAD.cs" />
     <Compile Include="CAD\PlanCAD.cs" />
     <Compile Include="CAD\PlancherCAD.cs" />
     <Compile Include="CAD\ProjetCAD.cs" />

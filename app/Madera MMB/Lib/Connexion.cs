@@ -29,6 +29,9 @@ namespace Madera_MMB.Lib
             if (File.Exists("Madera.bdd"))
             {
                 Console.Write("<--------------------------------------- Fichier SQLite déjà créé  --------------------------------------->");
+                Console.Write("<--------------------------------------- Suppression et re-génération  --------------------------------------->");
+                File.Delete("Madera.bdd");
+                CreateSQLiteBase();
             }
             else
             {
@@ -109,30 +112,33 @@ namespace Madera_MMB.Lib
             if(File.Exists("SQLiteScript.sql"))
             {
                 string strCommand = File.ReadAllText("SQLiteScript.sql");
+                //string cmd = " CREATE TABLE CLIENT (`refClient` varchar(20) NOT NULL UNIQUE,  `nom` varchar(45) NOT NULL,  `prenom` varchar(45) NOT NULL,  PRIMARY KEY (`refClient`))";
+
 
                 SQLiteConnection.CreateFile("Madera.bdd");
                 // Instanciation d'une nouvelle connexion à la base de données //
                 LiteCo = new SQLiteConnection("Data Source=Madera.bdd;Version=3;");
                 LiteCo.Open();
 
-                SQLiteCommand command = LiteCo.CreateCommand();
-                command.CommandText = strCommand;
+                SQLiteCommand command = new SQLiteCommand(strCommand, LiteCo);
 
                 try
                 {
                     command.ExecuteNonQuery();
+                    LiteCo.Close();
+                    return true;
                 }
                 catch(System.Data.SQLite.SQLiteException ex)
                 {
-                    Console.Write(ex.ToString());
+                    Console.Write(" \n ################################################# ERREUR CREATION BASE SQLITE ################################################# \n" + ex.ToString() + "\n");
+                    LiteCo.Close();
                     return false;
                 }
-                
-                return true;
             }
             else
             {
-                return false;
+                LiteCo.Close();
+                return false; 
             }
 
         }
