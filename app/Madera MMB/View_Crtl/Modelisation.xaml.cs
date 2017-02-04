@@ -231,7 +231,7 @@ namespace Madera_MMB.View_Crtl
             {
                 for (int y = 0; y < listB.GetLength(1); y++)
                 {
-                    if (listB[x, y].letype == ButtonM.type.Mur)
+                    if (listB[x, y].letype == ButtonM.type.Mur || listB[x, y].letype == ButtonM.type.MurInt)
                     {
                         ButtonM but2 = listB[x,y];
                         if (but2.rowspan != 1)
@@ -268,19 +268,8 @@ namespace Madera_MMB.View_Crtl
 
             if (around)
             {
-                but.letype = ButtonM.type.Mur;
-                if (but.Background == System.Windows.Media.Brushes.Yellow)
-                {
-                    but.Background = System.Windows.Media.Brushes.Green;
-                }
-                else if (but.Background == System.Windows.Media.Brushes.Green)
-                {
-                    but.Background = System.Windows.Media.Brushes.LightGray;
-                }
-                else
-                {
-                    but.Background = System.Windows.Media.Brushes.Yellow;
-                }
+                but.letype = ButtonM.type.MurInt;
+                but.checkType();
             }
         }
     }

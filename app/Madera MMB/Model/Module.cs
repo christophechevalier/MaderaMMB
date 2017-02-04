@@ -12,8 +12,8 @@ namespace Madera_MMB.Model
         public string nom { get; set; }
         public int debutPositionX { get; set; }
         public int debutPositionY { get; set; }
-        public int finPositionY { get; set; }
-        public int finPositionX { get; set; }
+        public int hauteur { get; set; }
+        public int longueur { get; set; }
         public int nbSlot { get; set; }
         public MetaModule metaModule { get; set; }
         public List<Slot> slotsContenus { get; set; }
@@ -36,7 +36,7 @@ namespace Madera_MMB.Model
             this.debutPositionX = posXD;
             this.debutPositionY = posYD;
             this.finPositionY = posYF;
-            this.finPositionX = posXF;
+            this.longueur = posXF;
             this.metaModule = metaModule;
         }
         #endregion
