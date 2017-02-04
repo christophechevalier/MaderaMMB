@@ -30,13 +30,13 @@ namespace Madera_MMB.Model
                 this.slotsContenus.Add(slot);
             }
         }
-        public Module(string nom, int posXD, int posYD, int posXF, int posYF, MetaModule metaModule)
+        public Module(string nom, int posXD, int posYD, int longueur, int hauteur, MetaModule metaModule)
         {
             this.nom = nom;
             this.debutPositionX = posXD;
             this.debutPositionY = posYD;
-            this.finPositionY = posYF;
-            this.longueur = posXF;
+            this.hauteur = hauteur;
+            this.longueur = longueur;
             this.metaModule = metaModule;
         }
         #endregion
