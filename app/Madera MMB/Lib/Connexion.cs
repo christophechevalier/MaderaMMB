@@ -11,12 +11,12 @@ namespace Madera_MMB.Lib
 {
     public class Connexion
     {
-        #region Properties 
+        #region Properties
         public SQLiteConnection LiteCo { get; set; }
         public MySqlConnection MySQLCo { get; set; }
         public bool MySQLconnected { get; set; }
         public SQLiteDataAdapter DataAdapter { get; set; }
-        #endregion 
+        #endregion
 
         #region Ctor
         public Connexion()
@@ -28,8 +28,8 @@ namespace Madera_MMB.Lib
 
             if (File.Exists("Madera.bdd"))
             {
-                Console.Write("<--------------------------------------- Fichier SQLite déjà créé  --------------------------------------->");
-                Console.Write("<--------------------------------------- Suppression et re-génération  --------------------------------------->");
+                Console.Write("\n<--------------------------------------- Fichier SQLite déjà créé  --------------------------------------->\n");
+                Console.Write("\n<--------------------------------------- Suppression et re-génération  --------------------------------------->\n");
                 File.Delete("Madera.bdd");
                 CreateSQLiteBase();
             }
@@ -37,7 +37,7 @@ namespace Madera_MMB.Lib
             {
                 if (CreateSQLiteBase())
                 {
-                    Console.Write("<---------------------------------------  Fichier SQLite créé  --------------------------------------->");
+                    Console.Write("\n<---------------------------------------  Fichier SQLite créé  --------------------------------------->\n");
                 }
                 else
                 {
@@ -55,49 +55,102 @@ namespace Madera_MMB.Lib
 
 
         #region Public Methods
-        public bool Synchronisation()
-        {
-            if (MySQLconnected == true)
-            {
-                MySqlDataReader Reader;
-                string query;
-                MySqlCommand selectMetaModules = new MySqlCommand("SELECT * FROM metamodule", MySQLCo);
-                Reader = selectMetaModules.ExecuteReader();
-                int i = 0;
-                while (Reader.Read())
-                {
-                    query = "insert into metamodule(refMetaModule, label, prixHT, nbSLot, image, nomGamme) values(" +
-                    Reader.GetValue(0).ToString() + "," +
-                    Reader.GetValue(1).ToString() + "," +
-                    Reader.GetValue(2).ToString() + "," +
-                    Reader.GetValue(3).ToString() + "," +
-                    Reader.GetValue(4).ToString() + "," +
-                    Reader.GetValue(5).ToString() + ")";
+        //public bool Synchronisation()
+        //{
+        //    if (MySQLconnected == true)
+        //    {
+        //        Console.Write(" \n ################################################# MYSQL SERVER CONNECTED, BEGIN SYNCHRONISATION ... ################################################# \n");
 
-                    SQLiteCommand command = new SQLiteCommand(query, LiteCo);
-                    try
-                    {
-                        i = i + command.ExecuteNonQuery();
-                    }
-                    catch (System.Data.SQLite.SQLiteException e)
-                    {
-                        Console.Write(e.ToString());
-                        return false;
-                    }
-                }
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+
+
+        //        //MySqlDataReader Reader;
+        //        //string query;
+
+        //        //Console.Write(" ############# TEST ############# \n");
+        //        //MySqlCommand selectMetaModules = new MySqlCommand("SELECT * FROM metamodule", MySQLCo);
+        //        //Reader = selectMetaModules.ExecuteReader();
+        //        //int i = 0;
+        //        //while (Reader.Read())
+        //        //{
+        //        //    for (int x = 0; x < Reader.VisibleFieldCount; x++)
+        //        //    {
+        //        //        Console.Write(" ############# " + Reader.GetValue(x).ToString() + " ############# \n");
+        //        //    }
+
+        //        //    query = "insert into metamodule(refMetaModule, label, prixHT, nbSLot, image, nomGamme) values(" +
+        //        //    Reader.GetValue(0).ToString() + "," +
+        //        //    Reader.GetValue(1).ToString() + "," +
+        //        //    Reader.GetValue(2).ToString() + "," +
+        //        //    Reader.GetValue(3).ToString() + "," +
+        //        //    Reader.GetValue(4).ToString() + "," +
+        //        //    Reader.GetValue(5).ToString() + ")";
+
+        //        //    SQLiteCommand command = new SQLiteCommand(query, LiteCo);
+        //        //    LiteCo.Open();
+        //        //    try
+        //        //    {
+        //        //        i = i + command.ExecuteNonQuery();
+        //        //    }
+        //        //    catch (System.Data.SQLite.SQLiteException e)
+        //        //    {
+        //        //        Console.Write(e.ToString());
+        //        //        LiteCo.Close();
+        //        //        return false;
+        //        //    }
+        //        //}
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
         public void InsertSQliteQuery(string query)
         {
             try
             {
-                SQLiteCommand command = new SQLiteCommand(query,LiteCo);
-                command.ExecuteNonQuery();
+                LiteCo.Open();
+                SQLiteCommand command = new SQLiteCommand(query, LiteCo);
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (System.Data.SQLite.SQLiteException e)
+                {
+                    Console.Write(e.ToString());
+                    LiteCo.Close();
+                }
+            }
+            catch (SQLiteException ex)
+            {
+                Console.Write(ex.ToString());
+                LiteCo.Close();
+            }
+        }
+
+        public void SelectSQLiteQuery(string query)
+        {
+            try
+            {
+                LiteCo.Open();
+                SQLiteCommand command = (SQLiteCommand)this.LiteCo.CreateCommand();
+                command.CommandText = query;
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                try
+                {
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.VisibleFieldCount; i++)
+                        {
+                            Console.Write(" ############# " + reader.GetValue(i).ToString() + " ############# \n");
+                        }
+                    }
+                }
+                finally
+                {
+                    reader.Close();
+                }
             }
             catch (SQLiteException ex)
             {
@@ -109,7 +162,7 @@ namespace Madera_MMB.Lib
         #region Privates Methods
         private bool CreateSQLiteBase()
         {
-            if(File.Exists("SQLiteScript.sql"))
+            if (File.Exists("SQLiteScript.sql"))
             {
                 string strCommand = File.ReadAllText("SQLiteScript.sql");
                 //string cmd = " CREATE TABLE CLIENT (`refClient` varchar(20) NOT NULL UNIQUE,  `nom` varchar(45) NOT NULL,  `prenom` varchar(45) NOT NULL,  PRIMARY KEY (`refClient`))";
@@ -126,9 +179,10 @@ namespace Madera_MMB.Lib
                 {
                     command.ExecuteNonQuery();
                     LiteCo.Close();
+                    Console.Write(" \n ################################################# CREATION BASE SQLITE SUCCESS ################################################# \n");
                     return true;
                 }
-                catch(System.Data.SQLite.SQLiteException ex)
+                catch (System.Data.SQLite.SQLiteException ex)
                 {
                     Console.Write(" \n ################################################# ERREUR CREATION BASE SQLITE ################################################# \n" + ex.ToString() + "\n");
                     LiteCo.Close();
@@ -138,7 +192,7 @@ namespace Madera_MMB.Lib
             else
             {
                 LiteCo.Close();
-                return false; 
+                return false;
             }
 
         }
