@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Madera_MMB" Height="700" Width="1040">
 
+    
 
     <Frame NavigationUIVisibility="Hidden" x:Name="Mainframe" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"  Margin="5,10,0,0" />
-
-
 
 </Window>

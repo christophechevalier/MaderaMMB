@@ -55,56 +55,53 @@ namespace Madera_MMB.Lib
 
 
         #region Public Methods
-        //public bool Synchronisation()
-        //{
-        //    if (MySQLconnected == true)
-        //    {
-        //        Console.Write(" \n ################################################# MYSQL SERVER CONNECTED, BEGIN SYNCHRONISATION ... ################################################# \n");
+        public bool SyncCommMySQL()
+        {
+            MySqlDataReader Reader;
+            string query;
+            Console.Write(" ############# TEST SYNC COMMERCIAL ############# \n");
+            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM Commercial", MySQLCo);
+            try
+            {
+                Reader = selectComms.ExecuteReader();
+                int i = 0;
+                LiteCo.Open();
+                while (Reader.Read())
+                {
+                    for (int x = 0; x < Reader.VisibleFieldCount; x++)
+                    {
+                        Console.Write(" ############# " + Reader.GetValue(x).ToString() + " ############# \n");
+                    }
 
+                    query = "replace into commercial(refCommercial, nom, prenom, motDePasse) values('" +
+                    Reader.GetValue(0).ToString() + "','" +
+                    Reader.GetValue(1).ToString() + "','" +
+                    Reader.GetValue(2).ToString() + "','" +
+                    Reader.GetValue(3).ToString() + "')";
 
-
-        //        //MySqlDataReader Reader;
-        //        //string query;
-
-        //        //Console.Write(" ############# TEST ############# \n");
-        //        //MySqlCommand selectMetaModules = new MySqlCommand("SELECT * FROM metamodule", MySQLCo);
-        //        //Reader = selectMetaModules.ExecuteReader();
-        //        //int i = 0;
-        //        //while (Reader.Read())
-        //        //{
-        //        //    for (int x = 0; x < Reader.VisibleFieldCount; x++)
-        //        //    {
-        //        //        Console.Write(" ############# " + Reader.GetValue(x).ToString() + " ############# \n");
-        //        //    }
-
-        //        //    query = "insert into metamodule(refMetaModule, label, prixHT, nbSLot, image, nomGamme) values(" +
-        //        //    Reader.GetValue(0).ToString() + "," +
-        //        //    Reader.GetValue(1).ToString() + "," +
-        //        //    Reader.GetValue(2).ToString() + "," +
-        //        //    Reader.GetValue(3).ToString() + "," +
-        //        //    Reader.GetValue(4).ToString() + "," +
-        //        //    Reader.GetValue(5).ToString() + ")";
-
-        //        //    SQLiteCommand command = new SQLiteCommand(query, LiteCo);
-        //        //    LiteCo.Open();
-        //        //    try
-        //        //    {
-        //        //        i = i + command.ExecuteNonQuery();
-        //        //    }
-        //        //    catch (System.Data.SQLite.SQLiteException e)
-        //        //    {
-        //        //        Console.Write(e.ToString());
-        //        //        LiteCo.Close();
-        //        //        return false;
-        //        //    }
-        //        //}
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
+                    SQLiteCommand command = new SQLiteCommand(query, LiteCo);
+                    Console.WriteLine("################" + query + "################");
+                    try
+                    {
+                        i = i + command.ExecuteNonQuery();  
+                    }
+                    catch (System.Data.SQLite.SQLiteException e)
+                    {
+                        Console.Write(e.ToString());
+                        LiteCo.Close();
+                        return false;
+                    } 
+                }
+                LiteCo.Close();
+                return true;
+            }
+            catch(MySqlException e)
+            {
+                Console.Write(e.ToString());
+                return false;
+            }
+          
+        }
         public void InsertSQliteQuery(string query)
         {
             try
@@ -115,10 +112,10 @@ namespace Madera_MMB.Lib
                 {
                     command.ExecuteNonQuery();
                 }
-                catch (System.Data.SQLite.SQLiteException e)
+                catch(System.Data.SQLite.SQLiteException e)
                 {
                     Console.Write(e.ToString());
-                    LiteCo.Close();
+                    LiteCo.Close(); 
                 }
             }
             catch (SQLiteException ex)
@@ -126,6 +123,7 @@ namespace Madera_MMB.Lib
                 Console.Write(ex.ToString());
                 LiteCo.Close();
             }
+            LiteCo.Close();
         }
 
         public void SelectSQLiteQuery(string query)
