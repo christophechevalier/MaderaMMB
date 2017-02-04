@@ -24,7 +24,7 @@ namespace Madera_MMB.View_Crtl
     {
 
         private Grid grid = new Grid();
-        private Button[] listB = new Button[30 * 40];
+        private ButtonM[,] listB = new ButtonM[30, 40];
         private ListBox listBox = new ListBox();
         private System.Windows.Controls.Image croix = new System.Windows.Controls.Image();
         private System.Windows.Controls.Image murh = new System.Windows.Controls.Image();
@@ -181,92 +181,106 @@ namespace Madera_MMB.View_Crtl
 
         private void loadGrid()
         {
-            Button[,] btns = new Button[30, 40];
-
             for (int i = 0; i < 30; i++)
             {
                 for (int y = 0; y < 40; y++)
                 {
-                    Button but = new Button();
-                    Grid.SetRow(but, i);
-                    Grid.SetColumn(but, y);
-                    but.Name = "butlig" + i + "col" + y;
-                    but.Background = System.Windows.Media.Brushes.LightGray;
-                    but.Click += new RoutedEventHandler(checkAround);
+                    ButtonM but = new ButtonM(ButtonM.type.Rien, y, i, 1, 1);
+                    Grid.SetRow(but, but.y);
+                    Grid.SetColumn(but, but.x);
+                    but.Click += new RoutedEventHandler(checkWall);
 
-                    btns[i, y] = but;
+                    listB[i, y] = but;
                     grid.Children.Add(but);
                 }
             }
 
-            Button murhaut = new Button();
-            Grid.SetColumn(murhaut, 5);
-            Grid.SetColumnSpan(murhaut, 20);
-            Grid.SetRow(murhaut, 5);
-            murhaut.Background = System.Windows.Media.Brushes.Red;
-            murhaut.Content = murh;
-            grid.Children.Add(murhaut);
+            ButtonM murhaut = new ButtonM(ButtonM.type.Mur, 5, 5, 20, 1);
+            placeComponent(murhaut);
 
-            Button murbas = new Button();
-            Grid.SetColumn(murbas, 5);
-            Grid.SetColumnSpan(murbas, 20);
-            Grid.SetRow(murbas, 24);
-            murbas.Background = System.Windows.Media.Brushes.Red;
-            murbas.Content = murh;
-            grid.Children.Add(murbas);
+            ButtonM murbas = new ButtonM(ButtonM.type.Mur, 5, 24, 20, 1);
+            placeComponent(murbas);
 
-            Button murgauche = new Button();
-            Grid.SetColumn(murgauche, 4);
-            Grid.SetRowSpan(murgauche, 20);
-            Grid.SetRow(murgauche, 5);
-            murgauche.Background = System.Windows.Media.Brushes.Red;
-            murgauche.Content = murv;
-            grid.Children.Add(murgauche);
+            ButtonM murgauche = new ButtonM(ButtonM.type.Mur, 4, 5, 1, 20);
+            placeComponent(murgauche);
 
-            Button murdroit = new Button();
-            Grid.SetColumn(murdroit, 25);
-            Grid.SetRowSpan(murdroit, 20);
-            Grid.SetRow(murdroit, 5);
-            murdroit.Background = System.Windows.Media.Brushes.Red;
-            murdroit.Content = murv;
-            grid.Children.Add(murdroit);
+            ButtonM murdroit = new ButtonM(ButtonM.type.Mur, 24, 5, 1, 20);
+            placeComponent(murdroit);
 
-            Button slot = new Button();
-            Grid.SetColumn(slot, 14);
-            Grid.SetRow(slot, 5);
-            slot.Background = System.Windows.Media.Brushes.Green;
-            grid.Children.Add(slot);
-
-            /*
-            btns[2, 2].Content = img;
-            btns[4, 4].Content = anglehg;
-
-            btns[2, 3].Content = murh;
-            btns[2, 4].Content = murh;
-
-            btns[3, 2].Content = murv;
-            btns[4, 2].Content = murv;
-            */
+            ButtonM slot = new ButtonM(ButtonM.type.Slot, 14, 5, 1, 1);
+            placeComponent(slot);
         }
 
-        private void checkAround(object sender, RoutedEventArgs e)
+        private void placeComponent(ButtonM but)
         {
-            Button but = sender as Button;
-            var x = Grid.GetRow(but);
-            var y = Grid.GetColumn(but);
+            Grid.SetColumn(but, but.x);
+            Grid.SetColumnSpan(but, but.colspan);
+            Grid.SetRow(but, but.y);
+            Grid.SetRowSpan(but, but.rowspan);
+            //but.Content = murh;
+            listB[but.x, but.y] = but;
+            grid.Children.Add(but);
+        }
 
-            Console.WriteLine("---------------------------------- lig " + x + " col " + y + " ----------------------------------");
-            if (but.Background == System.Windows.Media.Brushes.Yellow)
+        private void checkWall(object sender, RoutedEventArgs e)
+        {
+            ButtonM but = sender as ButtonM;
+            bool around = false;
+
+            for (int x = 0; x < listB.GetLength(0); x++)
             {
-                but.Background = System.Windows.Media.Brushes.Green;
+                for (int y = 0; y < listB.GetLength(1); y++)
+                {
+                    if (listB[x, y].letype == ButtonM.type.Mur)
+                    {
+                        ButtonM but2 = listB[x,y];
+                        if (but2.rowspan != 1)
+                        {
+                            for (int span = 0; span < but2.rowspan; span++)
+                            {
+                                if ((but2.y + span == but.y && but2.x + 1 == but.x) || (but2.y + span == but.y && but2.x - 1 == but.x))
+                                {
+                                    around = true;
+                                }
+                            }
+                        }
+                        else if (but2.colspan !=1 )
+                        {
+                            for (int span = 0; span < but2.colspan; span++)
+                            {
+                                if ((but2.x + span == but.x && but2.y + 1 == but.y) || (but2.x + span == but.x && but2.y - 1 == but.y))
+                                {
+                                    around = true;
+                                }
+                            } 
+                        }
+                        else
+                        {
+                            if ((but2.x == but.x && but2.y + 1 == but.y) || (but2.x == but.x && but2.y - 1 == but.y) || (but2.x + 1 == but.x && but2.y == but.y) || (but2.x - 1 == but.x && but2.y == but.y))
+                            {
+                                around = true;
+                            }
+                        }
+                        
+                    }
+                }
             }
-            else if (but.Background == System.Windows.Media.Brushes.Green)
+
+            if (around)
             {
-                but.Background = System.Windows.Media.Brushes.LightGray;
-            }
-            else
-            {
-                but.Background = System.Windows.Media.Brushes.Yellow;
+                but.letype = ButtonM.type.Mur;
+                if (but.Background == System.Windows.Media.Brushes.Yellow)
+                {
+                    but.Background = System.Windows.Media.Brushes.Green;
+                }
+                else if (but.Background == System.Windows.Media.Brushes.Green)
+                {
+                    but.Background = System.Windows.Media.Brushes.LightGray;
+                }
+                else
+                {
+                    but.Background = System.Windows.Media.Brushes.Yellow;
+                }
             }
         }
     }
