@@ -22,7 +22,7 @@ namespace Madera_MMB.Lib.Tools
         public int x { get; set; }
         public int y { get; set; }
 
-        public ButtonM(ButtonM unparent, type type,int x, int y, int colspan, int rowspan)
+        public ButtonM(ButtonM unparent, type type, int x, int y, int colspan, int rowspan)
         {
             this.parent = unparent;
             this.letype = type;
