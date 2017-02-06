@@ -22,25 +22,6 @@ namespace Madera_MMB.Lib.Tools
         public int x { get; set; }
         public int y { get; set; }
 
-        public ButtonM(type type)
-        {
-            this.letype = type;
-            this.slots = new List<ButtonM>();
-        }
-
-        public ButtonM(ButtonM unparent)
-        {
-            this.parent = unparent;
-            this.slots = new List<ButtonM>();
-        }
-
-        public ButtonM(ButtonM unparent, type type)
-        {
-            this.parent = unparent;
-            this.letype = type;
-            this.slots = new List<ButtonM>();
-        }
-
         public ButtonM(ButtonM unparent, type type,int x, int y, int colspan, int rowspan)
         {
             this.parent = unparent;
