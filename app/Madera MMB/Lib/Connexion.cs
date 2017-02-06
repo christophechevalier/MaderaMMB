@@ -15,6 +15,7 @@ namespace Madera_MMB.Lib
         public SQLiteConnection LiteCo { get; set; }
         public MySqlConnection MySQLCo { get; set; }
         public bool MySQLconnected { get; set; }
+        public bool SQLiteconnected { get; set; }
         public SQLiteDataAdapter DataAdapter { get; set; }
         #endregion
 
@@ -23,33 +24,8 @@ namespace Madera_MMB.Lib
         {
             // Test Connexion MySQL //
             MySQLconnected = OpenMySQLConnection();
-
-            // Partie SQLite //
-
-            if (File.Exists("Madera.bdd"))
-            {
-                Console.Write("\n<--------------------------------------- Fichier SQLite déjà créé  --------------------------------------->\n");
-                Console.Write("\n<--------------------------------------- Suppression et re-génération  --------------------------------------->\n");
-                File.Delete("Madera.bdd");
-                CreateSQLiteBase();
-            }
-            else
-            {
-                if (CreateSQLiteBase())
-                {
-                    Console.Write("\n<---------------------------------------  Fichier SQLite créé  --------------------------------------->\n");
-                }
-                else
-                {
-
-                }
-
-            }
-
-            // Pour exécuter une requête sur une base SQLite //
-            // SQLiteCommand command = new SQLiteCommand("tapper requête ici", liteConn);
-            // command.ExecuteNonQuery();
-
+            // Test Connexion SQLite //
+            SQLiteconnected = CreateSQLiteBase();
         }
         #endregion
 
@@ -59,6 +35,7 @@ namespace Madera_MMB.Lib
         {
             MySqlDataReader Reader;
             string query;
+            MySQLCo.Open();
             Console.Write(" ############# TEST SYNC COMMERCIAL ############# \n");
             MySqlCommand selectComms = new MySqlCommand("SELECT * FROM Commercial", MySQLCo);
             try
@@ -93,14 +70,15 @@ namespace Madera_MMB.Lib
                     } 
                 }
                 LiteCo.Close();
+                MySQLCo.Close();
                 return true;
             }
             catch(MySqlException e)
             {
                 Console.Write(e.ToString());
+                MySQLCo.Close();
                 return false;
-            }
-          
+            }        
         }
         public void InsertSQliteQuery(string query)
         {
@@ -125,7 +103,6 @@ namespace Madera_MMB.Lib
             }
             LiteCo.Close();
         }
-
         public void SelectSQLiteQuery(string query)
         {
             try
@@ -139,10 +116,10 @@ namespace Madera_MMB.Lib
                 {
                     while (reader.Read())
                     {
-                        for (int i = 0; i < reader.VisibleFieldCount; i++)
-                        {
-                            Console.Write(" ############# " + reader.GetValue(i).ToString() + " ############# \n");
-                        }
+                        //for (int i = 0; i < reader.VisibleFieldCount; i++)
+                        //{
+                        //    Console.Write(" ############# " + reader.GetValue(i).ToString() + " ############# \n");
+                        //}
                     }
                 }
                 finally
@@ -155,24 +132,37 @@ namespace Madera_MMB.Lib
                 Console.Write(ex.ToString());
             }
         }
+ 
         #endregion
 
+
         #region Privates Methods
+        // Partie SQLite //
         private bool CreateSQLiteBase()
         {
-            if (File.Exists("SQLiteScript.sql"))
+            if (File.Exists("Madera.bdd"))
             {
+                Console.Write(" \n ################################################# SQLITE DATABASE EXISTS ################################################# \n");
+                try
+                {
+                    LiteCo = new SQLiteConnection("Data Source=Madera.bdd;Version=3;");
+                    Console.Write(" \n ################################################# SQLITE DATABASE CONNECTED ################################################# \n");
+                    return true;
+                }
+                catch (System.Data.SQLite.SQLiteException ex)
+                {
+                    Console.Write(" \n ################################################# ERROR CONNECTION BASE SQLITE ################################################# \n" + ex.ToString() + "\n");
+                    LiteCo.Close();
+                    return false;
+                }
+            }
+            else
+            {
+                Console.Write(" \n ################################################# SQLITE DATABASE NOT EXISTS ################################################# \n");
                 string strCommand = File.ReadAllText("SQLiteScript.sql");
-                //string cmd = " CREATE TABLE CLIENT (`refClient` varchar(20) NOT NULL UNIQUE,  `nom` varchar(45) NOT NULL,  `prenom` varchar(45) NOT NULL,  PRIMARY KEY (`refClient`))";
-
-
-                SQLiteConnection.CreateFile("Madera.bdd");
-                // Instanciation d'une nouvelle connexion à la base de données //
                 LiteCo = new SQLiteConnection("Data Source=Madera.bdd;Version=3;");
-                LiteCo.Open();
-
                 SQLiteCommand command = new SQLiteCommand(strCommand, LiteCo);
-
+                LiteCo.Open();
                 try
                 {
                     command.ExecuteNonQuery();
@@ -187,25 +177,22 @@ namespace Madera_MMB.Lib
                     return false;
                 }
             }
-            else
-            {
-                LiteCo.Close();
-                return false;
-            }
-
         }
+
         // Partie MySQL //
         private bool OpenMySQLConnection()
         {
             string connectionString = "SERVER=localhost;DATABASE=madera_mmb;UID=root;PASSWORD=;";
-            MySQLCo = new MySqlConnection(connectionString);
             try
             {
-                MySQLCo.Open();
+                MySQLCo = new MySqlConnection(connectionString);
+                Console.Write(" \n ################################################# MYSQL DATABASE REACHED,  BEGIN SYNCHRONISATION ... ################################################# \n");
                 return true;
             }
             catch (MySqlException ex)
             {
+                Console.WriteLine("################################################# ERROR CONNECTION MYSQL SERVER #################################################");
+                Console.WriteLine(ex.ToString());
                 //When handling errors, you can your application's response based 
                 //on the error number.
                 //The two most common error numbers when connecting are as follows:
