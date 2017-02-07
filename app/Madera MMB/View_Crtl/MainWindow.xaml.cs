@@ -26,7 +26,8 @@ namespace Madera_MMB.View_Crtl
     {
 
         private Connexion Conn { get; set; }
-        public ErrorModalWindow errorWindow { get; set; }
+        private ErrorModalWindow errorWindow { get; set; }
+        private CommercialCAD CommCAD { get; set; }
 
         View_Crtl.Authentification Authentification = new Authentification();
         View_Crtl.GestionProjet GestionProjet = new GestionProjet();
@@ -43,35 +44,37 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             Initialize_Listeners();
             this.errorWindow = new ErrorModalWindow();
+            this.Conn = new Connexion();
+            CommCAD = new CommercialCAD(this.Conn);
+
             Mainframe.Content = Authentification;
 
-            errorWindow.ShowDialog();
-
-            this.Conn = new Connexion();
-
-            if (Conn.MySQLconnected == true)
+            if (!Conn.MySQLconnected)
             {
-                Console.WriteLine("################################################# MYSQL SERVER CONNECTED, BEGIN SYNCHRONISATION ... #################################################");
-                CommercialCAD CommCAD = new CommercialCAD(this.Conn);
-                if(this.Conn.SyncCommMySQL() == true)
-                {
-                    
-                }
-                else
-                {
-                    errorWindow.message.Content = "Erreur de récupération des données Commerciaux ! ";
-                    errorWindow.ShowDialog();
-                }
-            }
-            else
-            {
-
+                errorWindow.message.Content = " Mode déconnecté ";
+                errorWindow.ShowDialog();
             }
 
+            Console.WriteLine("TEST INTERMEDIAIRE1");
+            if (!Conn.SQLiteconnected)
+            {
+                errorWindow.message.Content = " Base innaccessible ! Veuillez contacter l'administrateur.  Application inutilisable ";
+                errorWindow.BtnOK.Click += delegate(object sender, RoutedEventArgs e)
+                {
+                    Application.Current.Shutdown();
+                };
+                errorWindow.ShowDialog();
+            }
 
+            Console.WriteLine("TEST INTERMEDIAIRE2");
+            if(!this.Conn.SyncCommMySQL())
+            {
+                errorWindow.message.Content = "Erreur de récupération des données Commerciaux ! ";
+                errorWindow.ShowDialog();
+            }
 
             // TEST QUERY SQLite //
-            string query = "REPLACE INTO Commercial (refCommercial, nom, prenom, motDePasse) VALUES ('uneref', 'unnom', 'unprenom', 'unmdp')";
+            string query = "REPLACE INTO Commercial (refCommercial, nom, prenom, motDePasse) VALUES ('003', 'yololnom', 'yololprenom', 'yololmdp')";
             Conn.InsertSQliteQuery(query);
             string myquery = "SELECT * FROM Commercial;";
             Conn.SelectSQLiteQuery(myquery);
@@ -108,7 +111,21 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
             Authentification.BtnValiderAuth.Click += delegate(object sender, RoutedEventArgs e)
             {
-                Mainframe.Content = GestionProjet;
+                string mdp = Authentification.username.Text;
+                string id = Authentification.password.Password;
+                foreach(var comm in CommCAD.listeAllCommerciaux)
+                {
+                    Console.WriteLine(comm.reference + "  /  " + comm.motDePasse);
+                    if(comm.reference == id && comm.motDePasse == mdp)
+                    {
+                        Mainframe.Content = GestionProjet;
+                    }
+                    else
+                    {
+                        errorWindow.message.Content = "Mauvais couple identifiant/mot de passe ! ";
+                        errorWindow.ShowDialog();
+                    }
+                }
             };
         }
         #endregion

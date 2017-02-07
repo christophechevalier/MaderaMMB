@@ -22,13 +22,15 @@ namespace Madera_MMB.CAD
         {
             Connexion conn = laConnexion;
             listeAllCommerciaux = new List<Commercial>();
+            getAllComm();
         }
         #endregion
 
         #region privates methods
-        public Commercial getCommercialbyRef(Commercial commercial)
+        private void getAllComm()
         {
-            SQLQuery = "SELECT nom, prenom FROM Commercial";
+            SQLQuery = "SELECT * FROM Commercial";
+            conn.LiteCo.Open();
             SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
             command.CommandText = SQLQuery;
             SQLiteDataReader reader = command.ExecuteReader();
@@ -38,17 +40,14 @@ namespace Madera_MMB.CAD
                 while (reader.Read())
                 {
                     Commercial com = new Commercial(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3));
-                    //com.reference = reader.GetString(0);
-                    //com.nom = reader.GetString(1);
-                    //com.prenom = reader.GetString(2);
-                    //com.motDePasse = reader.GetString(3);
+                    listeAllCommerciaux.Add(com);
                 }
             }
             finally
             {
                 reader.Close();
             }
-            return commercial;
+            conn.LiteCo.Close();
         }
         private void insertCommercial(Commercial commercial)
         {
