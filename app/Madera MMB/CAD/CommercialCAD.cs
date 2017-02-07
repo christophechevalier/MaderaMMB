@@ -20,7 +20,7 @@ namespace Madera_MMB.CAD
         #region Ctor
         public CommercialCAD(Connexion laConnexion)
         {
-            Connexion conn = laConnexion;
+            this.conn = laConnexion;
             listeAllCommerciaux = new List<Commercial>();
             getAllComm();
         }
@@ -30,7 +30,7 @@ namespace Madera_MMB.CAD
         private void getAllComm()
         {
             SQLQuery = "SELECT * FROM Commercial";
-            conn.LiteCo.Open();
+            this.conn.LiteCo.Open();
             SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
             command.CommandText = SQLQuery;
             SQLiteDataReader reader = command.ExecuteReader();

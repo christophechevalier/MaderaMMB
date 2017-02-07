@@ -41,6 +41,7 @@ namespace Madera_MMB.View_Crtl
 
         public MainWindow()
         {
+            Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             InitializeComponent();
             Initialize_Listeners();
             this.errorWindow = new ErrorModalWindow();
