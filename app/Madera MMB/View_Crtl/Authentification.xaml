@@ -90,7 +90,14 @@
         </Grid>
 
         <!-- Début Déclaration Vue-->
-        <Grid Background="White"  Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=columnDefinition1}" Height="{Binding ActualHeight, ElementName=rowDefinition1}" Grid.RowSpan="2" Grid.ColumnSpan="1">
+        <Grid Background="White"  
+              Grid.Column="1" 
+              Grid.Row="0" 
+              VerticalAlignment="Stretch" 
+              HorizontalAlignment="Stretch" 
+              Grid.RowSpan="2" 
+              Grid.ColumnSpan="1"
+              >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="0.40*" />
