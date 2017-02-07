@@ -1,8 +1,41 @@
 ﻿<Window x:Class="Madera_MMB.Lib.Tools.ErrorModalWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ErrorModalWindow" Height="300" Width="300">
-    <Grid>
+        Title="Erreur ! "  Height="700" Width="1040">
+    <Window.Resources>
+        <!-- Image Erreur -->
+        <BitmapImage x:Key="imgAlert" UriSource="/Madera MMB;component/Lib/Images/alert.png"/>
+
+    </Window.Resources>
+    
+    <Grid x:Name="ModalGrid" Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.25*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="0.25*" />
+        </Grid.RowDefinitions>
+
+        <Image Name="Logo" Grid.Column="0" Source="{StaticResource imgAlert}" Grid.Row="1" Width="250" Height="300" RenderTransformOrigin="0.706,0.609" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         
+        <Viewbox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Label x:Name="message" Height="45" Width="250" Foreground="Red"  /> 
+        </Viewbox>
+        
+        <Button x:Name="BtnOK"
+                Grid.Row="1" 
+                    Grid.Column="2" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Bottom"
+                    Content="OK"
+                    FontSize="15"
+                    Height="100"
+                    Width="200" />
+
+
     </Grid>
 </Window>

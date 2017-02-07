@@ -85,8 +85,6 @@
                   Grid.Row="1" 
                   VerticalAlignment="Stretch" 
                   HorizontalAlignment="Stretch" 
-                  Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                  Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
                   Grid.RowSpan="2" 
                   Grid.ColumnSpan="2">
 
@@ -196,9 +194,7 @@
                   Background="DimGray" 
                   Grid.Row="0" 
                   VerticalAlignment="Stretch" 
-                  HorizontalAlignment="Stretch" 
-                  Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                  Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
+                  HorizontalAlignment="Stretch"  
                   Grid.ColumnSpan="1" Margin="0,-10,0,10">
 
                 <Grid.RowDefinitions>
@@ -303,8 +299,6 @@
               Grid.Row="0" 
               VerticalAlignment="Stretch" 
               HorizontalAlignment="Stretch" 
-              Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-              Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
               Grid.RowSpan="2" 
               Grid.ColumnSpan="1"
               >
@@ -337,8 +331,6 @@
                               Grid.Row="1" 
                               VerticalAlignment="Stretch" 
                               HorizontalAlignment="Stretch" 
-                              Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                              Height="{Binding ActualHeight, ElementName=rowDefinition1}"
                               >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.1*" />
@@ -471,8 +463,6 @@
                               Grid.Row="2" 
                               VerticalAlignment="Stretch" 
                               HorizontalAlignment="Stretch" 
-                              Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                              Height="{Binding ActualHeight, ElementName=rowDefinition1}"
                               >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.1*" />
@@ -491,8 +481,6 @@
                                 Grid.Row="0" 
                                 VerticalAlignment="Stretch" 
                                 HorizontalAlignment="Stretch" 
-                                Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                                Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
                                 >
                     </GroupBox>
                     
@@ -503,8 +491,6 @@
                                 Grid.Row="0" 
                                 VerticalAlignment="Stretch" 
                                 HorizontalAlignment="Stretch" 
-                                Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                                Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
                                 >
                     </GroupBox>
 
@@ -515,8 +501,6 @@
                                 Grid.Row="0" 
                                 VerticalAlignment="Stretch" 
                                 HorizontalAlignment="Stretch" 
-                                Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                                Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
                                 >
                     </GroupBox>
 
@@ -527,8 +511,6 @@
                                 Grid.Row="0" 
                                 VerticalAlignment="Stretch" 
                                 HorizontalAlignment="Stretch" 
-                                Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                                Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
                                 >
                     </GroupBox>
 
@@ -539,8 +521,6 @@
                                 Grid.Row="0" 
                                 VerticalAlignment="Stretch" 
                                 HorizontalAlignment="Stretch" 
-                                Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                                Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
                                 >
                     </GroupBox>
                 </Grid>
@@ -556,8 +536,6 @@
               Grid.Row="0" 
               VerticalAlignment="Stretch" 
               HorizontalAlignment="Stretch" 
-              Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-              Height="{Binding ActualHeight, ElementName=rowDefinition1}"
               Grid.RowSpan="2" 
               Grid.ColumnSpan="1"
               >

@@ -68,7 +68,7 @@
         </Grid>
 
         <!-- Début Déclaration Vue-->
-        <Grid x:Name="contenaire" Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=columnDefinition1}" Height="{Binding ActualHeight, ElementName=rowDefinition1}" Grid.RowSpan="3" Grid.ColumnSpan="1">
+        <Grid x:Name="contenaire" Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.RowSpan="3" Grid.ColumnSpan="1">
             <Border BorderBrush="Black" BorderThickness="2" Margin="5" />
         </Grid>
 
