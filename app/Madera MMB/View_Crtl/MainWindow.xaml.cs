@@ -41,7 +41,7 @@ namespace Madera_MMB.View_Crtl
         public MainWindow()
         {
             InitializeComponent();
-            //Initialize_Listeners();
+            Initialize_Listeners();
             this.errorWindow = new ErrorModalWindow();
             Mainframe.Content = Authentification;
 

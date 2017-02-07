@@ -101,8 +101,6 @@
             <Button x:Name="BtnConfirmerParamPlan"
                     HorizontalAlignment="Stretch" 
                     Grid.Row="0" 
-                    Height="{Binding ActualHeight, ElementName=columnDefinition0}" 
-                    Width="{Binding ActualWidth, ElementName=rowDefinition0}" 
                     VerticalAlignment="Stretch" 
                     Margin="10,10,10,10" 
                     Content="Confirmer"
@@ -111,8 +109,6 @@
                     Content="Retour"
                     HorizontalAlignment="Stretch" 
                     Grid.Row="1" 
-                    Height="{Binding ActualHeight, ElementName=columnDefinition0}"
-                    Width="{Binding ActualWidth, ElementName=rowDefinition0}" 
                     VerticalAlignment="Stretch" 
                     Margin="10,10,10,10"
                     Click="BtnRetour_Click"/>
