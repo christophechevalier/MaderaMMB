@@ -22,11 +22,12 @@ namespace Madera_MMB.CAD
         {
             Connexion conn = laConnexion;
             listeAllCommerciaux = new List<Commercial>();
+            getAllComm();
         }
         #endregion
 
         #region privates methods
-        public void getAllComm()
+        private void getAllComm()
         {
             SQLQuery = "SELECT * FROM Commercial";
             conn.LiteCo.Open();

@@ -22,21 +22,21 @@ namespace Madera_MMB.View_Crtl
     public partial class Modelisation : Page
     {
 
-    //    private Grid grid = new Grid();
-    //    private System.Drawing.Image croix = new Image();
-    //    private System.Drawing.Image murh = new Image();
-    //    private System.Drawing.Image murv = new Image();
-    //    private System.Drawing.Image anglebd = new Image();
-    //    private System.Drawing.Image anglehd = new Image();
-    //    private System.Drawing.Image anglebg = new Image();
-    //    private System.Drawing.Image anglehg = new Image();
+        //private Grid grid = new Grid();
+        //private System.Drawing.Image croix = new Image();
+        //private System.Drawing.Image murh = new Image();
+        //private System.Drawing.Image murv = new Image();
+        //private System.Drawing.Image anglebd = new Image();
+        //private System.Drawing.Image anglehd = new Image();
+        //private System.Drawing.Image anglebg = new Image();
+        //private System.Drawing.Image anglehg = new Image();
 
-    //    public Modelisation()
-    //    {
-    //        InitializeComponent();
-    //        initialize();
+        public Modelisation()
+        {
+            InitializeComponent();
+            //initialize();
 
-    //    }
+        }
 
     //    private void initialize()
     //    {

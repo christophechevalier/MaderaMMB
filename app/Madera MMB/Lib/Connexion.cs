@@ -140,43 +140,7 @@ namespace Madera_MMB.Lib
         // Partie SQLite //
         private bool CreateSQLiteBase()
         {
-            if (File.Exists("Madera.bdd"))
-            {
-                Console.Write(" \n ################################################# SQLITE DATABASE EXISTS ################################################# \n");
-                try
-                {
-                    LiteCo = new SQLiteConnection("Data Source=Madera.bdd;Version=3;");
-                    Console.Write(" \n ################################################# SQLITE DATABASE CONNECTED ################################################# \n");
-                    return true;
-                }
-                catch (System.Data.SQLite.SQLiteException ex)
-                {
-                    Console.Write(" \n ################################################# ERROR CONNECTION BASE SQLITE ################################################# \n" + ex.ToString() + "\n");
-                    LiteCo.Close();
-                    return false;
-                }
-            }
-            else
-            {
-                Console.Write(" \n ################################################# SQLITE DATABASE NOT EXISTS ################################################# \n");
-                string strCommand = File.ReadAllText("SQLiteScript.sql");
-                LiteCo = new SQLiteConnection("Data Source=Madera.bdd;Version=3;");
-                SQLiteCommand command = new SQLiteCommand(strCommand, LiteCo);
-                LiteCo.Open();
-                try
-                {
-                    command.ExecuteNonQuery();
-                    LiteCo.Close();
-                    Console.Write(" \n ################################################# CREATION BASE SQLITE SUCCESS ################################################# \n");
-                    return true;
-                }
-                catch (System.Data.SQLite.SQLiteException ex)
-                {
-                    Console.Write(" \n ################################################# ERREUR CREATION BASE SQLITE ################################################# \n" + ex.ToString() + "\n");
-                    LiteCo.Close();
-                    return false;
-                }
-            }
+
         }
 
         // Partie MySQL //

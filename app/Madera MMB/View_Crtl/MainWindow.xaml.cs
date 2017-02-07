@@ -45,9 +45,9 @@ namespace Madera_MMB.View_Crtl
             Initialize_Listeners();
             this.errorWindow = new ErrorModalWindow();
             this.Conn = new Connexion();
+            CommCAD = new CommercialCAD(this.Conn);
 
             Mainframe.Content = Authentification;
-            CommCAD = new CommercialCAD(this.Conn);
 
             if (!Conn.MySQLconnected)
             {
@@ -111,7 +111,6 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
             Authentification.BtnValiderAuth.Click += delegate(object sender, RoutedEventArgs e)
             {
-                CommCAD.getAllComm();
                 string mdp = Authentification.username.Text;
                 string id = Authentification.password.Password;
                 foreach(var comm in CommCAD.listeAllCommerciaux)
