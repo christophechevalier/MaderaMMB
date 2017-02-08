@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace Madera_MMB.Model
 {
+    /// <summary>
+    /// * Règles de gestion Client :
+    /// - Ce qui définit l’unicité d’un client, c’est son adresse et/ou son email
+    /// - On peut modifier les informations relatives aux clients
+    /// - Dans le cas où le nom et/ou prénom sont modifiés, on met à jour la liste des noms des clients qui pourront être sélectionnés dans un nouveau projet
+    /// - On ne peut pas supprimer un client ou modifier la référence d’un client
+    /// </summary>
     class Client
     {
         #region properties
