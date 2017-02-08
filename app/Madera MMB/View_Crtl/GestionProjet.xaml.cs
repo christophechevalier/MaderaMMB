@@ -19,6 +19,12 @@ namespace Madera_MMB.View_Crtl
 {
     /// <summary>
     /// Logique d'interaction pour GestionClient.xaml
+    /// * Règles de gestion Projet :
+    /// - On ne peut pas supprimer un projet ni le modifier (nom)
+    /// - On peut consulter un projet existant
+    /// - On peut créer plusieurs projets pour le même client
+    /// - Pour créer un nouveau projet, il faut obligatoirement sélectionner un client dans la liste
+    /// - Le nom d’un projet est unique par projet client
     /// </summary>
     public partial class GestionProjet : Page
     {
