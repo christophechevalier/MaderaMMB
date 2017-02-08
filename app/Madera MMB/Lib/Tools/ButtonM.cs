@@ -68,5 +68,10 @@ namespace Madera_MMB.Lib.Tools
                     break;
             }
         }
+
+        public void test()
+        {
+
+        }
     }
 }

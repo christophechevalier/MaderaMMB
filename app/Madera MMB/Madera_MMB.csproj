@@ -92,6 +92,7 @@
     <Compile Include="CAD\ProjetCAD.cs" />
     <Compile Include="CAD\SlotCAD.cs" />
     <Compile Include="Lib\Connexion.cs" />
+    <Compile Include="Lib\Tools\ButtonM.cs" />
     <Compile Include="Lib\Tools\ErrorModalWindow.xaml.cs">
       <DependentUpon>ErrorModalWindow.xaml</DependentUpon>
     </Compile>
