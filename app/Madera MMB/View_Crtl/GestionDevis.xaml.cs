@@ -19,9 +19,16 @@ namespace Madera_MMB.View_Crtl
 {
     /// <summary>
     /// Logique d'interaction pour GestionDevis.xaml
+    /// * Règles de gestion Devis :
+    /// - Il ne peut y avoir qu’un seul devis estimatif et dossier technique par plan
+    /// - L’état du devis ne peut être uniquement modifié par un commercial ayant les privilèges
+    /// - Un devis n’a pas obligatoirement de remise
+    /// - Un devis a un workflow spécifique :
+    /// Brouillon ➡ Valider/Accepter par le client ➡ Facturer ➡ Clôturer
+    ///           ➡ Refuser                        ➡ En Attente
+    /// - Un devis brouillon valider ou refuser peut être modifié mais retourne à un état brouillon
     /// </summary>
 
-    //DEVIS
     public partial class GestionDevis : Page
     {
         #region Properties
