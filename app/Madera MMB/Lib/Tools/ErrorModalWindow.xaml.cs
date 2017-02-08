@@ -32,7 +32,14 @@ namespace Madera_MMB.Lib.Tools
         public ErrorModalWindow()
         {
             InitializeComponent();
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             this.Loaded += new RoutedEventHandler(this.Window_Loaded);
+            this.BtnOK.Click += new RoutedEventHandler(this.BtnOkCLicked);
+        }
+
+        private void BtnOkCLicked(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

@@ -30,7 +30,7 @@ namespace Madera_MMB.View_Crtl
         View_Crtl.ParametresPlan ParametresPlan = new ParametresPlan();
         View_Crtl.Modelisation Modelisation = new Modelisation();
         View_Crtl.GestionDevis GestionDevis = new GestionDevis();
-      
+
         public MainWindow()
         {
             InitializeComponent();

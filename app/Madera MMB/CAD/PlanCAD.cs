@@ -15,8 +15,8 @@ namespace Madera_MMB.CAD
         public List<Plan> listePlanParProjet { get; set; }
         public Connexion conn { get; set; }
         public Projet projet { get; set; }
-        public string SQLQuery {get; set;}
-        public CouvertureCAD couvCAD {get; set; }
+        public string SQLQuery { get; set; }
+        public CouvertureCAD couvCAD { get; set; }
         public CoupePrincipeCAD coupeCAD { get; set; }
         public PlancherCAD plancherCAD { get; set; }
         public GammeCAD gammeCAD { get; set; }
@@ -35,7 +35,7 @@ namespace Madera_MMB.CAD
             this.plancherCAD = plancherCAD;
             this.gammeCAD = gammeCAD;
             this.metamodCAD = metaCAD;
-            
+
         }
         #endregion
 
@@ -85,7 +85,7 @@ namespace Madera_MMB.CAD
                 {
 
                     Module module = new Module(
-                    reader.GetString(0), 
+                    reader.GetString(0),
                     reader.GetInt32(1),
                     reader.GetInt32(2),
                     reader.GetInt32(3),
@@ -107,15 +107,15 @@ namespace Madera_MMB.CAD
             SQLQuery = "INSERT INTO plan (refPlan, label, dateCreation, dateModification, refProjet, refClient, refCommercial, typeCouverture, id_coupe, typePlancher, nomGamme)" +
             "VALUES (" + plan.reference + "," + plan.label + "," + plan.creation + "," + plan.modification + "," + plan.projet.reference + "," + refClient + "," + refCommercial + "," + plan.couverture.type + "," + plan.coupePrincipe.id + "," + plan.plancher.type + "," + plan.gamme.nom + ";";
             conn.InsertSQliteQuery(SQLQuery);
-            foreach(Module module in plan.modules)
+            foreach (Module module in plan.modules)
             {
                 insertModule(module, plan.reference);
             }
         }
-        private void insertModule(Module module,string refplan) 
+        private void insertModule(Module module, string refplan)
         {
             SQLQuery = "INSERT INTO module (nom, prixHT, nbSlot, coordonneeDebutX , coordonneeDebutY, coordonneeFinX, coordonneeFinY, refMetaModule, refPlan)" +
-            "VALUES (" + module.nom + "," + module.getPrixHT + "," + module.getNbSlot + "," + module.debutPositionX + "," + module.debutPositionY + "," + module.finPositionX + "," + module.finPositionY + "," + module.getRefMetaModule + "," + refplan + ";";
+            "VALUES (" + module.nom + "," + module.getPrixHT() + "," + module.getNbSlot() + "," + module.debutPositionX + "," + module.debutPositionY + "," + module.finPositionX + "," + module.finPositionY + "," + module.getRefMetaModule() + "," + refplan + ";";
             conn.InsertSQliteQuery(SQLQuery);
         }
         #endregion
