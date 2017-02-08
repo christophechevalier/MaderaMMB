@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 using Madera_MMB.View_Crtl;
 using Madera_MMB.Lib;
 using Madera_MMB.Lib.Tools;
@@ -20,7 +21,20 @@ using Madera_MMB.CAD;
 namespace Madera_MMB.View_Crtl
 {
     /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
+    /// *Règle de gestion Authentification :
+    /// - Identifiant/mot de passe saisis doivent correspondre à ceux de l'un des Commerciaux de la liste renvoyée par CommercialCAD
+    /// 
+    /// *Règles de gestion Général / Synchronisation :
+    /// - Démarrage, connexion BDD SQLite; Si erreur de connexion BDD SQLite -> Message d'erreur critique, application ferme
+    /// - Test Connexion BDD distante; Si erreur de connexion BDD distante -> mode offline / Sinon -> mode online
+    /// - Si mode online -> chargement des commerciaux MYSQL dans BDD SQLite
+    /// - Authentification
+    /// - Si online -> chargement des Projets/Clients/Plans selon commercial authentifié MYSQL dans BDD SQLite
+    /// - Chargement Projets/Clients/Plans/Devis selon commercial authentifié depuis BDD SQLite
+    /// - Gestion Projet/Valider création projet : export données vers BDD SQLite, si online -> export aussi vers BDD distante
+    /// - Gestion Client/Valider création/modification client : export données vers BDD SQLite, si online -> export aussi vers BDD distante
+    /// - Modélisation/Valider création/modification plan : export données vers BDD SQLite, si online -> export aussi vers BDD distante
+    /// - Gestion Devis/Valider création projet : export données vers BDD SQLite, si online -> export aussi vers BDD distante
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -28,22 +42,21 @@ namespace Madera_MMB.View_Crtl
         private Connexion Conn { get; set; }
         private ErrorModalWindow errorWindow { get; set; }
         private CommercialCAD CommCAD { get; set; }
-
-        View_Crtl.Authentification Authentification = new Authentification();
-        View_Crtl.GestionProjet GestionProjet = new GestionProjet();
-        View_Crtl.GestionPlan GestionPlan = new GestionPlan();
-        View_Crtl.GestionClient GestionClient = new GestionClient();
-        View_Crtl.ParametresClient ParametresClient = new ParametresClient();
-        View_Crtl.ParametresPlan ParametresPlan = new ParametresPlan();
-        View_Crtl.GestionDevis GestionDevis = new GestionDevis();
-        View_Crtl.Modelisation Modelisation = new Modelisation();
+        private View_Crtl.Authentification Authentification {get;set;}
+        private View_Crtl.GestionProjet GestionProjet { get;set; }
+        private View_Crtl.GestionPlan GestionPlan { get;set; }
+        private View_Crtl.GestionClient GestionClient {get;set;}
+        private View_Crtl.ParametresClient ParametresClient {get;set;}
+        private View_Crtl.ParametresPlan ParametresPlan {get;set;}
+        private View_Crtl.GestionDevis GestionDevis {get;set;}
+        private View_Crtl.Modelisation Modelisation {get;set;}
 
 
         public MainWindow()
         {
-            Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             InitializeComponent();
-            Initialize_Listeners();
+            Initialize_Listeners_Auth();
+            Initialize_Listeners_GestionProjet();
             this.errorWindow = new ErrorModalWindow();
             this.Conn = new Connexion();
             CommCAD = new CommercialCAD(this.Conn);
@@ -53,10 +66,10 @@ namespace Madera_MMB.View_Crtl
             if (!Conn.MySQLconnected)
             {
                 errorWindow.message.Content = " Mode déconnecté ";
-                errorWindow.ShowDialog();
+                errorWindow.Show();
             }
 
-            Console.WriteLine("TEST INTERMEDIAIRE1");
+            Debug.WriteLine("TEST INTERMEDIAIRE1");
             if (!Conn.SQLiteconnected)
             {
                 errorWindow.message.Content = " Base innaccessible ! Veuillez contacter l'administrateur.  Application inutilisable ";
@@ -64,14 +77,14 @@ namespace Madera_MMB.View_Crtl
                 {
                     Application.Current.Shutdown();
                 };
-                errorWindow.ShowDialog();
+                errorWindow.Show();
             }
 
-            Console.WriteLine("TEST INTERMEDIAIRE2");
+            Debug.WriteLine("TEST INTERMEDIAIRE2");
             if(!this.Conn.SyncCommMySQL())
             {
                 errorWindow.message.Content = "Erreur de récupération des données Commerciaux ! ";
-                errorWindow.ShowDialog();
+                errorWindow.Show();
             }
 
             // TEST QUERY SQLite //
@@ -80,20 +93,6 @@ namespace Madera_MMB.View_Crtl
             string myquery = "SELECT * FROM Commercial;";
             Conn.SelectSQLiteQuery(myquery);
         }
-
-        #region Initialisation
-        private void Initialize_Listeners()
-        {
-            Initialize_Listeners_Auth();
-            Initialize_Listeners_GestionProjet();
-            Initialize_Listeners_GestionClient();
-            Initialize_Listeners_ParametresClient();
-            Initialize_Listeners_GestionPlan();
-            Initialize_Listeners_ParametresPlan();
-            Initialize_Listeners_Modelisation();
-            //Initialize_Listeners_Devis();
-        }
-        #endregion
 
         #region Initialisation ModalError
         private void Initialize_Listeners_ModalError()
@@ -109,6 +108,7 @@ namespace Madera_MMB.View_Crtl
         #region Initialisation Auth
         private void Initialize_Listeners_Auth()
         {
+            this.Authentification = new View_Crtl.Authentification();
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
             Authentification.BtnValiderAuth.Click += delegate(object sender, RoutedEventArgs e)
             {
@@ -116,15 +116,16 @@ namespace Madera_MMB.View_Crtl
                 string id = Authentification.password.Password;
                 foreach(var comm in CommCAD.listeAllCommerciaux)
                 {
-                    Console.WriteLine(comm.reference + "  /  " + comm.motDePasse);
+                    Debug.WriteLine(comm.reference + "  /  " + comm.motDePasse);
                     if(comm.reference == id && comm.motDePasse == mdp)
                     {
                         Mainframe.Content = GestionProjet;
                     }
                     else
                     {
+                        errorWindow.Hide();
                         errorWindow.message.Content = "Mauvais couple identifiant/mot de passe ! ";
-                        errorWindow.ShowDialog();
+                        errorWindow.Show();
                     }
                 }
             };
@@ -134,6 +135,7 @@ namespace Madera_MMB.View_Crtl
         #region Initialisation Gestion Projet
         private void Initialize_Listeners_GestionProjet()
         {
+            this.GestionProjet = new View_Crtl.GestionProjet();
             // Click sur le bouton listes des clients pour aller dans la Vue Gestion Client
             GestionProjet.BtnListeClient.Click += delegate(object sender, RoutedEventArgs e)
             {

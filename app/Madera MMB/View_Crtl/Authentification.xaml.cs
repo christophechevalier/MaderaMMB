@@ -29,7 +29,7 @@ namespace Madera_MMB.View_Crtl
         // Quitter l'application
         private void Btn_Quitter_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            //Application.Current.Shutdown();
         }
 
         #region listeners

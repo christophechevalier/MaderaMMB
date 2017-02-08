@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using MySql.Data.MySqlClient;
 using System.Data.SQLite;
 using System.IO;
@@ -36,7 +37,7 @@ namespace Madera_MMB.Lib
             MySqlDataReader Reader;
             string query;
             MySQLCo.Open();
-            Console.Write(" ############# TEST SYNC COMMERCIAL ############# \n");
+            Trace.WriteLine(" ############# TEST SYNC COMMERCIAL ############# \n");
             MySqlCommand selectComms = new MySqlCommand("SELECT * FROM Commercial", MySQLCo);
             try
             {
@@ -47,7 +48,7 @@ namespace Madera_MMB.Lib
                 {
                     for (int x = 0; x < Reader.VisibleFieldCount; x++)
                     {
-                        Console.Write(" ############# " + Reader.GetValue(x).ToString() + " ############# \n");
+                        Trace.WriteLine(" ############# " + Reader.GetValue(x).ToString() + " ############# \n");
                     }
 
                     query = "replace into commercial(refCommercial, nom, prenom, motDePasse) values('" +
@@ -57,14 +58,14 @@ namespace Madera_MMB.Lib
                     Reader.GetValue(3).ToString() + "')";
 
                     SQLiteCommand command = new SQLiteCommand(query, LiteCo);
-                    Console.WriteLine("################" + query + "################");
+                    Trace.WriteLine("################" + query + "################");
                     try
                     {
                         i = i + command.ExecuteNonQuery();  
                     }
                     catch (System.Data.SQLite.SQLiteException e)
                     {
-                        Console.Write(e.ToString());
+                        Trace.WriteLine(e.ToString());
                         LiteCo.Close();
                         return false;
                     } 
@@ -75,7 +76,7 @@ namespace Madera_MMB.Lib
             }
             catch(MySqlException e)
             {
-                Console.Write(e.ToString());
+                Trace.WriteLine(e.ToString());
                 MySQLCo.Close();
                 return false;
             }        
@@ -92,13 +93,13 @@ namespace Madera_MMB.Lib
                 }
                 catch(System.Data.SQLite.SQLiteException e)
                 {
-                    Console.Write(e.ToString());
+                    Trace.WriteLine(e.ToString());
                     LiteCo.Close(); 
                 }
             }
             catch (SQLiteException ex)
             {
-                Console.Write(ex.ToString());
+                Trace.WriteLine(ex.ToString());
                 LiteCo.Close();
             }
             LiteCo.Close();
@@ -118,7 +119,7 @@ namespace Madera_MMB.Lib
                     {
                         //for (int i = 0; i < reader.VisibleFieldCount; i++)
                         //{
-                        //    Console.Write(" ############# " + reader.GetValue(i).ToString() + " ############# \n");
+                        //    Trace.WriteLine(" ############# " + reader.GetValue(i).ToString() + " ############# \n");
                         //}
                     }
                 }
@@ -129,7 +130,7 @@ namespace Madera_MMB.Lib
             }
             catch (SQLiteException ex)
             {
-                Console.Write(ex.ToString());
+                Trace.WriteLine(ex.ToString());
             }
         }
  
@@ -142,23 +143,23 @@ namespace Madera_MMB.Lib
         {
             if (File.Exists("Madera.bdd"))
             {
-                Console.Write(" \n ################################################# SQLITE DATABASE EXISTS ################################################# \n");
+                Trace.WriteLine(" \n ################################################# SQLITE DATABASE EXISTS ################################################# \n");
                 try
                 {
                     this.LiteCo = new SQLiteConnection("Data Source=Madera.bdd;Version=3;");
-                    Console.Write(" \n ################################################# SQLITE DATABASE CONNECTED ################################################# \n");
+                    Trace.WriteLine(" \n ################################################# SQLITE DATABASE CONNECTED ################################################# \n");
                     return true;
                 }
                 catch (System.Data.SQLite.SQLiteException ex)
                 {
-                    Console.Write(" \n ################################################# ERROR CONNECTION BASE SQLITE ################################################# \n" + ex.ToString() + "\n");
+                    Trace.WriteLine(" \n ################################################# ERROR CONNECTION BASE SQLITE ################################################# \n" + ex.ToString() + "\n");
                     LiteCo.Close();
                     return false;
                 }
             }
             else
             {
-                Console.Write(" \n ################################################# SQLITE DATABASE NOT EXISTS ################################################# \n");
+                Trace.WriteLine(" \n ################################################# SQLITE DATABASE NOT EXISTS ################################################# \n");
                 string strCommand = File.ReadAllText("SQLiteScript.sql");
                 LiteCo = new SQLiteConnection("Data Source=Madera.bdd;Version=3;");
                 SQLiteCommand command = new SQLiteCommand(strCommand, LiteCo);
@@ -167,12 +168,12 @@ namespace Madera_MMB.Lib
                 {
                     command.ExecuteNonQuery();
                     LiteCo.Close();
-                    Console.Write(" \n ################################################# CREATION BASE SQLITE SUCCESS ################################################# \n");
+                    Trace.WriteLine(" \n ################################################# CREATION BASE SQLITE SUCCESS ################################################# \n");
                     return true;
                 }
                 catch (System.Data.SQLite.SQLiteException ex)
                 {
-                    Console.Write(" \n ################################################# ERREUR CREATION BASE SQLITE ################################################# \n" + ex.ToString() + "\n");
+                    Trace.WriteLine(" \n ################################################# ERREUR CREATION BASE SQLITE ################################################# \n" + ex.ToString() + "\n");
                     LiteCo.Close();
                     return false;
                 }
@@ -186,13 +187,13 @@ namespace Madera_MMB.Lib
             try
             {
                 MySQLCo = new MySqlConnection(connectionString);
-                Console.Write(" \n ################################################# MYSQL DATABASE REACHED,  BEGIN SYNCHRONISATION ... ################################################# \n");
+                Trace.WriteLine(" \n ################################################# MYSQL DATABASE REACHED,  BEGIN SYNCHRONISATION ... ################################################# \n");
                 return true;
             }
             catch (MySqlException ex)
             {
-                Console.WriteLine("################################################# ERROR CONNECTION MYSQL SERVER #################################################");
-                Console.WriteLine(ex.ToString());
+                Trace.WriteLine("################################################# ERROR CONNECTION MYSQL SERVER #################################################");
+                Trace.WriteLine(ex.ToString());
                 //When handling errors, you can your application's response based 
                 //on the error number.
                 //The two most common error numbers when connecting are as follows:
@@ -201,11 +202,11 @@ namespace Madera_MMB.Lib
                 switch (ex.Number)
                 {
                     case 0:
-                        Console.Write("Cannot connect to server.  Contact administrator");
+                        Trace.WriteLine("Cannot connect to server.  Contact administrator");
                         break;
 
                     case 1045:
-                        Console.Write("Invalid username/password, please try again");
+                        Trace.WriteLine("Invalid username/password, please try again");
                         break;
                 }
                 return false;
