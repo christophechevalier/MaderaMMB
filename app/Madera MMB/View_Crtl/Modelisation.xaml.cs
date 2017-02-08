@@ -20,6 +20,7 @@ namespace Madera_MMB.View_Crtl
     /// <summary>
     /// Logique d'interaction pour Modelisation.xaml
     /// </summary>
+    /// //
     public partial class Modelisation : Page
     {
 
