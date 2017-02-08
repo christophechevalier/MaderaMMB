@@ -29,7 +29,7 @@ namespace Madera_MMB.View_Crtl
         View_Crtl.ParametresClient ParametresClient = new ParametresClient();
         View_Crtl.ParametresPlan ParametresPlan = new ParametresPlan();
         View_Crtl.Modelisation Modelisation = new Modelisation();
-        View_Crtl.GestionDevis GestionDevis = new GestionDevis();
+        //View_Crtl.GestionDevis GestionDevis = new GestionDevis();
       
         public MainWindow()
         {
@@ -37,7 +37,7 @@ namespace Madera_MMB.View_Crtl
             Initialize_Listeners();
 
             // Démarrage de l'application sur la vue authentification
-            Mainframe.Content = Authentification;
+            Mainframe.Content = Modelisation;
         }
 
         #region Initialisation
@@ -144,7 +144,7 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton consulter le devis pour aller dans la Vue Gestion Devis
             GestionPlan.BtnConsulterDevis.Click += delegate(object sender, RoutedEventArgs e)
             {
-                Mainframe.Content = GestionDevis;
+                //Mainframe.Content = GestionDevis;
             };
             // Click sur le bouton copier plan pour aller dans la Vue ???
             GestionPlan.BtnCopierPlan.Click += delegate(object sender, RoutedEventArgs e)
@@ -190,12 +190,12 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Listeners_Devis()
         {
             // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
-            GestionDevis.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
+            //GestionDevis.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
             {
                 Mainframe.Content = GestionPlan;
             };
             // Click sur le bouton exporter un devis client pour ???
-            GestionDevis.BtnExportDevis.Click += delegate(object sender, RoutedEventArgs e)
+            //GestionDevis.BtnExportDevis.Click += delegate(object sender, RoutedEventArgs e)
             {
 
             };
