@@ -19,6 +19,13 @@ namespace Madera_MMB.View_Crtl
 {
     /// <summary>
     /// Logique d'interaction pour GestionClient.xaml
+    /// * Règles de gestion Plan :
+    /// - On ne peut pas supprimer un plan existant
+    /// - On peut consulter, modifier un plan
+    /// - On peut créer un ou plusieurs plan pour un même projet
+    /// - On peut copier un plan à la fois
+    /// - On peut renommer un plan que si son nom est unique
+    /// - Pour créer un plan, il faut renseigner au minimum ses paramètres
     /// </summary>
     public partial class GestionPlan : Page
     {
