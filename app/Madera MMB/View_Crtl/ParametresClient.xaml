@@ -72,8 +72,6 @@
                   Grid.Row="1" 
                   VerticalAlignment="Stretch" 
                   HorizontalAlignment="Stretch" 
-                  Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                  Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
                   Grid.RowSpan="2" 
                   Grid.ColumnSpan="2">
 
@@ -150,8 +148,6 @@
                   Grid.Row="0"
                   VerticalAlignment="Stretch"
                   HorizontalAlignment="Stretch"
-                  Width="{Binding ActualWidth, ElementName=columnDefinition1}"
-                  Height="{Binding ActualHeight, ElementName=rowDefinition1}"
                   Grid.RowSpan="2"
                   Grid.ColumnSpan="1">
 
@@ -222,8 +218,6 @@
                   Grid.Row="1" 
                   VerticalAlignment="Stretch" 
                   HorizontalAlignment="Stretch" 
-                  Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                  Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
                   Grid.RowSpan="2" 
                   Grid.ColumnSpan="1">
 
@@ -246,8 +240,6 @@
                     <Grid x:Name="GridDetailsClient"
                           VerticalAlignment="Stretch" 
                           HorizontalAlignment="Stretch" 
-                          Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                          Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
                           Grid.RowSpan="2" 
                           Grid.ColumnSpan="1">
 
