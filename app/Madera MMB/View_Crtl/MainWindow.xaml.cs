@@ -57,13 +57,14 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             Initialize_Listeners_Auth();
             Initialize_Listeners_GestionProjet();
-            this.errorWindow = new ErrorModalWindow();
-            Initialize_Listener_ModalError();
-            this.Conn = new Connexion();
-            CommCAD = new CommercialCAD(this.Conn);
-
             Mainframe.Content = Authentification;
 
+            initSynchro();
+        }
+
+        #region Process Synchro
+        private void initSynchro()
+        {
             if (!Conn.MySQLconnected)
             {
                 errorWindow.message.Content = " Mode déconnecté ";
@@ -82,7 +83,7 @@ namespace Madera_MMB.View_Crtl
             }
 
             Debug.WriteLine("TEST INTERMEDIAIRE2");
-            if(!this.Conn.SyncCommMySQL())
+            if (!this.Conn.SyncCommMySQL())
             {
                 errorWindow.message.Content = "Erreur de récupération des données Commerciaux ! ";
                 errorWindow.Show();
@@ -94,6 +95,7 @@ namespace Madera_MMB.View_Crtl
             string myquery = "SELECT * FROM Commercial;";
             Conn.SelectSQLiteQuery(myquery);
         }
+        #endregion
 
         #region Initialisation ModalError
         private void Initialize_Listener_ModalError()
@@ -111,6 +113,10 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Listeners_Auth()
         {
             this.Authentification = new View_Crtl.Authentification();
+            this.errorWindow = new ErrorModalWindow();
+            Initialize_Listener_ModalError();
+            this.Conn = new Connexion();
+            CommCAD = new CommercialCAD(this.Conn);
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
             Authentification.BtnValiderAuth.Click += delegate(object sender, RoutedEventArgs e)
             {
