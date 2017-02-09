@@ -58,6 +58,7 @@ namespace Madera_MMB.View_Crtl
             Initialize_Listeners_Auth();
             Initialize_Listeners_GestionProjet();
             this.errorWindow = new ErrorModalWindow();
+            Initialize_Listener_ModalError();
             this.Conn = new Connexion();
             CommCAD = new CommercialCAD(this.Conn);
 
@@ -95,12 +96,13 @@ namespace Madera_MMB.View_Crtl
         }
 
         #region Initialisation ModalError
-        private void Initialize_Listeners_ModalError()
+        private void Initialize_Listener_ModalError()
         {
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
             errorWindow.BtnOK.Click += delegate(object sender, RoutedEventArgs e)
             {
-                errorWindow.Close();
+                this.IsEnabled = true;
+                errorWindow.Hide();
             };
         }
         #endregion
@@ -112,21 +114,23 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
             Authentification.BtnValiderAuth.Click += delegate(object sender, RoutedEventArgs e)
             {
-                string mdp = Authentification.username.Text;
-                string id = Authentification.password.Password;
+                string id = Authentification.username.Text;
+                string mdp = Authentification.password.Password;
                 foreach(var comm in CommCAD.listeAllCommerciaux)
                 {
-                    Debug.WriteLine(comm.reference + "  /  " + comm.motDePasse);
                     if(comm.reference == id && comm.motDePasse == mdp)
-                    {
-                        Mainframe.Content = GestionProjet;
-                    }
-                    else
-                    {
-                        errorWindow.Hide();
-                        errorWindow.message.Content = "Mauvais couple identifiant/mot de passe ! ";
-                        errorWindow.Show();
-                    }
+                        GestionProjet.commercialAuthentifié = comm;
+                }
+                if (GestionProjet.commercialAuthentifié != null)
+                {
+                    Mainframe.Content = GestionProjet;
+                }
+                else
+                {
+                    errorWindow.Hide();
+                    this.IsEnabled = false;
+                    errorWindow.message.Content = "Mauvais couple identifiant/mot de passe ! ";
+                    errorWindow.Show();
                 }
             };
         }
@@ -269,6 +273,13 @@ namespace Madera_MMB.View_Crtl
             };
         }
         #endregion
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            Application.Current.Shutdown();
+        }
 
     }
 }

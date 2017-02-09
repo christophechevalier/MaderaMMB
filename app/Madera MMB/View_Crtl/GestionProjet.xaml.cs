@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Madera_MMB.Model;
 
 namespace Madera_MMB.View_Crtl
 {
@@ -23,7 +24,7 @@ namespace Madera_MMB.View_Crtl
     public partial class GestionProjet : Page
     {
         #region Properties
-        private string nom_client { get; set; }
+        public Commercial commercialAuthentifié { get; set; }
         #endregion
 
         #region Constructeur
@@ -80,7 +81,6 @@ namespace Madera_MMB.View_Crtl
                         tgbt.IsChecked = false;
 
                     }
-                    nom_client = tb.Text;
                     active.IsChecked = true;
                 };
 

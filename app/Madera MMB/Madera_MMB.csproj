@@ -129,6 +129,10 @@
     <Compile Include="View_Crtl\ParametresPlan.xaml.cs">
       <DependentUpon>ParametresPlan.xaml</DependentUpon>
     </Compile>
+    <Page Include="Lib\Tools\Template_Madera.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Lib\Tools\ErrorModalWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
