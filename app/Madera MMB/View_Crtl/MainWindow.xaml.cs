@@ -42,23 +42,21 @@ namespace Madera_MMB.View_Crtl
         private Connexion Conn { get; set; }
         private ErrorModalWindow errorWindow { get; set; }
         private CommercialCAD CommCAD { get; set; }
-        private View_Crtl.Authentification Authentification {get;set;}
-        private View_Crtl.GestionProjet GestionProjet { get;set; }
-        private View_Crtl.GestionPlan GestionPlan { get;set; }
-        private View_Crtl.GestionClient GestionClient {get;set;}
-        private View_Crtl.ParametresClient ParametresClient {get;set;}
-        private View_Crtl.ParametresPlan ParametresPlan {get;set;}
-        private View_Crtl.GestionDevis GestionDevis {get;set;}
-        private View_Crtl.Modelisation Modelisation {get;set;}
+        private View_Crtl.Authentification Authentification = new Authentification();
+        private View_Crtl.GestionProjet GestionProjet = new GestionProjet();
+        private View_Crtl.GestionPlan GestionPlan = new GestionPlan();
+        private View_Crtl.GestionClient GestionClient = new GestionClient();
+        private View_Crtl.ParametresClient ParametresClient = new ParametresClient();
+        private View_Crtl.ParametresPlan ParametresPlan = new ParametresPlan();
+        private View_Crtl.GestionDevis GestionDevis = new GestionDevis();
+        private View_Crtl.Modelisation Modelisation = new Modelisation();
 
 
         public MainWindow()
         {
             InitializeComponent();
-            Initialize_Listeners_Auth();
-            Initialize_Listeners_GestionProjet();
+            Initialize_Listeners();
             Mainframe.Content = Authentification;
-
             initSynchro();
         }
 
@@ -97,6 +95,21 @@ namespace Madera_MMB.View_Crtl
         }
         #endregion
 
+        #region Initialisation
+        private void Initialize_Listeners()
+        {
+            Initialize_Listeners_Auth();
+            Initialize_Listener_ModalError();
+            Initialize_Listeners_GestionProjet();
+            Initialize_Listeners_GestionClient();
+            Initialize_Listeners_ParametresClient();
+            Initialize_Listeners_GestionPlan();
+            Initialize_Listeners_ParametresPlan();
+            Initialize_Listeners_Modelisation();
+            Initialize_Listeners_Devis();
+        }
+        #endregion
+
         #region Initialisation ModalError
         private void Initialize_Listener_ModalError()
         {
@@ -112,9 +125,7 @@ namespace Madera_MMB.View_Crtl
         #region Initialisation Auth
         private void Initialize_Listeners_Auth()
         {
-            this.Authentification = new View_Crtl.Authentification();
             this.errorWindow = new ErrorModalWindow();
-            Initialize_Listener_ModalError();
             this.Conn = new Connexion();
             CommCAD = new CommercialCAD(this.Conn);
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet

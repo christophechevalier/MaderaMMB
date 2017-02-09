@@ -5,11 +5,13 @@
         Style="{DynamicResource RedWindowStyle}">
 
     <Window.Resources>
+        
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Lib/Tools/Template_Madera.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Template_Madera.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+        
     </Window.Resources>
     <Grid x:Name="ModalGrid" Background="White">
         <Grid.ColumnDefinitions>
