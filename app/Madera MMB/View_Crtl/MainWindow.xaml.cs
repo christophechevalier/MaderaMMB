@@ -15,7 +15,6 @@ using System.Windows.Shapes;
 using System.Diagnostics;
 using Madera_MMB.View_Crtl;
 using Madera_MMB.Lib;
-using Madera_MMB.Lib.Tools;
 using Madera_MMB.CAD;
 
 namespace Madera_MMB.View_Crtl
@@ -40,7 +39,6 @@ namespace Madera_MMB.View_Crtl
     {
 
         private Connexion Conn { get; set; }
-        private ErrorModalWindow errorWindow { get; set; }
         private CommercialCAD CommCAD { get; set; }
         private View_Crtl.Authentification Authentification = new Authentification();
         private View_Crtl.GestionProjet GestionProjet = new GestionProjet();
@@ -65,28 +63,23 @@ namespace Madera_MMB.View_Crtl
         {
             if (!Conn.MySQLconnected)
             {
-                errorWindow.message.Content = " Mode déconnecté ";
-                errorWindow.Show();
+                MessageBox.Show("Mode déconnecté");
+
+            }
+            else if (!this.Conn.SyncCommMySQL())
+            {
+                MessageBox.Show("Erreur de synchronisation ! ");
             }
 
             Debug.WriteLine("TEST INTERMEDIAIRE1");
             if (!Conn.SQLiteconnected)
             {
-                errorWindow.message.Content = " Base innaccessible ! Veuillez contacter l'administrateur.  Application inutilisable ";
-                errorWindow.BtnOK.Click += delegate(object sender, RoutedEventArgs e)
-                {
-                    Application.Current.Shutdown();
-                };
-                errorWindow.Show();
+                MessageBox.Show("Base innaccessible ! Veuillez contacter l'administrateur. ");
+                Application.Current.Shutdown();
             }
 
             Debug.WriteLine("TEST INTERMEDIAIRE2");
-            if (!this.Conn.SyncCommMySQL())
-            {
-                errorWindow.message.Content = "Erreur de récupération des données Commerciaux ! ";
-                errorWindow.Show();
-            }
-
+ 
             // TEST QUERY SQLite //
             string query = "REPLACE INTO Commercial (refCommercial, nom, prenom, motDePasse) VALUES ('003', 'yololnom', 'yololprenom', 'yololmdp')";
             Conn.InsertSQliteQuery(query);
@@ -99,7 +92,6 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Listeners()
         {
             Initialize_Listeners_Auth();
-            Initialize_Listener_ModalError();
             Initialize_Listeners_GestionProjet();
             Initialize_Listeners_GestionClient();
             Initialize_Listeners_ParametresClient();
@@ -110,22 +102,11 @@ namespace Madera_MMB.View_Crtl
         }
         #endregion
 
-        #region Initialisation ModalError
-        private void Initialize_Listener_ModalError()
-        {
-            // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
-            errorWindow.BtnOK.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                this.IsEnabled = true;
-                errorWindow.Hide();
-            };
-        }
-        #endregion
 
         #region Initialisation Auth
         private void Initialize_Listeners_Auth()
         {
-            this.errorWindow = new ErrorModalWindow();
+            //this.errorWindow = new ErrorModalWindow();
             this.Conn = new Connexion();
             CommCAD = new CommercialCAD(this.Conn);
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
@@ -144,10 +125,7 @@ namespace Madera_MMB.View_Crtl
                 }
                 else
                 {
-                    errorWindow.Hide();
-                    this.IsEnabled = false;
-                    errorWindow.message.Content = "Mauvais couple identifiant/mot de passe ! ";
-                    errorWindow.Show();
+                    MessageBox.Show("Mauvais couple identifiant/mot de passe ! ");
                 }
             };
         }

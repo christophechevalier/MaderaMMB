@@ -36,7 +36,7 @@ namespace Madera_MMB.Lib
         {
             MySqlDataReader Reader;
             string query;
-            MySQLCo.Open();
+
             Trace.WriteLine(" ############# TEST SYNC COMMERCIAL ############# \n");
             MySqlCommand selectComms = new MySqlCommand("SELECT * FROM Commercial", MySQLCo);
             try
@@ -187,6 +187,7 @@ namespace Madera_MMB.Lib
             try
             {
                 MySQLCo = new MySqlConnection(connectionString);
+                MySQLCo.Open();
                 Trace.WriteLine(" \n ################################################# MYSQL DATABASE REACHED,  BEGIN SYNCHRONISATION ... ################################################# \n");
                 return true;
             }

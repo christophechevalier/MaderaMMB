@@ -89,9 +89,6 @@
     <Compile Include="CAD\ProjetCAD.cs" />
     <Compile Include="CAD\SlotCAD.cs" />
     <Compile Include="Lib\Connexion.cs" />
-    <Compile Include="Lib\Tools\ErrorModalWindow.xaml.cs">
-      <DependentUpon>ErrorModalWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Lib\Tools\InputModalWindow.xaml.cs">
       <DependentUpon>InputModalWindow.xaml</DependentUpon>
     </Compile>
@@ -132,10 +129,6 @@
     <Page Include="Lib\Tools\Template_Madera.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Lib\Tools\ErrorModalWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Lib\Tools\InputModalWindow.xaml">
       <SubType>Designer</SubType>
