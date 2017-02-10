@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
+using System.Diagnostics;
 
 namespace Madera_MMB.CAD
 {
-    class PlancherCAD
+    public class PlancherCAD
     {
         #region properties
         private List<Plancher> listeplancher { get; set; }
@@ -23,30 +24,34 @@ namespace Madera_MMB.CAD
         {
             listeplancher = new List<Plancher>();
             this.conn = co;
+            listAllPlancher();
         }
         #endregion
 
         #region privates methods
         private void listAllPlancher() 
         {
-            SQLQuery = "SELECT * FROM Plancher";
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
+            SQLQuery = "SELECT * FROM plancher";
+            conn.LiteCo.Open();
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                while (reader.Read())
+                try
                 {
-                    Plancher plancher = new Plancher(reader.GetString(0), reader.GetInt32(1));
-
-                    listeplancher.Add(plancher);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Plancher plancher = new Plancher(reader.GetString(0), reader.GetInt32(1));
+                            listeplancher.Add(plancher);
+                        }
+                    }
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# ERREUR RECUPERATION PLANCHERS ################################################# \n" + ex.ToString() + "\n");
                 }
             }
-            finally
-            {
-                reader.Close();
-            }
+            conn.LiteCo.Close();
         }
         #endregion
 

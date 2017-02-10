@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Madera_MMB.Model
 {
-    class CoupePrincipe
+    public class CoupePrincipe
     {
         #region properties
 

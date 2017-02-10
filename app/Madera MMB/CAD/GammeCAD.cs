@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
 using System.Data;
+using System.Diagnostics;
 
 namespace Madera_MMB.CAD
 {
-    class GammeCAD
+    public class GammeCAD
     {
         #region properties
         private List<Gamme> listegamme { get; set; }
@@ -24,29 +25,34 @@ namespace Madera_MMB.CAD
         {
             listegamme = new List<Gamme>();
             this.conn = co;
+            listAllGamme();
         }
         #endregion
 
         #region privates methods
         private void listAllGamme() 
         {
-            SQLQuery = "SELECT * FROM Gamme";
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
+            SQLQuery = "SELECT * FROM gamme";
+            conn.LiteCo.Open();
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                while (reader.Read())
+                try
                 {
-                    Gamme gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
-                    listegamme.Add(gamme);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Gamme gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
+                            listegamme.Add(gamme);
+                        }
+                    }
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# ERREUR RECUPERATION GAMMES ################################################# \n" + ex.ToString() + "\n");
                 }
             }
-            finally
-            {
-                reader.Close();
-            }
+            conn.LiteCo.Close();
         }
 
         #endregion

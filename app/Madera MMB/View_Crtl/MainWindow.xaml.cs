@@ -37,26 +37,27 @@ namespace Madera_MMB.View_Crtl
     /// </summary>
     public partial class MainWindow : Window
     {
+        // Déclaration des classes de connexion et d'accès aux données de l'application //
+        private Connexion conn { get; set; }
+        private CommercialCAD commCAD { get; set; }
 
-        private Connexion Conn { get; set; }
-        private CommercialCAD CommCAD { get; set; }
-
-        private View_Crtl.Authentification Authentification = new Authentification();
-        private View_Crtl.GestionProjet GestionProjet = new GestionProjet();
-        private View_Crtl.GestionPlan GestionPlan = new GestionPlan();
-        private View_Crtl.GestionClient GestionClient = new GestionClient();
-        private View_Crtl.ParametresClient ParametresClient = new ParametresClient();
-        private View_Crtl.ParametresPlan ParametresPlan = new ParametresPlan();
-        private View_Crtl.GestionDevis GestionDevis = new GestionDevis();
-        private View_Crtl.Modelisation Modelisation = new Modelisation();
+        // Déclaration et initialisation des Vues de l'application //
+        private View_Crtl.Authentification Authentification { get; set; } 
+        private View_Crtl.GestionProjet GestionProjet { get; set; }
+        private View_Crtl.GestionPlan GestionPlan { get; set; }
+        private View_Crtl.GestionClient GestionClient { get; set; }
+        private View_Crtl.ParametresClient ParametresClient { get; set; }
+        private View_Crtl.ParametresPlan ParametresPlan { get; set; }
+        private View_Crtl.GestionDevis GestionDevis { get; set; }
+        private View_Crtl.Modelisation Modelisation { get; set; }
 
 
         public MainWindow()
         {
             InitializeComponent();
+            initSynchro();
             Initialize_Listeners();
             Mainframe.Content = Authentification;
-            initSynchro();
         }
 
         #region Process Synchro
@@ -65,34 +66,38 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void initSynchro()
         {
-            if (!Conn.MySQLconnected)
+            this.conn = new Connexion();
+            if (!conn.MySQLconnected)
             {
                 MessageBox.Show("Mode déconnecté");
             }
-            else if (!this.Conn.SyncCommMySQL())
+            else if (!this.conn.SyncCommMySQL())
             {
                 MessageBox.Show("Erreur de synchronisation ! ");
             }
-            if (!Conn.SQLiteconnected)
+            if (!conn.SQLiteconnected)
             {
                 MessageBox.Show("Base innaccessible ! Veuillez contacter l'administrateur. ");
                 Application.Current.Shutdown();
             }
-
-            // TEST QUERY SQLite //
-            //string query = "REPLACE INTO Commercial (refCommercial, nom, prenom, motDePasse) VALUES ('003', 'yololnom', 'yololprenom', 'yololmdp')";
-            //Conn.InsertSQliteQuery(query);
-            string myquery = "SELECT * FROM Commercial;";
-            Conn.SelectSQLiteQuery(myquery);
         }
         #endregion
 
         #region Initialisation
         /// <summary>
-        ///  Méthode appelant toutes les méthodes d'abonnement aux différentes vues
+        ///  Méthode initialisant toutes les vues et appelant toutes les méthodes d'abonnement aux vues
         /// </summary>
         private void Initialize_Listeners()
         {
+            this.Authentification = new Authentification();
+            this.GestionProjet = new GestionProjet();
+            this.GestionPlan = new GestionPlan();
+            this.GestionClient = new GestionClient();
+            this.ParametresClient = new ParametresClient();
+            this.ParametresPlan = new ParametresPlan(conn);
+            this.GestionDevis = new GestionDevis();
+            this.Modelisation = new Modelisation();
+
             Initialize_Listeners_Auth();
             Initialize_Listeners_GestionProjet();
             Initialize_Listeners_GestionClient();
@@ -110,14 +115,13 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void Initialize_Listeners_Auth()
         {
-            this.Conn = new Connexion();
-            CommCAD = new CommercialCAD(this.Conn);
+            commCAD = new CommercialCAD(this.conn);
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
             Authentification.BtnValiderAuth.Click += delegate(object sender, RoutedEventArgs e)
             {
                 string id = Authentification.username.Text;
                 string mdp = Authentification.password.Password;
-                foreach(var comm in CommCAD.listeAllCommerciaux)
+                foreach(var comm in commCAD.listeAllCommerciaux)
                 {
                     if(comm.reference == id && comm.motDePasse == mdp)
                         GestionProjet.commercialAuthentifié = comm;

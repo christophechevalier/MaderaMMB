@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Madera_MMB.Model
 {
-    class Couverture
+    public class Couverture
     {
         #region properties
         public string type { get;set; }

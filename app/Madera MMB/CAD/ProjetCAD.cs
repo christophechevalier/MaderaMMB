@@ -18,16 +18,14 @@ namespace Madera_MMB.CAD
         public Commercial commercial { get; set; }
         public Client client { get; set; }
         public ClientCAD clientCAD { get; set; }
-        public CommercialCAD commercialCAD { get; set; }
         #endregion
 
         #region Ctor
-        public ProjetCAD(Connexion laConnexion, ClientCAD clientCAD, CommercialCAD commercialCAD)
+        public ProjetCAD(Connexion laConnexion, ClientCAD clientCAD)
         {
             Connexion conn = laConnexion;
             listeProjet = new List<Projet>();
             this.clientCAD = clientCAD;
-            this.commercialCAD = commercialCAD;
         }
         #endregion
 

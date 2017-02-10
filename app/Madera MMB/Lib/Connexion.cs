@@ -32,9 +32,9 @@ namespace Madera_MMB.Lib
 
         #region Public Methods
         /// <summary>
-        ///   Test
+        ///   Méthode de synchronisation des données des commerciaux depuis la base distante MYSQL vers la base locale SQLite
         /// </summary>
-        /// <returns></returns>
+        /// <returns>booléen renseignant le succès ou l'échec de la synchronisation des données des Commerciaux</returns>
         public bool SyncCommMySQL()
         {
             MySqlDataReader Reader;
@@ -49,11 +49,6 @@ namespace Madera_MMB.Lib
                 LiteCo.Open();
                 while (Reader.Read())
                 {
-                    for (int x = 0; x < Reader.VisibleFieldCount; x++)
-                    {
-                        Trace.WriteLine(" ############# " + Reader.GetValue(x).ToString() + " ############# \n");
-                    }
-
                     query = "replace into commercial(refCommercial, nom, prenom, motDePasse) values('" +
                     Reader.GetValue(0).ToString() + "','" +
                     Reader.GetValue(1).ToString() + "','" +
@@ -61,7 +56,6 @@ namespace Madera_MMB.Lib
                     Reader.GetValue(3).ToString() + "')";
 
                     SQLiteCommand command = new SQLiteCommand(query, LiteCo);
-                    Trace.WriteLine("################" + query + "################");
                     try
                     {
                         i = i + command.ExecuteNonQuery();  
@@ -84,6 +78,55 @@ namespace Madera_MMB.Lib
                 return false;
             }        
         }
+
+        /// <summary>
+        ///   Méthode de synchronisation des données des coupes de principe, couvertures, planchers et gammes depuis la base distante MYSQL vers la base locale SQLite
+        /// </summary>
+        /// <returns>booléen renseignant le succès ou l'échec de la synchronisation des données des paramètres de plan</returns>
+        public bool SyncParamPlan()
+        {
+            MySqlDataReader Reader;
+            string query;
+
+            Trace.WriteLine(" ############# TEST SYNC COUPE PRINCIPE ############# \n");
+            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM coupeprincipe", MySQLCo);
+            try
+            {
+                Reader = selectComms.ExecuteReader();
+                int i = 0;
+                LiteCo.Open();
+                while (Reader.Read())
+                {
+                    query = "replace into coupeprincipe(refCommercial, nom, prenom, motDePasse) values('" +
+                    Reader.GetValue(0).ToString() + "','" +
+                    Reader.GetValue(1).ToString() + "','" +
+                    Reader.GetValue(2).ToString() + "','" +
+                    Reader.GetValue(3).ToString() + "')";
+
+                    SQLiteCommand command = new SQLiteCommand(query, LiteCo);
+                    try
+                    {
+                        i = i + command.ExecuteNonQuery();
+                    }
+                    catch (System.Data.SQLite.SQLiteException e)
+                    {
+                        Trace.WriteLine(e.ToString());
+                        LiteCo.Close();
+                        return false;
+                    }
+                }
+                LiteCo.Close();
+                MySQLCo.Close();
+                return true;
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine(e.ToString());
+                MySQLCo.Close();
+                return false;
+            }
+        }
+
         public void InsertSQliteQuery(string query)
         {
             try
@@ -140,7 +183,10 @@ namespace Madera_MMB.Lib
         #endregion
 
         #region Privates Methods
-        // Partie SQLite //
+        /// <summary>
+        /// Méthode testant l'existence d'une base SQLite, la créé si inexistante
+        /// </summary>
+        /// <returns>booléen renseignant le le succès ou l'échec de la création/connexion à l base SQLite</returns>
         private bool CreateSQLiteBase()
         {
             if (File.Exists("Madera.bdd"))
@@ -150,6 +196,7 @@ namespace Madera_MMB.Lib
                 {
                     this.LiteCo = new SQLiteConnection("Data Source=Madera.bdd;Version=3;");
                     Trace.WriteLine(" \n ################################################# SQLITE DATABASE CONNECTED ################################################# \n");
+                    LiteCo.Close();
                     return true;
                 }
                 catch (System.Data.SQLite.SQLiteException ex)
@@ -182,7 +229,10 @@ namespace Madera_MMB.Lib
             }
         }
 
-        // Partie MySQL //
+        /// <summary>
+        /// Méthode testant la connexion à la base distante MySQL
+        /// </summary>
+        /// <returns>booléen renseignant le le succès ou l'échec de la création/connexion à l base MySQL</returns>
         private bool OpenMySQLConnection()
         {
             string connectionString = "SERVER=localhost;DATABASE=madera_mmb;UID=root;PASSWORD=;";

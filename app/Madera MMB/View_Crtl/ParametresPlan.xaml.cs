@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Madera_MMB.CAD;
+using Madera_MMB.Lib;
 
 namespace Madera_MMB.View_Crtl
 {
@@ -22,6 +24,13 @@ namespace Madera_MMB.View_Crtl
     public partial class ParametresPlan : Page
     {
         #region Properties
+
+        public Connexion Conn { get; set; }
+
+        private CoupePrincipeCAD coupeCAD { get; set; }
+        private CouvertureCAD couvCAD { get; set; }
+        private PlancherCAD planchCAD { get; set; }
+        private GammeCAD gammCAD { get; set; }
         private string type_forme { get; set; }
         private string taille_choisie { get; set; }
         private string couverture { get; set; }
@@ -30,10 +39,16 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Constructeur
-        public ParametresPlan()
+        public ParametresPlan(Connexion co)
         {
             InitializeComponent();
-            initialize_cp_wrappers();
+            Conn = co;
+            this.coupeCAD = new CoupePrincipeCAD(this.Conn);
+            this.couvCAD = new CouvertureCAD(this.Conn);
+            this.planchCAD = new PlancherCAD(this.Conn);
+            this.gammCAD = new GammeCAD(this.Conn);
+
+            initialize_coupe_wrappers();
             initialize_couv_wrapper();
             initialize_planch_wrapper();
             initialize_gamme_wrapper();
@@ -41,9 +56,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation des conteneurs
-        private void initialize_cp_wrappers()
+        private void initialize_coupe_wrappers()
         {
-            for (int i = 0; i < 4; i++)
+            foreach (var coupe in this.coupeCAD.listecoupeprincipe)
             {
                 ToggleButton Uneforme = new ToggleButton();
                 Uneforme.Background = Brushes.White;
@@ -66,7 +81,7 @@ namespace Madera_MMB.View_Crtl
                 img.Source = imageBitmap;
 
                 TextBlock tb = new TextBlock();
-                tb.Text = "Carré";
+                tb.Text = coupe.label;
                 tb.VerticalAlignment = VerticalAlignment.Bottom;
                 tb.HorizontalAlignment = HorizontalAlignment.Center;
                 tb.Height = 40;
@@ -90,31 +105,28 @@ namespace Madera_MMB.View_Crtl
                 };
 
                 wrapformes.Children.Add(Uneforme);
-            }
 
-            for (int i = 0; i < 9; i++)
-            {
                 ToggleButton Unetaille = new ToggleButton();
                 Unetaille.Background = Brushes.White;
                 Unetaille.Width = 100;
                 Unetaille.Height = 50;
-                Thickness margin = Unetaille.Margin;
+                Thickness margint = Unetaille.Margin;
                 margin.Left = 50;
                 margin.Right = 50;
                 margin.Bottom = 10;
                 margin.Top = 10;
                 Unetaille.Margin = margin;
 
-                TextBlock tb = new TextBlock();
-                tb.Text = "50 X 50";
-                tb.VerticalAlignment = VerticalAlignment.Center;
-                tb.HorizontalAlignment = HorizontalAlignment.Center;
-                tb.Height = 50;
+                TextBlock tbTaille = new TextBlock();
+                tbTaille.Text = coupe.largeur.ToString() + " X " + coupe.longueur.ToString();
+                tbTaille.VerticalAlignment = VerticalAlignment.Center;
+                tbTaille.HorizontalAlignment = HorizontalAlignment.Center;
+                tbTaille.Height = 50;
 
-                StackPanel sp = new StackPanel();
-                sp.Children.Add(tb);
+                StackPanel spTaille = new StackPanel();
+                sp.Children.Add(tbTaille);
 
-                Unetaille.Content = sp;
+                Unetaille.Content = spTaille;
 
                 Unetaille.Click += delegate(object sender, RoutedEventArgs e)
                 {

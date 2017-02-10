@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
 using System.Data;
+using System.Diagnostics;
 
 namespace Madera_MMB.CAD
 {
-    class CouvertureCAD
+    public class CouvertureCAD
     {
         #region properties
         private List<Couverture> listecouverture { get; set; }
@@ -24,30 +25,34 @@ namespace Madera_MMB.CAD
         {
             listecouverture = new List<Couverture>();
             this.conn = co;
+            listAllCouverture();
         }
         #endregion
 
         #region privates methods
         private void listAllCouverture() 
         {
-            SQLQuery = "SELECT * FROM Couverture";
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
+            SQLQuery = "SELECT * FROM couverture";
+            conn.LiteCo.Open();
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                while (reader.Read())
+                try
                 {
-                    Couverture couverture = new Couverture(reader.GetString(0), reader.GetInt32(1));
-
-                    listecouverture.Add(couverture);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Couverture couverture = new Couverture(reader.GetString(0), reader.GetInt32(1));
+                            listecouverture.Add(couverture);
+                        }
+                    }
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# ERREUR RECUPERATION COUVERTURES ################################################# \n" + ex.ToString() + "\n");
                 }
             }
-            finally
-            {
-                reader.Close();
-            }
+            conn.LiteCo.Close();
         }
         #endregion
 

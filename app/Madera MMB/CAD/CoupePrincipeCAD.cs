@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
 using System.Data;
+using System.Diagnostics;
 
 namespace Madera_MMB.CAD
 {
-    class CoupePrincipeCAD
+    public class CoupePrincipeCAD
     {
         #region properties
-        private List<CoupePrincipe> listecoupeprincipe { get; set; }
+        public List<CoupePrincipe> listecoupeprincipe { get; set; }
         public string SQLQuery { get; set; }
         public Connexion conn { get; set; }
         public CoupePrincipe coupe { get; set; }
@@ -25,30 +26,35 @@ namespace Madera_MMB.CAD
         {
             this.conn = co;
             listecoupeprincipe = new List<CoupePrincipe>();
+            listAllCoupePrincipe();
         }
         #endregion
 
         #region privates methods
         private void listAllCoupePrincipe() 
         {
-            SQLQuery = "SELECT * FROM Coupeprincipe";
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
+            SQLQuery = "SELECT * FROM coupeprincipe";
+            conn.LiteCo.Open();
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                while (reader.Read())
+                try
                 {
-                    CoupePrincipe coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4));
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            CoupePrincipe coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4));
 
-                    listecoupeprincipe.Add(coupe);
+                            listecoupeprincipe.Add(coupe);
+                        }
+                    }
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# ERREUR RECUPERATION COUPES PRINCIPE ################################################# \n" + ex.ToString() + "\n");
                 }
             }
-            finally
-            {
-                reader.Close();
-            }
+            conn.LiteCo.Close();
         }
         #endregion
 

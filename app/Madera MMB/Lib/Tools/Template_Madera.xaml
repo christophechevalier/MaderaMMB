@@ -3,17 +3,6 @@
 
 
 
-    <Style x:Key="RedWindowStyle" TargetType="{x:Type Window}">
-        <Setter Property="WindowStyle" Value="None"/>
-        <Setter Property="AllowsTransparency" Value="True"/>
-        <Setter Property="MinWidth" Value="100"/>
-        <Setter Property="MinHeight" Value="46"/>
-        <Setter Property="Background" Value="white"/>
-        <Setter Property="BorderBrush" Value="DarkRed"/>
-        <Setter Property="BorderThickness" Value="7"/>
-        <Setter Property="Foreground" Value="DarkGray"/>
-    </Style>
-
     <Style TargetType="{x:Type GridViewColumnHeader}">
         <!-- Header List style -->
         <Setter Property="HorizontalContentAlignment" Value="Left" />
