@@ -14,6 +14,11 @@
         <Setter Property="Foreground" Value="DarkGray"/>
     </Style>
 
+    <Style TargetType="{x:Type GridViewColumnHeader}">
+        <!-- Header List style -->
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+    </Style>
+
     <!-- Image Logo -->
     <BitmapImage x:Key="Logo" UriSource="../logo_madera.png"/>
 
