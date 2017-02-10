@@ -21,10 +21,8 @@ namespace Madera_MMB.CAD
         public GammeCAD gammeCAD { get; set; }
         public MetaSlotCAD metaslotCAD { get; set; }
         public ComposantCAD compCAD { get; set; }
-
         private Bitmap image { get; set; }
         private MetaModule metamodule { get; set; }
-
 
         #endregion
 

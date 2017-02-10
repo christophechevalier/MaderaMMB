@@ -34,15 +34,13 @@ namespace Madera_MMB.View_Crtl
     /// - Gestion Client/Valider création/modification client : export données vers BDD SQLite, si online -> export aussi vers BDD distante
     /// - Modélisation/Valider création/modification plan : export données vers BDD SQLite, si online -> export aussi vers BDD distante
     /// - Gestion Devis/Valider création projet : export données vers BDD SQLite, si online -> export aussi vers BDD distante
-    /// 
-    /// 
-    /// 
     /// </summary>
     public partial class MainWindow : Window
     {
 
         private Connexion Conn { get; set; }
         private CommercialCAD CommCAD { get; set; }
+
         private View_Crtl.Authentification Authentification = new Authentification();
         private View_Crtl.GestionProjet GestionProjet = new GestionProjet();
         private View_Crtl.GestionPlan GestionPlan = new GestionPlan();

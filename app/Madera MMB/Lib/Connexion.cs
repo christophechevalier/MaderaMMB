@@ -30,8 +30,11 @@ namespace Madera_MMB.Lib
         }
         #endregion
 
-
         #region Public Methods
+        /// <summary>
+        ///   Test
+        /// </summary>
+        /// <returns></returns>
         public bool SyncCommMySQL()
         {
             MySqlDataReader Reader;
@@ -135,7 +138,6 @@ namespace Madera_MMB.Lib
         }
  
         #endregion
-
 
         #region Privates Methods
         // Partie SQLite //

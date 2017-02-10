@@ -26,6 +26,7 @@ namespace Madera_MMB.View_Crtl
         private string taille_choisie { get; set; }
         private string couverture { get; set; }
         private string plancher { get; set; }
+
         #endregion
 
         #region Constructeur
