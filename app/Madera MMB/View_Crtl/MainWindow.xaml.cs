@@ -37,7 +37,7 @@ namespace Madera_MMB.View_Crtl
             Initialize_Listeners();
 
             // Démarrage de l'application sur la vue authentification
-            Mainframe.Content = Authentification;
+            Mainframe.Content = Modelisation;
         }
 
         #region Initialisation

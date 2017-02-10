@@ -38,7 +38,6 @@ namespace Madera_MMB.View_Crtl
         {
             InitializeComponent();
             initialize();
-
         }
 
         private void initialize()
@@ -271,6 +270,15 @@ namespace Madera_MMB.View_Crtl
                 but.letype = ButtonM.type.MurInt;
                 but.checkType();
             }
+        }
+
+        private bool isInside (ButtonM but)
+        {
+            bool inside = false;
+
+
+
+            return inside;
         }
     }
 }
