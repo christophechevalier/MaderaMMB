@@ -34,6 +34,9 @@ namespace Madera_MMB.View_Crtl
     /// - Gestion Client/Valider création/modification client : export données vers BDD SQLite, si online -> export aussi vers BDD distante
     /// - Modélisation/Valider création/modification plan : export données vers BDD SQLite, si online -> export aussi vers BDD distante
     /// - Gestion Devis/Valider création projet : export données vers BDD SQLite, si online -> export aussi vers BDD distante
+    /// 
+    /// 
+    /// 
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -59,6 +62,9 @@ namespace Madera_MMB.View_Crtl
         }
 
         #region Process Synchro
+        /// <summary>
+        ///  Méthode testant les possibilités de connexion aux bases de données locale et distante 
+        /// </summary>
         private void initSynchro()
         {
             if (!Conn.MySQLconnected)
@@ -89,6 +95,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation
+        /// <summary>
+        ///  Méthode appelant toutes les méthodes d'abonnement aux différentes vues
+        /// </summary>
         private void Initialize_Listeners()
         {
             Initialize_Listeners_Auth();
@@ -102,11 +111,12 @@ namespace Madera_MMB.View_Crtl
         }
         #endregion
 
-
         #region Initialisation Auth
+        /// <summary>
+        ///  Méthode d'abonnement à la validation du formulaire d'authentification avec contrôles des identifiants
+        /// </summary>
         private void Initialize_Listeners_Auth()
         {
-            //this.errorWindow = new ErrorModalWindow();
             this.Conn = new Connexion();
             CommCAD = new CommercialCAD(this.Conn);
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
@@ -132,6 +142,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation Gestion Projet
+        /// <summary>
+        ///  Méthode d'abonnements à la vue Gestion Projet pour naviguer vers Gestion Client / Gestion Plan / Paramètre Client
+        /// </summary>
         private void Initialize_Listeners_GestionProjet()
         {
             this.GestionProjet = new View_Crtl.GestionProjet();
@@ -159,6 +172,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation Gestion Client
+        /// <summary>
+        ///  Méthode d'abonnement à la vue Gestion CLient pour naviguer vers Paramètres Client / Gestion Projet
+        /// </summary>
         private void Initialize_Listeners_GestionClient()
         {
             // Click sur le bouton éditer un client pour aller dans la Vue Paramètre Client
@@ -180,6 +196,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation Paramètres Client
+        /// <summary>
+        ///  Méthode d'abonnement à la vue Paramètres Client pour naviguer vers Gestion Client
+        /// </summary>
         private void Initialize_Listeners_ParametresClient()
         {
             // Click sur le bouton valider paramètres client pour aller dans la Vue Gestion Client
@@ -196,6 +215,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation Gestion Plan
+        /// <summary>
+        ///  Méthode d'abonnement à la vue Gestion Plan pour naviguer vers Paramètres Plan / Modélisation
+        /// </summary>
         private void Initialize_Listeners_GestionPlan()
         {
             // Click sur le bouton créer un nouveau plan pour aller dans la Vue Paramètres Plan
@@ -227,6 +249,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation Paramètres Plan
+        /// <summary>
+        ///  Méthode d'abonnement à la vue Paramètres Plan pour naviguer vers Modélisation / Gestion Plan
+        /// </summary>
         private void Initialize_Listeners_ParametresPlan()
         {
             // Click sur le bouton confirmer paramètres plan pour aller dans la Vue Modélisation
@@ -243,6 +268,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation Modélisation
+        /// <summary>
+        ///  Méthode d'abonnement à la vue Modélisation pour naviguer vers Gestion Plan
+        /// </summary>
         private void Initialize_Listeners_Modelisation()
         {
             // Click sur le bouton quitter modélisation pour aller dans la Vue Gestion Plan
@@ -254,6 +282,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation Gestion Devis
+        /// <summary>
+        ///  Méthode d'abonnement à la vue Gestion Devis pour naviguer vers Gestion Plan
+        /// </summary>
         private void Initialize_Listeners_Devis()
         {
             // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
@@ -269,6 +300,9 @@ namespace Madera_MMB.View_Crtl
         }
         #endregion
 
+        /// <summary>
+        ///  Méthode définissant le comportement de l'application à la fermeture de la fenêtre
+        /// </summary>
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
