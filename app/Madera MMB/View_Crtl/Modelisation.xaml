@@ -7,10 +7,12 @@
       d:DesignHeight="300" d:DesignWidth="300"
 	  Title="Modelisation">
 
-
-    <!-- Début Déclaration Template-->
     <Page.Resources>
-        <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Lib/Tools/Template_Madera.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Page.Resources>
 
     <Grid x:Name="MainGrid">
