@@ -68,25 +68,20 @@ namespace Madera_MMB.View_Crtl
             if (!Conn.MySQLconnected)
             {
                 MessageBox.Show("Mode déconnecté");
-
             }
             else if (!this.Conn.SyncCommMySQL())
             {
                 MessageBox.Show("Erreur de synchronisation ! ");
             }
-
-            Debug.WriteLine("TEST INTERMEDIAIRE1");
             if (!Conn.SQLiteconnected)
             {
                 MessageBox.Show("Base innaccessible ! Veuillez contacter l'administrateur. ");
                 Application.Current.Shutdown();
             }
 
-            Debug.WriteLine("TEST INTERMEDIAIRE2");
- 
             // TEST QUERY SQLite //
-            string query = "REPLACE INTO Commercial (refCommercial, nom, prenom, motDePasse) VALUES ('003', 'yololnom', 'yololprenom', 'yololmdp')";
-            Conn.InsertSQliteQuery(query);
+            //string query = "REPLACE INTO Commercial (refCommercial, nom, prenom, motDePasse) VALUES ('003', 'yololnom', 'yololprenom', 'yololmdp')";
+            //Conn.InsertSQliteQuery(query);
             string myquery = "SELECT * FROM Commercial;";
             Conn.SelectSQLiteQuery(myquery);
         }
