@@ -11,7 +11,7 @@ CREATE TABLE commercial (
 
 -- Table Client OK
 
-CREATE TABLE  client (
+CREATE TABLE client (
   refClient TEXT PRIMARY KEY NOT NULL,
   nom TEXT NOT NULL,
   prenom TEXT NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE  client (
 
 -- Table Projet OK
 
-CREATE TABLE  projet (
+CREATE TABLE projet (
   refProjet TEXT PRIMARY KEY NOT NULL,
   nom TEXT NOT NULL,
   dateCreation NUMERIC NOT NULL,
@@ -32,20 +32,20 @@ CREATE TABLE  projet (
   refClient TEXT NOT NULL,
   refCommercial TEXT NOT NULL,
   FOREIGN KEY (refClient) REFERENCES client,
-  FOREIGN KEY (refCommercial) REFERENCES commercial,
+  FOREIGN KEY (refCommercial) REFERENCES commercial
 ); 
 
 -- Table Couverture OK
 
-CREATE TABLE  couverture (
+CREATE TABLE couverture (
   typeCouverture TEXT PRIMARY KEY NOT NULL,
   prixHT INT NOT NULL
 );
 
 -- Table CoupePrincipe OK
 
-CREATE TABLE  coupePrincipe (
-  id_coupe INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+CREATE TABLE coupePrincipe (
+  id_coupe INTEGER PRIMARY KEY NOT NULL,
   label TEXT NOT NULL,
   longueur INTEGER NOT NULL,
   largeur INTEGER NOT NULL,
@@ -54,15 +54,15 @@ CREATE TABLE  coupePrincipe (
 
 -- Table Plancher OK
 
-CREATE TABLE  plancher (
+CREATE TABLE plancher (
   typePlancher TEXT PRIMARY KEY NOT NULL,
-  prixHT INTEGER NOT NULL,
+  prixHT INTEGER NOT NULL
 );
 
 
 -- Table Gamme OK
 
-CREATE TABLE  gamme (
+CREATE TABLE gamme (
   nom TEXT PRIMARY KEY NOT NULL,
   offrePromo INT NOT NULL,
   typeIsolant TEXT NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE plan (
 
 -- Table Devis OK
 
-CREATE TABLE  devis (
+CREATE TABLE devis (
   refDevis TEXT PRIMARY KEY NOT NULL,
   nom TEXT NOT NULL,
   etat TEXT NOT NULL,
@@ -120,7 +120,7 @@ CREATE TABLE  devis (
 
 -- Table MetaModule OK
 
-CREATE TABLE  MetaModule (
+CREATE TABLE MetaModule (
   refMetaModule TEXT PRIMARY KEY NOT NULL,
   label TEXT NOT NULL,
   prixHT INT NOT NULL,
@@ -132,7 +132,7 @@ CREATE TABLE  MetaModule (
 
 -- Table Module OK
 
-CREATE TABLE  module (
+CREATE TABLE module (
   nom TEXT PRIMARY KEY NOT NULL,
   prixHT INT NOT NULL,
   nbSlot INT NOT NULL,
@@ -149,15 +149,15 @@ CREATE TABLE  module (
 
 -- Table Famille composant OK
 
-CREATE TABLE  familleComposant (
+CREATE TABLE familleComposant (
   nom TEXT PRIMARY KEY NOT NULL
 ); 
 
 
 -- Table Composant OK
 
-CREATE TABLE  composant (
-  id_composant INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+CREATE TABLE composant (
+  id_composant INTEGER PRIMARY KEY NOT NULL,
   nom TEXT NOT NULL,
   nomFamilleComposant TEXT NOT NULL,
   FOREIGN KEY (nomFamilleComposant) REFERENCES familleComposant
@@ -166,7 +166,7 @@ CREATE TABLE  composant (
 
 -- Table Composant_has_MetaModule OK
 
-CREATE TABLE  Composant_has_MetaModule (
+CREATE TABLE Composant_has_MetaModule (
   refMetaModule TEXT NOT NULL,
   id_composant INT NOT NULL,
   PRIMARY KEY (refMetaModule, id_composant),
@@ -187,7 +187,7 @@ CREATE TABLE MetaSlot (
 
 -- Table Slot OK
 
-CREATE TABLE  slot (
+CREATE TABLE slot (
   idSlot INT PRIMARY KEY NOT NULL,
   numSlotPosition INT NOT NULL,
   label TEXT NOT NULL,
@@ -203,8 +203,8 @@ CREATE TABLE  slot (
 
 -- Table MetaModul_has_MetaSlot OK
 
-CREATE TABLE  MetaModul_has_MetaSlot (
-  id_composition INT PRIMARY KEY NOT NULL AUTOINCREMENT,
+CREATE TABLE MetaModul_has_MetaSlot (
+  id_composition INT PRIMARY KEY NOT NULL,
   refMetaModule TEXT NOT NULL,
   idMetaSlot INT NOT NULL,
   FOREIGN KEY (refMetaModule) REFERENCES MetaModule,
@@ -269,10 +269,8 @@ INSERT INTO coupeprincipe (label, longueur, largeur, prixHT) VALUES
 ('L', 50, 50, 45000),
 ('T', 50, 50, 50000),
 ('carré', 50, 50, 35000),
-('rectangle', 50, 50, 35000),
-('carré', 50, 50, 35000),
-('carré', 50, 50, 35000),
-('carré', 50, 50, 35000);
+('rectangle', 50, 50, 35000);
+
 
 --
 -- Contenu de la table `famillecomposant`
@@ -321,5 +319,5 @@ INSERT INTO plancher (typePlancher, prixHT) VALUES
 --
 -- Compositions des MetaModules
 --
-INSERT INTO composant_has_metamodule `refMetaModule, id_composant) VALUES ('201443874685331', '6'), ('201443874685331', '7'), ('201443874685331', '11'), ('3559747487225506', '11'), ('30264985106539', '9'), ('3562989509476444', '11'), ('30344920947781', '6'), ('201443874685331', '15'), ('30344920947781', '15'), ('4844260374691931', '12'), ('3562989509476444', '14'), ('3559747487225506', '12'), ('3559747487225506', '16'), ('30344920947781', '11'), ('201443874685331', '13'), ('4844260374691931', '15'), ('5485794656214823', '14'), ('201455480736282', '4'), ('3559747488225406', '8'), ('4913679059729102', '15');
+INSERT INTO composant_has_metamodule (refMetaModule, id_composant) VALUES ('201443874685331', '6'), ('201443874685331', '7'), ('201443874685331', '11'), ('3559747487225506', '11'), ('30264985106539', '9'), ('3562989509476444', '11'), ('30344920947781', '6'), ('201443874685331', '15'), ('30344920947781', '15'), ('4844260374691931', '12'), ('3562989509476444', '14'), ('3559747487225506', '12'), ('3559747487225506', '16'), ('30344920947781', '11'), ('201443874685331', '13'), ('4844260374691931', '15'), ('5485794656214823', '14'), ('201455480736282', '4'), ('3559747488225406', '8'), ('4913679059729102', '15');
 
