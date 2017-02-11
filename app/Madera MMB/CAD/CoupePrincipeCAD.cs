@@ -8,6 +8,10 @@ using Madera_MMB.Lib;
 using System.Data.SQLite;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
+using System.Drawing;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace Madera_MMB.CAD
 {
@@ -41,10 +45,14 @@ namespace Madera_MMB.CAD
                 {
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
+                        Trace.Write("#### GET COUPE PRINCIPE DATA #### \n");
                         while (reader.Read())
                         {
-                            CoupePrincipe coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4));
+                            Trace.WriteLine(reader.GetValue(5));
+                            Byte[] data = (Byte[])reader.GetValue(5);
+                            Trace.Write(data.Length.ToString() + "#### \n");
 
+                            CoupePrincipe coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), data);
                             listecoupeprincipe.Add(coupe);
                         }
                     }
@@ -70,7 +78,11 @@ namespace Madera_MMB.CAD
             {
                 while (reader.Read())
                 {
-                    this.coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4));
+                    Byte[] data = (Byte[])reader.GetValue(5);
+                    foreach (byte b in data)
+                        Trace.Write(b.ToString());
+
+                    this.coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), data);
                 }
             }
             finally
@@ -78,6 +90,21 @@ namespace Madera_MMB.CAD
                 reader.Close();
             }
             return coupe;
+        }
+        #endregion
+
+        #region Tools
+        public BitmapImage ToImage(byte[] array)
+        {
+            using (var ms = new System.IO.MemoryStream(array))
+            {
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad; // here
+                image.StreamSource = ms;
+                image.EndInit();
+                return image;
+            }
         }
         #endregion
     }

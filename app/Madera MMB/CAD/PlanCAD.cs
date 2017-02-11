@@ -35,7 +35,6 @@ namespace Madera_MMB.CAD
             this.plancherCAD = plancherCAD;
             this.gammeCAD = gammeCAD;
             this.metamodCAD = metaCAD;
-
         }
         #endregion
 

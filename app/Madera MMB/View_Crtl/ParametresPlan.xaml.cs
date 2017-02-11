@@ -15,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Madera_MMB.CAD;
 using Madera_MMB.Lib;
+using System.Diagnostics;
+using System.IO;
 
 namespace Madera_MMB.View_Crtl
 {
@@ -43,10 +45,10 @@ namespace Madera_MMB.View_Crtl
         {
             InitializeComponent();
             Conn = co;
-            this.coupeCAD = new CoupePrincipeCAD(this.Conn);
-            this.couvCAD = new CouvertureCAD(this.Conn);
-            this.planchCAD = new PlancherCAD(this.Conn);
-            this.gammCAD = new GammeCAD(this.Conn);
+            coupeCAD = new CoupePrincipeCAD(this.Conn);
+            couvCAD = new CouvertureCAD(this.Conn);
+            planchCAD = new PlancherCAD(this.Conn);
+            gammCAD = new GammeCAD(this.Conn);
 
             initialize_coupe_wrappers();
             initialize_couv_wrapper();
@@ -60,6 +62,14 @@ namespace Madera_MMB.View_Crtl
         {
             foreach (var coupe in this.coupeCAD.listecoupeprincipe)
             {
+                
+                //foreach(byte b in coupe.image)
+                //{
+                //    Trace.Write(b.ToString());
+                //}
+
+                //Trace.Write("\n");
+
                 ToggleButton Uneforme = new ToggleButton();
                 Uneforme.Background = Brushes.White;
                 Uneforme.Width = 150;
@@ -71,14 +81,14 @@ namespace Madera_MMB.View_Crtl
                 margin.Top = 10;
                 Uneforme.Margin = margin;
 
+                BitmapImage bitmap = new BitmapImage();
+                MemoryStream ms = new MemoryStream(coupe.image);
+                bitmap.StreamSource = ms;
                 Image img = new Image();
+                img.Source = bitmap;
                 img.Width = 150;
                 img.Height = 130;
                 img.VerticalAlignment = VerticalAlignment.Top;
-                string source = "../Lib/Images/carre.png";
-                Uri imageUri = new Uri(source, UriKind.Relative);
-                BitmapImage imageBitmap = new BitmapImage(imageUri);
-                img.Source = imageBitmap;
 
                 TextBlock tb = new TextBlock();
                 tb.Text = coupe.label;

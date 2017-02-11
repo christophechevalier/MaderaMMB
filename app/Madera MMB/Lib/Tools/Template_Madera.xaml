@@ -9,8 +9,9 @@
     </Style>
 
     <!-- Image Logo -->
-    <BitmapImage x:Key="Logo" UriSource="../logo_madera.png"/>
-
+    <BitmapImage x:Key="Logo" UriSource="../logo_madera.png" />
+    <BitmapImage x:Key="LogoOffline" UriSource="../logo_offline.png"/>
+    
     <Style TargetType="{x:Type Label}">
         <Setter Property="FontSize" Value="12" />
     </Style>

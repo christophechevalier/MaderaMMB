@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace Madera_MMB.Model
 {
@@ -15,17 +17,18 @@ namespace Madera_MMB.Model
         public int longueur { get; set; }
         public int largeur { get; set; }
         public int prixHT { get; set; }
-        public string forme { get; set; }
+        public byte[] image { get; set; }
         #endregion
 
         #region Ctor
-        public CoupePrincipe(int id, string label, int longueur, int largeur, int prix)
+        public CoupePrincipe(int id, string label, int longueur, int largeur, int prix, byte[] img)
         {
             this.id = id;
             this.label = label;
             this.longueur = longueur;
             this.largeur = largeur;
-            this.prixHT = prix;
+            prixHT = prix;
+            image = img;
         }
         #endregion
 

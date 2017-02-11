@@ -69,12 +69,14 @@ namespace Madera_MMB.Lib
                 }
                 LiteCo.Close();
                 MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC COMMERCIAL SUCCESS ############# \n");
                 return true;
             }
             catch(MySqlException e)
             {
                 Trace.WriteLine(e.ToString());
                 MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC COMMERCIAL FAIL ############# \n");
                 return false;
             }        
         }
@@ -92,16 +94,25 @@ namespace Madera_MMB.Lib
             MySqlCommand selectComms = new MySqlCommand("SELECT * FROM coupeprincipe", MySQLCo);
             try
             {
+                MySQLCo.Open();
                 Reader = selectComms.ExecuteReader();
                 int i = 0;
                 LiteCo.Open();
                 while (Reader.Read())
                 {
-                    query = "replace into coupeprincipe(refCommercial, nom, prenom, motDePasse) values('" +
-                    Reader.GetValue(0).ToString() + "','" +
+                    Byte[] data = (byte[])Reader.GetValue(5);
+                    Trace.Write(data.Length.ToString() + "**** \n");
+                    //Console.WriteLine(Encoding.UTF8.GetString(data));
+
+
+                    query = "replace into coupeprincipe(id_coupe, label, longueur, largeur, prixHT, image) values('" +
+                    Reader.GetInt32(0).ToString() + "','" +
                     Reader.GetValue(1).ToString() + "','" +
                     Reader.GetValue(2).ToString() + "','" +
-                    Reader.GetValue(3).ToString() + "')";
+                    Reader.GetValue(3).ToString() + "','" +
+                    Reader.GetInt32(4).ToString() + "','" +
+                    data + "')";
+
 
                     SQLiteCommand command = new SQLiteCommand(query, LiteCo);
                     try
@@ -112,17 +123,20 @@ namespace Madera_MMB.Lib
                     {
                         Trace.WriteLine(e.ToString());
                         LiteCo.Close();
+                        MySQLCo.Close();
                         return false;
                     }
                 }
                 LiteCo.Close();
                 MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC COUPE PRINCIPE SUCESS ############# \n");
                 return true;
             }
             catch (MySqlException e)
             {
                 Trace.WriteLine(e.ToString());
                 MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC COUPE PRINCIPE FAIL ############# \n");
                 return false;
             }
         }

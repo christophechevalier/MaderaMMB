@@ -41,6 +41,7 @@ namespace Madera_MMB.View_Crtl
         private Connexion conn { get; set; }
         private CommercialCAD commCAD { get; set; }
 
+        private bool mySQLSync { get; set; }
         // Déclaration et initialisation des Vues de l'application //
         private View_Crtl.Authentification Authentification { get; set; } 
         private View_Crtl.GestionProjet GestionProjet { get; set; }
@@ -67,9 +68,18 @@ namespace Madera_MMB.View_Crtl
         private void initSynchro()
         {
             this.conn = new Connexion();
-            if (!conn.MySQLconnected)
+            if (conn.MySQLconnected == false)
             {
+                mySQLSync = false;
                 MessageBox.Show("Mode déconnecté");
+
+    
+                ResourceDictionary resource = this.Resources;
+                
+                resource["Logo"] = "../Lib/logo_offline.png";
+                resource["Logo"] = resource["LogoOffline"];
+                Trace.WriteLine(resource["Logo"]);
+                this.UpdateLayout();
             }
             else if (!this.conn.SyncCommMySQL())
             {
@@ -106,6 +116,7 @@ namespace Madera_MMB.View_Crtl
             Initialize_Listeners_ParametresPlan();
             Initialize_Listeners_Modelisation();
             Initialize_Listeners_Devis();
+
         }
         #endregion
 
@@ -129,6 +140,8 @@ namespace Madera_MMB.View_Crtl
                 if (GestionProjet.commercialAuthentifié != null)
                 {
                     Mainframe.Content = GestionProjet;
+                    if(this.conn.SyncParamPlan() == false)
+                        MessageBox.Show("Coupes principe non synchronisées ! ");
                 }
                 else
                 {

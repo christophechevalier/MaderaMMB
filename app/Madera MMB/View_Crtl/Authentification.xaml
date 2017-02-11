@@ -76,7 +76,7 @@
                 <ColumnDefinition Width="0.20*"/>
             </Grid.ColumnDefinitions>
 
-            <Image Name="Logo" Grid.Column="1" Source="{StaticResource Logo}" Grid.Row="0" Width="{Binding ActualHeight, ElementName=rowDefinition0}" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10"/>
+            <Image Name="Logo" Grid.Column="1" Source="{DynamicResource Logo}" Grid.Row="0" Width="{Binding ActualHeight, ElementName=rowDefinition0}" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10"/>
 
             <Viewbox Margin="20,0,20,0" 
                      Grid.Row="1"

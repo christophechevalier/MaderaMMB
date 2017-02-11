@@ -60,7 +60,6 @@ namespace Madera_MMB.CAD
             SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
             command.CommandText = SQLQuery;
             SQLiteDataReader reader = command.ExecuteReader();
-
             try
             {
                 while (reader.Read())
