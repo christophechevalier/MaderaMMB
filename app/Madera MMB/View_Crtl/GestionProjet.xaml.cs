@@ -30,6 +30,8 @@ namespace Madera_MMB.View_Crtl
     {
         #region Properties
         private string nom_client { get; set; }
+        // private Label lblNomClient = label1;
+
         #endregion
 
         #region Constructeur
@@ -38,6 +40,19 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             Initialize_Client_Wrapper();
             Initialize_Menu_Wrapper();
+        }
+        #endregion
+
+        #region private methods
+        /// <summary>
+        /// Méthode qui permet l'affichage des informations relative au client d'un projet
+        /// Dans ce cas précis, on souhaite afficher le nom d'un client pour un projet
+        /// </summary>
+        /// <param name="proj"></param>
+        private void afficherInfosClient(Projet proj, object sender, RoutedEventArgs e)
+        {
+            // lblNomClient.Text = proj.client.Nom;
+            // afficherInfosClient();
         }
         #endregion
 
@@ -185,7 +200,6 @@ namespace Madera_MMB.View_Crtl
             }
 
             btn.IsChecked = true;
-
         }
         #endregion
 

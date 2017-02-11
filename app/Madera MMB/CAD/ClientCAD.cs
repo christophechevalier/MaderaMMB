@@ -21,7 +21,7 @@ namespace Madera_MMB.CAD
         public ClientCAD(Connexion laConnexion)
         {
             Connexion conn = laConnexion;
-            List<Client> listeClient = new List<Client>();
+            listeClient = new List<Client>();
         }
         #endregion
 
@@ -37,15 +37,18 @@ namespace Madera_MMB.CAD
             {
                 while (reader.Read())
                 {
-                    Client cli = new Client();
-                    cli.reference = reader.GetString(0);
-                    cli.nom = reader.GetString(1);
-                    cli.prenom = reader.GetString(2);
-                    cli.adresse = reader.GetString(3);
-                    cli.codePostal = reader.GetString(4);
-                    cli.ville = reader.GetString(5);
-                    cli.email = reader.GetString(6);
-                    cli.telephone = reader.GetString(7);
+                    Client cli = new Client
+                        (
+                            reader.GetString(0),
+                            reader.GetString(1),
+                            reader.GetString(2),
+                            reader.GetString(3),
+                            reader.GetString(4),
+                            reader.GetString(5),
+                            reader.GetString(6),
+                            reader.GetString(7)
+                        );
+                    listeClient.Add(cli);
                 }
             }
             finally
@@ -65,16 +68,16 @@ namespace Madera_MMB.CAD
             {
                 while (reader.Read())
                 {
-                    Client cli = new Client(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetString(7));
-                    //cli.reference = reader.GetString(0);
-                    //cli.nom = reader.GetString(1);
-                    //cli.prenom = reader.GetString(2);
-                    //cli.adresse = reader.GetString(3);
-                    //cli.codePostal = reader.GetString(4);
-                    //cli.ville = reader.GetString(5);
-                    //cli.email = reader.GetString(6);
-                    //cli.telephone = reader.GetString(7);
-
+                    Client cli = new Client(
+                        reader.GetString(0),
+                        reader.GetString(1),
+                        reader.GetString(2),
+                        reader.GetString(3),
+                        reader.GetString(4),
+                        reader.GetString(5),
+                        reader.GetString(6),
+                        reader.GetString(7)
+                        );
                     listeClient.Add(cli);
                 }
             }

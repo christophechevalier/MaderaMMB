@@ -98,13 +98,15 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.3*" />
                     <ColumnDefinition Width="0.4*" />
                     <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.3*" />
                     <ColumnDefinition Width="0.4*" />
                     <ColumnDefinition Width="0.05*" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Partie de gauche -->
+                <!-- Nom du client -->
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="1"
                          Grid.Column="1" 
@@ -113,12 +115,21 @@
                     <Label Content="Nom du client :" FontSize="6" />
                 </Viewbox>
                 <Viewbox Margin="15,0,0,0"
+                         Grid.Row="1"
+                         Grid.Column="2" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblNomClient" Content="" FontSize="6"/>
+                </Viewbox>
+                <!-- Date de création -->
+                <Viewbox Margin="15,0,0,0"
                          Grid.Row="3"
                          Grid.Column="1" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
                     <Label Content="Date de création :" FontSize="6" />
                 </Viewbox>
+                <!-- Statut -->
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="5"
                          Grid.Column="1" 
@@ -127,33 +138,32 @@
                     <Label Content="Statut actuel :" FontSize="6" />
                 </Viewbox>
 
-                <!-- Partie de droite -->
+                <!-- Nombre de plans -->
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="1"
-                         Grid.Column="3" 
+                         Grid.Column="4" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
                     <Label Content="Nombre de plan :" FontSize="6" />
                 </Viewbox>
+                <!-- Date de dernière mise à jour -->
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="3"
-                         Grid.Column="3" 
+                         Grid.Column="4" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
                     <Label Content="Dernière mise à jour :" FontSize="6" />
                 </Viewbox>
+                <!-- Nom du commercial -->
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="5"
-                         Grid.Column="3" 
+                         Grid.Column="4" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
                     <Label Content="Nom du commercial :" FontSize="6" />
                 </Viewbox>
 
             </Grid>
-
-            <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1 2 2 1" Grid.Column="1" />
-
         </Grid>
         <!-- Fin Déclaration Footer Gestion Projet -->
 

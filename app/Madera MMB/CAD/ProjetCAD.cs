@@ -32,41 +32,34 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region privates methods
-        //private void listAllProjet()
-        //{
-        //    SQLQuery = "SELECT * FROM Projet WHERE refCommercial AND refClient = " + commercial.reference + client.reference;
-        //    SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-        //    command.CommandText = SQLQuery;
-        //    SQLiteDataReader reader = command.ExecuteReader();
+        private void listAllProjet()
+        {
+            SQLQuery = "SELECT * FROM Projet WHERE refCommercial AND refClient = " + commercial.reference + client.reference;
+            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
+            command.CommandText = SQLQuery;
+            SQLiteDataReader reader = command.ExecuteReader();
 
-        //    try
-        //    {
-        //        while (reader.Read())
-        //        {
-        //            Projet proj = new Projet
-        //                (
-        //                    //reader.GetString(0),
-        //                    //reader.GetString(1),
-        //                    //reader.GetString(2),
-        //                    //reader.GetString(3),
-        //                    //clientCAD.getClientbyRef(4),
-        //                    //commercialCAD.getCommercialbyRef(5)
-        //                );
-        //            proj.reference = reader.GetString(0);
-        //            proj.nom = reader.GetString(1);
-        //            proj.creation = reader.GetString(2);
-        //            proj.modification = reader.GetString(3);
-        //            proj.client = clientCAD.getClientbyRef(reader.GetString(4));
-        //            proj.commercial = commercialCAD.getCommercialbyRef(reader.GetString(5));
-
-        //            listeProjet.Add(proj);
-        //        }
-        //    }
-        //    finally
-        //    {
-        //        reader.Close();
-        //    }
-        //}
+            try
+            {
+                while (reader.Read())
+                {
+                    Projet proj = new Projet
+                        (
+                            reader.GetString(0),
+                            reader.GetString(1),
+                            reader.GetString(2),
+                            reader.GetString(3),
+                            clientCAD.getClientbyRef(getClient(reader.GetString(4))),
+                            commercialCAD.getCommercialbyRef(getCommercial(reader.GetString(5)))
+                        );
+                    listeProjet.Add(proj);
+                }
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
         private void insertProjet(Projet projet, string refClient, string refCommercial)
         {
             SQLQuery = "INSERT INTO `projet` (`refProjet`, `nom`, `dateCreation`, `dateModification`, `refClient`, `refCommercial`)" +
@@ -74,5 +67,21 @@ namespace Madera_MMB.CAD
             conn.InsertSQliteQuery(SQLQuery);
         }
         #endregion
+
+        private Client getClient(string reference)
+        {
+            // TODO : Faire la requête pour sélectionner un client d'un projet
+
+            Client client = new Client();
+            return client;
+        }
+
+        private Commercial getCommercial(string reference)
+        {
+            // TODO : Faire la requête pour sélectionner un commercial d'un projet
+
+            Commercial commercial = new Commercial();
+            return commercial;
+        }
     }
 }
