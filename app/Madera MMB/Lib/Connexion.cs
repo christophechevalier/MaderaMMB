@@ -50,11 +50,12 @@ namespace Madera_MMB.Lib
                         Console.Write(" ############# " + Reader.GetValue(x).ToString() + " ############# \n");
                     }
 
-                    query = "replace into commercial(refCommercial, nom, prenom, motDePasse) values('" +
+                    query = "replace into commercial(refCommercial, nom, prenom, email, motDePasse) values('" +
                     Reader.GetValue(0).ToString() + "','" +
                     Reader.GetValue(1).ToString() + "','" +
                     Reader.GetValue(2).ToString() + "','" +
-                    Reader.GetValue(3).ToString() + "')";
+                    Reader.GetValue(3).ToString() + "','" +
+                    Reader.GetValue(4).ToString() + "')";
 
                     SQLiteCommand command = new SQLiteCommand(query, LiteCo);
                     Console.WriteLine("################" + query + "################");
@@ -116,10 +117,10 @@ namespace Madera_MMB.Lib
                 {
                     while (reader.Read())
                     {
-                        //for (int i = 0; i < reader.VisibleFieldCount; i++)
-                        //{
-                        //    Console.Write(" ############# " + reader.GetValue(i).ToString() + " ############# \n");
-                        //}
+                        for (int i = 0; i < reader.VisibleFieldCount; i++)
+                        {
+                            Console.Write(" ############# " + reader.GetValue(i).ToString() + " ############# \n");
+                        }
                     }
                 }
                 finally

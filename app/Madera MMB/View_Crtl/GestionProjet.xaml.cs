@@ -14,6 +14,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Madera_MMB.Lib;
+using Madera_MMB.CAD;
+using Madera_MMB.Model;
 
 namespace Madera_MMB.View_Crtl
 {
@@ -29,83 +32,106 @@ namespace Madera_MMB.View_Crtl
     public partial class GestionProjet : Page
     {
         #region Properties
-        private string nom_client { get; set; }
-        // private Label lblNomClient = label1;
-
+        private Connexion connexion { get; set; }
+        private Commercial commercial { get; set; }
+        private ProjetCAD projetCAD { get; set; }
+        private Projet proj { get; set; }
         #endregion
 
         #region Constructeur
-        public GestionProjet()
+        public GestionProjet(Connexion co, Commercial com)
         {
+            // Instanciations
             InitializeComponent();
+            connexion = co;
+            commercial = com;
+            projetCAD = new ProjetCAD(this.connexion, this.commercial);
+
+            // Appel des méthodes dans le ctor
             Initialize_Client_Wrapper();
             Initialize_Menu_Wrapper();
         }
         #endregion
 
-        #region private methods
-        /// <summary>
-        /// Méthode qui permet l'affichage des informations relative au client d'un projet
-        /// Dans ce cas précis, on souhaite afficher le nom d'un client pour un projet
-        /// </summary>
-        /// <param name="proj"></param>
-        private void afficherInfosClient(Projet proj, object sender, RoutedEventArgs e)
-        {
-            // lblNomClient.Text = proj.client.Nom;
-            // afficherInfosClient();
-        }
-        #endregion
-
         #region Initialisation Container
+        /// <summary>
+        /// Méthode pour parcourir la liste des projets existant en bdd
+        /// Pour chaque projet sélectionné, on aura le nom du client, le nom d'un commercial, la date de création/modification, 
+        /// et le nombre de plans associés
+        /// </summary>
         private void Initialize_Client_Wrapper()
         {
-            for (int i = 0; i < 9; i++)
+            if (projetCAD.projets != null)
             {
-                ToggleButton UnClient = new ToggleButton();
-                UnClient.Background = Brushes.White;
-                UnClient.Width = 120;
-                UnClient.Height = 120;
-                Thickness margin = UnClient.Margin;
-                margin.Left = 20;
-                margin.Right = 20;
-                margin.Bottom = 20;
-                margin.Top = 20;
-                UnClient.Margin = margin;
-
-                Image img = new Image();
-                img.Width = 70;
-                img.Height = 70;
-                img.VerticalAlignment = VerticalAlignment.Top;
-                string source = "../Lib/Images/folder.png";
-                Uri imageUri = new Uri(source, UriKind.Relative);
-                BitmapImage imageBitmap = new BitmapImage(imageUri);
-                img.Source = imageBitmap;
-
-                TextBlock tb = new TextBlock();
-                tb.Text = "Nom du client";
-                tb.VerticalAlignment = VerticalAlignment.Bottom;
-                tb.HorizontalAlignment = HorizontalAlignment.Center;
-                tb.Height = 50;
-
-                StackPanel sp = new StackPanel();
-                sp.Children.Add(img);
-                sp.Children.Add(tb);
-
-                UnClient.Content = sp;
-
-                UnClient.Click += delegate(object sender, RoutedEventArgs e)
+                foreach (var proj in projetCAD.projets)
                 {
-                    ToggleButton active = sender as ToggleButton;
-                    foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(WrapClients))
+                    ToggleButton UnClient = new ToggleButton();
+                    UnClient.Background = Brushes.White;
+                    UnClient.Width = 120;
+                    UnClient.Height = 120;
+                    Thickness margin = UnClient.Margin;
+                    margin.Left = 20;
+                    margin.Right = 20;
+                    margin.Bottom = 20;
+                    margin.Top = 20;
+                    UnClient.Margin = margin;
+
+                    Image img = new Image();
+                    img.Width = 70;
+                    img.Height = 70;
+                    img.VerticalAlignment = VerticalAlignment.Top;
+                    string source = "../Lib/Images/folder.png";
+                    Uri imageUri = new Uri(source, UriKind.Relative);
+                    BitmapImage imageBitmap = new BitmapImage(imageUri);
+                    img.Source = imageBitmap;
+
+                    TextBlock tb = new TextBlock();
+                    tb.Text = proj.nom;
+                    tb.VerticalAlignment = VerticalAlignment.Bottom;
+                    tb.HorizontalAlignment = HorizontalAlignment.Center;
+                    tb.Height = 70;
+
+                    StackPanel sp = new StackPanel();
+                    sp.Children.Add(img);
+                    sp.Children.Add(tb);
+
+                    UnClient.Content = sp;
+
+                    // Active un projet client lors de la sélection
+                    UnClient.Click += delegate(object sender, RoutedEventArgs e)
                     {
-                        tgbt.IsChecked = false;
+                        ToggleButton active = sender as ToggleButton;
+                        foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(WrapClients))
+                        {
+                            tgbt.IsChecked = false;
+                        }
+                        active.IsChecked = true;
 
-                    }
-                    nom_client = tb.Text;
-                    active.IsChecked = true;
-                };
+                        // Value Non client
+                        lblNomClient.Content = "";
+                        lblNomClient.Content = proj.client.nom + " " + proj.client.prenom;
 
-                WrapClients.Children.Add(UnClient);
+                        // Value Date création
+                        lblDateCreation.Content = "";
+                        lblDateCreation.Content = proj.creation;
+
+                        // TODO : Value Statut Dernier Devis
+                        lblStatut.Content = "?";
+
+                        // Value Nombre de plans
+                        lblNbPlans.Content = "";
+                        lblNbPlans.Content = projetCAD.countPlansProjet(proj.reference);
+
+                        // Value Date modification
+                        lblDateModification.Content = "";
+                        lblDateModification.Content = proj.modification;
+
+                        // Value Nom Commercial
+                        lblNomCommercial.Content = "";
+                        lblNomCommercial.Content = proj.commercial.nom + " " + proj.commercial.prenom;
+                    };
+                    WrapClients.Children.Add(UnClient);
+                }
             }
         }
 
@@ -200,6 +226,7 @@ namespace Madera_MMB.View_Crtl
             }
 
             btn.IsChecked = true;
+            //Initialize_Information_Projet(proj);
         }
         #endregion
 
