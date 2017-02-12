@@ -49,11 +49,12 @@ namespace Madera_MMB.Lib
                 LiteCo.Open();
                 while (Reader.Read())
                 {
-                    query = "replace into commercial(refCommercial, nom, prenom, motDePasse) values('" +
+                    query = "replace into commercial(refCommercial, nom, prenom, email, motDePasse) values('" +
                     Reader.GetValue(0).ToString() + "','" +
                     Reader.GetValue(1).ToString() + "','" +
                     Reader.GetValue(2).ToString() + "','" +
-                    Reader.GetValue(3).ToString() + "')";
+                    Reader.GetValue(3).ToString() + "','" +
+                    Reader.GetValue(4).ToString() + "')";
 
                     SQLiteCommand command = new SQLiteCommand(query, LiteCo);
                     try
@@ -100,32 +101,34 @@ namespace Madera_MMB.Lib
                 LiteCo.Open();
                 while (Reader.Read())
                 {
-                    Byte[] data = (byte[])Reader.GetValue(5);
-                    Trace.Write(data.Length.ToString() + "**** \n");
-                    //Console.WriteLine(Encoding.UTF8.GetString(data));
+                    Byte[] data = (Byte[])Reader.GetValue(5);
+                    foreach (byte b in data)
+                        Trace.Write(b);
+                    Trace.WriteLine("Length : " + data.Length.ToString() + " Value : " + data);
 
+                    query = "replace into coupeprincipe(id_coupe, label, longueur, largeur, prixHT, image) values(@id, @label, @longueur, @largeur, @prixHT, @image)";
 
-                    query = "replace into coupeprincipe(id_coupe, label, longueur, largeur, prixHT, image) values('" +
-                    Reader.GetInt32(0).ToString() + "','" +
-                    Reader.GetValue(1).ToString() + "','" +
-                    Reader.GetValue(2).ToString() + "','" +
-                    Reader.GetValue(3).ToString() + "','" +
-                    Reader.GetInt32(4).ToString() + "','" +
-                    data + "')";
-
-
-                    SQLiteCommand command = new SQLiteCommand(query, LiteCo);
-                    try
+                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
-                        i = i + command.ExecuteNonQuery();
+                        command.Parameters.AddWithValue("@id", Reader.GetInt32(0));
+                        command.Parameters.AddWithValue("@label", Reader.GetString(1));
+                        command.Parameters.AddWithValue("@longueur", Reader.GetInt32(2));
+                        command.Parameters.AddWithValue("@largeur", Reader.GetInt32(3));
+                        command.Parameters.AddWithValue("@prixHT", Reader.GetInt32(3));
+                        command.Parameters.AddWithValue("@image", data);
+                        try
+                        {
+                            i = i + command.ExecuteNonQuery();
+                        }
+                        catch (System.Data.SQLite.SQLiteException e)
+                        {
+                            Trace.WriteLine(e.ToString());
+                            LiteCo.Close();
+                            MySQLCo.Close();
+                            return false;
+                        }
                     }
-                    catch (System.Data.SQLite.SQLiteException e)
-                    {
-                        Trace.WriteLine(e.ToString());
-                        LiteCo.Close();
-                        MySQLCo.Close();
-                        return false;
-                    }
+
                 }
                 LiteCo.Close();
                 MySQLCo.Close();

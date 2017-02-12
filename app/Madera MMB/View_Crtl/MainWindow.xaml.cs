@@ -134,14 +134,13 @@ namespace Madera_MMB.View_Crtl
                 string mdp = Authentification.password.Password;
                 foreach(var comm in commCAD.listeAllCommerciaux)
                 {
-                    if(comm.reference == id && comm.motDePasse == mdp)
+                    Trace.WriteLine(comm.email + " " + comm.motDePasse);
+                    if(comm.email == id && comm.motDePasse == mdp)
                         GestionProjet.commercialAuthentifié = comm;
                 }
                 if (GestionProjet.commercialAuthentifié != null)
                 {
                     Mainframe.Content = GestionProjet;
-                    if(this.conn.SyncParamPlan() == false)
-                        MessageBox.Show("Coupes principe non synchronisées ! ");
                 }
                 else
                 {

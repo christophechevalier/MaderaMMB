@@ -60,99 +60,92 @@ namespace Madera_MMB.View_Crtl
         #region Initialisation des conteneurs
         private void initialize_coupe_wrappers()
         {
-            foreach (var coupe in this.coupeCAD.listecoupeprincipe)
+            if(coupeCAD.listecoupeprincipe != null)
             {
-                
-                //foreach(byte b in coupe.image)
-                //{
-                //    Trace.Write(b.ToString());
-                //}
-
-                //Trace.Write("\n");
-
-                ToggleButton Uneforme = new ToggleButton();
-                Uneforme.Background = Brushes.White;
-                Uneforme.Width = 150;
-                Uneforme.Height = 170;
-                Thickness margin = Uneforme.Margin;
-                margin.Left = 30;
-                margin.Right = 30;
-                margin.Bottom = 10;
-                margin.Top = 10;
-                Uneforme.Margin = margin;
-
-                BitmapImage bitmap = new BitmapImage();
-                MemoryStream ms = new MemoryStream(coupe.image);
-                bitmap.StreamSource = ms;
-                Image img = new Image();
-                img.Source = bitmap;
-                img.Width = 150;
-                img.Height = 130;
-                img.VerticalAlignment = VerticalAlignment.Top;
-
-                TextBlock tb = new TextBlock();
-                tb.Text = coupe.label;
-                tb.VerticalAlignment = VerticalAlignment.Bottom;
-                tb.HorizontalAlignment = HorizontalAlignment.Center;
-                tb.Height = 40;
-
-                StackPanel sp = new StackPanel();
-                sp.Children.Add(img);
-                sp.Children.Add(tb);
-
-                Uneforme.Content = sp;
-
-                Uneforme.Click += delegate(object sender, RoutedEventArgs e)
+                foreach (var coupe in this.coupeCAD.listecoupeprincipe)
                 {
-                    ToggleButton active = sender as ToggleButton;
-                    foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wrapformes))
+                    Trace.WriteLine(coupe.image.GetType());
+
+                    ToggleButton Uneforme = new ToggleButton();
+                    Uneforme.Background = Brushes.White;
+                    Uneforme.Width = 150;
+                    Uneforme.Height = 170;
+                    Thickness margin = Uneforme.Margin;
+                    margin.Left = 30;
+                    margin.Right = 30;
+                    margin.Bottom = 10;
+                    margin.Top = 10;
+                    Uneforme.Margin = margin;
+
+                    Image img = new Image();
+                    img.Source = coupe.image;
+                    img.Width = 150;
+                    img.Height = 130;
+                    img.VerticalAlignment = VerticalAlignment.Top;
+
+                    TextBlock tb = new TextBlock();
+                    tb.Text = coupe.label;
+                    tb.VerticalAlignment = VerticalAlignment.Bottom;
+                    tb.HorizontalAlignment = HorizontalAlignment.Center;
+                    tb.Height = 40;
+
+                    StackPanel sp = new StackPanel();
+                    sp.Children.Add(img);
+                    sp.Children.Add(tb);
+
+                    Uneforme.Content = sp;
+
+                    Uneforme.Click += delegate (object sender, RoutedEventArgs e)
                     {
-                        tgbt.IsChecked = false;
-                    }
-                    type_forme = tb.Text;
-                    active.IsChecked = true;
-                    BoutonChoixCoupe.Content = type_forme + " " + taille_choisie;
-                };
+                        ToggleButton active = sender as ToggleButton;
+                        foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wrapformes))
+                        {
+                            tgbt.IsChecked = false;
+                        }
+                        type_forme = tb.Text;
+                        active.IsChecked = true;
+                        BoutonChoixCoupe.Content = type_forme + " " + taille_choisie;
+                    };
 
-                wrapformes.Children.Add(Uneforme);
+                    wrapformes.Children.Add(Uneforme);
 
-                ToggleButton Unetaille = new ToggleButton();
-                Unetaille.Background = Brushes.White;
-                Unetaille.Width = 100;
-                Unetaille.Height = 50;
-                Thickness margint = Unetaille.Margin;
-                margin.Left = 50;
-                margin.Right = 50;
-                margin.Bottom = 10;
-                margin.Top = 10;
-                Unetaille.Margin = margin;
+                    ToggleButton Unetaille = new ToggleButton();
+                    Unetaille.Background = Brushes.White;
+                    Unetaille.Width = 100;
+                    Unetaille.Height = 50;
+                    Thickness margint = Unetaille.Margin;
+                    margin.Left = 50;
+                    margin.Right = 50;
+                    margin.Bottom = 10;
+                    margin.Top = 10;
+                    Unetaille.Margin = margin;
 
-                TextBlock tbTaille = new TextBlock();
-                tbTaille.Text = coupe.largeur.ToString() + " X " + coupe.longueur.ToString();
-                tbTaille.VerticalAlignment = VerticalAlignment.Center;
-                tbTaille.HorizontalAlignment = HorizontalAlignment.Center;
-                tbTaille.Height = 50;
+                    TextBlock tbTaille = new TextBlock();
+                    tbTaille.Text = coupe.largeur.ToString() + " X " + coupe.longueur.ToString();
+                    tbTaille.VerticalAlignment = VerticalAlignment.Center;
+                    tbTaille.HorizontalAlignment = HorizontalAlignment.Center;
+                    tbTaille.Height = 50;
 
-                StackPanel spTaille = new StackPanel();
-                sp.Children.Add(tbTaille);
+                    StackPanel spTaille = new StackPanel();
+                    sp.Children.Add(tbTaille);
 
-                Unetaille.Content = spTaille;
+                    Unetaille.Content = spTaille;
 
-                Unetaille.Click += delegate(object sender, RoutedEventArgs e)
-                {
-                    ToggleButton active = sender as ToggleButton;
-                    foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wraptailles))
+                    Unetaille.Click += delegate (object sender, RoutedEventArgs e)
                     {
-                        tgbt.IsChecked = false;
-                    }
-                    taille_choisie = tb.Text;
-                    active.IsChecked = true;
-                    BoutonChoixCoupe.Content = type_forme + " " + taille_choisie;
-                };
+                        ToggleButton active = sender as ToggleButton;
+                        foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wraptailles))
+                        {
+                            tgbt.IsChecked = false;
+                        }
+                        taille_choisie = tb.Text;
+                        active.IsChecked = true;
+                        BoutonChoixCoupe.Content = type_forme + " " + taille_choisie;
+                    };
 
-                wraptailles.Children.Add(Unetaille);
+                    wraptailles.Children.Add(Unetaille);
+                }
             }
-
         }
         private void initialize_couv_wrapper()
         {

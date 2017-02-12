@@ -39,7 +39,7 @@ namespace Madera_MMB.CAD
             {
                 while (reader.Read())
                 {
-                    Commercial com = new Commercial(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3));
+                    Commercial com = new Commercial(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
                     listeAllCommerciaux.Add(com);
                 }
             }
@@ -48,12 +48,6 @@ namespace Madera_MMB.CAD
                 reader.Close();
             }
             conn.LiteCo.Close();
-        }
-        private void insertCommercial(Commercial commercial)
-        {
-            SQLQuery = "INSERT INTO `commercial` (`refCommercial`, `nom`, `prenom`, `motDePasse`)" +
-            "VALUES (" + commercial.reference + "," + commercial.nom + "," + commercial.prenom + "," + commercial.motDePasse + ";";
-            conn.InsertSQliteQuery(SQLQuery);
         }
         #endregion
     }

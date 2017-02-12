@@ -29,6 +29,8 @@ namespace Madera_MMB.CAD
         public CoupePrincipeCAD(Connexion co)
         {
             this.conn = co;
+            if (conn.MySQLconnected != false)
+                conn.SyncParamPlan();
             listecoupeprincipe = new List<CoupePrincipe>();
             listAllCoupePrincipe();
         }
@@ -48,11 +50,16 @@ namespace Madera_MMB.CAD
                         Trace.Write("#### GET COUPE PRINCIPE DATA #### \n");
                         while (reader.Read())
                         {
-                            Trace.WriteLine(reader.GetValue(5));
+
+
                             Byte[] data = (Byte[])reader.GetValue(5);
+
+                            foreach (byte b in data)
+                                Trace.Write(b);
+
                             Trace.Write(data.Length.ToString() + "#### \n");
 
-                            CoupePrincipe coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), data);
+                            CoupePrincipe coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), ToImage(data));
                             listecoupeprincipe.Add(coupe);
                         }
                     }
@@ -69,7 +76,7 @@ namespace Madera_MMB.CAD
         #region public methods
         public CoupePrincipe getCoupebyId(int id)
         {
-            SQLQuery = "SELECT * FROM Coupeprincipe WHERE id_coupe = " + id;
+            SQLQuery = "SELECT * FROM coupeprincipe WHERE id_coupe = " + id;
             SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
             command.CommandText = SQLQuery;
             SQLiteDataReader reader = command.ExecuteReader();
@@ -82,7 +89,7 @@ namespace Madera_MMB.CAD
                     foreach (byte b in data)
                         Trace.Write(b.ToString());
 
-                    this.coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), data);
+                    this.coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), ToImage(data));
                 }
             }
             finally
