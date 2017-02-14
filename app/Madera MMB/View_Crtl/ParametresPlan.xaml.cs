@@ -17,6 +17,7 @@ using Madera_MMB.CAD;
 using Madera_MMB.Lib;
 using System.Diagnostics;
 using System.IO;
+using Madera_MMB.Model;
 
 namespace Madera_MMB.View_Crtl
 {
@@ -33,10 +34,11 @@ namespace Madera_MMB.View_Crtl
         private CouvertureCAD couvCAD { get; set; }
         private PlancherCAD planchCAD { get; set; }
         private GammeCAD gammCAD { get; set; }
-        private string type_forme { get; set; }
         private string taille_choisie { get; set; }
-        private string couverture { get; set; }
-        private string plancher { get; set; }
+        private CoupePrincipe coupeChoisie { get; set; }
+        private Couverture couvChoisie { get; set; }
+        private Plancher planchChoisi { get; set; }
+        private Gamme gammChoisie { get; set; }
 
         #endregion
 
@@ -45,6 +47,10 @@ namespace Madera_MMB.View_Crtl
         {
             InitializeComponent();
             Conn = co;
+
+            if (Conn.MySQLconnected != false)
+                Conn.SyncParamPlan();
+
             coupeCAD = new CoupePrincipeCAD(this.Conn);
             couvCAD = new CouvertureCAD(this.Conn);
             planchCAD = new PlancherCAD(this.Conn);
@@ -58,14 +64,15 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation des conteneurs
+        /// <summary>
+        /// Méthode renseigant le formulaire de choix d'une coupe de principe à partir de la base de données SQLite
+        /// </summary>
         private void initialize_coupe_wrappers()
         {
             if(coupeCAD.listecoupeprincipe != null)
             {
                 foreach (var coupe in this.coupeCAD.listecoupeprincipe)
                 {
-                    Trace.WriteLine(coupe.image.GetType());
-
                     ToggleButton Uneforme = new ToggleButton();
                     Uneforme.Background = Brushes.White;
                     Uneforme.Width = 150;
@@ -102,9 +109,10 @@ namespace Madera_MMB.View_Crtl
                         {
                             tgbt.IsChecked = false;
                         }
-                        type_forme = tb.Text;
+                        choix_coupe(coupe.label, taille_choisie);
                         active.IsChecked = true;
-                        BoutonChoixCoupe.Content = type_forme + " " + taille_choisie;
+                        BoutonChoixCoupe.Content = "";
+                        BoutonChoixCoupe.Content = coupe.label + " " + taille_choisie;
                     };
 
                     wrapformes.Children.Add(Uneforme);
@@ -138,168 +146,192 @@ namespace Madera_MMB.View_Crtl
                         {
                             tgbt.IsChecked = false;
                         }
-                        taille_choisie = tb.Text;
+                        taille_choisie = tbTaille.Text;
                         active.IsChecked = true;
-                        BoutonChoixCoupe.Content = type_forme + " " + taille_choisie;
+                        BoutonChoixCoupe.Content = "";
+                        BoutonChoixCoupe.Content = coupe.label + " " + taille_choisie;
                     };
-
                     wraptailles.Children.Add(Unetaille);
                 }
             }
         }
+
+        /// <summary>
+        /// Méthode renseigant le formulaire de choix d'une couverture à partir de la base de données SQLite
+        /// </summary>
         private void initialize_couv_wrapper()
         {
-            for (int i = 0; i < 4; i++)
+            if(this.couvCAD.listecouverture != null)
             {
-                ToggleButton Unetuile = new ToggleButton();
-                Unetuile.Background = Brushes.White;
-                Unetuile.Width = 150;
-                Unetuile.Height = 170;
-                Thickness margin = Unetuile.Margin;
-                margin.Left = 30;
-                margin.Right = 30;
-                margin.Bottom = 10;
-                margin.Top = 10;
-                Unetuile.Margin = margin;
-
-                Image img = new Image();
-                img.Width = 150;
-                img.Height = 130;
-                img.VerticalAlignment = VerticalAlignment.Top;
-                string source = "../Lib/Images/tuile.jpg";
-                Uri imageUri = new Uri(source, UriKind.Relative);
-                BitmapImage imageBitmap = new BitmapImage(imageUri);
-                img.Source = imageBitmap;
-
-                TextBlock tb = new TextBlock();
-                tb.Text = "Tuiles";
-                tb.VerticalAlignment = VerticalAlignment.Bottom;
-                tb.HorizontalAlignment = HorizontalAlignment.Center;
-                tb.Height = 40;
-
-                StackPanel sp = new StackPanel();
-                sp.Children.Add(img);
-                sp.Children.Add(tb);
-
-                Unetuile.Content = sp;
-
-                Unetuile.Click += delegate(object sender, RoutedEventArgs e)
+                foreach (var couv in couvCAD.listecouverture)
                 {
-                    ToggleButton active = sender as ToggleButton;
-                    foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wrapcouv))
-                    {
-                        tgbt.IsChecked = false;
-                    }
-                    couverture = tb.Text;
-                    active.IsChecked = true;
-                    BoutonChoixCouverture.Content = couverture;
-                };
+                    ToggleButton Unetuile = new ToggleButton();
+                    Unetuile.Background = Brushes.White;
+                    Unetuile.Width = 150;
+                    Unetuile.Height = 170;
+                    Thickness margin = Unetuile.Margin;
+                    margin.Left = 30;
+                    margin.Right = 30;
+                    margin.Bottom = 10;
+                    margin.Top = 10;
+                    Unetuile.Margin = margin;
 
-                wrapcouv.Children.Add(Unetuile);
-            }
+                    Image img = new Image();
+                    img.Source = couv.image;
+                    img.Width = 150;
+                    img.Height = 130;
+                    img.VerticalAlignment = VerticalAlignment.Top;
+
+                    TextBlock tb = new TextBlock();
+                    tb.Text = couv.type;
+                    tb.VerticalAlignment = VerticalAlignment.Bottom;
+                    tb.HorizontalAlignment = HorizontalAlignment.Center;
+                    tb.Height = 40;
+
+                    StackPanel sp = new StackPanel();
+                    sp.Children.Add(img);
+                    sp.Children.Add(tb);
+
+                    Unetuile.Content = sp;
+
+                    Unetuile.Click += delegate (object sender, RoutedEventArgs e)
+                    {
+                        ToggleButton active = sender as ToggleButton;
+                        foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wrapcouv))
+                        {
+                            tgbt.IsChecked = false;
+                        }
+                        couvChoisie = couv;
+                        active.IsChecked = true;
+                        BoutonChoixCouverture.Content = couvChoisie.type;
+                    };
+
+                    wrapcouv.Children.Add(Unetuile);
+                }
+            } 
         }
+
+        /// <summary>
+        /// Méthode renseigant le formulaire de choix d'un plancher à partir de la base de données SQLite
+        /// </summary>
         private void initialize_planch_wrapper()
         {
-            for (int i = 0; i < 4; i++)
+            if(planchCAD.listeplancher != null)
             {
-                ToggleButton Unplanch = new ToggleButton();
-                Unplanch.Background = Brushes.White;
-                Unplanch.Width = 150;
-                Unplanch.Height = 170;
-                Thickness margin = Unplanch.Margin;
-                margin.Left = 30;
-                margin.Right = 30;
-                margin.Bottom = 10;
-                margin.Top = 10;
-                Unplanch.Margin = margin;
-
-                Image img = new Image();
-                img.Width = 150;
-                img.Height = 130;
-                img.VerticalAlignment = VerticalAlignment.Top;
-                string source = "../Lib/Images/carrelage.jpg";
-                Uri imageUri = new Uri(source, UriKind.Relative);
-                BitmapImage imageBitmap = new BitmapImage(imageUri);
-                img.Source = imageBitmap;
-
-                TextBlock tb = new TextBlock();
-                tb.Text = "Carrelage";
-                tb.VerticalAlignment = VerticalAlignment.Bottom;
-                tb.HorizontalAlignment = HorizontalAlignment.Center;
-                tb.Height = 40;
-
-                StackPanel sp = new StackPanel();
-                sp.Children.Add(img);
-                sp.Children.Add(tb);
-
-                Unplanch.Content = sp;
-
-                Unplanch.Click += delegate(object sender, RoutedEventArgs e)
+                foreach (var plancher in planchCAD.listeplancher)
                 {
-                    ToggleButton active = sender as ToggleButton;
-                    foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wrapplanch))
+                    ToggleButton Unplanch = new ToggleButton();
+                    Unplanch.Background = Brushes.White;
+                    Unplanch.Width = 150;
+                    Unplanch.Height = 170;
+                    Thickness margin = Unplanch.Margin;
+                    margin.Left = 30;
+                    margin.Right = 30;
+                    margin.Bottom = 10;
+                    margin.Top = 10;
+                    Unplanch.Margin = margin;
+
+                    Image img = new Image();
+                    img.Source = plancher.image;
+                    img.Width = 150;
+                    img.Height = 130;
+                    img.VerticalAlignment = VerticalAlignment.Top;
+
+                    TextBlock tb = new TextBlock();
+                    tb.Text = plancher.type;
+                    tb.VerticalAlignment = VerticalAlignment.Bottom;
+                    tb.HorizontalAlignment = HorizontalAlignment.Center;
+                    tb.Height = 40;
+
+                    StackPanel sp = new StackPanel();
+                    sp.Children.Add(img);
+                    sp.Children.Add(tb);
+
+                    Unplanch.Content = sp;
+
+                    Unplanch.Click += delegate (object sender, RoutedEventArgs e)
                     {
-                        tgbt.IsChecked = false;
+                        ToggleButton active = sender as ToggleButton;
+                        foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wrapplanch))
+                        {
+                            tgbt.IsChecked = false;
 
-                    }
-                    plancher = tb.Text;
-                    active.IsChecked = true;
-                    BoutonChoixPlancher.Content = plancher;
-                };
+                        }
+                        planchChoisi = plancher;
+                        active.IsChecked = true;
+                        BoutonChoixPlancher.Content = planchChoisi.type;
+                    };
 
-                wrapplanch.Children.Add(Unplanch);
+                    wrapplanch.Children.Add(Unplanch);
+                }
             }
         }
+
+        /// <summary>
+        /// Méthode renseigant le formulaire de choix d'une gamme à partir de la base de données SQLite
+        /// </summary>
         private void initialize_gamme_wrapper()
         {
-            for (int i = 0; i < 4; i++)
+            if(gammCAD.listegamme != null)
             {
-                ToggleButton Unegam = new ToggleButton();
-                Unegam.Background = Brushes.White;
-                Unegam.Width = 150;
-                Unegam.Height = 170;
-                Thickness margin = Unegam.Margin;
-                margin.Left = 30;
-                margin.Right = 30;
-                margin.Bottom = 10;
-                margin.Top = 10;
-                Unegam.Margin = margin;
-
-                Image img = new Image();
-                img.Width = 150;
-                img.Height = 130;
-                img.VerticalAlignment = VerticalAlignment.Top;
-                string source = "../Lib/Images/bois.png";
-                Uri imageUri = new Uri(source, UriKind.Relative);
-                BitmapImage imageBitmap = new BitmapImage(imageUri);
-                img.Source = imageBitmap;
-
-                TextBlock tb = new TextBlock();
-                tb.Text = "Tout en bois";
-                tb.VerticalAlignment = VerticalAlignment.Bottom;
-                tb.HorizontalAlignment = HorizontalAlignment.Center;
-                tb.Height = 40;
-
-                StackPanel sp = new StackPanel();
-                sp.Children.Add(img);
-                sp.Children.Add(tb);
-
-                Unegam.Content = sp;
-
-                Unegam.Click += delegate(object sender, RoutedEventArgs e)
+                foreach (var gamme in gammCAD.listegamme)
                 {
-                    ToggleButton active = sender as ToggleButton;
-                    foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wrapgamme))
+                    ToggleButton Unegam = new ToggleButton();
+                    Unegam.Background = Brushes.White;
+                    Unegam.Width = 150;
+                    Unegam.Height = 170;
+                    Thickness margin = Unegam.Margin;
+                    margin.Left = 30;
+                    margin.Right = 30;
+                    margin.Bottom = 10;
+                    margin.Top = 10;
+                    Unegam.Margin = margin;
+
+                    Image img = new Image();
+                    img.Source = gamme.image;
+                    img.Width = 150;
+                    img.Height = 130;
+                    img.VerticalAlignment = VerticalAlignment.Top;
+
+                    TextBlock tb = new TextBlock();
+                    tb.Text = gamme.nom;
+                    tb.VerticalAlignment = VerticalAlignment.Bottom;
+                    tb.HorizontalAlignment = HorizontalAlignment.Center;
+                    tb.Height = 40;
+
+                    StackPanel sp = new StackPanel();
+                    sp.Children.Add(img);
+                    sp.Children.Add(tb);
+
+                    Unegam.Content = sp;
+
+                    Unegam.Click += delegate (object sender, RoutedEventArgs e)
                     {
-                        tgbt.IsChecked = false;
+                        ToggleButton active = sender as ToggleButton;
+                        foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wrapgamme))
+                        {
+                            tgbt.IsChecked = false;
 
-                    }
-                    plancher = tb.Text;
-                    active.IsChecked = true;
-                    BoutonChoixGamme.Content = plancher;
-                };
+                        }
+                        gammChoisie = gamme;
+                        active.IsChecked = true;
+                        BoutonChoixGamme.Content = gammChoisie.nom;
+                    };
 
-                wrapgamme.Children.Add(Unegam);
+                    wrapgamme.Children.Add(Unegam);
+                }
+            }
+            
+        }
+
+        private void choix_coupe(string label, string taille)
+        {
+            foreach(var coupe in coupeCAD.listecoupeprincipe)
+            {
+                if(coupe.label == label && taille.Contains(coupe.largeur.ToString()))
+                {
+                    coupeChoisie = coupe;
+                }
             }
         }
         #endregion

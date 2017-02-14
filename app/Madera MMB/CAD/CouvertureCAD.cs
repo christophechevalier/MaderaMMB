@@ -8,23 +8,24 @@ using Madera_MMB.Lib;
 using System.Data.SQLite;
 using System.Data;
 using System.Diagnostics;
+using System.Windows.Media.Imaging;
 
 namespace Madera_MMB.CAD
 {
     public class CouvertureCAD
     {
         #region properties
-        private List<Couverture> listecouverture { get; set; }
-        public string SQLQuery { get; set; }
+        public List<Couverture> listecouverture { get; set; }
         public Connexion conn { get; set; }
-        public Couverture couv { get; set; }
+        private Couverture couverture { get; set; }
+        private string SQLQuery { get; set; }
         #endregion
 
         #region Ctor
         public CouvertureCAD(Connexion co)
         {
-            listecouverture = new List<Couverture>();
             this.conn = co;
+            listecouverture = new List<Couverture>();
             listAllCouverture();
         }
         #endregion
@@ -42,7 +43,9 @@ namespace Madera_MMB.CAD
                     {
                         while (reader.Read())
                         {
-                            Couverture couverture = new Couverture(reader.GetString(0), reader.GetInt32(1));
+                            Byte[] data = (Byte[])reader.GetValue(2);
+
+                            Couverture couverture = new Couverture(reader.GetString(0), reader.GetInt32(1), ToImage(data));
                             listecouverture.Add(couverture);
                         }
                     }
@@ -68,14 +71,35 @@ namespace Madera_MMB.CAD
             {
                 while (reader.Read())
                 {
-                    this.couv = new Couverture(reader.GetString(0), reader.GetInt32(1));
+                    Byte[] data = (Byte[])reader.GetValue(2);
+                    this.couverture = new Couverture(reader.GetString(0), reader.GetInt32(1), ToImage(data));
                 }
             }
             finally
             {
                 reader.Close();
             }
-            return couv;
+            return couverture;
+        }
+        #endregion
+
+        #region Tools
+        /// <summary>
+        /// Méthode de conversion de type byte array en BitmapImage
+        /// </summary>
+        /// <param name="array">tableau d'octets de l'image</param>
+        /// <returns></returns>
+        public BitmapImage ToImage(byte[] array)
+        {
+            using (var ms = new System.IO.MemoryStream(array))
+            {
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad; 
+                image.StreamSource = ms;
+                image.EndInit();
+                return image;
+            }
         }
         #endregion
     }

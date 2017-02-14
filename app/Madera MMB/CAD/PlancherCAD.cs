@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
 using System.Diagnostics;
+using System.Windows.Media.Imaging;
 
 namespace Madera_MMB.CAD
 {
     public class PlancherCAD
     {
         #region properties
-        private List<Plancher> listeplancher { get; set; }
+        public List<Plancher> listeplancher { get; set; }
         public string SQLQuery { get; set; }
         public Connexion conn { get; set; }
-        public Plancher plancher { get; set; }
+        private Plancher plancher { get; set; }
         #endregion
 
         #region Ctor
@@ -41,7 +42,8 @@ namespace Madera_MMB.CAD
                     {
                         while (reader.Read())
                         {
-                            Plancher plancher = new Plancher(reader.GetString(0), reader.GetInt32(1));
+                            Byte[] data = (Byte[])reader.GetValue(2);
+                            Plancher plancher = new Plancher(reader.GetString(0), reader.GetInt32(1), ToImage(data));
                             listeplancher.Add(plancher);
                         }
                     }
@@ -56,6 +58,11 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region public methods
+        /// <summary>
+        /// Renvoie un plancher selon son type
+        /// </summary>
+        /// <param name="type">type du plancher recherché</param>
+        /// <returns></returns>
         public Plancher getPlancherbyType(string type)
         {
             SQLQuery = "SELECT * FROM Plancher WHERE typePlancher = " + type;
@@ -67,7 +74,8 @@ namespace Madera_MMB.CAD
             {
                 while (reader.Read())
                 {
-                    this.plancher = new Plancher(reader.GetString(0), reader.GetInt32(1));
+                    Byte[] data = (Byte[])reader.GetValue(2);
+                    this.plancher = new Plancher(reader.GetString(0), reader.GetInt32(1), ToImage(data));
                 }
             }
             finally
@@ -75,6 +83,26 @@ namespace Madera_MMB.CAD
                 reader.Close();
             }
             return plancher;
+        }
+        #endregion
+
+        #region Tools
+        /// <summary>
+        /// Méthode de conversion de type byte array en BitmapImage
+        /// </summary>
+        /// <param name="array">tableau d'octets de l'image</param>
+        /// <returns></returns>
+        public BitmapImage ToImage(byte[] array)
+        {
+            using (var ms = new System.IO.MemoryStream(array))
+            {
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.StreamSource = ms;
+                image.EndInit();
+                return image;
+            }
         }
         #endregion
     }

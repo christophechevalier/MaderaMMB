@@ -18,10 +18,10 @@ namespace Madera_MMB.CAD
     public class CoupePrincipeCAD
     {
         #region properties
-        public List<CoupePrincipe> listecoupeprincipe { get; set; }
-        public string SQLQuery { get; set; }
+        public List<CoupePrincipe> listecoupeprincipe { get; set; }      
         public Connexion conn { get; set; }
         public CoupePrincipe coupe { get; set; }
+        private string SQLQuery { get; set; }
 
         #endregion
 
@@ -29,8 +29,6 @@ namespace Madera_MMB.CAD
         public CoupePrincipeCAD(Connexion co)
         {
             this.conn = co;
-            if (conn.MySQLconnected != false)
-                conn.SyncParamPlan();
             listecoupeprincipe = new List<CoupePrincipe>();
             listAllCoupePrincipe();
         }
@@ -50,14 +48,7 @@ namespace Madera_MMB.CAD
                         Trace.Write("#### GET COUPE PRINCIPE DATA #### \n");
                         while (reader.Read())
                         {
-
-
                             Byte[] data = (Byte[])reader.GetValue(5);
-
-                            foreach (byte b in data)
-                                Trace.Write(b);
-
-                            Trace.Write(data.Length.ToString() + "#### \n");
 
                             CoupePrincipe coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), ToImage(data));
                             listecoupeprincipe.Add(coupe);
@@ -101,6 +92,11 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region Tools
+        /// <summary>
+        /// Méthode de conversion de type byte array en BitmapImage
+        /// </summary>
+        /// <param name="array"> tableau d'octets de l'image</param>
+        /// <returns></returns>
         public BitmapImage ToImage(byte[] array)
         {
             using (var ms = new System.IO.MemoryStream(array))

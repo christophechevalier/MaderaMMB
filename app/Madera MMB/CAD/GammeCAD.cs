@@ -8,16 +8,17 @@ using Madera_MMB.Lib;
 using System.Data.SQLite;
 using System.Data;
 using System.Diagnostics;
+using System.Windows.Media.Imaging;
 
 namespace Madera_MMB.CAD
 {
     public class GammeCAD
     {
         #region properties
-        private List<Gamme> listegamme { get; set; }
+        public List<Gamme> listegamme { get; set; }
         public string SQLQuery { get; set; }
         public Connexion conn { get; set; }
-        public Gamme gamme { get; set; }
+        private Gamme gamme { get; set; }
         #endregion
 
         #region Ctor
@@ -42,7 +43,8 @@ namespace Madera_MMB.CAD
                     {
                         while (reader.Read())
                         {
-                            Gamme gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
+                            Byte[] data = (Byte[])reader.GetValue(5);
+                            Gamme gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), ToImage(data));
                             listegamme.Add(gamme);
                         }
                     }
@@ -54,10 +56,14 @@ namespace Madera_MMB.CAD
             }
             conn.LiteCo.Close();
         }
-
         #endregion
 
         #region public methods
+        /// <summary>
+        /// Renvoie une gamme selon son nom
+        /// </summary>
+        /// <param name="type">nom de la gammer recherchée</param>
+        /// <returns></returns>
         public Gamme getGammebyNom(string nom)
         {
             SQLQuery = "SELECT * FROM Gamme WHERE nom = " + nom;
@@ -69,7 +75,8 @@ namespace Madera_MMB.CAD
             {
                 while (reader.Read())
                 {
-                    this.gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
+                    Byte[] data = (Byte[])reader.GetValue(5);
+                    Gamme gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), ToImage(data));
                 }
             }
             finally
@@ -77,6 +84,26 @@ namespace Madera_MMB.CAD
                 reader.Close();
             }
             return gamme;
+        }
+        #endregion
+
+        #region Tools
+        /// <summary>
+        /// Méthode de conversion de type byte array en BitmapImage
+        /// </summary>
+        /// <param name="array">tableau d'octets de l'image</param>
+        /// <returns></returns>
+        public BitmapImage ToImage(byte[] array)
+        {
+            using (var ms = new System.IO.MemoryStream(array))
+            {
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.StreamSource = ms;
+                image.EndInit();
+                return image;
+            }
         }
         #endregion
     }
