@@ -15,7 +15,7 @@ namespace Madera_MMB.CAD
     public class CouvertureCAD
     {
         #region properties
-        public List<Couverture> listecouverture { get; set; }
+        public List<Couverture> Listecouverture { get; set; }
         public Connexion conn { get; set; }
         private Couverture couverture { get; set; }
         private string SQLQuery { get; set; }
@@ -25,7 +25,7 @@ namespace Madera_MMB.CAD
         public CouvertureCAD(Connexion co)
         {
             this.conn = co;
-            listecouverture = new List<Couverture>();
+            Listecouverture = new List<Couverture>();
             listAllCouverture();
         }
         #endregion
@@ -46,7 +46,7 @@ namespace Madera_MMB.CAD
                             Byte[] data = (Byte[])reader.GetValue(2);
 
                             Couverture couverture = new Couverture(reader.GetString(0), reader.GetInt32(1), ToImage(data));
-                            listecouverture.Add(couverture);
+                            Listecouverture.Add(couverture);
                         }
                     }
                 }

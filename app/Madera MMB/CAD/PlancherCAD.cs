@@ -14,7 +14,7 @@ namespace Madera_MMB.CAD
     public class PlancherCAD
     {
         #region properties
-        public List<Plancher> listeplancher { get; set; }
+        public List<Plancher> Listeplancher { get; set; }
         public string SQLQuery { get; set; }
         public Connexion conn { get; set; }
         private Plancher plancher { get; set; }
@@ -23,7 +23,7 @@ namespace Madera_MMB.CAD
         #region Ctor
         public PlancherCAD(Connexion co)
         {
-            listeplancher = new List<Plancher>();
+            Listeplancher = new List<Plancher>();
             this.conn = co;
             listAllPlancher();
         }
@@ -44,7 +44,7 @@ namespace Madera_MMB.CAD
                         {
                             Byte[] data = (Byte[])reader.GetValue(2);
                             Plancher plancher = new Plancher(reader.GetString(0), reader.GetInt32(1), ToImage(data));
-                            listeplancher.Add(plancher);
+                            Listeplancher.Add(plancher);
                         }
                     }
                 }

@@ -69,20 +69,20 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void initialize_coupe_wrappers()
         {
-            if(coupeCAD.listecoupeprincipe != null)
+            if(coupeCAD.Listecoupeprincipe != null)
             {
-                foreach (var coupe in this.coupeCAD.listecoupeprincipe)
+                foreach (var coupe in this.coupeCAD.Listecoupeprincipe)
                 {
-                    ToggleButton Uneforme = new ToggleButton();
-                    Uneforme.Background = Brushes.White;
-                    Uneforme.Width = 150;
-                    Uneforme.Height = 170;
-                    Thickness margin = Uneforme.Margin;
+                    ToggleButton UneForme = new ToggleButton();
+                    UneForme.Background = Brushes.White;
+                    UneForme.Width = 150;
+                    UneForme.Height = 170;
+                    Thickness margin = UneForme.Margin;
                     margin.Left = 30;
                     margin.Right = 30;
                     margin.Bottom = 10;
                     margin.Top = 10;
-                    Uneforme.Margin = margin;
+                    UneForme.Margin = margin;
 
                     Image img = new Image();
                     img.Source = coupe.image;
@@ -100,9 +100,9 @@ namespace Madera_MMB.View_Crtl
                     sp.Children.Add(img);
                     sp.Children.Add(tb);
 
-                    Uneforme.Content = sp;
+                    UneForme.Content = sp;
 
-                    Uneforme.Click += delegate (object sender, RoutedEventArgs e)
+                    UneForme.Click += delegate (object sender, RoutedEventArgs e)
                     {
                         ToggleButton active = sender as ToggleButton;
                         foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wrapformes))
@@ -115,18 +115,18 @@ namespace Madera_MMB.View_Crtl
                         BoutonChoixCoupe.Content = coupe.label + " " + taille_choisie;
                     };
 
-                    wrapformes.Children.Add(Uneforme);
+                    wrapformes.Children.Add(UneForme);
 
-                    ToggleButton Unetaille = new ToggleButton();
-                    Unetaille.Background = Brushes.White;
-                    Unetaille.Width = 100;
-                    Unetaille.Height = 50;
-                    Thickness margint = Unetaille.Margin;
+                    ToggleButton UneTaille = new ToggleButton();
+                    UneTaille.Background = Brushes.White;
+                    UneTaille.Width = 100;
+                    UneTaille.Height = 50;
+                    Thickness margint = UneTaille.Margin;
                     margin.Left = 50;
                     margin.Right = 50;
                     margin.Bottom = 10;
                     margin.Top = 10;
-                    Unetaille.Margin = margin;
+                    UneTaille.Margin = margin;
 
                     TextBlock tbTaille = new TextBlock();
                     tbTaille.Text = coupe.largeur.ToString() + " X " + coupe.longueur.ToString();
@@ -137,9 +137,9 @@ namespace Madera_MMB.View_Crtl
                     StackPanel spTaille = new StackPanel();
                     sp.Children.Add(tbTaille);
 
-                    Unetaille.Content = spTaille;
+                    UneTaille.Content = spTaille;
 
-                    Unetaille.Click += delegate (object sender, RoutedEventArgs e)
+                    UneTaille.Click += delegate (object sender, RoutedEventArgs e)
                     {
                         ToggleButton active = sender as ToggleButton;
                         foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wraptailles))
@@ -147,11 +147,12 @@ namespace Madera_MMB.View_Crtl
                             tgbt.IsChecked = false;
                         }
                         taille_choisie = tbTaille.Text;
+                        choix_coupe(coupe.label, taille_choisie);
                         active.IsChecked = true;
                         BoutonChoixCoupe.Content = "";
                         BoutonChoixCoupe.Content = coupe.label + " " + taille_choisie;
                     };
-                    wraptailles.Children.Add(Unetaille);
+                    wraptailles.Children.Add(UneTaille);
                 }
             }
         }
@@ -161,20 +162,20 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void initialize_couv_wrapper()
         {
-            if(this.couvCAD.listecouverture != null)
+            if(this.couvCAD.Listecouverture != null)
             {
-                foreach (var couv in couvCAD.listecouverture)
+                foreach (var couv in couvCAD.Listecouverture)
                 {
-                    ToggleButton Unetuile = new ToggleButton();
-                    Unetuile.Background = Brushes.White;
-                    Unetuile.Width = 150;
-                    Unetuile.Height = 170;
-                    Thickness margin = Unetuile.Margin;
+                    ToggleButton UneTuile = new ToggleButton();
+                    UneTuile.Background = Brushes.White;
+                    UneTuile.Width = 150;
+                    UneTuile.Height = 170;
+                    Thickness margin = UneTuile.Margin;
                     margin.Left = 30;
                     margin.Right = 30;
                     margin.Bottom = 10;
                     margin.Top = 10;
-                    Unetuile.Margin = margin;
+                    UneTuile.Margin = margin;
 
                     Image img = new Image();
                     img.Source = couv.image;
@@ -192,9 +193,9 @@ namespace Madera_MMB.View_Crtl
                     sp.Children.Add(img);
                     sp.Children.Add(tb);
 
-                    Unetuile.Content = sp;
+                    UneTuile.Content = sp;
 
-                    Unetuile.Click += delegate (object sender, RoutedEventArgs e)
+                    UneTuile.Click += delegate (object sender, RoutedEventArgs e)
                     {
                         ToggleButton active = sender as ToggleButton;
                         foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wrapcouv))
@@ -206,7 +207,7 @@ namespace Madera_MMB.View_Crtl
                         BoutonChoixCouverture.Content = couvChoisie.type;
                     };
 
-                    wrapcouv.Children.Add(Unetuile);
+                    wrapcouv.Children.Add(UneTuile);
                 }
             } 
         }
@@ -216,20 +217,20 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void initialize_planch_wrapper()
         {
-            if(planchCAD.listeplancher != null)
+            if(planchCAD.Listeplancher != null)
             {
-                foreach (var plancher in planchCAD.listeplancher)
+                foreach (var plancher in planchCAD.Listeplancher)
                 {
-                    ToggleButton Unplanch = new ToggleButton();
-                    Unplanch.Background = Brushes.White;
-                    Unplanch.Width = 150;
-                    Unplanch.Height = 170;
-                    Thickness margin = Unplanch.Margin;
+                    ToggleButton UnPlanch = new ToggleButton();
+                    UnPlanch.Background = Brushes.White;
+                    UnPlanch.Width = 150;
+                    UnPlanch.Height = 170;
+                    Thickness margin = UnPlanch.Margin;
                     margin.Left = 30;
                     margin.Right = 30;
                     margin.Bottom = 10;
                     margin.Top = 10;
-                    Unplanch.Margin = margin;
+                    UnPlanch.Margin = margin;
 
                     Image img = new Image();
                     img.Source = plancher.image;
@@ -247,9 +248,9 @@ namespace Madera_MMB.View_Crtl
                     sp.Children.Add(img);
                     sp.Children.Add(tb);
 
-                    Unplanch.Content = sp;
+                    UnPlanch.Content = sp;
 
-                    Unplanch.Click += delegate (object sender, RoutedEventArgs e)
+                    UnPlanch.Click += delegate (object sender, RoutedEventArgs e)
                     {
                         ToggleButton active = sender as ToggleButton;
                         foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wrapplanch))
@@ -262,7 +263,7 @@ namespace Madera_MMB.View_Crtl
                         BoutonChoixPlancher.Content = planchChoisi.type;
                     };
 
-                    wrapplanch.Children.Add(Unplanch);
+                    wrapplanch.Children.Add(UnPlanch);
                 }
             }
         }
@@ -272,20 +273,20 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void initialize_gamme_wrapper()
         {
-            if(gammCAD.listegamme != null)
+            if(gammCAD.Listegamme != null)
             {
-                foreach (var gamme in gammCAD.listegamme)
+                foreach (var gamme in gammCAD.Listegamme)
                 {
-                    ToggleButton Unegam = new ToggleButton();
-                    Unegam.Background = Brushes.White;
-                    Unegam.Width = 150;
-                    Unegam.Height = 170;
-                    Thickness margin = Unegam.Margin;
+                    ToggleButton UneGam = new ToggleButton();
+                    UneGam.Background = Brushes.White;
+                    UneGam.Width = 150;
+                    UneGam.Height = 170;
+                    Thickness margin = UneGam.Margin;
                     margin.Left = 30;
                     margin.Right = 30;
                     margin.Bottom = 10;
                     margin.Top = 10;
-                    Unegam.Margin = margin;
+                    UneGam.Margin = margin;
 
                     Image img = new Image();
                     img.Source = gamme.image;
@@ -303,9 +304,9 @@ namespace Madera_MMB.View_Crtl
                     sp.Children.Add(img);
                     sp.Children.Add(tb);
 
-                    Unegam.Content = sp;
+                    UneGam.Content = sp;
 
-                    Unegam.Click += delegate (object sender, RoutedEventArgs e)
+                    UneGam.Click += delegate (object sender, RoutedEventArgs e)
                     {
                         ToggleButton active = sender as ToggleButton;
                         foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(wrapgamme))
@@ -318,7 +319,7 @@ namespace Madera_MMB.View_Crtl
                         BoutonChoixGamme.Content = gammChoisie.nom;
                     };
 
-                    wrapgamme.Children.Add(Unegam);
+                    wrapgamme.Children.Add(UneGam);
                 }
             }
             
@@ -326,7 +327,7 @@ namespace Madera_MMB.View_Crtl
 
         private void choix_coupe(string label, string taille)
         {
-            foreach(var coupe in coupeCAD.listecoupeprincipe)
+            foreach(var coupe in coupeCAD.Listecoupeprincipe)
             {
                 if(coupe.label == label && taille.Contains(coupe.largeur.ToString()))
                 {

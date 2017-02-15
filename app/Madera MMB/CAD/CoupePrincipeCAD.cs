@@ -18,7 +18,7 @@ namespace Madera_MMB.CAD
     public class CoupePrincipeCAD
     {
         #region properties
-        public List<CoupePrincipe> listecoupeprincipe { get; set; }      
+        public List<CoupePrincipe> Listecoupeprincipe { get; set; }      
         public Connexion conn { get; set; }
         public CoupePrincipe coupe { get; set; }
         private string SQLQuery { get; set; }
@@ -29,7 +29,7 @@ namespace Madera_MMB.CAD
         public CoupePrincipeCAD(Connexion co)
         {
             this.conn = co;
-            listecoupeprincipe = new List<CoupePrincipe>();
+            Listecoupeprincipe = new List<CoupePrincipe>();
             listAllCoupePrincipe();
         }
         #endregion
@@ -51,7 +51,7 @@ namespace Madera_MMB.CAD
                             Byte[] data = (Byte[])reader.GetValue(5);
 
                             CoupePrincipe coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), ToImage(data));
-                            listecoupeprincipe.Add(coupe);
+                            Listecoupeprincipe.Add(coupe);
                         }
                     }
                 }

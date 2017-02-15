@@ -112,8 +112,8 @@ namespace Madera_MMB.Lib
                 while (Reader.Read())
                 {
                     Byte[] data = (Byte[])Reader.GetValue(5);
-                    foreach (byte b in data)
-                        Trace.Write(b);
+                    //foreach (byte b in data)
+                    //    Trace.Write(b);
                     Trace.WriteLine("Length : " + data.Length.ToString() + " Value : " + data);
 
                     query = "replace into coupeprincipe(id_coupe, label, longueur, largeur, prixHT, image) values(@id, @label, @longueur, @largeur, @prixHT, @image)";

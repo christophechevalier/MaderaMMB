@@ -15,7 +15,7 @@ namespace Madera_MMB.CAD
     public class GammeCAD
     {
         #region properties
-        public List<Gamme> listegamme { get; set; }
+        public List<Gamme> Listegamme { get; set; }
         public string SQLQuery { get; set; }
         public Connexion conn { get; set; }
         private Gamme gamme { get; set; }
@@ -24,7 +24,7 @@ namespace Madera_MMB.CAD
         #region Ctor
         public GammeCAD(Connexion co)
         {
-            listegamme = new List<Gamme>();
+            Listegamme = new List<Gamme>();
             this.conn = co;
             listAllGamme();
         }
@@ -45,7 +45,7 @@ namespace Madera_MMB.CAD
                         {
                             Byte[] data = (Byte[])reader.GetValue(5);
                             Gamme gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), ToImage(data));
-                            listegamme.Add(gamme);
+                            Listegamme.Add(gamme);
                         }
                     }
                 }
@@ -62,7 +62,7 @@ namespace Madera_MMB.CAD
         /// <summary>
         /// Renvoie une gamme selon son nom
         /// </summary>
-        /// <param name="type">nom de la gammer recherchée</param>
+        /// <param name="type">nom de la gamme recherchée</param>
         /// <returns></returns>
         public Gamme getGammebyNom(string nom)
         {
