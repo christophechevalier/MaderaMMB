@@ -34,6 +34,9 @@ namespace Madera_MMB.CAD
 
         #region privates methods
         //REQUETE SELECT DEVIS PAR PLAN
+        /// <summary>
+        /// Méthode pour récupérer le devis d'un plan
+        /// </summary>
         private void listAllDevisParPlan() 
         {
             SQLQuery = "SELECT * FROM Devis WHERE refPlan = " + plan.reference;
@@ -69,6 +72,14 @@ namespace Madera_MMB.CAD
         }
 
         //REQUETE CREATION DEVIS
+        /// <summary>
+        /// Méthode de création d'un devis
+        /// </summary>
+        /// <param name="devis"></param>
+        /// <param name="refProjet"></param>
+        /// <param name="refPlan"></param>
+        /// <param name="refClient"></param>
+        /// <param name="refCommercial"></param>
         private void insertDevis(Devis devis, string refProjet, string refPlan, string refClient, string refCommercial) 
         {
             SQLQuery = "INSERT INTO devis (refDevis, nom, etat, quantite, unite, dateCreation, margeCommercial, margeEntreprise, prixTotalHT, prixTotalTTC, refPlan, refProjet, refClient, refCommercial)" +

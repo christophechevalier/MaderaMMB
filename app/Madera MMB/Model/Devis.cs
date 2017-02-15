@@ -16,7 +16,11 @@ namespace Madera_MMB.Model
     //    - changerEtat X
     //    - verifierOffrePromo X
     //    - genererDocTech X
-    //
+
+    /// <summary>
+    /// Classe Devis 
+    /// </summary>
+
     class Devis
     {
         #region properties
@@ -50,12 +54,53 @@ namespace Madera_MMB.Model
 
         #region privates methods
 
-        private void calculerPrixHT();
-        private void calculerPrixTTC();
-        private void verifierExpiration();
-        private void changerEtat();
-        private void verifierOffrePromo();
-        private void genererDocTech();
+        /// <summary>
+        /// Méthode de calcul du prix TTC du module
+        /// </summary>
+        private void calculerPrixHT()
+        {
+
+        }
+
+        /// <summary>
+        /// Méthode de calcul du prix TTC du module
+        /// </summary>
+        private void calculerPrixTTC()
+        {
+
+        }
+
+        /// <summary>
+        /// Méthode de vérification de la validité du devis 
+        /// </summary>
+        private void verifierExpiration()
+        {
+
+        }
+        /// <summary>
+        /// Méthode pour changer l'état d'un devis
+        /// </summary>
+        private void changerEtat()
+        {
+
+        }
+
+        /// <summary>
+        /// Méthode de vérification de l'offre promotionnelle
+        /// </summary>
+        private void verifierOffrePromo()
+        {
+
+        }
+
+        /// <summary>
+        /// Méthode de génération du devis
+        /// </summary>
+        
+        private void genererDocTech()
+        {
+
+        }
 
         #endregion
     }
