@@ -39,7 +39,7 @@ namespace Madera_MMB.View_Crtl
             Connexion connexion = new Connexion();
             Commercial commercialTest = new Commercial
                 (
-                    "003", 
+                    "COM003", 
                     "Chevalier",
                     "Christophe",
                     "monemail@gmail.com",
@@ -49,14 +49,14 @@ namespace Madera_MMB.View_Crtl
             this.authentification = new Authentification();
             this.gestionProjet = new GestionProjet(connexion, commercialTest);
             this.gestionPlan = new GestionPlan();
-            this.gestionClient = new GestionClient();
+            this.gestionClient = new GestionClient(connexion);
             this.parametresClient = new ParametresClient();
 
             // Démarrage de l'application sur la vue authentification
             Mainframe.Content = authentification;
 
-            // Tmp : Commercial authentifié avec la référence 003
-            string query = " SELECT * FROM projet WHERE refCommercial = '003'";
+            // Tmp : Commercial authentifié avec la référence COM003
+            string query = " SELECT * FROM projet WHERE refCommercial = 'COM003'";
             connexion.SelectSQLiteQuery(query);
 
             Initialize_Listeners();

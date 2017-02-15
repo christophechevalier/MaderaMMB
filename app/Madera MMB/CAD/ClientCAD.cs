@@ -15,6 +15,7 @@ namespace Madera_MMB.CAD
         #region properties
         public Connexion conn { get; set; }
         public string SQLQuery { get; set; }
+        public Commercial commercial { get; set; }
         public List<Client> clients { get; set; }
         #endregion
 
@@ -31,10 +32,13 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region public methods
+        /// <summary>
+        /// Méthode pour sélectionner la liste de tous les clients existants
+        /// </summary>
         public void listAllClients()
         {
             // Nom du/des champs mis directement dans la requête pour éviter d'avoir à passer par QSqlRecord 
-            SQLQuery = "SELECT refClient, nom, prenom, adresse, codePostal, ville, email, telephone FROM client";
+            SQLQuery = "SELECT refClient, nom, prenom, adresse, codePostal, ville, email, telephone, dateCreation, dateModification FROM client";
             //SQLQuery = "SELECT * FROM client;
 
             // Ouverture de la connexion
@@ -58,7 +62,9 @@ namespace Madera_MMB.CAD
                                 reader.GetString(4) +
                                 reader.GetString(5) +
                                 reader.GetString(6) +
-                                reader.GetString(7));
+                                reader.GetString(7) +
+                                reader.GetString(8) +
+                                reader.GetString(9));
                             Client cli = new Client
                                 (
                                     reader.GetString(0),
@@ -68,7 +74,9 @@ namespace Madera_MMB.CAD
                                     reader.GetString(4),
                                     reader.GetString(5),
                                     reader.GetString(6),
-                                    reader.GetString(7)
+                                    reader.GetString(7),
+                                    reader.GetString(8),
+                                    reader.GetString(9)
                                 );
                             clients.Add(cli);
                         }
@@ -86,8 +94,8 @@ namespace Madera_MMB.CAD
         // TODO : Faire une méthode pour permettre de créer un nouveau client en bdd
         //public void insertClient(Client client)
         //{
-        //    SQLQuery = "INSERT INTO `client` (`refClient`, `nom`, `prenom`, `adresse`, `codePostal`, `ville`, `email`, `telephone`)" +
-        //    "VALUES (" + client.reference + "," + client.nom + "," + client.prenom + "," + client.adresse + ";" + client.codePostal + "," + client.ville + "," + client.email + "," + client.telephone + ";";
+        //    SQLQuery = "INSERT INTO `client` (`refClient`, `nom`, `prenom`, `adresse`, `codePostal`, `ville`, `email`, `telephone`, `dateCreation`, `dateModification`)" +
+        //    "VALUES (" + client.reference + "," + client.nom + "," + client.prenom + "," + client.adresse + ";" + client.codePostal + "," + client.ville + "," + client.email + "," + client.telephone + "," + client.dateCreation + "," + client.dateModification + "," + client.dateModification ";";
         //    conn.InsertSQliteQuery(SQLQuery);
         //}
         #endregion

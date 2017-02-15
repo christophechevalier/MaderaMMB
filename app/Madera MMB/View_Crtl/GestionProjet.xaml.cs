@@ -21,7 +21,7 @@ using Madera_MMB.Model;
 namespace Madera_MMB.View_Crtl
 {
     /// <summary>
-    /// Logique d'interaction pour GestionClient.xaml
+    /// Logique d'interaction pour GestionProjet.xaml
     /// * Règles de gestion Projet :
     /// - On ne peut pas supprimer un projet ni le modifier (nom)
     /// - On peut consulter un projet existant
@@ -226,7 +226,6 @@ namespace Madera_MMB.View_Crtl
             }
 
             btn.IsChecked = true;
-            //Initialize_Information_Projet(proj);
         }
         #endregion
 

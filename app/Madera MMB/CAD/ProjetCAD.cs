@@ -76,7 +76,7 @@ namespace Madera_MMB.CAD
                                     reader.GetString(1),
                                     reader.GetString(2),
                                     reader.GetString(3),
-                                    new Client("CLI001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06"),
+                                    new Client("CLI001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
                                     commercial
                                 );
                             projets.Add(proj);
