@@ -112,10 +112,6 @@ namespace Madera_MMB.Lib
                 while (Reader.Read())
                 {
                     Byte[] data = (Byte[])Reader.GetValue(5);
-                    //foreach (byte b in data)
-                    //    Trace.Write(b);
-                    Trace.WriteLine("Length : " + data.Length.ToString() + " Value : " + data);
-
                     query = "replace into coupeprincipe(id_coupe, label, longueur, largeur, prixHT, image) values(@id, @label, @longueur, @largeur, @prixHT, @image)";
 
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
@@ -168,15 +164,11 @@ namespace Madera_MMB.Lib
                 while (Reader.Read())
                 {
                     Byte[] data = (Byte[])Reader.GetValue(2);
-                    foreach (byte b in data)
-                        Trace.Write(b);
-                    Trace.WriteLine("Length : " + data.Length.ToString() + " Value : " + data);
-
-                    query = "replace into couverture(type_couverture, prixHT, image) values(@type_couverture, @prixHT, @image)";
+                    query = "replace into couverture(typeCouverture, prixHT, image) values(@typeCouverture, @prixHT, @image)";
 
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
-                        command.Parameters.AddWithValue("@type_couverture", Reader.GetString(0));
+                        command.Parameters.AddWithValue("@typeCouverture", Reader.GetString(0));
                         command.Parameters.AddWithValue("@prixHT", Reader.GetUInt32(1));
                         command.Parameters.AddWithValue("@image", data);
                         try
@@ -221,10 +213,6 @@ namespace Madera_MMB.Lib
                 while (Reader.Read())
                 {
                     Byte[] data = (Byte[])Reader.GetValue(2);
-                    foreach (byte b in data)
-                        Trace.Write(b);
-                    Trace.WriteLine("Length : " + data.Length.ToString() + " Value : " + data);
-
                     query = "replace into plancher(typePlancher, prixHT, image) values(@typePlancher, @prixHT, @image)";
 
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
@@ -274,10 +262,6 @@ namespace Madera_MMB.Lib
                 while (Reader.Read())
                 {
                     Byte[] data = (Byte[])Reader.GetValue(5);
-                    foreach (byte b in data)
-                        Trace.Write(b);
-                    Trace.WriteLine("Length : " + data.Length.ToString() + " Value : " + data);
-
                     query = "replace into gamme(nom, offrePromo,typeIsolant,typeFinition,qualiteHuisserie, image) values(@nom, @offrePromo, @typeIsolant, @typeFinition, @qualiteHuisserie, @image)";
 
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))

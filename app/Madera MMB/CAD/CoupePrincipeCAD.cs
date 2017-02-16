@@ -37,7 +37,7 @@ namespace Madera_MMB.CAD
         #region privates methods
         private void listAllCoupePrincipe() 
         {
-            SQLQuery = "SELECT * FROM coupeprincipe";
+            SQLQuery = "SELECT * FROM coupeprincipe order by label desc";
             conn.LiteCo.Open();
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {

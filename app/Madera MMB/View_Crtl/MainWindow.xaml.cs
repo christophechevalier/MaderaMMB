@@ -58,7 +58,7 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             initSynchro();
             Initialize_Listeners();
-            Mainframe.Content = Authentification;
+            Mainframe.Content = ParametresPlan;
         }
 
         #region Process Synchro
