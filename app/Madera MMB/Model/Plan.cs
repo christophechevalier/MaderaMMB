@@ -22,7 +22,7 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
-        public Plan(string label, Projet unprojet,Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, Gamme unegamme)
+        public Plan(string label, Projet unprojet,Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, Gamme unegamme = null)
         {
             this.label = label;
             this.projet = unprojet;
@@ -31,7 +31,7 @@ namespace Madera_MMB.Model
             this.coupePrincipe = unecoupe;
             this.gamme = unegamme;
         }
-        public Plan(string reference, string label, string creation, string modification, Projet unprojet, Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, Gamme unegamme, List<Module> modules)
+        public Plan(string reference, string label, string creation, string modification, Projet unprojet, Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, List<Module> modules, Gamme unegamme = null)
         {
             this.reference = reference;
             this.label = label;
@@ -53,6 +53,7 @@ namespace Madera_MMB.Model
 
 
         #endregion
+
         #region public methods
         public Devis genereDevis()
         {

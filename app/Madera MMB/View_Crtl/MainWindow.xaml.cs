@@ -266,7 +266,10 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton confirmer paramètres plan pour aller dans la Vue Modélisation
             ParametresPlan.BtnConfirmerParamPlan.Click += delegate(object sender, RoutedEventArgs e)
             {
-                Mainframe.Content = Modelisation;
+                if(ParametresPlan.SetPlan())
+                {
+                    Mainframe.Content = Modelisation;
+                }
             };
             // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
             ParametresPlan.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)

@@ -40,14 +40,16 @@ namespace Madera_MMB.View_Crtl
         private Couverture couvChoisie { get; set; }
         private Plancher planchChoisi { get; set; }
         private Gamme gammChoisie { get; set; }
+        private Projet projet { get; set; }
 
         #endregion
 
         #region Constructeur
-        public ParametresPlan(Connexion co)
+        public ParametresPlan(Connexion co, Projet projet)
         {
             InitializeComponent();
             Conn = co;
+            this.projet = projet;
 
             if (Conn.MySQLconnected != false)
                 Conn.SyncParamPlan();
@@ -328,6 +330,11 @@ namespace Madera_MMB.View_Crtl
             } 
         }
 
+        /// <summary>
+        /// méthode permettant la sélection de la coupe de principe selon les critères de forme et de taille
+        /// </summary>
+        /// <param name="label"></param>
+        /// <param name="taille"></param>
         private void choix_coupe(string label, string taille)
         {
             foreach(var coupe in coupeCAD.Listecoupeprincipe)
@@ -340,6 +347,11 @@ namespace Madera_MMB.View_Crtl
         }
         #endregion
 
+        /// <summary>
+        /// Méthodes d'écoute des différents boutons de choix des paramètres du Plan, permettant d'afficher le formulaire correspondant au paramètre désigné
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         #region listeners
         private void cp_Button_Click(object sender, RoutedEventArgs e)
         {
@@ -428,7 +440,26 @@ namespace Madera_MMB.View_Crtl
         }
         #endregion
 
+        #region public methods
+        public bool SetPlan()
+        {
+            if(this.coupeChoisie != null && this.couvChoisie != null && this.planchChoisi != null)
+            {
+                string label;
+                Plan plan = new Plan(label, this.projet, this.planchChoisi, this.couvChoisie, this.coupeChoisie, this.gammChoisie);
+                return true;
+            }
+            return false;
+        }
+        #endregion
+
         #region Tools
+        /// <summary>
+        /// Méthode permettant de récupérer les éléments enfants d'un conteneur, nécessaire pour désactiver les Togglebuttons
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="depObj"></param>
+        /// <returns></returns>
         private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
         {
             if (depObj != null)
@@ -448,6 +479,9 @@ namespace Madera_MMB.View_Crtl
                 }
             }
         }
+        /// <summary>
+        /// Méthode désactivant tous les Togglebuttons
+        /// </summary>
         private void disableButtons()
         {
             BoutonChoixCoupe.IsChecked = false;
@@ -455,6 +489,9 @@ namespace Madera_MMB.View_Crtl
             BoutonChoixPlancher.IsChecked = false;
             BoutonChoixGamme.IsChecked = false;
         }
+        /// <summary>
+        /// Méthode cachant tous les formulaires de paramètre de plan
+        /// </summary>
         private void clearAll()
         {
             forme.Visibility = Visibility.Hidden;
@@ -463,6 +500,9 @@ namespace Madera_MMB.View_Crtl
             planch.Visibility = Visibility.Hidden;
             gam.Visibility = Visibility.Hidden;
         }
+        /// <summary>
+        /// Méthode restaurant l'indiquation du bouton de choix de coupe de principe dans le cas où une coupe n'est pas choisie
+        /// </summary>
         private void resetBtnChoixCoupe()
         {
             if ((string)BoutonChoixCoupe.Content == "")
