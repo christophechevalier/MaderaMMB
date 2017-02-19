@@ -9,9 +9,10 @@
     </Style>
 
     <!-- Image Logo -->
-    <BitmapImage x:Key="Logo" UriSource="../logo_madera.png" />
-    <BitmapImage x:Key="LogoOffline" UriSource="../logo_offline.png"/>
-    
+    <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png"></BitmapImage>
+    <!--<ImageSource x:Key="LogoOff">pack://application:,,,/Madera_MMB;component/Lib/logo_offline.png</ImageSource>-->
+
+
     <Style TargetType="{x:Type Label}">
         <Setter Property="FontSize" Value="12" />
     </Style>

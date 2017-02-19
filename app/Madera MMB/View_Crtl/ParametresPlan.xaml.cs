@@ -18,6 +18,7 @@ using Madera_MMB.Lib;
 using System.Diagnostics;
 using System.IO;
 using Madera_MMB.Model;
+using System.ComponentModel;
 
 namespace Madera_MMB.View_Crtl
 {
@@ -40,19 +41,21 @@ namespace Madera_MMB.View_Crtl
         private Couverture couvChoisie { get; set; }
         private Plancher planchChoisi { get; set; }
         private Gamme gammChoisie { get; set; }
-        private Projet projet { get; set; }
+
+        public Projet projet { get; set; }
 
         #endregion
 
         #region Constructeur
-        public ParametresPlan(Connexion co, Projet projet)
+        public ParametresPlan(Connexion co)
         {
             InitializeComponent();
             Conn = co;
-            this.projet = projet;
+            DataContext = Conn;
 
             if (Conn.MySQLconnected != false)
                 Conn.SyncParamPlan();
+
 
             coupeCAD = new CoupePrincipeCAD(this.Conn);
             couvCAD = new CouvertureCAD(this.Conn);
@@ -445,7 +448,7 @@ namespace Madera_MMB.View_Crtl
         {
             if(this.coupeChoisie != null && this.couvChoisie != null && this.planchChoisi != null)
             {
-                string label;
+                string label = "qqch";
                 Plan plan = new Plan(label, this.projet, this.planchChoisi, this.couvChoisie, this.coupeChoisie, this.gammChoisie);
                 return true;
             }

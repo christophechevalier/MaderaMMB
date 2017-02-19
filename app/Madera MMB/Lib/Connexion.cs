@@ -7,18 +7,30 @@ using System.Diagnostics;
 using MySql.Data.MySqlClient;
 using System.Data.SQLite;
 using System.IO;
+using System.ComponentModel;
 
 namespace Madera_MMB.Lib
 {
-    public class Connexion
+    public class Connexion : INotifyPropertyChanged
     {
         #region Properties
         public SQLiteConnection LiteCo { get; set; }
         public MySqlConnection MySQLCo { get; set; }
-        public bool MySQLconnected { get; set; }
+        private bool _MySQLconnected;
+        public bool MySQLconnected
+        { get { return _MySQLconnected; }
+          set { _MySQLconnected = value; RaisePropertyChanged("MySQLconnected");}
+        }
         public bool SQLiteconnected { get; set; }
         public SQLiteDataAdapter DataAdapter { get; set; }
         #endregion
+
+        private void RaisePropertyChanged(String property)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         #region Ctor
         public Connexion()

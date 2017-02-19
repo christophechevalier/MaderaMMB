@@ -59,8 +59,8 @@ namespace Madera_MMB.CAD
                         plancherCAD.getPlancherbyType(reader.GetString(9)),
                         couvCAD.getCouvbyType(reader.GetString(7)),
                         coupeCAD.getCoupebyId(8),
-                        gammeCAD.getGammebyNom(reader.GetString(10)),
-                        getModulesByRefPlan(reader.GetString(0))
+                        getModulesByRefPlan(reader.GetString(0)),
+                        gammeCAD.getGammebyNom(reader.GetString(10))
                         );
 
                     listePlanParProjet.Add(plan);

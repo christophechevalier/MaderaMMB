@@ -58,6 +58,7 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             initSynchro();
             Initialize_Listeners();
+
             Mainframe.Content = ParametresPlan;
         }
 
@@ -72,14 +73,6 @@ namespace Madera_MMB.View_Crtl
             {
                 mySQLSync = false;
                 MessageBox.Show("Mode déconnecté");
-
-    
-                ResourceDictionary resource = this.Resources;
-                
-                resource["Logo"] = "../Lib/logo_offline.png";
-                resource["Logo"] = resource["LogoOffline"];
-                Trace.WriteLine(resource["Logo"]);
-                this.UpdateLayout();
             }
             else if (!this.conn.SyncCommMySQL())
             {
@@ -116,7 +109,6 @@ namespace Madera_MMB.View_Crtl
             Initialize_Listeners_ParametresPlan();
             Initialize_Listeners_Modelisation();
             Initialize_Listeners_Devis();
-
         }
         #endregion
 

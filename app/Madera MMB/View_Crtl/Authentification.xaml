@@ -11,7 +11,10 @@
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Lib/Tools/Template_Madera.xaml"></ResourceDictionary>
+
+
+                <ResourceDictionary Source="../Lib/Tools/Template_Madera.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
@@ -76,8 +79,20 @@
                 <ColumnDefinition Width="0.20*"/>
             </Grid.ColumnDefinitions>
 
-            <Image Name="Logo" Grid.Column="1" Source="{DynamicResource Logo}" Grid.Row="0" Width="{Binding ActualHeight, ElementName=rowDefinition0}" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10"/>
+            <!--<Image x:Name="logo">
+                <Image.Style>
+                    <Style TargetType="Image">
 
+                        <Setter Property="Source" Value="{StaticResource LogoOff}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                                <Setter Property="Source" Value="{StaticResource Logo}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>-->
+            
             <Viewbox Margin="20,0,20,0" 
                      Grid.Row="1"
                      Grid.Column="1"
