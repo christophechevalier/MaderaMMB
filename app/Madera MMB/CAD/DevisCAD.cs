@@ -22,13 +22,18 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region Ctor
-        public DevisCAD(Connexion laConnexion, Projet unprojet, ClientCAD clientCAD, CommercialCAD commercialCAD)
+        /// <summary>
+        /// Constructeur du devis avec connexion / plan en paramètre
+        /// </summary>
+        /// <param name="laConnexion"></param>
+        /// <param name="unprojet"></param>
+        /// <param name="clientCAD"></param>
+        /// <param name="commercialCAD"></param>
+        public DevisCAD(Connexion laConnexion, Plan pln)
         {
-            this.projet = unprojet;
-            Connexion conn = laConnexion;
+            conn = laConnexion;
+            plan = pln;
             listeAllDevisParPlan = new List<Devis>();
-            this.clientCAD = clientCAD;
-            this.commercialCAD = commercialCAD;
         }
         #endregion
 
@@ -39,6 +44,7 @@ namespace Madera_MMB.CAD
         /// </summary>
         private void listAllDevisParPlan() 
         {
+            //MODIFICATION A EFFECTUER Transformer LIST => objet Devis
             SQLQuery = "SELECT * FROM Devis WHERE refPlan = " + plan.reference;
             SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
             command.CommandText = SQLQuery;
@@ -86,6 +92,14 @@ namespace Madera_MMB.CAD
             "VALUES (" + devis.reference + "," + devis.nom + "," + devis.etat + "," + devis.quantite + "," + devis.unite + "," + devis.creation + "," + devis.margeCommercial + "," + devis.margeEntreprise + "," + devis.prixTotalHT + "," + devis.prixTotalTTC + "," + devis.plan.reference + "," + devis.projet.reference + "," + refClient + "," + refCommercial + ";";
             conn.InsertSQliteQuery(SQLQuery);
         }
+
+        //REQUETE CHANGEMENT D'ETAT DEVIS
+        private void changeStatusDevis(Devis devis, string etat)
+        {
+            SQLQuery = "UPDATE devis SET etat =" + etat + " WHERE refDevis = " + devis.reference + ";";
+            // A TERMINER
+        }
+
         #endregion
     }
 }

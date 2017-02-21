@@ -55,15 +55,16 @@ namespace Madera_MMB.Model
         #region privates methods
 
         /// <summary>
-        /// Méthode de calcul du prix TTC du module
+        /// Méthode de calcul du prix HT du devis 
         /// </summary>
-        private void calculerPrixHT()
+        /// <param name="modules"></param>
+        private void calculerPrixHT(List<Module> modules)
         {
 
         }
 
         /// <summary>
-        /// Méthode de calcul du prix TTC du module
+        /// Méthode de calcul du prix TTC du devis avec marge Commercial + entreprise
         /// </summary>
         private void calculerPrixTTC()
         {

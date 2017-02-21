@@ -14,6 +14,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Madera_MMB.Lib;
+using Madera_MMB.CAD;
+using Madera_MMB.Model;
 
 namespace Madera_MMB.View_Crtl
 {
@@ -32,50 +35,82 @@ namespace Madera_MMB.View_Crtl
     public partial class GestionDevis : Page
     {
         #region Properties
-
+        private Connexion connexion { get; set}
+        private Plan plan { get; set}
+        private DevisCAD devisCAD { get; set}
+        private Devis dev { get; set}
         #endregion
 
         #region Constructeur
-        public GestionDevis()
+        public GestionDevis(Connexion co, Plan pln)
         {
             InitializeComponent();
+            connexion = co;
+            plan = pln;
+            devisCAD = new DevisCAD(this.connexion, this.plan);
+
+            //modules = new List<Module>getModulesByRefPlan(this.plan.reference); A VOIR COMMENT RECUPERER TOUT LES MODULES PRESENT DANS LE PLAN POUR LE DEVIS
+
             Initialize_Labels();
             Initialize_Devis();
         }
         #endregion
 
         #region Initialisation Container
+        /// <summary>
+        /// Initialisation des valeurs de labels grâce au CAD Devis
+        /// </summary>
         private void Initialize_Labels()
         {
-            //RETURN VALUES
-            //CLIENT
-            nomClient.Content += "BOLZINGER Gabriel"; //RETURN REQUEST
+            //IF devisCAD.devis NOT NULL START INSTANCIATION VALUES IN VIEW
+            if(devisCAD.devis != null)
+            {
 
-            //COMMERCIAL
-            nomCommercial.Content += "CROCCO David"; //RETURN REQUEST
+                //CLIENT
+                nomClient.Content = ""; //INITIALISE EMPTY
+                nomClient.Content = dev.client.nom + " " + dev.client.prenom;
 
-            //DEVIS
-            dateCreation.Content += "01/01/2016"; //RETURN REQUEST
-            lastUpdate.Content += "20/05/2016"; //RETURN REQUEST
-            currentStatus.Content += "Accepté"; //RETURN REQUEST
+                //COMMERCIAL
+                nomCommercial.Content = ""; //INITIALISE EMPTY
+                nomCommercial.Content = dev.commercial.prenom + " " + dev.commercial.prenom;
 
+                //DEVIS DATE CREATION
+                dateCreation.Content = ""; //INITIALISE EMPTY
+                dateCreation.Content = dev.creation;
 
+                //DEVIS STATUS
+                currentStatus.Content = ""; //INITIALISE EMPTY
+                currentStatus.Content = dev.etat;
+            }
         }
+
+        /// <summary>
+        /// Initialisation des valeurs des labels contenu dans le devis grâce au CAD PLAN et MODULE
+        /// </summary>
         private void Initialize_Devis()
         {
             //TOP INFORMATION
-            //CLIENT
-            nomClientDevis.Content += "BOLZINGER Gabriel"; //RETURN REQUEST
-            referenceClientDevis.Content += "#43654782"; //RETURN REQUEST
-            adresseClientDevis.Content += "646 Route de Paris 31000 Toulouse";
+            //CLIENT INDO
+            nomClient.Content = ""; 
+            nomClient.Content = dev.client.nom + " " + dev.client.prenom;
+            referenceClientDevis.Content = ""; 
+            referenceClientDevis.Content = dev.client.reference;
+            adresseClientDevis.Content = "";
+            adresseClientDevis.Content = dev.client.adresse;
 
             //COMMERCIAL
-            nomCommerialDevis.Content += "CROCCO David"; //RETURN REQUEST
-            referenceCommercialDevis.Content += "#54254312"; //RETURN REQUEST
+            nomCommercial.Content = "";
+            nomCommercial.Content = dev.commercial.prenom + " " + dev.commercial.prenom;
+            referenceCommercialDevis.Content = "";
+            referenceCommercialDevis.Content = dev.commercial.reference;
+
+            //DATE DEVIS
+            dateDevis.Content = "";
+            dateDevis.Content = dev.creation;
 
             //PLAN
-            dateDevis.Content += "20/05/2016";
-            planDevis.Content += "Plan 1 Base Rectangle";
+            planDevis.Content = "";
+            planDevis.Content = dev.plan.label;
 
             //ARRAY RETURN BY REQUEST GET ALL COMPOSANT FROM PLAN
             string[,] listeComposants = { { "Base en L; Dimension 15x10x5", "1", "1500", "1800", "1800" }, 
@@ -117,6 +152,8 @@ namespace Madera_MMB.View_Crtl
             window.DataSelect.Items.Add("Brouillon");
 
             window.ShowDialog();
+
+            //RECUPERER L'ETAT A CHANGER avec la méthode  changeStatusDevis()
         }
         private void Initialize_Dialog_Remise_Devis()
         {
@@ -133,6 +170,8 @@ namespace Madera_MMB.View_Crtl
             };
 
             window.ShowDialog();
+
+            //APPLIQUER REMISE SUR LE PRIX TTC du devis
         }
         private void TreeView_Loaded(object sender, RoutedEventArgs e)
         {
@@ -257,5 +296,4 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
     }
-    
 }
