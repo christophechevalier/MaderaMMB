@@ -11,7 +11,7 @@ namespace Madera_MMB.Lib.Tools
     {
         public enum type
         {
-            Mur, MurInt, Fenetre, Porte, Rien, Slot
+            Mur, MurInt, Fenetre, Porte, Rien, SlotMur, SlotFen, SlotPorte
         }
 
         public type letype { get; set; }
@@ -22,7 +22,7 @@ namespace Madera_MMB.Lib.Tools
         public int x { get; set; }
         public int y { get; set; }
 
-        public ButtonM(ButtonM unparent, type type,int x, int y, int colspan, int rowspan)
+        public ButtonM(ButtonM unparent, type type, int x, int y, int colspan, int rowspan)
         {
             this.parent = unparent;
             this.letype = type;
@@ -63,8 +63,14 @@ namespace Madera_MMB.Lib.Tools
                 case type.Porte:
                     this.Background = System.Windows.Media.Brushes.Olive;
                     break;
-                case type.Slot:
+                case type.SlotMur:
                     this.Background = System.Windows.Media.Brushes.Cyan;
+                    break;
+                case type.SlotFen:
+                    this.Background = System.Windows.Media.Brushes.LightGreen;
+                    break;
+                case type.SlotPorte:
+                    this.Background = System.Windows.Media.Brushes.LightBlue;
                     break;
             }
         }

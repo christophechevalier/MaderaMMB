@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Drawing;
 using Madera_MMB.Lib.Tools;
 
 namespace Madera_MMB.View_Crtl
@@ -26,13 +15,20 @@ namespace Madera_MMB.View_Crtl
         private Grid grid = new Grid();
         private ButtonM[,] listB = new ButtonM[30, 40];
         private ListBox listBox = new ListBox();
-        private System.Windows.Controls.Image croix = new System.Windows.Controls.Image();
-        private System.Windows.Controls.Image murh = new System.Windows.Controls.Image();
-        private System.Windows.Controls.Image murv = new System.Windows.Controls.Image();
-        private System.Windows.Controls.Image anglebd = new System.Windows.Controls.Image();
-        private System.Windows.Controls.Image anglehd = new System.Windows.Controls.Image();
-        private System.Windows.Controls.Image anglebg = new System.Windows.Controls.Image();
-        private System.Windows.Controls.Image anglehg = new System.Windows.Controls.Image();
+        private string mode = "default";
+
+        private Image croix = new Image(); // rempplacer par des bitmapImage ou pas, erreurs d'instanciation
+        private Image murh = new Image();
+        private Image murv = new Image();
+        private Image anglebd = new Image();
+        private Image anglehd = new Image();
+        private Image anglebg = new Image();
+        private Image anglehg = new Image();
+        private ButtonM slot = new ButtonM(ButtonM.type.SlotMur, 14, 5, 1, 1);
+        private ButtonM murdroit = new ButtonM(ButtonM.type.Mur, 24, 5, 1, 20);
+        private ButtonM murgauche = new ButtonM(ButtonM.type.Mur, 4, 5, 1, 20);
+        private ButtonM murbas = new ButtonM(ButtonM.type.Mur, 5, 24, 20, 1);
+        private ButtonM murhaut = new ButtonM(ButtonM.type.Mur, 5, 5, 20, 1);
 
         public Modelisation()
         {
@@ -44,6 +40,12 @@ namespace Madera_MMB.View_Crtl
         {
             grid.ShowGridLines = true;
             grid.Margin = new Thickness(7);
+
+            slot.Click += new RoutedEventHandler(checkType);
+            tracer.Click += new RoutedEventHandler(changeMode);
+            retirer.Click += new RoutedEventHandler(changeMode);
+            Grid.SetColumn(listBox, 0);
+            Grid.SetRow(listBox, 1);
 
             ColumnDefinition col;
             RowDefinition row;
@@ -63,19 +65,6 @@ namespace Madera_MMB.View_Crtl
             }
 
             contenaire.Children.Add(grid);
-
-
-            Grid.SetColumn(listBox, 0);
-            Grid.SetRow(listBox, 1);
-
-            Button buttt = new Button();
-            buttt.Background = System.Windows.Media.Brushes.Red;
-            buttt.Height = 100;
-            buttt.Width = 40;
-            listBox.Items.Add(buttt);
-
-            MainGrid.Children.Add(listBox);
-
 
             initializeImage();
             loadGrid();
@@ -187,26 +176,17 @@ namespace Madera_MMB.View_Crtl
                     ButtonM but = new ButtonM(ButtonM.type.Rien, y, i, 1, 1);
                     Grid.SetRow(but, but.y);
                     Grid.SetColumn(but, but.x);
-                    but.Click += new RoutedEventHandler(checkWall);
+                    but.Click += new RoutedEventHandler(checkType);
 
                     listB[i, y] = but;
                     grid.Children.Add(but);
                 }
             }
-
-            ButtonM murhaut = new ButtonM(ButtonM.type.Mur, 5, 5, 20, 1);
+            
             placeComponent(murhaut);
-
-            ButtonM murbas = new ButtonM(ButtonM.type.Mur, 5, 24, 20, 1);
             placeComponent(murbas);
-
-            ButtonM murgauche = new ButtonM(ButtonM.type.Mur, 4, 5, 1, 20);
             placeComponent(murgauche);
-
-            ButtonM murdroit = new ButtonM(ButtonM.type.Mur, 24, 5, 1, 20);
             placeComponent(murdroit);
-
-            ButtonM slot = new ButtonM(ButtonM.type.Slot, 14, 5, 1, 1);
             placeComponent(slot);
         }
 
@@ -216,14 +196,45 @@ namespace Madera_MMB.View_Crtl
             Grid.SetColumnSpan(but, but.colspan);
             Grid.SetRow(but, but.y);
             Grid.SetRowSpan(but, but.rowspan);
-            //but.Content = murh;
             listB[but.x, but.y] = but;
             grid.Children.Add(but);
         }
 
-        private void checkWall(object sender, RoutedEventArgs e)
+        private void checkType(object sender, RoutedEventArgs e)
         {
             ButtonM but = sender as ButtonM;
+            if (but.letype == ButtonM.type.Rien)
+            {
+                MainGrid.Children.Remove(listBox);
+                if (mode == "tracer")
+                {
+                    placeWall(but);
+                }
+            } else if (but.letype == ButtonM.type.SlotMur)
+            {
+                mode = "default";
+                MainGrid.Children.Add(listBox);
+                ListBoxItem item1 = new ListBoxItem();
+                item1.Content = "Yop !";
+                listBox.Items.Add(item1);
+            } else if (but.letype == ButtonM.type.MurInt)
+            {
+                if (mode == "retirer")
+                {
+                    removeWall(but);
+                }
+            }
+        }
+
+        private void changeMode(object sender, RoutedEventArgs e)
+        {
+            Button but = sender as Button;
+            mode = but.Name;
+            Console.WriteLine(mode);
+        }
+
+        private void placeWall(ButtonM but)
+        {
             bool around = false;
 
             for (int x = 0; x < listB.GetLength(0); x++)
@@ -265,18 +276,34 @@ namespace Madera_MMB.View_Crtl
                 }
             }
 
-            if (around)
+            if (around && isInside(but))
             {
                 but.letype = ButtonM.type.MurInt;
                 but.checkType();
             }
         }
 
+        private void removeWall(ButtonM but)
+        {
+            Console.WriteLine(but.letype);
+            but.letype = ButtonM.type.Rien;
+            Console.WriteLine(but.letype);
+            but.checkType();
+            Console.WriteLine(but.letype);
+        }
+
         private bool isInside (ButtonM but)
         {
+            Console.WriteLine(but.x + "..." + but.y);
+            Console.WriteLine("y haut : " + murgauche.y + " y bas : " + (murgauche.y + murgauche.rowspan - 1));
             bool inside = false;
-
-
+            if (but.y > murgauche.y && but.y < (murgauche.y + murgauche.rowspan -1))
+            {
+                if (but.x > murgauche.x && but.x < murdroit.x)
+                {
+                    inside = true;
+                }
+            }
 
             return inside;
         }
