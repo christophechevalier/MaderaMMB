@@ -85,7 +85,6 @@
     <Compile Include="CAD\DevisCAD.cs" />
     <Compile Include="CAD\FamilleComposantCAD.cs" />
     <Compile Include="CAD\GammeCAD.cs" />
-    <Compile Include="CAD\MetamoduleCAD.cs" />
     <Compile Include="CAD\MetaSlotCAD.cs" />
     <Compile Include="CAD\PlanCAD.cs" />
     <Compile Include="CAD\PlancherCAD.cs" />

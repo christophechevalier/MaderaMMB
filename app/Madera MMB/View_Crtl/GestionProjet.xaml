@@ -356,7 +356,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <GroupBox x:Name="Clients"
+            <GroupBox x:Name="Projets"
                       Header="Liste Projets Clients"
                       Grid.Column="1"
                       Grid.Row="0"
@@ -369,7 +369,7 @@
                       Grid.ColumnSpan="1"
                       >
                 <StackPanel Width="auto">
-                    <WrapPanel x:Name="WrapClients" />
+                    <WrapPanel x:Name="WrapProjets" />
                 </StackPanel>
             </GroupBox>
         </Grid>

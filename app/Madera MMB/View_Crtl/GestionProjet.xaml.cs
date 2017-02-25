@@ -35,10 +35,16 @@ namespace Madera_MMB.View_Crtl
         private Connexion connexion { get; set; }
         private Commercial commercial { get; set; }
         private ProjetCAD projetCAD { get; set; }
-        private Projet proj { get; set; }
+        private PlanCAD planCAD { get; set; }
+        private View_Crtl.GestionPlan gestionPlan { get; set; }
         #endregion
 
         #region Constructeur
+        /// <summary>
+        /// Constructeur qui prend en paramètre la connexion et le commercial authentifié
+        /// </summary>
+        /// <param name="co"></param>
+        /// <param name="com"></param>
         public GestionProjet(Connexion co, Commercial com)
         {
             // Instanciations
@@ -48,7 +54,7 @@ namespace Madera_MMB.View_Crtl
             projetCAD = new ProjetCAD(this.connexion, this.commercial);
 
             // Appel des méthodes dans le ctor
-            Initialize_Client_Wrapper();
+            Initialize_Projet_Wrapper();
             Initialize_Menu_Wrapper();
         }
         #endregion
@@ -59,22 +65,22 @@ namespace Madera_MMB.View_Crtl
         /// Pour chaque projet sélectionné, on aura le nom du client, le nom d'un commercial, la date de création/modification, 
         /// et le nombre de plans associés
         /// </summary>
-        private void Initialize_Client_Wrapper()
+        private void Initialize_Projet_Wrapper()
         {
             if (projetCAD.projets != null)
             {
                 foreach (var proj in projetCAD.projets)
                 {
-                    ToggleButton UnClient = new ToggleButton();
-                    UnClient.Background = Brushes.White;
-                    UnClient.Width = 120;
-                    UnClient.Height = 120;
-                    Thickness margin = UnClient.Margin;
+                    ToggleButton UnProjet = new ToggleButton();
+                    UnProjet.Background = Brushes.White;
+                    UnProjet.Width = 120;
+                    UnProjet.Height = 120;
+                    Thickness margin = UnProjet.Margin;
                     margin.Left = 20;
                     margin.Right = 20;
                     margin.Bottom = 20;
                     margin.Top = 20;
-                    UnClient.Margin = margin;
+                    UnProjet.Margin = margin;
 
                     Image img = new Image();
                     img.Width = 70;
@@ -95,13 +101,13 @@ namespace Madera_MMB.View_Crtl
                     sp.Children.Add(img);
                     sp.Children.Add(tb);
 
-                    UnClient.Content = sp;
+                    UnProjet.Content = sp;
 
                     // Active un projet client lors de la sélection
-                    UnClient.Click += delegate(object sender, RoutedEventArgs e)
+                    UnProjet.Click += delegate(object sender, RoutedEventArgs e)
                     {
                         ToggleButton active = sender as ToggleButton;
-                        foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(WrapClients))
+                        foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(WrapProjets))
                         {
                             tgbt.IsChecked = false;
                         }
@@ -120,7 +126,7 @@ namespace Madera_MMB.View_Crtl
 
                         // Value Nombre de plans
                         lblNbPlans.Content = "";
-                        lblNbPlans.Content = projetCAD.countPlansProjet(proj.reference);
+                        lblNbPlans.Content = this.projetCAD.countPlansProjet(proj.reference);
 
                         // Value Date modification
                         lblDateModification.Content = "";
@@ -130,7 +136,7 @@ namespace Madera_MMB.View_Crtl
                         lblNomCommercial.Content = "";
                         lblNomCommercial.Content = proj.commercial.nom + " " + proj.commercial.prenom;
                     };
-                    WrapClients.Children.Add(UnClient);
+                    WrapProjets.Children.Add(UnProjet);
                 }
             }
         }
@@ -190,6 +196,16 @@ namespace Madera_MMB.View_Crtl
         private void Btn_Ouvrir_Projet_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
+            //planCAD.listAllPlansByProject();
+
+            //ToggleButton btn = sender as ToggleButton;
+            //if (Projets.Visibility == System.Windows.Visibility.Hidden)
+            //{
+            //    Projets.Visibility = System.Windows.Visibility.Visible;
+            //    planCAD.listAllPlansByProject();
+            //}
+
+            //btn.IsChecked = true;
         }
         // Se déconnecter
         private void Btn_Se_Deconnecter_Click(object sender, RoutedEventArgs e)
@@ -216,13 +232,9 @@ namespace Madera_MMB.View_Crtl
         private void Btn_Select_Projet_Client_Click(object sender, RoutedEventArgs e)
         {
             ToggleButton btn = sender as ToggleButton;
-            if (Clients.Visibility == System.Windows.Visibility.Hidden)
+            if (Projets.Visibility == System.Windows.Visibility.Hidden)
             {
-                Clients.Visibility = System.Windows.Visibility.Visible;
-            }
-            else
-            {
-
+                Projets.Visibility = System.Windows.Visibility.Visible;
             }
 
             btn.IsChecked = true;

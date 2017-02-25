@@ -18,11 +18,9 @@ using Madera_MMB.Lib;
 
 namespace Madera_MMB.View_Crtl
 {
-    /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        #region Properties
         private View_Crtl.Authentification authentification { get; set; }
         private View_Crtl.GestionProjet gestionProjet { get; set; }
         private View_Crtl.GestionPlan gestionPlan { get; set; }
@@ -31,12 +29,18 @@ namespace Madera_MMB.View_Crtl
         //private View_Crtl.ParametresPlan parametresPlan { get; set; }
         //private View_Crtl.GestionDevis gestionDevis { get; set; }
         //private View_Crtl.Modelisation modelisation { get; set; }
+        private Connexion connexion;
+        #endregion
 
+        #region Ctor
+        /// <summary>
+        /// Constructeur du main window
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
 
-            Connexion connexion = new Connexion();
+            connexion = new Connexion();
             Commercial commercialTest = new Commercial
                 (
                     "COM003", 
@@ -45,10 +49,19 @@ namespace Madera_MMB.View_Crtl
                     "monemail@gmail.com",
                     "mdp"
                 );
+            Projet projetTest = new Projet
+            (
+                "PRO001",
+                "Maison Familiale",
+                "10-10-2016",
+                "10-10-2016",
+                new Client("CLI001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
+                commercialTest
+            );
 
             this.authentification = new Authentification();
             this.gestionProjet = new GestionProjet(connexion, commercialTest);
-            this.gestionPlan = new GestionPlan();
+            //this.gestionPlan = new GestionPlan(connexion, projetTest);
             this.gestionClient = new GestionClient(connexion);
             this.parametresClient = new ParametresClient();
 
@@ -61,15 +74,19 @@ namespace Madera_MMB.View_Crtl
 
             Initialize_Listeners();
         }
+        #endregion
 
         #region Initialisation
+        /// <summary>
+        /// Méthode qui contient l'ensemble des listeners pour chaque vue
+        /// </summary>
         private void Initialize_Listeners()
         {
             Initialize_Listeners_Auth();
             Initialize_Listeners_GestionProjet();
             Initialize_Listeners_GestionClient();
             Initialize_Listeners_ParametresClient();
-            Initialize_Listeners_GestionPlan();
+            //Initialize_Listeners_GestionPlan();
             //Initialize_Listeners_ParametresPlan();
             //Initialize_Listeners_Modelisation();
             //Initialize_Listeners_Devis();
@@ -77,6 +94,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation Auth
+        /// <summary>
+        /// Méthode qui contient l'ensemble des listeners de la vue authentification
+        /// </summary>
         private void Initialize_Listeners_Auth()
         {
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
@@ -88,6 +108,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation Gestion Projet
+        /// <summary>
+        /// Méthode qui contient l'ensemble des listeners de la vue gestion projet
+        /// </summary>
         private void Initialize_Listeners_GestionProjet()
         {
             // Click sur le bouton listes des clients pour aller dans la Vue Gestion Client
@@ -98,6 +121,26 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton ouvrir un projet client pour aller dans la Vue Gestion Plan
             gestionProjet.BtnOuvrirProjet.Click += delegate(object sender, RoutedEventArgs e)
             {
+                Commercial commercialTest = new Commercial
+                    (
+                        "COM003",
+                        "Chevalier",
+                        "Christophe",
+                        "monemail@gmail.com",
+                        "mdp"
+                    );
+                Projet projetTest = new Projet
+                    (
+                        "PRO001",
+                        "Maison Familiale",
+                        "10-10-2016",
+                        "10-10-2016",
+                        new Client("CLI001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
+                        commercialTest
+                    );
+
+                this.gestionPlan = new GestionPlan(connexion, projetTest);
+                Initialize_Listeners_GestionPlan();
                 Mainframe.Content = gestionPlan;
             };
             // Click sur le bouton créer un nouveau client pour aller dans la Vue Paramètre Client
@@ -114,6 +157,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation Gestion Client
+        /// <summary>
+        /// Méthode qui contient l'ensemble des listeners de la vue gestion client
+        /// </summary>
         private void Initialize_Listeners_GestionClient()
         {
             // Click sur le bouton éditer un client pour aller dans la Vue Paramètre Client
@@ -135,6 +181,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation Paramètres Client
+        /// <summary>
+        /// Méthode qui contient l'ensemble des listeners de la vue paramètres client
+        /// </summary>
         private void Initialize_Listeners_ParametresClient()
         {
             // Click sur le bouton valider paramètres client pour aller dans la Vue Gestion Client
@@ -151,6 +200,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Initialisation Gestion Plan
+        /// <summary>
+        /// Méthode qui contient l'ensemble des listeners de la vue gestion plan
+        /// </summary>
         private void Initialize_Listeners_GestionPlan()
         {
             // Click sur le bouton créer un nouveau plan pour aller dans la Vue Paramètres Plan
@@ -181,7 +233,10 @@ namespace Madera_MMB.View_Crtl
         }
         #endregion
 
-        //#region Initialisation Paramètres Plan
+        #region Initialisation Paramètres Plan
+        /// <summary>
+        /// Méthode qui contient l'ensemble des listeners de la vue paramètres plan
+        /// </summary>
         //private void Initialize_Listeners_ParametresPlan()
         //{
         //    // Click sur le bouton confirmer paramètres plan pour aller dans la Vue Modélisation
@@ -195,9 +250,12 @@ namespace Madera_MMB.View_Crtl
         //        Mainframe.Content = gestionPlan;
         //    };
         //}
-        //#endregion
+        #endregion
 
-        //#region Initialisation Modélisation
+        #region Initialisation Modélisation
+        /// <summary>
+        /// Méthode qui contient l'ensemble des listeners de la vue modélisation
+        /// </summary>
         //private void Initialize_Listeners_Modelisation()
         //{
         //    // Click sur le bouton quitter modélisation pour aller dans la Vue Gestion Plan
@@ -206,9 +264,12 @@ namespace Madera_MMB.View_Crtl
         //        Mainframe.Content = GestionPlan;
         //    };
         //}
-        //#endregion
+        #endregion
 
-        //#region Initialisation Gestion Devis
+        #region Initialisation Gestion Devis
+        /// <summary>
+        /// Méthode qui contient l'ensemble des listeners de la vue gestion devis
+        /// </summary>
         //private void Initialize_Listeners_Devis()
         //{
         //    // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
@@ -222,6 +283,6 @@ namespace Madera_MMB.View_Crtl
 
         //    };
         //}
-        //#endregion
+        #endregion
     }
 }

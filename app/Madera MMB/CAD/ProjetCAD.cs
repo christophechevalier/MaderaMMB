@@ -12,7 +12,7 @@ namespace Madera_MMB.CAD
 {
     class ProjetCAD
     {
-        #region properties
+        #region Properties
         public Connexion conn { get; set; }
         public string SQLQuery { get; set; }
         public Commercial commercial { get; set; }
@@ -40,9 +40,9 @@ namespace Madera_MMB.CAD
         }
         #endregion
 
-        #region public methods
+        #region Public methods
         /// <summary>
-        /// Méthode pour sélectionner la liste de tous les projets existants
+        /// Méthode qui permet de récupérer la liste des projets existant
         /// </summary>
         public void listAllProjects()
         {
