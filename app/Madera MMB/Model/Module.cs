@@ -41,10 +41,6 @@ namespace Madera_MMB.Model
         }
         #endregion
 
-        #region privates methods
-
-        #endregion
-
         #region public methods
         public int getPrixHT()
         {
@@ -58,7 +54,6 @@ namespace Madera_MMB.Model
         {
             return this.metaModule.reference;
         }
-
         #endregion
     }
 }

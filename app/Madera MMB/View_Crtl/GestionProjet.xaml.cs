@@ -14,77 +14,130 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Madera_MMB.Lib;
+using Madera_MMB.CAD;
+using Madera_MMB.Model;
 
 namespace Madera_MMB.View_Crtl
 {
     /// <summary>
-    /// Logique d'interaction pour GestionClient.xaml
+    /// Logique d'interaction pour GestionProjet.xaml
+    /// * Règles de gestion Projet :
+    /// - On ne peut pas supprimer un projet ni le modifier (nom)
+    /// - On peut consulter un projet existant
+    /// - On peut créer plusieurs projets pour le même client
+    /// - Pour créer un nouveau projet, il faut obligatoirement sélectionner un client dans la liste
+    /// - Le nom d’un projet est unique par projet client
     /// </summary>
     public partial class GestionProjet : Page
     {
         #region Properties
-        private string nom_client { get; set; }
+        private Connexion connexion { get; set; }
+        private Commercial commercial { get; set; }
+        private ProjetCAD projetCAD { get; set; }
+        private PlanCAD planCAD { get; set; }
+        private View_Crtl.GestionPlan gestionPlan { get; set; }
         #endregion
 
         #region Constructeur
-        public GestionProjet()
+        /// <summary>
+        /// Constructeur qui prend en paramètre la connexion et le commercial authentifié
+        /// </summary>
+        /// <param name="co"></param>
+        /// <param name="com"></param>
+        public GestionProjet(Connexion co, Commercial com)
         {
+            // Instanciations
             InitializeComponent();
-            Initialize_Client_Wrapper();
+            connexion = co;
+            commercial = com;
+            projetCAD = new ProjetCAD(this.connexion, this.commercial);
+
+            // Appel des méthodes dans le ctor
+            Initialize_Projet_Wrapper();
             Initialize_Menu_Wrapper();
         }
         #endregion
 
         #region Initialisation Container
-        private void Initialize_Client_Wrapper()
+        /// <summary>
+        /// Méthode pour parcourir la liste des projets existant en bdd
+        /// Pour chaque projet sélectionné, on aura le nom du client, le nom d'un commercial, la date de création/modification, 
+        /// et le nombre de plans associés
+        /// </summary>
+        private void Initialize_Projet_Wrapper()
         {
-            for (int i = 0; i < 9; i++)
+            if (projetCAD.projets != null)
             {
-                ToggleButton UnClient = new ToggleButton();
-                UnClient.Background = Brushes.White;
-                UnClient.Width = 120;
-                UnClient.Height = 120;
-                Thickness margin = UnClient.Margin;
-                margin.Left = 20;
-                margin.Right = 20;
-                margin.Bottom = 20;
-                margin.Top = 20;
-                UnClient.Margin = margin;
-
-                Image img = new Image();
-                img.Width = 70;
-                img.Height = 70;
-                img.VerticalAlignment = VerticalAlignment.Top;
-                string source = "../Lib/Images/folder.png";
-                Uri imageUri = new Uri(source, UriKind.Relative);
-                BitmapImage imageBitmap = new BitmapImage(imageUri);
-                img.Source = imageBitmap;
-
-                TextBlock tb = new TextBlock();
-                tb.Text = "Nom du client";
-                tb.VerticalAlignment = VerticalAlignment.Bottom;
-                tb.HorizontalAlignment = HorizontalAlignment.Center;
-                tb.Height = 50;
-
-                StackPanel sp = new StackPanel();
-                sp.Children.Add(img);
-                sp.Children.Add(tb);
-
-                UnClient.Content = sp;
-
-                UnClient.Click += delegate(object sender, RoutedEventArgs e)
+                foreach (var proj in projetCAD.projets)
                 {
-                    ToggleButton active = sender as ToggleButton;
-                    foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(WrapClients))
+                    ToggleButton UnProjet = new ToggleButton();
+                    UnProjet.Background = Brushes.White;
+                    UnProjet.Width = 120;
+                    UnProjet.Height = 120;
+                    Thickness margin = UnProjet.Margin;
+                    margin.Left = 20;
+                    margin.Right = 20;
+                    margin.Bottom = 20;
+                    margin.Top = 20;
+                    UnProjet.Margin = margin;
+
+                    Image img = new Image();
+                    img.Width = 70;
+                    img.Height = 70;
+                    img.VerticalAlignment = VerticalAlignment.Top;
+                    string source = "../Lib/Images/folder.png";
+                    Uri imageUri = new Uri(source, UriKind.Relative);
+                    BitmapImage imageBitmap = new BitmapImage(imageUri);
+                    img.Source = imageBitmap;
+
+                    TextBlock tb = new TextBlock();
+                    tb.Text = proj.nom;
+                    tb.VerticalAlignment = VerticalAlignment.Bottom;
+                    tb.HorizontalAlignment = HorizontalAlignment.Center;
+                    tb.Height = 70;
+
+                    StackPanel sp = new StackPanel();
+                    sp.Children.Add(img);
+                    sp.Children.Add(tb);
+
+                    UnProjet.Content = sp;
+
+                    // Active un projet client lors de la sélection
+                    UnProjet.Click += delegate(object sender, RoutedEventArgs e)
                     {
-                        tgbt.IsChecked = false;
+                        ToggleButton active = sender as ToggleButton;
+                        foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(WrapProjets))
+                        {
+                            tgbt.IsChecked = false;
+                        }
+                        active.IsChecked = true;
 
-                    }
-                    nom_client = tb.Text;
-                    active.IsChecked = true;
-                };
+                        // Value Non client
+                        lblNomClient.Content = "";
+                        lblNomClient.Content = proj.client.nom + " " + proj.client.prenom;
 
-                WrapClients.Children.Add(UnClient);
+                        // Value Date création
+                        lblDateCreation.Content = "";
+                        lblDateCreation.Content = proj.creation;
+
+                        // TODO : Value Statut Dernier Devis
+                        lblStatut.Content = "?";
+
+                        // Value Nombre de plans
+                        lblNbPlans.Content = "";
+                        lblNbPlans.Content = this.projetCAD.countPlansProjet(proj.reference);
+
+                        // Value Date modification
+                        lblDateModification.Content = "";
+                        lblDateModification.Content = proj.modification;
+
+                        // Value Nom Commercial
+                        lblNomCommercial.Content = "";
+                        lblNomCommercial.Content = proj.commercial.nom + " " + proj.commercial.prenom;
+                    };
+                    WrapProjets.Children.Add(UnProjet);
+                }
             }
         }
 
@@ -143,6 +196,16 @@ namespace Madera_MMB.View_Crtl
         private void Btn_Ouvrir_Projet_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
+            //planCAD.listAllPlansByProject();
+
+            //ToggleButton btn = sender as ToggleButton;
+            //if (Projets.Visibility == System.Windows.Visibility.Hidden)
+            //{
+            //    Projets.Visibility = System.Windows.Visibility.Visible;
+            //    planCAD.listAllPlansByProject();
+            //}
+
+            //btn.IsChecked = true;
         }
         // Se déconnecter
         private void Btn_Se_Deconnecter_Click(object sender, RoutedEventArgs e)
@@ -169,17 +232,12 @@ namespace Madera_MMB.View_Crtl
         private void Btn_Select_Projet_Client_Click(object sender, RoutedEventArgs e)
         {
             ToggleButton btn = sender as ToggleButton;
-            if (Clients.Visibility == System.Windows.Visibility.Hidden)
+            if (Projets.Visibility == System.Windows.Visibility.Hidden)
             {
-                Clients.Visibility = System.Windows.Visibility.Visible;
-            }
-            else
-            {
-
+                Projets.Visibility = System.Windows.Visibility.Visible;
             }
 
             btn.IsChecked = true;
-
         }
         #endregion
 

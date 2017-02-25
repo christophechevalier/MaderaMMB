@@ -12,7 +12,6 @@ namespace Madera_MMB.Model
         private int numSlotPosition { get; set; }
         private MetaSlot metaSlot { get; set; }
         private Module moduleEnfant { get; set; }
-
         #endregion
 
         #region Ctor
@@ -22,16 +21,12 @@ namespace Madera_MMB.Model
             this.metaSlot = metaslot;
             this.numSlotPosition = this.metaSlot.numMetaSlot;
         }
-        // Slot instancié avec un module enfant //
+        // Slot instancié avec un module enfant
         public Slot(MetaSlot metaslot, Module enfant)
         {
             this.metaSlot = metaslot;
             this.moduleEnfant = enfant;
         }
-        #endregion
-
-        #region privates methods
-
         #endregion
 
         #region public methods

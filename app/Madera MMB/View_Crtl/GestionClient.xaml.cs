@@ -13,6 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Madera_MMB.Lib;
+using Madera_MMB.CAD;
+using Madera_MMB.Model;
 
 namespace Madera_MMB.View_Crtl
 {
@@ -26,44 +29,70 @@ namespace Madera_MMB.View_Crtl
     /// </summary>
     public partial class GestionClient : Page
     {
+        #region Properties
+        private Connexion connexion { get; set; }
+        private ClientCAD clientCAD { get; set; }
+        private Client cli { get; set; }
+        ListView selectedClientsListView = new ListView();
+        #endregion
+
         #region Constructeur
-        public GestionClient()
+        public GestionClient(Connexion co)
         {
+            // Instanciations
             InitializeComponent();
-            Initialize_Labels();
+            connexion = co;
+            clientCAD = new ClientCAD(this.connexion);
+
+            // Appel des méthodes dans le ctor
             Initialize_Liste_Clients_Wrapper();
         }
         #endregion
 
-        #region Initialisation Containers
-        private void Initialize_Labels()
-        {
-            NomCommercial.Content += "José Répas";
-        }
+        #region Initialisation Container
         private void Initialize_Liste_Clients_Wrapper()
         {
-            List<String> nomsComplet = new List<string>();
-            List<String> noms = new List<string>();
-            List<String> prenoms = new List<string>();
-            List<String> telephones = new List<string>();
-            List<String> emails = new List<string>();
-            List<String> adresses = new List<string>();
-            List<String> codepostal = new List<string>();
-            List<String> villes = new List<string>();
-
-            for (int i = 0; i < 9; i++)
+            if (clientCAD.clients != null)
             {
-                nomsComplet.Add("NOM " + "Prénom " + i.ToString());
-                noms.Add("Prénom " + i.ToString());
-                prenoms.Add("Prénom " + i.ToString());
-                telephones.Add("xx-xx-xx-xx-xx " + i.ToString());
-                emails.Add("xxxx@xxx.fr " + i.ToString());
-                adresses.Add("xxxxxxxxxxxxxxx " + i.ToString());
-                codepostal.Add("xxxxx " + i.ToString());
-                villes.Add("xxxx " + i.ToString());
-            }
+                // TODO : Utiliser la liste d'objet existante -> clientCAD.clients
+                //List<Client> nomsComplet = new List<Client>();
+                List<String> nomsComplet = new List<string>();
 
-            ListeClients.ItemsSource = nomsComplet;
+                foreach (var cli in clientCAD.clients)
+                {
+                    //ListItem item = new ListItem();
+                    //item = tbNomComplet.Text;
+
+                    //nomsComplet.Add(cli.nom + " " + cli.prenom);
+
+                    //ListViewItem item = new ListViewItem();
+                    //item.Text = cli.nom;
+                    //item.Tag = cli;
+
+                    //ListeClients.Items.Add(item);
+
+                    nomsComplet.Add(cli.nom + " " + cli.prenom);
+
+                    // Value Non client
+                    lblNomClient.Content = "";
+                    lblNomClient.Content = cli.nom + " " + cli.prenom;
+
+                    // Value Date création
+                    lblDateCreation.Content = "";
+                    lblDateCreation.Content = cli.creation;
+
+                    // Value Date modification
+                    lblDateModification.Content = "";
+                    lblDateModification.Content = cli.modification;
+
+                    // Value Nom Commercial
+                    lblNomCommercial.Content = "";
+                    //lblNomCommercial.Content = cli.commercial.nom + " " + cli.commercial.prenom;
+                }
+                // TODO : Remplacer le string par la liste des clients défini dans le cad
+                //ListeClients.ItemsSource = clientCAD.clients;
+                ListeClients.ItemsSource = nomsComplet;
+            }
         }
         #endregion
 
@@ -85,18 +114,24 @@ namespace Madera_MMB.View_Crtl
 
         private void ListeClients_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ListItem item = sender as ListItem;
+            //ListItem item = sender as ListItem;
 
-            if (e.AddedItems.Count > 0)
-            {
-                ClientNom.Text = e.AddedItems[0].ToString();
-                ClientPrenom.Text = e.AddedItems[0].ToString();
-                ClientTelephone.Text = e.AddedItems[0].ToString();
-                ClientEmail.Text = e.AddedItems[0].ToString();
-                ClientAdresse.Text = e.AddedItems[0].ToString();
-                ClientCodePostal.Text = e.AddedItems[0].ToString();
-                ClientVille.Text = e.AddedItems[0].ToString();
-            }
+            //if (e.AddedItems.Count > 0)
+            //{
+            //    ClientNom.Text = e.AddedItems[0].ToString();
+            //    ClientPrenom.Text = e.AddedItems[0].ToString();
+            //    ClientTelephone.Text = e.AddedItems[0].ToString();
+            //    ClientEmail.Text = e.AddedItems[0].ToString();
+            //    ClientAdresse.Text = e.AddedItems[0].ToString();
+            //    ClientCodePostal.Text = e.AddedItems[0].ToString();
+            //    ClientVille.Text = e.AddedItems[0].ToString();
+            //}
+            //else
+            //{
+            //    // Display default string.
+            //    ClientNom.Text = "Empty";
+            //    ClientPrenom.Text = "Empty";
+            //}
         }
         #endregion
     }

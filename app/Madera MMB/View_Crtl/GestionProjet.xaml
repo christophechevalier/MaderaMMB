@@ -98,56 +98,102 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.3*" />
                     <ColumnDefinition Width="0.4*" />
-                    <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.3*" />
                     <ColumnDefinition Width="0.4*" />
                     <ColumnDefinition Width="0.05*" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Partie de gauche -->
+                <!-- Nom du client -->
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="1"
                          Grid.Column="1" 
-                         HorizontalAlignment="Left" 
+                         HorizontalAlignment="Right" 
                          VerticalAlignment="Center">
                     <Label Content="Nom du client :" FontSize="6" />
                 </Viewbox>
                 <Viewbox Margin="15,0,0,0"
+                         Grid.Row="1"
+                         Grid.Column="2" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblNomClient" FontSize="6"/>
+                </Viewbox>
+                <!-- Date de création -->
+                <Viewbox Margin="15,0,0,0"
                          Grid.Row="3"
                          Grid.Column="1" 
-                         HorizontalAlignment="Left" 
+                         HorizontalAlignment="Right" 
                          VerticalAlignment="Center">
                     <Label Content="Date de création :" FontSize="6" />
                 </Viewbox>
                 <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="2" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblDateCreation" FontSize="6"/>
+                </Viewbox>
+                <!-- Statut -->
+                <Viewbox Margin="15,0,0,0"
                          Grid.Row="5"
                          Grid.Column="1" 
-                         HorizontalAlignment="Left" 
+                         HorizontalAlignment="Right" 
                          VerticalAlignment="Center">
                     <Label Content="Statut actuel :" FontSize="6" />
                 </Viewbox>
-
-                <!-- Partie de droite -->
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="5"
+                         Grid.Column="2" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblStatut" FontSize="6"/>
+                </Viewbox>
+                <!-- Nombre de plans -->
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="1"
                          Grid.Column="3" 
-                         HorizontalAlignment="Left" 
+                         HorizontalAlignment="Right" 
                          VerticalAlignment="Center">
                     <Label Content="Nombre de plan :" FontSize="6" />
                 </Viewbox>
                 <Viewbox Margin="15,0,0,0"
+                         Grid.Row="1"
+                         Grid.Column="4" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblNbPlans" FontSize="6" />
+                </Viewbox>
+                <!-- Date de dernière mise à jour -->
+                <Viewbox Margin="15,0,0,0"
                          Grid.Row="3"
                          Grid.Column="3" 
-                         HorizontalAlignment="Left" 
+                         HorizontalAlignment="Right" 
                          VerticalAlignment="Center">
                     <Label Content="Dernière mise à jour :" FontSize="6" />
                 </Viewbox>
                 <Viewbox Margin="15,0,0,0"
-                         Grid.Row="5"
-                         Grid.Column="3" 
+                         Grid.Row="3"
+                         Grid.Column="4" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
+                    <Label x:Name="lblDateModification" FontSize="6" />
+                </Viewbox>
+                <!-- Nom du commercial -->
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="5"
+                         Grid.Column="3" 
+                         HorizontalAlignment="Right" 
+                         VerticalAlignment="Center">
                     <Label Content="Nom du commercial :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="5"
+                         Grid.Column="4" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblNomCommercial" FontSize="6" />
                 </Viewbox>
 
             </Grid>
@@ -171,7 +217,7 @@
                    Grid.Column="0" 
                    Source="{StaticResource Logo}" 
                    Grid.Row="0" 
-                   Width="{Binding ActualHeight, ElementName=rowDefinition0}" 
+                   Width="auto" 
                    Margin="10" />
         </Grid>
         <!-- Fin Déclaration Logo Madera -->
@@ -310,20 +356,20 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <GroupBox x:Name="Clients"
+            <GroupBox x:Name="Projets"
                       Header="Liste Projets Clients"
                       Grid.Column="1"
-                      Grid.Row="0" 
+                      Grid.Row="0"
                       Panel.ZIndex="1"
                       VerticalAlignment="Stretch" 
                       HorizontalAlignment="Stretch" 
-                      Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                      Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
+                      Width="auto" 
+                      Height="auto" 
                       Grid.RowSpan="2" 
                       Grid.ColumnSpan="1"
                       >
-                <StackPanel Width="{Binding ActualWidth, ElementName=columnDefinition1}">
-                    <WrapPanel x:Name="WrapClients" />
+                <StackPanel Width="auto">
+                    <WrapPanel x:Name="WrapProjets" />
                 </StackPanel>
             </GroupBox>
         </Grid>
