@@ -312,18 +312,28 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <ListView x:Name="ListeClients" 
+                <ListBox x:Name="ListeClients" 
                           Grid.Row="1"
                           Grid.Column="1"
                           VerticalAlignment="Stretch" 
-                          HorizontalAlignment="Stretch">
-                          <!--SelectionChanged="ListeClients_SelectionChanged"-->
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Client" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                          HorizontalAlignment="Stretch"
+                          SelectionMode="Extended"
+                          SelectionChanged="ListeClients_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock >
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} {1}">
+                                            <Binding Path="nom" />
+                                            <Binding Path="prenom" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
             </Grid>
             <!-- Fin Déclaration Liste Client -->

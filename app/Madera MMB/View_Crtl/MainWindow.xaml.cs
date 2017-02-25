@@ -41,36 +41,40 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
 
             connexion = new Connexion();
-            Commercial commercialTest = new Commercial
-                (
-                    "COM003", 
-                    "Chevalier",
-                    "Christophe",
-                    "monemail@gmail.com",
-                    "mdp"
-                );
-            Projet projetTest = new Projet
-            (
-                "PRO001",
-                "Maison Familiale",
-                "10-10-2016",
-                "10-10-2016",
-                new Client("CLI001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
-                commercialTest
-            );
-
-            this.authentification = new Authentification();
-            this.gestionProjet = new GestionProjet(connexion, commercialTest);
-            //this.gestionPlan = new GestionPlan(connexion, projetTest);
             this.gestionClient = new GestionClient(connexion);
             this.parametresClient = new ParametresClient();
+            Mainframe.Content = gestionClient;
+
+
+            //Commercial commercialTest = new Commercial
+            //    (
+            //        "COM003",
+            //        "Chevalier",
+            //        "Christophe",
+            //        "monemail@gmail.com",
+            //        "mdp"
+            //    );
+            //Projet projetTest = new Projet
+            //(
+            //    "PRO001",
+            //    "Maison Familiale",
+            //    "10-10-2016",
+            //    "10-10-2016",
+            //    new Client("CLI001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
+            //    commercialTest
+            //);
+
+            //this.authentification = new Authentification();
+            //this.gestionProjet = new GestionProjet(connexion, commercialTest);
+            //this.gestionPlan = new GestionPlan(connexion, projetTest);
+
 
             // Démarrage de l'application sur la vue authentification
-            Mainframe.Content = authentification;
+
 
             // Tmp : Commercial authentifié avec la référence COM003
-            string query = " SELECT * FROM projet WHERE refCommercial = 'COM003'";
-            connexion.SelectSQLiteQuery(query);
+            //string query = " SELECT * FROM projet WHERE refCommercial = 'COM003'";
+            //connexion.SelectSQLiteQuery(query);
 
             Initialize_Listeners();
         }
@@ -82,8 +86,8 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void Initialize_Listeners()
         {
-            Initialize_Listeners_Auth();
-            Initialize_Listeners_GestionProjet();
+            //Initialize_Listeners_Auth();
+            //Initialize_Listeners_GestionProjet();
             Initialize_Listeners_GestionClient();
             Initialize_Listeners_ParametresClient();
             //Initialize_Listeners_GestionPlan();

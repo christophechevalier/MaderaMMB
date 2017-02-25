@@ -7,16 +7,32 @@ using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Madera_MMB.CAD
 {
-    class ClientCAD
+    class ClientCAD : INotifyPropertyChanged
     {
         #region properties
         public Connexion conn { get; set; }
         public string SQLQuery { get; set; }
         public Commercial commercial { get; set; }
-        public List<Client> clients { get; set; }
+
+        private List<Client> _clients;
+        public List<Client> Clients
+        {
+            get { return _clients; }
+            set { _clients = value; RaisePropertyChanged("Clients"); }
+        }
+        #endregion
+
+        #region events
+        private void RaisePropertyChanged(String property)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
         #region Ctor
@@ -24,7 +40,7 @@ namespace Madera_MMB.CAD
         {
             // Instanciations
             conn = laConnexion;
-            clients = new List<Client>();
+            Clients = new List<Client>();
 
             // Appel des méthodes dans le ctor
             listAllClients();
@@ -78,7 +94,7 @@ namespace Madera_MMB.CAD
                                     reader.GetString(8),
                                     reader.GetString(9)
                                 );
-                            clients.Add(cli);
+                            Clients.Add(cli);
                         }
                     }
                     Trace.WriteLine("#### GET CLIENTS DATA SUCCESS ####");
@@ -91,13 +107,27 @@ namespace Madera_MMB.CAD
             conn.LiteCo.Close();
         }
 
-        // TODO : Faire une méthode pour permettre de créer un nouveau client en bdd
-        //public void insertClient(Client client)
-        //{
-        //    SQLQuery = "INSERT INTO `client` (`refClient`, `nom`, `prenom`, `adresse`, `codePostal`, `ville`, `email`, `telephone`, `dateCreation`, `dateModification`)" +
-        //    "VALUES (" + client.reference + "," + client.nom + "," + client.prenom + "," + client.adresse + ";" + client.codePostal + "," + client.ville + "," + client.email + "," + client.telephone + "," + client.dateCreation + "," + client.dateModification + "," + client.dateModification ";";
-        //    conn.InsertSQliteQuery(SQLQuery);
-        //}
+        /// <summary>
+        /// Méthode permettant d'insérer un nouveau client dans la abse locale
+        /// </summary>
+        /// <param name="client">Client à insérer dans la base</param>
+        public void InsertClient(Client client)
+        {
+            SQLQuery = "INSERT INTO `client` (`refClient`, `nom`, `prenom`, `adresse`, `codePostal`, `ville`, `email`, `telephone`, `dateCreation`, `dateModification`)" +
+            "VALUES (" + client.reference + "," + client.nom + "," + client.prenom + "," + client.adresse + ";" + client.codePostal + "," + client.ville + "," + client.email + "," + client.telephone + "," + client.creation + "," + client.modification +";";
+            conn.InsertSQliteQuery(SQLQuery);
+        }
+
+        /// <summary>
+        /// Méthode permettant de mettre à jour les informations d'un client dans la base locale
+        /// </summary>
+        /// <param name="client">Client à mettre à jour</param>
+        public void UpdateClient(Client client)
+        {
+            SQLQuery = "REPLACE INTO `client` (`refClient`, `nom`, `prenom`, `adresse`, `codePostal`, `ville`, `email`, `telephone`, `dateCreation`, `dateModification`)" +
+            "VALUES (" + client.reference + "," + client.nom + "," + client.prenom + "," + client.adresse + ";" + client.codePostal + "," + client.ville + "," + client.email + "," + client.telephone + "," + client.creation + "," + client.modification + ";";
+            conn.InsertSQliteQuery(SQLQuery);
+        }
         #endregion
     }
 }
