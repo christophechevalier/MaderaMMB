@@ -34,6 +34,7 @@ namespace Madera_MMB.View_Crtl
         #region Properties
         private Connexion connexion { get; set; }
         private Commercial commercial { get; set; }
+        private ClientCAD clientCAD { get; set; }
         private ProjetCAD projetCAD { get; set; }
         private PlanCAD planCAD { get; set; }
         private View_Crtl.GestionPlan gestionPlan { get; set; }
@@ -51,6 +52,8 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             connexion = co;
             commercial = com;
+
+            clientCAD = new ClientCAD(this.connexion);
             projetCAD = new ProjetCAD(this.connexion, this.commercial);
 
             // Appel des méthodes dans le ctor
@@ -146,11 +149,23 @@ namespace Madera_MMB.View_Crtl
             // TODO : Faire en sorte que les boutons du menu soit activé lorsqu'on clic dessus
         }
 
+        /// <summary>
+        /// Méthode pour créer un nouveau projet avec un client sélectionné dans une liste
+        /// </summary>
         private void Initialize_Dialog_Creation_Projet()
         {
             var window = new SelectModalWindow();
             window.Title = "Nouveau Projet ";
-            window.Titlelabel.Content = " Sélectionner un client pour votre nouveau projet ";
+            window.titleLabel.Content = " Création d'un nouveau Projet Client ";
+
+            // Permet de set l'image dynamiquement
+            BitmapImage bm = new BitmapImage(new Uri(@"/Madera MMB;component/Lib/Images/existing_folder.png", UriKind.RelativeOrAbsolute));
+            window.titleImage.Source = bm;
+
+            clientCAD = new ClientCAD(this.connexion);
+
+            window.DataSelect.Text = "-- Choisir un client --";
+            window.DataSelect.ItemsSource = clientCAD.Clients;
 
             window.Retour.Click += delegate(object sender, RoutedEventArgs e)
             {
@@ -162,20 +177,35 @@ namespace Madera_MMB.View_Crtl
                 window.Close();
             };
 
-            window.DataSelect.Text = "-- Choisir un client --";
-            window.DataSelect.Items.Add("CERISIER Madeleine");
-            window.DataSelect.Items.Add("CHENES Yves");
-            window.DataSelect.Items.Add("NOISETTIER Louise");
-            window.DataSelect.Items.Add("TILLEULE Bertrand");
-            window.DataSelect.Items.Add("SAPIN Léo");
-            window.DataSelect.Items.Add("PORIER José");
-            window.DataSelect.Items.Add("PRUNIER Marion");
+            if (window.DataSelect.SelectedItem != null)
+            {
+                Client client = (Client)window.DataSelect.SelectedItem;
+                window.DataSelect.Text = client.nom + client.prenom;
+            }
 
             window.ShowDialog();
         }
         #endregion
 
         #region Listeners
+        // Met à jour le select dans la modal pour créer un nouveau projet lorsqu'on sélectionne un client
+        //private void DataSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    //var text = ((sender as ComboBox).SelectedItem as ComboBoxItem).Content as string;
+        //    string text = (sender as ComboBox).SelectedItem as string;
+
+        //    //if (DataSelect.SelectedItem != null)
+        //    //{
+        //    //    Client client = (Client)DataSelect.SelectedItem;
+        //    //    ClientNom.Text = client.nom;
+        //    //    ClientPrenom.Text = client.prenom;
+        //    //    ClientTelephone.Text = client.telephone;
+        //    //    ClientEmail.Text = client.email;
+        //    //    ClientAdresse.Text = client.adresse;
+        //    //    ClientCodePostal.Text = client.codePostal;
+        //    //    ClientVille.Text = client.ville;
+        //    //}
+        //}
         // Afficher la liste des clients existants
         private void Btn_List_Client_Click(object sender, RoutedEventArgs e)
         {

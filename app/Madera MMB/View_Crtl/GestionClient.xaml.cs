@@ -23,19 +23,22 @@ namespace Madera_MMB.View_Crtl
         private Connexion connexion { get; set; }
         private ClientCAD clientCAD { get; set; }
         private Client cli { get; set; }
-        ListView selectedClientsListView = new ListView();
         #endregion
 
         #region Constructeur
+        /// <summary>
+        /// Constructeur qui prend en paramètre la connexion
+        /// </summary>
+        /// <param name="co"></param>
         public GestionClient(Connexion co)
         {
             // Instanciations
             InitializeComponent();
             connexion = co;
             clientCAD = new ClientCAD(this.connexion);
+            // Les bindings exécutés dans le XAML ont pour DataContext une connexion
             DataContext = connexion;
             ListeClients.ItemsSource = clientCAD.Clients;
-
         }
         #endregion
 
@@ -67,6 +70,14 @@ namespace Madera_MMB.View_Crtl
                 ClientAdresse.Text = client.adresse;
                 ClientCodePostal.Text = client.codePostal;
                 ClientVille.Text = client.ville;
+
+                // Value Date création
+                lblDateCreation.Content = "";
+                lblDateCreation.Content = client.creation;
+
+                // Value Date modification
+                lblDateModification.Content = "";
+                lblDateModification.Content = client.modification;
             }
         }
         #endregion
