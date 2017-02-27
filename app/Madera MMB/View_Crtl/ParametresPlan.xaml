@@ -7,11 +7,19 @@
       d:DesignHeight="300" d:DesignWidth="300"
 	Title="ParametresPlan">
 
-    <!-- Début Déclaration Template-->
     <Page.Resources>
+
         <!-- Image Logo -->
-        <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png"/>
-        <!-- Label style -->
+        <ImageSource x:Key="Logo">../Lib/logo_madera.png</ImageSource>
+        <ImageSource x:Key="LogoOff">../Lib/logo_offline.png</ImageSource>
+
+        <Style TargetType="{x:Type GridViewColumnHeader}">
+            <!-- Header List style -->
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+        </Style>
+
+       
+
         <Style TargetType="{x:Type Label}">
             <Setter Property="FontSize" Value="12" />
         </Style>
@@ -21,29 +29,11 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="bdr" BorderBrush="Black" BorderThickness="1 2 2 1" Margin="3" Background="White">
+                        <Border x:Name="bdr" BorderBrush="Black" BorderThickness="1 2 2 1" CornerRadius="2" Margin="3" Background="LightGray">
                             <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="{x:Type ToggleButton}">
-            <!-- Toggle Bouton style -->
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border x:Name="bdr" BorderBrush="Black" BorderThickness="1 2 2 1" Margin="3" Background="White">
-                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -51,6 +41,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
     </Page.Resources>
 
 
@@ -76,8 +67,25 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Image Name="Logo" Grid.Column="0" Source="{StaticResource Logo}" Grid.Row="0" Width="{Binding ActualHeight, ElementName=rowDefinition0}" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10"/>
-            <Viewbox Grid.Column="1" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="{Binding ActualHeight, ElementName=rowDefinition0}" Margin="10,10,10,10">
+            
+            <!--<Image Name="Logo" Grid.Column="0" Source="{DynamicResource Logo}" Grid.Row="0" Width="Auto" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10"/>-->
+            <!-- Image Logo -->
+            <Image x:Name="logo" Grid.Column="0" Grid.Row="0" Width="Auto" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10">
+                <Image.Style>
+                    <Style TargetType="Image">
+
+                        <Setter Property="Source" Value="{StaticResource LogoOff}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding MySQLconnected}" Value="True">
+                                <Setter Property="Source" Value="{StaticResource Logo}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+
+
+            <Viewbox Grid.Column="1" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="Auto" Margin="10,10,10,10">
                 <Label Content="Paramètres du plan : " FontWeight="ExtraBold" FontSize="10"/>
             </Viewbox>
         </Grid>
@@ -113,19 +121,19 @@
                     Margin="10,10,10,10"
                     Click="BtnRetour_Click"/>
 
-            <Viewbox  Grid.Row="0" Grid.Column="1"  Width="{Binding ActualWidth, ElementName=rowDefinition0}" Height="{Binding ActualHeight, ElementName=columnDefinition0}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Viewbox  Grid.Row="0" Grid.Column="1"  Width="Auto" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Label Content=" Nom du client : " FontWeight="Bold" FontSize="5"/>
             </Viewbox>
 
-            <Viewbox  Grid.Row="1" Grid.Column="1"  Width="{Binding ActualWidth, ElementName=rowDefinition0}" Height="{Binding ActualHeight, ElementName=columnDefinition0}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Viewbox  Grid.Row="1" Grid.Column="1"  Width="Auto" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Label Content=" Statut actuel : " FontWeight="Bold" FontSize="5"/>
             </Viewbox>
 
-            <Viewbox Grid.Row="0" Grid.Column="3"  Width="{Binding ActualWidth, ElementName=rowDefinition0}" Height="{Binding ActualHeight, ElementName=columnDefinition0}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Viewbox Grid.Row="0" Grid.Column="3"  Width="Auto" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Label  Content=" Date de création : " FontWeight="Bold" FontSize="5"/>
             </Viewbox>
 
-            <Viewbox Grid.Row="1" Grid.Column="3"  Width="{Binding ActualWidth, ElementName=rowDefinition0}" Height="{Binding ActualHeight, ElementName=columnDefinition0}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Viewbox Grid.Row="1" Grid.Column="3"  Width="Auto" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Label Content=" Nom du Commercial : " FontWeight="Bold" FontSize="5"/>
             </Viewbox>
 
@@ -185,44 +193,51 @@
             <ToggleButton x:Name="BoutonChoixGamme" Content=" Choisir une gamme " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="6"   VerticalAlignment="Center" Click="gamme_Button_Click" />
 
             <GroupBox x:Name="forme" Visibility="Hidden" Header="Sélection d'une forme"  Grid.Column="2" Grid.Row="0" Grid.RowSpan="5"
-                      Height="{Binding ActualHeight, ElementName=rowDefinition1}"
+                      Height="Auto"
                       Margin="25,0,25,0">
-                <WrapPanel x:Name="wrapformes"/>
+                <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
+                        VerticalScrollBarVisibility="Auto">
+                    <WrapPanel x:Name="wrapformes" Cursor="Hand"/>
+                </ScrollViewer>
             </GroupBox>
 
             <GroupBox Grid.Column="2" Grid.Row="5" Grid.RowSpan="5"
                     Margin="25,0,25,0" x:Name="taille" Visibility="Hidden" Header="Sélection d'une taille" >
-                <StackPanel Height="{Binding ActualHeight, ElementName=columnDefinition2}">
-                    <WrapPanel x:Name="wraptailles"/>
-                    <ScrollBar Height="{Binding ActualHeight, ElementName=rowDefinition1}" HorizontalAlignment="Right"/>
-                </StackPanel>
+                <!--<StackPanel Height="Auto">-->
+                    <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
+                        VerticalScrollBarVisibility="Auto">
+                    <WrapPanel x:Name="wraptailles" Cursor="Hand"/>
+                    </ScrollViewer>
+                <!--</StackPanel>-->
             </GroupBox>
 
             <GroupBox x:Name="couv" Visibility="Hidden" Header="Sélection d'une couverture"  Grid.Column="2" Grid.Row="1" Grid.RowSpan="5"
-                      Height="{Binding ActualHeight, ElementName=rowDefinition1}"
+                      Height="Auto"
                       Margin="25,0,25,0">
-                <StackPanel  Width="{Binding ActualWidth, ElementName=columnDefinition1}">
-                    <WrapPanel x:Name="wrapcouv"/>
-                    <ScrollBar Height="{Binding ActualHeight, ElementName=rowDefinition1}" HorizontalAlignment="Right"/>
+                <StackPanel  Width="Auto">
+                    <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
+                        VerticalScrollBarVisibility="Auto">
+                        <WrapPanel x:Name="wrapcouv" Cursor="Hand"/>
+                    </ScrollViewer>
                 </StackPanel>
             </GroupBox>
 
             <GroupBox x:Name="planch" Visibility="Hidden" Header="Sélection d'un plancher"  Grid.Column="2" Grid.Row="1" Grid.RowSpan="5"
-                      Height="{Binding ActualHeight, ElementName=rowDefinition1}"
+                      Height="Auto"
                       Margin="25,0,25,0">
-                <StackPanel  Width="{Binding ActualWidth, ElementName=columnDefinition1}">
-                    <WrapPanel x:Name="wrapplanch"/>
-                    <ScrollBar Height="{Binding ActualHeight, ElementName=rowDefinition1}" HorizontalAlignment="Right"/>
-                </StackPanel>
+                <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
+                        VerticalScrollBarVisibility="Auto">
+                    <WrapPanel x:Name="wrapplanch" Cursor="Hand"/>
+                </ScrollViewer>
             </GroupBox>
 
             <GroupBox x:Name="gam" Visibility="Hidden" Header="Sélection d'une gamme"  Grid.Column="2" Grid.Row="1" Grid.RowSpan="5"
-                      Height="{Binding ActualHeight, ElementName=rowDefinition1}"
+                      Height="Auto"
                       Margin="25,0,25,0">
-                <StackPanel Width="{Binding ActualWidth, ElementName=columnDefinition1}">
+                <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
+                        VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapgamme"/>
-                    <ScrollBar Height="{Binding ActualHeight, ElementName=rowDefinition1}" HorizontalAlignment="Right"/>
-                </StackPanel>
+                 </ScrollViewer>
             </GroupBox>
         </Grid>
         <!-- Fin Déclaration Vue -->

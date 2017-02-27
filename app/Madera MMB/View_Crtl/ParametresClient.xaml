@@ -6,41 +6,13 @@
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
 	Title="ParametresClient">
-
-    <!-- Début Déclaration Template-->
     <Page.Resources>
-        <!-- Image Logo -->
-        <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png" />
-        <!-- Label style -->
-        <Style TargetType="{x:Type Label}">
-            <Setter Property="FontSize" Value="12" />
-        </Style>
-
-        <Style TargetType="{x:Type Button}">
-            <!-- Bouton style -->
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="bdr" CornerRadius="2" Margin="3" Background="LightGray" BorderBrush="Black" BorderThickness="1 1 2 2">
-                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="{x:Type GridViewColumnHeader}">
-            <!-- Header List style -->
-            <Setter Property="HorizontalContentAlignment" Value="Left" />
-        </Style>
-
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Lib/Tools/Template_Madera.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Page.Resources>
-    <!-- Fin Déclaration Template-->
 
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>

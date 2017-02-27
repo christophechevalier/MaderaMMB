@@ -30,6 +30,7 @@ namespace Madera_MMB.View_Crtl
         //private View_Crtl.GestionDevis gestionDevis { get; set; }
         //private View_Crtl.Modelisation modelisation { get; set; }
         private Connexion connexion;
+        private bool mySQLSync { get; set; }
         #endregion
 
         #region Ctor
@@ -74,6 +75,30 @@ namespace Madera_MMB.View_Crtl
             connexion.SelectSQLiteQuery(query);
 
             Initialize_Listeners();
+        }
+        #endregion
+
+        #region Process Synchro
+        /// <summary>
+        ///  Méthode testant les possibilités de connexion aux bases de données locale et distante 
+        /// </summary>
+        private void initSynchro()
+        {
+            this.connexion = new Connexion();
+            if (connexion.MySQLconnected == false)
+            {
+                mySQLSync = false;
+                MessageBox.Show("Mode déconnecté");
+            }
+            else if (!this.connexion.SyncCommMySQL())
+            {
+                MessageBox.Show("Erreur de synchronisation ! ");
+            }
+            if (!connexion.SQLiteconnected)
+            {
+                MessageBox.Show("Base innaccessible ! Veuillez contacter l'administrateur. ");
+                Application.Current.Shutdown();
+            }
         }
         #endregion
 
