@@ -31,7 +31,7 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region privates methods
-        private void listAllCouverture() 
+        private void listAllCouverture()
         {
             SQLQuery = "SELECT * FROM couverture";
             conn.LiteCo.Open();
@@ -59,30 +59,6 @@ namespace Madera_MMB.CAD
         }
         #endregion
 
-        #region public methods
-        public Couverture getCouvbyType(string type)
-        {
-            SQLQuery = "SELECT * FROM Couverture WHERE typeCouverture = " + type;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
-            {
-                while (reader.Read())
-                {
-                    Byte[] data = (Byte[])reader.GetValue(2);
-                    this.couverture = new Couverture(reader.GetString(0), reader.GetInt32(1), ToImage(data));
-                }
-            }
-            finally
-            {
-                reader.Close();
-            }
-            return couverture;
-        }
-        #endregion
-
         #region Tools
         /// <summary>
         /// Méthode de conversion de type byte array en BitmapImage
@@ -95,7 +71,7 @@ namespace Madera_MMB.CAD
             {
                 var image = new BitmapImage();
                 image.BeginInit();
-                image.CacheOption = BitmapCacheOption.OnLoad; 
+                image.CacheOption = BitmapCacheOption.OnLoad;
                 image.StreamSource = ms;
                 image.EndInit();
                 return image;

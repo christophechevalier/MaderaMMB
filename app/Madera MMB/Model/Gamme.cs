@@ -9,7 +9,6 @@ namespace Madera_MMB.Model
 {
     public class Gamme
     {
-
         #region properties
         public string nom { get; set; }
         public int offrePromo { get; set; }
@@ -17,23 +16,19 @@ namespace Madera_MMB.Model
         public string typeFinition { get; set; }
         public string qualiteHuisserie { get; set; }
         public BitmapImage image { get; set; }
-
         #endregion
 
         #region Ctor
         public Gamme(string nom, int offre, string isolant, string finition, string huisserie, BitmapImage img)
         {
             this.nom = nom;
-            offrePromo = offre;
-            typeIsolant = isolant;
-            typeFinition = finition;
-            qualiteHuisserie = huisserie;
+            this.offrePromo = offre;
+            this.typeIsolant = isolant;
+            this.typeFinition = finition;
+            this.qualiteHuisserie = huisserie;
             image = img;
         }
-        #endregion
-
-        #region privates methods
-
+        public Gamme() { }
         #endregion
     }
 }

@@ -1,64 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Madera_MMB.Lib;
+using Madera_MMB.CAD;
+using Madera_MMB.Model;
+using System.Diagnostics;
 
 namespace Madera_MMB.View_Crtl
 {
     /// <summary>
     /// Logique d'interaction pour GestionClient.xaml
+    /// * Règles de gestion Client :
+    /// - Ce qui définit l’unicité d’un client, c’est son adresse et/ou son email
+    /// - On peut modifier les informations relatives aux clients
+    /// - Dans le cas où le nom et/ou prénom sont modifiés, on met à jour la liste des noms des clients qui pourront être sélectionnés dans un nouveau projet
+    /// - On ne peut pas supprimer un client ou modifier la référence d’un client
     /// </summary>
     public partial class GestionClient : Page
     {
-        #region Constructeur
-        public GestionClient()
-        {
-            InitializeComponent();
-            Initialize_Labels();
-            Initialize_Liste_Clients_Wrapper();
-        }
+        #region Properties
+        private Connexion connexion { get; set; }
+        private ClientCAD clientCAD { get; set; }
+        private Client cli { get; set; }
+        ListView selectedClientsListView = new ListView();
         #endregion
 
-        #region Initialisation Containers
-        private void Initialize_Labels()
+        #region Constructeur
+        public GestionClient(Connexion co)
         {
-            NomCommercial.Content += "José Répas";
-        }
-        private void Initialize_Liste_Clients_Wrapper()
-        {
-            List<String> nomsComplet = new List<string>();
-            List<String> noms = new List<string>();
-            List<String> prenoms = new List<string>();
-            List<String> telephones = new List<string>();
-            List<String> emails = new List<string>();
-            List<String> adresses = new List<string>();
-            List<String> codepostal = new List<string>();
-            List<String> villes = new List<string>();
+            // Instanciations
+            InitializeComponent();
+            connexion = co;
+            clientCAD = new ClientCAD(this.connexion);
+            DataContext = connexion;
+            ListeClients.ItemsSource = clientCAD.Clients;
 
-            for (int i = 0; i < 9; i++)
-            {
-                nomsComplet.Add("NOM " + "Prénom " + i.ToString());
-                noms.Add("Prénom " + i.ToString());
-                prenoms.Add("Prénom " + i.ToString());
-                telephones.Add("xx-xx-xx-xx-xx " + i.ToString());
-                emails.Add("xxxx@xxx.fr " + i.ToString());
-                adresses.Add("xxxxxxxxxxxxxxx " + i.ToString());
-                codepostal.Add("xxxxx " + i.ToString());
-                villes.Add("xxxx " + i.ToString());
-            }
-
-            ListeClients.ItemsSource = nomsComplet;
         }
         #endregion
 
@@ -80,17 +57,16 @@ namespace Madera_MMB.View_Crtl
 
         private void ListeClients_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ListItem item = sender as ListItem;
-
-            if (e.AddedItems.Count > 0)
+            if (ListeClients.SelectedItem != null)
             {
-                ClientNom.Text = e.AddedItems[0].ToString();
-                ClientPrenom.Text = e.AddedItems[0].ToString();
-                ClientTelephone.Text = e.AddedItems[0].ToString();
-                ClientEmail.Text = e.AddedItems[0].ToString();
-                ClientAdresse.Text = e.AddedItems[0].ToString();
-                ClientCodePostal.Text = e.AddedItems[0].ToString();
-                ClientVille.Text = e.AddedItems[0].ToString();
+                Client client = (Client)ListeClients.SelectedItem;
+                ClientNom.Text = client.nom;
+                ClientPrenom.Text = client.prenom;
+                ClientTelephone.Text = client.telephone;
+                ClientEmail.Text = client.email;
+                ClientAdresse.Text = client.adresse;
+                ClientCodePostal.Text = client.codePostal;
+                ClientVille.Text = client.ville;
             }
         }
         #endregion

@@ -49,66 +49,82 @@
                   Grid.ColumnSpan="2">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.05*"/>
-                    <RowDefinition Height="0.25*"/>
-                    <RowDefinition Height="0.05*"/>
-                    <RowDefinition Height="0.25*"/>
-                    <RowDefinition Height="0.05*"/>
-                    <RowDefinition Height="0.25*"/>
-                    <RowDefinition Height="0.05*"/>
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.05*"/>
-                    <ColumnDefinition Width="0.4*"/>
-                    <ColumnDefinition Width="0.05*"/>
-                    <ColumnDefinition Width="0.4*"/>
-                    <ColumnDefinition Width="0.05*"/>
+                    <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.3*" />
+                    <ColumnDefinition Width="0.4*" />
+                    <ColumnDefinition Width="0.3*" />
+                    <ColumnDefinition Width="0.4*" />
+                    <ColumnDefinition Width="0.05*" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Partie de gauche -->
-                <Viewbox Margin="15,0,0,0"
-                         Grid.Row="1"
-                         Grid.Column="1" 
-                         HorizontalAlignment="Left" 
-                         VerticalAlignment="Center">
-                    <Label x:Name="nomClient" Content="Nom du client : " FontSize="6"/>
-                </Viewbox>
+                <!-- Date de création -->
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="3"
                          Grid.Column="1" 
-                         HorizontalAlignment="Left" 
+                         HorizontalAlignment="Right" 
                          VerticalAlignment="Center">
-                    <Label x:Name="dateCréation"  Content="Date de création : " FontSize="6"/>
-                </Viewbox>
-                <Viewbox Margin="15,0,0,0"
-                         Grid.Row="5"
-                         Grid.Column="1" 
-                         HorizontalAlignment="Left" 
-                         VerticalAlignment="Center">
-                    <Label x:Name="statut"  Content="Statut actuel : " FontSize="6"/>
-                </Viewbox>
-
-                <!-- Partie de droite -->
-                <Viewbox Margin="15,0,0,0"
-                         Grid.Row="1"
-                         Grid.Column="3" 
-                         HorizontalAlignment="Left" 
-                         VerticalAlignment="Center">
-                    <Label x:Name="basePlan" Content="Base du plan : " FontSize="6"/>
+                    <Label Content="Date de création :" FontSize="6" />
                 </Viewbox>
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="3"
-                         Grid.Column="3" 
+                         Grid.Column="2" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label x:Name="dateMaj"  Content="Dernière mise à jour : " FontSize="6"/>
+                    <Label x:Name="lblDateCreation" FontSize="6"/>
+                </Viewbox>
+                <!-- Statut -->
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="5"
+                         Grid.Column="1" 
+                         HorizontalAlignment="Right" 
+                         VerticalAlignment="Center">
+                    <Label Content="Statut actuel :" FontSize="6" />
                 </Viewbox>
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="5"
-                         Grid.Column="3" 
+                         Grid.Column="2" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label x:Name="nomCommercial" Content="Nom du commercial : " FontSize="6"/>
+                    <Label x:Name="lblStatut" FontSize="6"/>
+                </Viewbox>
+                <!-- Base plan -->
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="1"
+                         Grid.Column="3" 
+                         HorizontalAlignment="Right" 
+                         VerticalAlignment="Center">
+                    <Label Content="Base du plan :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="1"
+                         Grid.Column="4" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblBasePlan" FontSize="6" />
+                </Viewbox>
+                <!-- Date de dernière mise à jour -->
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="3" 
+                         HorizontalAlignment="Right" 
+                         VerticalAlignment="Center">
+                    <Label Content="Dernière mise à jour :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="4" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblDateModification" FontSize="6" />
                 </Viewbox>
 
             </Grid>

@@ -31,7 +31,7 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region privates methods
-        private void listAllGamme() 
+        private void listAllGamme()
         {
             SQLQuery = "SELECT * FROM gamme";
             conn.LiteCo.Open();
@@ -55,35 +55,6 @@ namespace Madera_MMB.CAD
                 }
             }
             conn.LiteCo.Close();
-        }
-        #endregion
-
-        #region public methods
-        /// <summary>
-        /// Renvoie une gamme selon son nom
-        /// </summary>
-        /// <param name="type">nom de la gamme recherchée</param>
-        /// <returns></returns>
-        public Gamme getGammebyNom(string nom)
-        {
-            SQLQuery = "SELECT * FROM Gamme WHERE nom = " + nom;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
-            {
-                while (reader.Read())
-                {
-                    Byte[] data = (Byte[])reader.GetValue(5);
-                    Gamme gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), ToImage(data));
-                }
-            }
-            finally
-            {
-                reader.Close();
-            }
-            return gamme;
         }
         #endregion
 

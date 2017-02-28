@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,19 +20,16 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
-        public CoupePrincipe(int id, string label, int longueur, int largeur, int prix, BitmapImage img)
+        public CoupePrincipe(int id, string label, int longueur, int largeur, int prix, BitmapImage img = null)
         {
             this.id = id;
             this.label = label;
             this.longueur = longueur;
             this.largeur = largeur;
-            prixHT = prix;
+            this.prixHT = prix;
             image = img;
         }
-        #endregion
-
-        #region privates methods
-
+        public CoupePrincipe() { }
         #endregion
     }
 }

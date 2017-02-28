@@ -12,6 +12,7 @@ namespace Madera_MMB.Model
         public string reference { get; set; }
         public string nom { get; set; }
         public string prenom { get; set; }
+        public string email { get; set; }
         public string motDePasse { get; set; }
         public string email { get; set; }
         #endregion

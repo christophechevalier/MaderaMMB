@@ -6,70 +6,133 @@ using System.Text;
 using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
+using System.Diagnostics;
 
 namespace Madera_MMB.CAD
 {
     class ProjetCAD
     {
-        #region properties
-        public List<Projet> listeProjet { get; set; }
+        #region Properties
         public Connexion conn { get; set; }
         public string SQLQuery { get; set; }
         public Commercial commercial { get; set; }
         public Client client { get; set; }
         public ClientCAD clientCAD { get; set; }
+        public CommercialCAD commercialCAD { get; set; }
+        public List<Projet> projets { get; set; }
         #endregion
 
         #region Ctor
-        public ProjetCAD(Connexion laConnexion, ClientCAD clientCAD)
+        /// <summary>
+        /// Constructeur qui prend en paramètre la connexion et le commercial authentifié
+        /// </summary>
+        /// <param name="laConnexion"></param>
+        /// <param name="com"></param>
+        public ProjetCAD(Connexion laConnexion, Commercial com)
         {
-            Connexion conn = laConnexion;
-            listeProjet = new List<Projet>();
-            this.clientCAD = clientCAD;
+            // Instanciations
+            conn = laConnexion;
+            commercial = com;
+            projets = new List<Projet>();
+
+            // Appel des méthodes dans le ctor
+            listAllProjects();
         }
         #endregion
 
-        #region privates methods
-        //private void listAllProjet()
-        //{
-        //    SQLQuery = "SELECT * FROM Projet WHERE refCommercial AND refClient = " + commercial.reference + client.reference;
-        //    SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-        //    command.CommandText = SQLQuery;
-        //    SQLiteDataReader reader = command.ExecuteReader();
-
-        //    try
-        //    {
-        //        while (reader.Read())
-        //        {
-        //            Projet proj = new Projet
-        //                (
-        //                    //reader.GetString(0),
-        //                    //reader.GetString(1),
-        //                    //reader.GetString(2),
-        //                    //reader.GetString(3),
-        //                    //clientCAD.getClientbyRef(4),
-        //                    //commercialCAD.getCommercialbyRef(5)
-        //                );
-        //            proj.reference = reader.GetString(0);
-        //            proj.nom = reader.GetString(1);
-        //            proj.creation = reader.GetString(2);
-        //            proj.modification = reader.GetString(3);
-        //            proj.client = clientCAD.getClientbyRef(reader.GetString(4));
-        //            proj.commercial = commercialCAD.getCommercialbyRef(reader.GetString(5));
-
-        //            listeProjet.Add(proj);
-        //        }
-        //    }
-        //    finally
-        //    {
-        //        reader.Close();
-        //    }
-        //}
-        private void insertProjet(Projet projet, string refClient, string refCommercial)
+        #region Public methods
+        /// <summary>
+        /// Méthode qui permet de récupérer la liste des projets existant
+        /// </summary>
+        public void listAllProjects()
         {
-            SQLQuery = "INSERT INTO `projet` (`refProjet`, `nom`, `dateCreation`, `dateModification`, `refClient`, `refCommercial`)" +
-            "VALUES (" + projet.reference + "," + projet.nom + "," + projet.creation + "," + projet.modification + "," + refClient + "," + refCommercial + ";";
-            conn.InsertSQliteQuery(SQLQuery);
+            // Nom du/des champs mis directement dans la requête pour éviter d'avoir à passer par QSqlRecord 
+            SQLQuery = "SELECT refProjet, nom, dateCreation, dateModification, refClient, refCommercial FROM projet WHERE refCommercial = '" + commercial.reference + "'";
+            //SQLQuery = "SELECT * FROM projet WHERE refCommercial = " + commercial.reference;
+
+            // Ouverture de la connexion
+            conn.LiteCo.Open();
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            {
+                Trace.WriteLine(SQLQuery);
+                try
+                {
+                    // Execute le lecteur de donnée
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        Trace.WriteLine("#### GET PROJETS DATA ####");
+                        while (reader.Read())
+                        {
+                            Trace.WriteLine(
+                                reader.GetString(0) +
+                                reader.GetString(1) +
+                                reader.GetString(2) +
+                                reader.GetString(3) +
+                                client +
+                                commercial);
+                            Projet proj = new Projet
+                                (
+                                    reader.GetString(0),
+                                    reader.GetString(1),
+                                    reader.GetString(2),
+                                    reader.GetString(3),
+                                    new Client("CLI001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
+                                    commercial
+                                );
+                            projets.Add(proj);
+                        }
+                    }
+                    Trace.WriteLine("#### GET PROJETS DATA SUCCESS ####");
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# ERREUR RECUPERATION PROJETS ################################################# \n" + ex.ToString() + "\n");
+                }
+            }
+            conn.LiteCo.Close();
+        }
+
+        // TODO : Faire une méthode pour permettre de créer un nouveau projet en bdd
+        //public void insertProjet(Projet projet, string refClient, string refCommercial)
+        //{
+        //    SQLQuery = "INSERT INTO `projet` (`refProjet`, `nom`, `dateCreation`, `dateModification`, `refClient`, `refCommercial`)" +
+        //    "VALUES (" + projet.reference + "," + projet.nom + "," + projet.creation + "," + projet.modification + "," + refClient + "," + refCommercial + ");";
+        //    conn.InsertSQliteQuery(SQLQuery);
+        //}
+
+        /// <summary>
+        /// Méthode qui permet de compter les plans appartenant à un projet
+        /// </summary>
+        /// <param name="projet"></param>
+        /// <param name="plan"></param>
+        public int countPlansProjet(String refProjet)
+        {
+            SQLQuery = "SELECT count(*) FROM plan WHERE refProjet = '" + refProjet + "'";
+
+            int nbPlans = 0;
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            {
+                Trace.WriteLine(SQLQuery);
+                try
+                {
+                    // Execute le lecteur de donnée
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        Trace.WriteLine("#### COUNT PLANS PROJET ####");
+                        while (reader.Read())
+                        {
+                            Trace.WriteLine(reader.GetInt32(0));
+                            nbPlans = reader.GetInt32(0);
+                        }
+                    }
+                    Trace.WriteLine("#### COUNT PLANS PROJET SUCCESS ####");
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# ERREUR RECUPERATION PLANS PROJETS ################################################# \n" + ex.ToString() + "\n");
+                }
+            }
+            return nbPlans;
         }
         #endregion
     }

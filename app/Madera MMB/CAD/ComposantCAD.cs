@@ -21,10 +21,10 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region Ctor
-        public ComposantCAD(Connexion co, FamilleComposantCAD famille)
+        public ComposantCAD(Connexion co)
         {
-            this.conn = co;
-            this.familleCAD = famille;
+            conn = co;
+            familleCAD = new FamilleComposantCAD(conn);
         }
         #endregion
 

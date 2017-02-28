@@ -18,7 +18,7 @@ namespace Madera_MMB.CAD
     public class CoupePrincipeCAD
     {
         #region properties
-        public List<CoupePrincipe> Listecoupeprincipe { get; set; }      
+        public List<CoupePrincipe> Listecoupeprincipe { get; set; }
         public Connexion conn { get; set; }
         public CoupePrincipe coupe { get; set; }
         private string SQLQuery { get; set; }
@@ -35,7 +35,7 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region privates methods
-        private void listAllCoupePrincipe() 
+        private void listAllCoupePrincipe()
         {
             SQLQuery = "SELECT * FROM coupeprincipe order by label desc";
             conn.LiteCo.Open();
@@ -61,33 +61,6 @@ namespace Madera_MMB.CAD
                 }
             }
             conn.LiteCo.Close();
-        }
-        #endregion
-
-        #region public methods
-        public CoupePrincipe getCoupebyId(int id)
-        {
-            SQLQuery = "SELECT * FROM coupeprincipe WHERE id_coupe = " + id;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
-            {
-                while (reader.Read())
-                {
-                    Byte[] data = (Byte[])reader.GetValue(5);
-                    foreach (byte b in data)
-                        Trace.Write(b.ToString());
-
-                    this.coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), ToImage(data));
-                }
-            }
-            finally
-            {
-                reader.Close();
-            }
-            return coupe;
         }
         #endregion
 

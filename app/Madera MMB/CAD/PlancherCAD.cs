@@ -30,7 +30,7 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region privates methods
-        private void listAllPlancher() 
+        private void listAllPlancher()
         {
             SQLQuery = "SELECT * FROM plancher";
             conn.LiteCo.Open();
@@ -54,35 +54,6 @@ namespace Madera_MMB.CAD
                 }
             }
             conn.LiteCo.Close();
-        }
-        #endregion
-
-        #region public methods
-        /// <summary>
-        /// Renvoie un plancher selon son type
-        /// </summary>
-        /// <param name="type">type du plancher recherché</param>
-        /// <returns></returns>
-        public Plancher getPlancherbyType(string type)
-        {
-            SQLQuery = "SELECT * FROM Plancher WHERE typePlancher = " + type;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
-            {
-                while (reader.Read())
-                {
-                    Byte[] data = (Byte[])reader.GetValue(2);
-                    this.plancher = new Plancher(reader.GetString(0), reader.GetInt32(1), ToImage(data));
-                }
-            }
-            finally
-            {
-                reader.Close();
-            }
-            return plancher;
         }
         #endregion
 

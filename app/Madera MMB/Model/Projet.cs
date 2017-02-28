@@ -8,7 +8,7 @@ namespace Madera_MMB.Model
 {
     public class Projet
     {
-        #region properties
+        #region Properties
         public string reference { get; set; }
         public string nom { get; set; }
         public string creation { get; set; }
