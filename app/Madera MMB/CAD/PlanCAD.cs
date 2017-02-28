@@ -56,32 +56,53 @@ namespace Madera_MMB.CAD
             //SQLQuery = "SELECT * FROM `plan` WHERE refProjet = \"" + projet.reference + "\"";
 
             // TODO : Résoudre l'erreur retourner : SQLite error (1): near "=": syntax error
-            SQLQuery = "SELECT * FROM `plan` WHERE refProjet = '" + projet.reference + "';";
+            //SQLQuery = "SELECT * FROM plan WHERE refProjet = '" + projet.reference + "';";
+
+            //SQLQuery = "SELECT * FROM `plan` WHERE refProjet = \"" + projet.reference + "\"";
+
 
             // Ouverture de la connexion
             conn.LiteCo.Open();
+            // CAST(id_coupe AS VARCHAR(255))
+            SQLQuery = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, id_coupe, nomGamme FROM plan WHERE refProjet = @refProjet;";
+          
+            //SQLQuery = "SELECT * FROM plan WHERE refProjet = @refProjet ;";
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
+                command.Parameters.AddWithValue("@refProjet", projet.reference);
                 Trace.WriteLine(SQLQuery);
                 try
                 {
                     // Execute le lecteur de donnée
+
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
                         Trace.WriteLine("#### GET PLANS DATA ####");
                         while (reader.Read())
                         {
+                            //Trace.WriteLine(
+                            //    reader.GetString(0) +
+                            //    reader.GetString(1) +
+                            //    reader.GetString(2) +
+                            //    reader.GetString(3) +
+                            //    projet +
+                            //    getPlancherbyType(reader.GetString(5)) +
+                            //    getCouvbyType(reader.GetString(6)) +
+                            //    getCoupebyId(reader.GetInt32(7)) +
+                            //    getModulesByRefPlan(reader.GetString(8)) +
+                            //    getGammebyNom(reader.GetString(9)));
+
                             Trace.WriteLine(
-                                reader.GetString(0) +
-                                reader.GetString(1) +
-                                reader.GetString(2) +
-                                reader.GetString(3) +
-                                projet +
-                                getPlancherbyType(reader.GetString(5)) +
-                                getCouvbyType(reader.GetString(6)) +
-                                getCoupebyId(reader.GetInt32(7)) +
-                                getModulesByRefPlan(reader.GetString(8)) +
-                                getGammebyNom(reader.GetString(9)));
+                                reader.GetValue(0).GetType() + " || " +
+                                reader.GetValue(1).GetType() + " || " +
+                                reader.GetValue(2).GetType() + " || " +
+                                reader.GetValue(3).GetType() + " || " +
+                                reader.GetValue(4).GetType() + " || " +
+                                reader.GetValue(5).GetType() + " || " +
+                                reader.GetValue(6).GetType() + " || " +
+                                reader.GetValue(7).GetType() + " || " +
+                                reader.GetValue(8).GetType());
+                                //reader.GetValue(9).ToString());
                             Plan plan = new Plan
                                 (
                                     reader.GetString(0),
@@ -89,12 +110,14 @@ namespace Madera_MMB.CAD
                                     reader.GetString(2),
                                     reader.GetString(3),
                                     projet,
-                                    getPlancherbyType(reader.GetString(5)),
                                     getCouvbyType(reader.GetString(6)),
-                                    getCoupebyId(reader.GetInt32(7)),
-                                    getModulesByRefPlan(reader.GetString(8)),
+                                    getCoupebyId(reader.GetInt16(7)),
+                                    getPlancherbyType(reader.GetString(8)),
+                                    getModulesByRefPlan(reader.GetString(0)),
                                     getGammebyNom(reader.GetString(9))
                                 );
+                            //SQLQuery = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, id_coupe, nomGamme FROM plan WHERE refProjet = @refProjet;";
+                            //  string reference, string label, string creation, string modification, Projet unprojet, Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, List<Module> modules, Gamme unegamme = null
                             plans.Add(plan);
                         }
                     }
@@ -102,6 +125,7 @@ namespace Madera_MMB.CAD
                 }
                 catch (SQLiteException ex)
                 {
+                    Trace.WriteLine(SQLQuery);
                     Trace.WriteLine(" \n ################################################# ERREUR RECUPERATION PLANS ################################################# \n" + ex.ToString() + "\n");
                 }
             }
@@ -111,40 +135,67 @@ namespace Madera_MMB.CAD
 
         #region Privates methods
         /// <summary>
-        /// 
+        /// Méthode qui permet de récupérer les metamodules
         /// </summary>
         private List<MetaModule> listAllMetaModules()
         {
-            SQLQuery = "SELECT * FROM Metamodule";
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
             List<MetaModule> listMetaModule = new List<MetaModule>();
-
-            using (SQLiteDataReader reader = command.ExecuteReader())
+            SQLQuery = "SELECT * FROM metamodule";
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                try
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    while (reader.Read())
+                    try
                     {
-                        Byte[] data = (Byte[])reader.GetValue(4);
-                        MetaModule metamodule = new MetaModule(
-                            reader.GetString(0),
-                            reader.GetString(1),
-                            reader.GetInt32(2),
-                            reader.GetInt32(3),
-                            ToImage(data),
-                            getGammebyNom(reader.GetString(5)),
-                            this.compCAD.listComposantByMetamodule(reader.GetString(0)),
-                            this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0))
-                            );
-                        listMetaModule.Add(metamodule);
+                        while (reader.Read())
+                        {
+                            Trace.WriteLine(
+                            "META MODULE : " +
+                            reader.GetValue(0).GetType() + " || " +
+                            reader.GetValue(1).GetType() + " || " +
+                            reader.GetValue(2).GetType() + " || " +
+                            reader.GetValue(3).GetType() + " || " +
+                            reader.GetValue(4).ToString().GetType() + " || " +
+                            reader.GetValue(5).ToString().GetType());
+                            if (reader.GetValue(5) != null)
+                            {
+                                Byte[] data = (Byte[])reader.GetValue(4);
+                                MetaModule metamodule = new MetaModule
+                                (
+                                    reader.GetString(0),
+                                    reader.GetString(1),
+                                    reader.GetInt32(2),
+                                    reader.GetInt32(3),                                   
+                                    getGammebyNom(reader.GetString(5)),
+                                    this.compCAD.listComposantByMetamodule(reader.GetString(0)),
+                                    this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
+                                    ToImage(data)
+                                );
+                                listMetaModule.Add(metamodule);
+                            }
+                            else
+                            {
+                                MetaModule metamodule = new MetaModule
+                                (
+                                    reader.GetString(0),
+                                    reader.GetString(1),
+                                    reader.GetInt32(2),
+                                    reader.GetInt32(3),
+                                    getGammebyNom(reader.GetString(5)),
+                                    this.compCAD.listComposantByMetamodule(reader.GetString(0)),
+                                    this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0))
+                                );
+                                listMetaModule.Add(metamodule);
+                            }
+                        }
                     }
+                    catch (SQLiteException ex)
+                    {
+                        Trace.WriteLine(SQLQuery);
+                        Trace.WriteLine(ex.ToString());
+                    }
+                    return listMetaModule;
                 }
-                catch (SQLiteException ex)
-                {
-                    Trace.WriteLine(ex.ToString());
-                }
-                return listMetaModule;
             }
         }
 
@@ -155,32 +206,42 @@ namespace Madera_MMB.CAD
         /// <returns></returns>
         private List<Module> getModulesByRefPlan(string refPlan)
         {
-            SQLQuery = "SELECT * FROM module WHERE refPlan = " + refPlan;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
             List<Module> modules = new List<Module>();
-            try
+            SQLQuery = "SELECT * FROM module WHERE refPlan = @reference;";
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                while (reader.Read())
-                {
-                    Module module = new Module(
-                    reader.GetString(0),
-                    reader.GetInt32(1),
-                    reader.GetInt32(2),
-                    reader.GetInt32(3),
-                    reader.GetInt32(4),
-                    getMetaModuleByRef(refPlan)
-                    );
+                command.Parameters.AddWithValue("@reference", refPlan);
 
-                    modules.Add(module);
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    try
+                    {
+                        while (reader.Read())
+                        {
+                            Module module = new Module
+                            (
+                                reader.GetString(0),
+                                //Convert.ToInt32(reader.GetValue(1)),
+                                //Convert.ToInt32(reader.GetValue(2)),
+                                //Convert.ToInt32(reader.GetValue(3)),
+                                //Convert.ToInt32(reader.GetValue(4)),
+                                reader.GetInt32(1),
+                                reader.GetInt32(2),
+                                reader.GetInt32(3),
+                                reader.GetInt32(4),
+                                getMetaModuleByRef(refPlan)
+                            );
+                            modules.Add(module);
+                        }
+                    }
+                    catch (SQLiteException ex)
+                    {
+                        Trace.WriteLine(SQLQuery);
+                        Trace.WriteLine(ex.ToString());
+                    }
+                    return modules;
                 }
             }
-            finally
-            {
-                reader.Close();
-            }
-            return modules;
         }
 
         /// <summary>
@@ -213,71 +274,138 @@ namespace Madera_MMB.CAD
         }
 
         /// <summary>
-        /// Méthode qui permet de récupérer les coupes de principes par id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        private CoupePrincipe getCoupebyId(int id)
-        {
-            SQLQuery = "SELECT * FROM Coupeprincipe WHERE id_coupe = " + id;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            CoupePrincipe coupe = new CoupePrincipe();
-
-            using (SQLiteDataReader reader = command.ExecuteReader())
-            {
-                try
-                {
-                    while (reader.Read())
-                    {
-                        Byte[] data = (Byte[])reader.GetValue(5);
-                        coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), ToImage(data));
-                    }
-                }
-                catch (SQLiteException ex)
-                {
-                    Trace.WriteLine(ex.ToString());
-                }
-                return coupe;
-            }
-        }
-
-        /// <summary>
         /// Méthode qui permet de récupérer les métamodules par id/ref
         /// </summary>
         /// <param name="reference"></param>
         /// <returns></returns>
         private MetaModule getMetaModuleByRef(string reference)
         {
-            SQLQuery = "SELECT * FROM Metamodule WHERE refMetaModule = " + reference;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
             MetaModule metaModule = new MetaModule();
-
-            using (SQLiteDataReader reader = command.ExecuteReader())
+            SQLQuery = "SELECT * FROM metamodule WHERE refMetaModule = @reference;";
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                try
+                command.Parameters.AddWithValue("@reference", reference);
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    while (reader.Read())
+                    try
                     {
-                        Byte[] data = (Byte[])reader.GetValue(4);
-                        metaModule = new MetaModule(
-                        reader.GetString(0),
-                        reader.GetString(1),
-                        reader.GetInt32(2),
-                        reader.GetInt32(3),
-                        ToImage(data),
-                        getGammebyNom(reader.GetString(5)),
-                        this.compCAD.listComposantByMetamodule(reader.GetString(0)),
-                        this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)));
-                        reader.Close();
+                        while (reader.Read())
+                        {
+                            Trace.WriteLine(
+                            "META MODULE : " +
+                            reader.GetValue(0).GetType() + " || " +
+                            reader.GetValue(1).GetType() + " || " +
+                            reader.GetValue(2).GetType() + " || " +
+                            reader.GetValue(3).GetType() + " || " +
+                            reader.GetValue(4).GetType() + " || " +
+                            reader.GetValue(5).GetType());
+                            if (reader.GetValue(5) != null)
+                            {
+                                Byte[] data = (Byte[])reader.GetValue(4);
+                                metaModule = new MetaModule
+                                (
+                                    reader.GetString(0),
+                                    reader.GetString(1),
+                                    //Convert.ToInt32(reader.GetValue(2)),
+                                    //Convert.ToInt32(reader.GetValue(3)),
+                                    reader.GetInt32(2),
+                                    reader.GetInt32(3),                        
+                                    getGammebyNom(reader.GetString(5)),
+                                    this.compCAD.listComposantByMetamodule(reader.GetString(0)),
+                                    this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
+                                    ToImage(data)
+                                );
+                            }
+                            else
+                            {
+                                metaModule = new MetaModule
+                                (
+                                    reader.GetString(0),
+                                    reader.GetString(1),
+                                    reader.GetInt32(2),
+                                    reader.GetInt32(3),
+                                    getGammebyNom(reader.GetString(5)),
+                                    this.compCAD.listComposantByMetamodule(reader.GetString(0)),
+                                    this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0))
+                                );
+                            }
+                        }
                     }
+                    catch (SQLiteException ex)
+                    {
+                        Trace.WriteLine(SQLQuery);
+                        Trace.WriteLine(ex.ToString());
+                    }
+                    return metaModule;
                 }
-                catch (SQLiteException ex)
+            }
+        }
+
+        /// <summary>
+        /// Méthode qui permet de récupérer les coupes de principes par id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private CoupePrincipe getCoupebyId(int id)
+        {
+            CoupePrincipe coupe = new CoupePrincipe();
+            SQLQuery = "SELECT * FROM coupeprincipe WHERE id_coupe = @id;";
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            {
+                command.Parameters.AddWithValue("@id", id);
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    Trace.WriteLine(ex.ToString());
+                    try
+                    {
+                        while (reader.Read())
+                        {
+                            Trace.WriteLine(
+                            "COUPE PRINCIPE : " +
+                            reader.GetValue(0).GetType() + " || " +
+                            reader.GetValue(1).GetType() + " || " +
+                            reader.GetValue(2).GetType() + " || " +
+                            reader.GetValue(3).GetType() + " || " +
+                            reader.GetValue(4).GetType() + " || " +
+                            reader.GetValue(5).GetType());
+                            if (reader.GetValue(5) != null)
+                            {
+                                Byte[] data = (Byte[])reader.GetValue(5);
+                                coupe = new CoupePrincipe
+                                (
+                                    //Convert.ToInt32(reader.GetValue(0)),
+                                    reader.GetInt32(0),
+                                    reader.GetString(1),
+                                    //Convert.ToInt32(reader.GetValue(2)),
+                                    //Convert.ToInt32(reader.GetValue(3)),
+                                    //Convert.ToInt32(reader.GetValue(4)),
+                                    reader.GetInt32(2),
+                                    reader.GetInt32(3),
+                                    reader.GetInt32(4),
+                                    ToImage(data)
+                                );
+                            }
+                            else
+                            {
+                                coupe = new CoupePrincipe
+                                (
+                                    reader.GetInt32(0),
+                                    reader.GetString(1),
+                                    reader.GetInt32(2),
+                                    reader.GetInt32(3),
+                                    reader.GetInt32(4)
+                                );
+                            }
+                        }
+                    }
+                    catch (SQLiteException ex)
+                    {
+                        Trace.WriteLine(SQLQuery);
+                        Trace.WriteLine(ex.ToString());
+                    }
+                    return coupe;
                 }
-                return metaModule;
             }
         }
 
@@ -288,26 +416,51 @@ namespace Madera_MMB.CAD
         /// <returns></returns>
         private Couverture getCouvbyType(string type)
         {
-            SQLQuery = "SELECT * FROM Couverture WHERE typeCouverture = " + type;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
             Couverture couv = new Couverture();
-
-            using (SQLiteDataReader reader = command.ExecuteReader())
+            SQLQuery = "SELECT * FROM couverture WHERE typeCouverture = @type;";
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                try
+                command.Parameters.AddWithValue("@type", type);
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    while (reader.Read())
+                    try
                     {
-                        Byte[] data = (Byte[])reader.GetValue(2);
-                        couv = new Couverture(reader.GetString(0), reader.GetInt32(1), ToImage(data));
+                        while (reader.Read())
+                        {
+                            Trace.WriteLine(
+                            "COUVERTURE : " +
+                            reader.GetValue(0).GetType() + " || " +
+                            reader.GetValue(1).GetType() + " || " +
+                            reader.GetValue(2).GetType());
+                            if (reader.GetValue(2) != null)
+                            {
+                                Byte[] data = (Byte[])reader.GetValue(2);
+                                couv = new Couverture
+                                (
+                                    reader.GetString(0),
+                                    //Convert.ToInt32(reader.GetValue(1)),
+                                    reader.GetInt32(1),
+                                    ToImage(data)
+                                );
+                            }
+                            else
+                            {
+                                couv = new Couverture
+                                (
+                                    reader.GetString(0),
+                                    reader.GetInt32(1)
+                                );
+                            }
+                        }
                     }
+                    catch (SQLiteException ex)
+                    {
+                        Trace.WriteLine(SQLQuery);
+                        Trace.WriteLine(ex.ToString());
+                    }
+                    return couv;
                 }
-                catch (SQLiteException ex)
-                {
-                    Trace.WriteLine(ex.ToString());
-                }
-                return couv;
             }
         }
 
@@ -318,27 +471,60 @@ namespace Madera_MMB.CAD
         /// <returns></returns>
         private Gamme getGammebyNom(string nom)
         {
-            SQLQuery = "SELECT * FROM Gamme WHERE nomGamme = " + nom;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
             Gamme gamme = new Gamme();
-
-            using (SQLiteDataReader reader = command.ExecuteReader())
+            SQLQuery = "SELECT * FROM gamme WHERE nomGamme = @nom;";
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                try
-                {
-                    while (reader.Read())
-                    {
-                        Byte[] data = (Byte[])reader.GetValue(5);
-                        gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), ToImage(data));
-                    }
+                command.Parameters.AddWithValue("@nom", nom);
 
-                }
-                catch (SQLiteException ex)
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    Trace.WriteLine(ex.ToString());
+                    try
+                    {
+                        while (reader.Read())
+                        {
+                            Trace.WriteLine(
+                            "GAMME : " +
+                            reader.GetValue(0).GetType() + " || " +
+                            reader.GetValue(1).GetType() + " || " +
+                            reader.GetValue(2).GetType() + " || " +
+                            reader.GetValue(3).GetType() + " || " +
+                            reader.GetValue(4).GetType() + " || " +
+                            reader.GetValue(5).GetType());
+                            if (reader.GetValue(5) != null)
+                            {
+                                Byte[] data = (Byte[])reader.GetValue(5);
+                                gamme = new Gamme
+                                (
+                                    reader.GetString(0),
+                                    //Convert.ToInt32(reader.GetValue(1)),
+                                    reader.GetInt32(1),
+                                    reader.GetString(2),
+                                    reader.GetString(3),
+                                    reader.GetString(4),
+                                    ToImage(data)
+                                );
+                            }
+                            else
+                            {
+                                gamme = new Gamme
+                                (
+                                    reader.GetString(0),
+                                    reader.GetInt32(1),
+                                    reader.GetString(2),
+                                    reader.GetString(3),
+                                    reader.GetString(4)
+                                );
+                            }
+                        }
+                    }
+                    catch (SQLiteException ex)
+                    {
+                        Trace.WriteLine(SQLQuery);
+                        Trace.WriteLine(ex.ToString());
+                    }
+                    return gamme;
                 }
-                return gamme;
             }
         }
 
@@ -349,26 +535,51 @@ namespace Madera_MMB.CAD
         /// <returns></returns>
         private Plancher getPlancherbyType(string type)
         {
-            SQLQuery = "SELECT * FROM Plancher WHERE typePlancher = " + type;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
             Plancher plancher = new Plancher();
-
-            using (SQLiteDataReader reader = command.ExecuteReader())
+            SQLQuery = "SELECT * FROM plancher WHERE typePlancher = @type;";
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                try
+                command.Parameters.AddWithValue("@type", type);
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    while (reader.Read())
+                    try
                     {
-                        Byte[] data = (Byte[])reader.GetValue(2);
-                        plancher = new Plancher(reader.GetString(0), reader.GetInt32(1), ToImage(data));
+                        while (reader.Read())
+                        {
+                            Trace.WriteLine(
+                            "PLANCHER : " +
+                            reader.GetValue(0).GetType() + " || " +
+                            reader.GetValue(1).GetType() + " || " +
+                            reader.GetValue(2).GetType());
+                            if (reader.GetValue(2) != null)
+                            {
+                                Byte[] data = (Byte[])reader.GetValue(2);
+                                plancher = new Plancher
+                                (
+                                    reader.GetString(0),
+                                    //Convert.ToInt32(reader.GetValue(1)),
+                                    reader.GetInt32(1),
+                                    ToImage(data)
+                                );
+                            }
+                            else
+                            {
+                                plancher = new Plancher
+                                (
+                                    reader.GetString(0),
+                                    reader.GetInt32(1)
+                                );
+                            }
+                        }
                     }
+                    catch (SQLiteException ex)
+                    {
+                        Trace.WriteLine(SQLQuery);
+                        Trace.WriteLine(ex.ToString());
+                    }
+                    return plancher;
                 }
-                catch (SQLiteException ex)
-                {
-                    Trace.WriteLine(ex.ToString());
-                }
-                return plancher;
             }
         }
         #endregion

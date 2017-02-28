@@ -89,7 +89,7 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Dialog_Modification_Devis()
         {
             var window = new SelectModalWindow();
-            window.Titlelabel.Content = " Sélectionner l'état du devis";
+            window.titleLabel.Content = " Sélectionner l'état du devis";
 
             window.Retour.Click += delegate(object sender, RoutedEventArgs e)
             {

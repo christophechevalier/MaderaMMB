@@ -21,7 +21,7 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
-        public MetaModule(string reference, string label, int prix, int nbslot, BitmapImage image, Gamme gamme, List<Composant> composants, List<MetaSlot> metaslots)
+        public MetaModule(string reference, string label, int prix, int nbslot, Gamme gamme, List<Composant> composants, List<MetaSlot> metaslots, BitmapImage image = null)
         {
             this.reference = reference;
             this.label = label;

@@ -20,6 +20,7 @@ namespace Madera_MMB.CAD
         public ClientCAD clientCAD { get; set; }
         public CommercialCAD commercialCAD { get; set; }
         public List<Projet> projets { get; set; }
+        public List<Client> clients { get; set; }
         #endregion
 
         #region Ctor
@@ -34,6 +35,7 @@ namespace Madera_MMB.CAD
             conn = laConnexion;
             commercial = com;
             projets = new List<Projet>();
+            clients = new List<Client>();
 
             // Appel des méthodes dans le ctor
             listAllProjects();

@@ -1,9 +1,10 @@
 ﻿<Window x:Class="Madera_MMB.View_Crtl.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Madera_MMB" Height="700" Width="1040">
-
-    
+        Title="Madera_MMB" 
+        Height="700" 
+        Width="1040"
+        WindowStartupLocation="CenterScreen">
 
     <Frame NavigationUIVisibility="Hidden" x:Name="Mainframe" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"  Margin="5,10,0,0" />
 

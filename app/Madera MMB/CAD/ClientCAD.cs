@@ -11,22 +11,29 @@ using System.ComponentModel;
 
 namespace Madera_MMB.CAD
 {
-    public class ClientCAD : INotifyPropertyChanged
+    // INotifyPropertyChanged permet de signaler au moteur de bindings qu'un élément a changé
+    class ClientCAD : INotifyPropertyChanged
     {
         #region properties
-        public Connexion conn { get; set; }
+        public Connexion Conn { get; set; }
         public string SQLQuery { get; set; }
-        public Commercial commercial { get; set; }
 
         private List<Client> _clients;
         public List<Client> Clients
         {
-            get { return _clients; }
+            get
+            {
+                if (this._clients == null)
+                {
+                    this._clients = new List<Client>();
+                }
+                return this._clients;
+            }
             set { _clients = value; RaisePropertyChanged("Clients"); }
         }
         #endregion
 
-        #region events
+        #region Events
         private void RaisePropertyChanged(String property)
         {
             if (PropertyChanged != null)
@@ -39,27 +46,29 @@ namespace Madera_MMB.CAD
         public ClientCAD(Connexion laConnexion)
         {
             // Instanciations
-            conn = laConnexion;
+            //Conn = laConnexion;
+            Conn = new Connexion();
+
             Clients = new List<Client>();
 
             // Appel des méthodes dans le ctor
-            listAllClients();
+            ListAllClients();
         }
         #endregion
 
-        #region public methods
+        #region Public methods
         /// <summary>
         /// Méthode pour sélectionner la liste de tous les clients existants
         /// </summary>
-        public void listAllClients()
+        public void ListAllClients()
         {
             // Nom du/des champs mis directement dans la requête pour éviter d'avoir à passer par QSqlRecord 
             SQLQuery = "SELECT refClient, nom, prenom, adresse, codePostal, ville, email, telephone, dateCreation, dateModification FROM client";
             //SQLQuery = "SELECT * FROM client;
 
             // Ouverture de la connexion
-            conn.LiteCo.Open();
-            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            Conn.LiteCo.Open();
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, Conn.LiteCo))
             {
                 Trace.WriteLine(SQLQuery);
                 try
@@ -104,7 +113,7 @@ namespace Madera_MMB.CAD
                     Trace.WriteLine(" \n ################################################# ERREUR RECUPERATION CLIENTS ################################################# \n" + ex.ToString() + "\n");
                 }
             }
-            conn.LiteCo.Close();
+            Conn.LiteCo.Close();
         }
 
         /// <summary>
@@ -115,7 +124,7 @@ namespace Madera_MMB.CAD
         {
             SQLQuery = "INSERT INTO `client` (`refClient`, `nom`, `prenom`, `adresse`, `codePostal`, `ville`, `email`, `telephone`, `dateCreation`, `dateModification`)" +
             "VALUES (" + client.reference + "," + client.nom + "," + client.prenom + "," + client.adresse + ";" + client.codePostal + "," + client.ville + "," + client.email + "," + client.telephone + "," + client.creation + "," + client.modification +";";
-            conn.InsertSQliteQuery(SQLQuery);
+            Conn.InsertSQliteQuery(SQLQuery);
         }
 
         /// <summary>
@@ -126,7 +135,7 @@ namespace Madera_MMB.CAD
         {
             SQLQuery = "REPLACE INTO `client` (`refClient`, `nom`, `prenom`, `adresse`, `codePostal`, `ville`, `email`, `telephone`, `dateCreation`, `dateModification`)" +
             "VALUES (" + client.reference + "," + client.nom + "," + client.prenom + "," + client.adresse + ";" + client.codePostal + "," + client.ville + "," + client.email + "," + client.telephone + "," + client.creation + "," + client.modification + ";";
-            conn.InsertSQliteQuery(SQLQuery);
+            Conn.InsertSQliteQuery(SQLQuery);
         }
         #endregion
     }
