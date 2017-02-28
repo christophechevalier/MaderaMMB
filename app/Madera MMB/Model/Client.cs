@@ -19,6 +19,11 @@ namespace Madera_MMB.Model
         public string telephone { get; set; }
         public string creation { get; set; }
         public string modification { get; set; }
+        public string nomprenom
+        {
+            get { return prenom + " " + nom; }
+            set { }
+        }
         #endregion
 
         #region Ctor

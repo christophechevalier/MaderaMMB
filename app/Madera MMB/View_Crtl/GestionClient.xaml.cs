@@ -27,15 +27,15 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Constructeur
-        public GestionClient(Connexion co)
+        public GestionClient(Connexion co, ClientCAD CADclient)
         {
             // Instanciations
             InitializeComponent();
             connexion = co;
-            clientCAD = new ClientCAD(this.connexion);
+            this.clientCAD = CADclient;
+            clientCAD.listAllClients();
             DataContext = connexion;
             ListeClients.ItemsSource = clientCAD.Clients;
-
         }
         #endregion
 

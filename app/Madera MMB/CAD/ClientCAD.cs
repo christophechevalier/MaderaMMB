@@ -11,7 +11,7 @@ using System.ComponentModel;
 
 namespace Madera_MMB.CAD
 {
-    class ClientCAD : INotifyPropertyChanged
+    public class ClientCAD : INotifyPropertyChanged
     {
         #region properties
         public Connexion conn { get; set; }

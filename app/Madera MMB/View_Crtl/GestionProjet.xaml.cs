@@ -35,8 +35,9 @@ namespace Madera_MMB.View_Crtl
         private Connexion connexion { get; set; }
         private Commercial commercial { get; set; }
         private ProjetCAD projetCAD { get; set; }
-        private PlanCAD planCAD { get; set; }
         private View_Crtl.GestionPlan gestionPlan { get; set; }
+
+        public ClientCAD ClientCAD { get; set; }
         #endregion
 
         #region Constructeur
@@ -52,7 +53,7 @@ namespace Madera_MMB.View_Crtl
             connexion = co;
             commercial = com;
             projetCAD = new ProjetCAD(this.connexion, this.commercial);
-
+            ClientCAD = new ClientCAD(this.connexion);
             // Appel des méthodes dans le ctor
             Initialize_Projet_Wrapper();
             Initialize_Menu_Wrapper();
@@ -162,14 +163,8 @@ namespace Madera_MMB.View_Crtl
                 window.Close();
             };
 
-            window.DataSelect.Text = "-- Choisir un client --";
-            window.DataSelect.Items.Add("CERISIER Madeleine");
-            window.DataSelect.Items.Add("CHENES Yves");
-            window.DataSelect.Items.Add("NOISETTIER Louise");
-            window.DataSelect.Items.Add("TILLEULE Bertrand");
-            window.DataSelect.Items.Add("SAPIN Léo");
-            window.DataSelect.Items.Add("PORIER José");
-            window.DataSelect.Items.Add("PRUNIER Marion");
+            window.DataSelect.ItemsSource = ClientCAD.Clients;
+            window.DataSelect.DisplayMemberPath = "nomprenom";
 
             window.ShowDialog();
         }

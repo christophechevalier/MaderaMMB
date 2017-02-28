@@ -41,33 +41,33 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
 
             connexion = new Connexion();
-            this.gestionClient = new GestionClient(connexion);
-            this.parametresClient = new ParametresClient();
+            //this.gestionClient = new GestionClient(connexion);
+            //this.parametresClient = new ParametresClient();
             Mainframe.Content = gestionClient;
 
 
-            //Commercial commercialTest = new Commercial
-            //    (
-            //        "COM003",
-            //        "Chevalier",
-            //        "Christophe",
-            //        "monemail@gmail.com",
-            //        "mdp"
-            //    );
-            //Projet projetTest = new Projet
-            //(
-            //    "PRO001",
-            //    "Maison Familiale",
-            //    "10-10-2016",
-            //    "10-10-2016",
-            //    new Client("CLI001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
-            //    commercialTest
-            //);
+            Commercial commercialTest = new Commercial
+                (
+                    "COM003",
+                    "Chevalier",
+                    "Christophe",
+                    "monemail@gmail.com",
+                    "mdp"
+                );
+            Projet projetTest = new Projet
+            (
+                "PRO001",
+                "Maison Familiale",
+                "10-10-2016",
+                "10-10-2016",
+                new Client("CLI001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
+                commercialTest
+            );
 
             //this.authentification = new Authentification();
-            //this.gestionProjet = new GestionProjet(connexion, commercialTest);
+            this.gestionProjet = new GestionProjet(connexion, commercialTest);
             //this.gestionPlan = new GestionPlan(connexion, projetTest);
-
+            Mainframe.Content = gestionProjet;
 
             // Démarrage de l'application sur la vue authentification
 
@@ -87,9 +87,9 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Listeners()
         {
             //Initialize_Listeners_Auth();
-            //Initialize_Listeners_GestionProjet();
-            Initialize_Listeners_GestionClient();
-            Initialize_Listeners_ParametresClient();
+            Initialize_Listeners_GestionProjet();
+            //Initialize_Listeners_GestionClient();
+            //Initialize_Listeners_ParametresClient();
             //Initialize_Listeners_GestionPlan();
             //Initialize_Listeners_ParametresPlan();
             //Initialize_Listeners_Modelisation();
