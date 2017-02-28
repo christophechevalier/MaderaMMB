@@ -308,6 +308,55 @@ namespace Madera_MMB.Lib
             }
         }
 
+        public void SyncClient()
+        {
+            MySqlDataReader Reader;
+            string query;
+            Trace.WriteLine(" ############# TEST SYNC CLIENT ############# \n");
+            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM client", MySQLCo);
+            try
+            {
+                MySQLCo.Open();
+                Reader = selectComms.ExecuteReader();
+                int i = 0;
+                LiteCo.Open();
+                while (Reader.Read())
+                {
+                    Byte[] data = (Byte[])Reader.GetValue(5);
+                    query = "replace into client(refClient, nom,prenom,adresse,codePostal,ville,email,telephone,dateCreation,dateModification) values(@refClient, @nom, @prenom, @adresse, @codePostal, @ville, @email, @telephone, @dateCreation, @dateModification)";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
+                    {
+                        command.Parameters.AddWithValue("@nom", Reader.GetString(0));
+                        command.Parameters.AddWithValue("@offrePromo", Reader.GetUInt32(1));
+                        command.Parameters.AddWithValue("@typeIsolant", Reader.GetString(2));
+                        command.Parameters.AddWithValue("@typeFinition", Reader.GetString(3));
+                        command.Parameters.AddWithValue("@qualiteHuisserie", Reader.GetString(4));
+                        command.Parameters.AddWithValue("@image", data);
+                        try
+                        {
+                            i = i + command.ExecuteNonQuery();
+                        }
+                        catch (System.Data.SQLite.SQLiteException e)
+                        {
+                            Trace.WriteLine(e.ToString());
+                            LiteCo.Close();
+                            MySQLCo.Close();
+                        }
+                    }
+                }
+                LiteCo.Close();
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC CLIENT SUCESS ############# \n");
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine(e.ToString());
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC CLIENT FAIL ############# \n");
+            }
+        }
+
         /// <summary>
         /// Méthode de test d'insertion dans la base SQLite
         /// </summary>
