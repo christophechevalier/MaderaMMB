@@ -6,15 +6,23 @@ using System.Text;
 using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
+using System.Diagnostics;
 
 namespace Madera_MMB.CAD
 {
     class DevisCAD
     {
         #region properties
-        private List<Devis> listeAllDevisParPlan { get; set; }
+        public Devis dev { get; set; }
         public Connexion conn { get; set; }
         public Plan plan { get; set; }
+        public Plancher plancher { get; set; }
+        public CoupePrincipe coupe { get; set; }
+        public Gamme gamme { get; set; }
+        public Couverture couverture { get; set; }
+        public List<Module> modules { get; set; }
+        public Client client { get; set; }
+        public Commercial commercial { get; set; }
         public Projet projet { get; set; }
         public string SQLQuery { get; set; }
         public ClientCAD clientCAD { get; set; }
@@ -29,11 +37,12 @@ namespace Madera_MMB.CAD
         /// <param name="unprojet"></param>
         /// <param name="clientCAD"></param>
         /// <param name="commercialCAD"></param>
-        public DevisCAD(Connexion laConnexion, Plan pln)
+        public DevisCAD( Plan pln)
         {
-            conn = laConnexion;
             plan = pln;
-            listeAllDevisParPlan = new List<Devis>();
+            dev = new Devis();
+
+            getDevisByPlan();
         }
         #endregion
 
@@ -42,39 +51,67 @@ namespace Madera_MMB.CAD
         /// <summary>
         /// Méthode pour récupérer le devis d'un plan
         /// </summary>
-        private void listAllDevisParPlan() 
+        private void getDevisByPlan() 
         {
             //MODIFICATION A EFFECTUER Transformer LIST => objet Devis
-            SQLQuery = "SELECT * FROM Devis WHERE refPlan = " + plan.reference;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
+            SQLQuery = "SELECT refDevis, nom, etat, quantite, unite, dateCreation, margeCommercial, margeEntreprise, prixTotalHT, prixTotalTTC, refPlan, refProjet, refClient, refCommercial FROM Devis WHERE refPlan = " + plan.reference;
 
-            try
+            //CONNEXION BDD
+            conn.LiteCo.Open();
+
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                while (reader.Read())
+                Trace.WriteLine(SQLQuery);
+                try
                 {
-                    Devis devis = new Devis();
-                    devis.reference = reader.GetString(0);
-                    devis.nom = reader.GetString(1);
-                    devis.etat = reader.GetString(2);
-                    devis.quantite = reader.GetString(3);
-                    devis.unite = reader.GetString(4);
-                    devis.creation = reader.GetDateTime(5);
-                    devis.margeCommercial = reader.GetInt32(6);
-                    devis.margeEntreprise = reader.GetInt32(7);
-                    devis.prixTotalHT = reader.GetInt32(6);
-                    devis.prixTotalTTC = reader.GetInt32(6);
-                    devis.plan = this.plan;
-                    devis.projet = this.projet;
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        Trace.WriteLine("#### GET DEVIS DATA ####");
+                        while(reader.Read())
+                        {
+                            Trace.WriteLine(
+                                reader.GetString(0) +
+                                reader.GetString(1) +
+                                reader.GetString(2) +
+                                reader.GetString(3) +
+                                reader.GetString(4) +
+                                reader.GetDateTime(5) +
+                                reader.GetInt32(6) +
+                                reader.GetInt32(7) +
+                                reader.GetInt32(8) +
+                                reader.GetInt32(9) +
+                                plan +
+                                projet +
+                                client + 
+                                commercial);
 
-                    listeAllDevisParPlan.Add(devis);
+                            Devis devis = new Devis
+                                (
+                                    reader.GetString(0),
+                                    reader.GetString(1),
+                                    reader.GetString(2),
+                                    reader.GetString(3),
+                                    reader.GetString(4),
+                                    reader.GetDateTime(5),
+                                    reader.GetInt32(6),
+                                    reader.GetInt32(7),
+                                    reader.GetInt32(8),
+                                    reader.GetInt32(9),
+                                    new Plan("Ref001", "Plan X 50x50", "2017-01-01", "2017-28-02", projet, plancher, couverture, coupe, gamme, modules),
+                                    new Projet(client, commercial),
+                                    new Client("Ref0001", "Bolzinger", "Gabriel", "362 Route de Villemur", "31340", "Mirepoix sur Tarn", "gabriel.bolzinge@gmail.com", "0562571665"),
+                                    new Commercial("RefX5968", "Crocco", "David", "")
+                                );
+                        }
+                    }
+                    Trace.WriteLine("#### GET DEVIS DATA SUCCESS ####");
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# ERREUR RECUPERATION PROJETS ################################################# \n" + ex.ToString() + "\n");
                 }
             }
-            finally
-            {
-                reader.Close();
-            }
+            conn.LiteCo.Close();   
         }
 
         //REQUETE CREATION DEVIS

@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 using Madera_MMB.Lib;
 using Madera_MMB.CAD;
 using Madera_MMB.Model;
+using System.Data.SQLite;
+using System.Diagnostics;
 
 namespace Madera_MMB.View_Crtl
 {
@@ -34,22 +36,24 @@ namespace Madera_MMB.View_Crtl
 
     public partial class GestionDevis : Page
     {
+        
         #region Properties
-        private Connexion connexion { get; set}
-        private Plan plan { get; set}
-        private DevisCAD devisCAD { get; set}
-        private Devis dev { get; set}
+        private Connexion connexion { get; set; }
+        private Plan plan { get; set; }
+        private DevisCAD devisCAD { get; set; }
+        private Devis dev { get; set; }
+        private List<Module> modules { get; set; }
         #endregion
 
         #region Constructeur
-        public GestionDevis(Connexion co, Plan pln)
+        public GestionDevis(Plan pln)
         {
             InitializeComponent();
-            connexion = co;
             plan = pln;
-            devisCAD = new DevisCAD(this.connexion, this.plan);
+            devisCAD = new DevisCAD(this.plan);
 
-            //modules = new List<Module>getModulesByRefPlan(this.plan.reference); A VOIR COMMENT RECUPERER TOUT LES MODULES PRESENT DANS LE PLAN POUR LE DEVIS
+            modules = new List<Module>();
+            //modules = getModulesByRefPlan(this.plan.reference);
 
             Initialize_Labels();
             Initialize_Devis();
@@ -63,7 +67,7 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Labels()
         {
             //IF devisCAD.devis NOT NULL START INSTANCIATION VALUES IN VIEW
-            if(devisCAD.devis != null)
+            if(devisCAD.dev != null)
             {
 
                 //CLIENT
@@ -112,7 +116,16 @@ namespace Madera_MMB.View_Crtl
             planDevis.Content = "";
             planDevis.Content = dev.plan.label;
 
+
             //ARRAY RETURN BY REQUEST GET ALL COMPOSANT FROM PLAN
+            if(dev.plan.modules != null)
+            {
+                foreach (var module in dev.plan.modules)
+                {
+                    
+                }
+            }
+            
             string[,] listeComposants = { { "Base en L; Dimension 15x10x5", "1", "1500", "1800", "1800" }, 
                                      { "Couverture tuiles", "1", "2500", "3000", "3000" } };
             int nbrcomposant = 0;
@@ -140,9 +153,12 @@ namespace Madera_MMB.View_Crtl
 
             window.Valider.Click += delegate(object sender, RoutedEventArgs e)
             {
+                //RECUPERER L'ETAT A CHANGER avec la méthode  changeStatusDevis()
                 window.Close();
             };
 
+            string status = dev.etat;
+            
             window.DataSelect.Text = "-- Choisir un état --";
             window.DataSelect.Items.Add("Accepté");
             window.DataSelect.Items.Add("Refusé");
@@ -152,8 +168,7 @@ namespace Madera_MMB.View_Crtl
             window.DataSelect.Items.Add("Brouillon");
 
             window.ShowDialog();
-
-            //RECUPERER L'ETAT A CHANGER avec la méthode  changeStatusDevis()
+            
         }
         private void Initialize_Dialog_Remise_Devis()
         {
@@ -175,6 +190,9 @@ namespace Madera_MMB.View_Crtl
         }
         private void TreeView_Loaded(object sender, RoutedEventArgs e)
         {
+            
+            
+            
             // ... Create a TreeViewItem.
             TreeViewItem item = new TreeViewItem();
             item.Header = "Porte";

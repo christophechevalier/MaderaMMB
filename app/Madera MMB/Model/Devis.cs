@@ -42,12 +42,23 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
-        public Devis(Plan unplan, Projet unprojet, Client unclient, Commercial uncommercial)
+        public Devis(string reference, string nom, string etat, string quantite, string unite, DateTime creation, int margeCommercial, int margeEntreprise, int prixTotalHT, int prixTotalTTC, Plan plan, Projet projet, Client client, Commercial commercial)
         {
-            this.plan = unplan;
-            this.projet = unprojet;
-            this.client = unclient;
-            this.commercial = uncommercial;
+            this.reference = reference;
+            this.nom = nom;
+            this.etat = etat;
+            this.quantite = quantite;
+            this.unite = unite;
+            this.creation = creation;
+            this.margeCommercial = margeCommercial;
+            this.margeEntreprise = margeEntreprise;
+            this.prixTotalHT = prixTotalHT;
+            this.prixTotalTTC = prixTotalTTC;
+            this.plan = plan;
+            this.projet = projet;
+            this.client = client;
+            this.commercial = commercial;
+
         }
         public Devis() { }
         #endregion
