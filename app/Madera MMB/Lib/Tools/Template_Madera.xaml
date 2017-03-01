@@ -9,7 +9,7 @@
     </Style>
 
     <!-- Image Logo -->
-    <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png"></BitmapImage>
+    <BitmapImage x:Key="Logo" UriSource="/Lib/logo_madera.png"></BitmapImage>
     <!--<ImageSource x:Key="LogoOff">pack://application:,,,/Madera_MMB;component/Lib/logo_offline.png</ImageSource>-->
 
 

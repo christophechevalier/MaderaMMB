@@ -14,7 +14,6 @@ namespace Madera_MMB.Model
         public string prenom { get; set; }
         public string email { get; set; }
         public string motDePasse { get; set; }
-        public string email { get; set; }
         #endregion
 
         #region Ctor
