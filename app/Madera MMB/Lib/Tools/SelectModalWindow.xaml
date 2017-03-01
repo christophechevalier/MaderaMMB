@@ -3,66 +3,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Height="300" Width="450"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
         >
-
     <Grid Background="Gray">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.1*" />
-            <ColumnDefinition Width="0.5*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="0.5*" />
-            <ColumnDefinition Width="0.1*" />
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.5*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="0.15*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.15*"/>
         </Grid.RowDefinitions>
+        <Label FontWeight="Bold" FontSize="15"  x:Name="Titlelabel" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
-        <Viewbox Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center">
-            <Label FontWeight="Bold" FontSize="28"  x:Name="titleLabel" HorizontalAlignment="Left" VerticalAlignment="Center" />
+        <Viewbox  Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button Width="75" Content="Valider" x:Name="Valider"/>
         </Viewbox>
-        <Viewbox Grid.Column="3" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center">
-            <Button Width="75" Content="Valider" x:Name="Valider" />
-        </Viewbox>
-        <Viewbox Grid.Column="1"  Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center">
+        <Viewbox Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center">
             <Button Width="75" Content="Retour" x:Name="Retour" />
         </Viewbox>
 
-        <!--<Viewbox Grid.Column="2"  Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center">-->
-            <ComboBox x:Name="DataSelect"
-                TabIndex="0"
-                Width="150"
-                Height="auto"
-                HorizontalAlignment="Center"
-                Grid.Row="1"
-                Grid.Column="2"
-                Margin="25, 25, 25, 25"
-                VerticalAlignment="Center"
-                IsEditable="True"
-                IsReadOnly="True" 
-                >
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock >
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}{0} {1}">
-                                        <Binding Path="nom" />
-                                        <Binding Path="prenom" />
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <!--</Viewbox>-->
-
-        <Viewbox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <!--Source="/Madera MMB;component/Lib/Images/existing_folder.png"-->
-            <Image x:Name="titleImage" Height="auto" Width="auto" />
-        </Viewbox>
+        <ComboBox x:Name="DataSelect"
+            TabIndex="0"
+            Width="150" 
+            Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
+            HorizontalAlignment="Center" Margin="25,25,25,25" Grid.Row="1" VerticalAlignment="Center" 
+            IsEditable="True" IsReadOnly="True"/>
     </Grid>
 </Window>

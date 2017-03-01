@@ -163,6 +163,7 @@ namespace Madera_MMB.View_Crtl
                 window.Close();
             };
 
+            window.DataSelect.Text = "Sélectionnez un client";
             window.DataSelect.ItemsSource = ClientCAD.Clients;
             window.DataSelect.DisplayMemberPath = "nomprenom";
 
