@@ -1,19 +1,11 @@
 ﻿using Madera_MMB.Lib.Tools;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Madera_MMB.Lib;
 using Madera_MMB.CAD;
 using Madera_MMB.Model;
@@ -35,9 +27,8 @@ namespace Madera_MMB.View_Crtl
         private Connexion connexion { get; set; }
         private Commercial commercial { get; set; }
         private ProjetCAD projetCAD { get; set; }
-        private View_Crtl.GestionPlan gestionPlan { get; set; }
-
-        public ClientCAD ClientCAD { get; set; }
+        private GestionPlan gestionPlan { get; set; }
+        public ClientCAD clientCAD { get; set; }
         #endregion
 
         #region Constructeur
@@ -52,8 +43,8 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             connexion = co;
             commercial = com;
-            projetCAD = new ProjetCAD(this.connexion, this.commercial);
-            ClientCAD = new ClientCAD(this.connexion);
+            clientCAD = new ClientCAD(this.connexion);
+            projetCAD = new ProjetCAD(this.connexion, this.commercial, clientCAD.Clients);
             // Appel des méthodes dans le ctor
             Initialize_Projet_Wrapper();
             Initialize_Menu_Wrapper();
@@ -68,9 +59,9 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void Initialize_Projet_Wrapper()
         {
-            if (projetCAD.projets != null)
+            if (projetCAD.Projets != null)
             {
-                foreach (var proj in projetCAD.projets)
+                foreach (var proj in projetCAD.Projets)
                 {
                     ToggleButton UnProjet = new ToggleButton();
                     UnProjet.Background = Brushes.White;
@@ -127,7 +118,7 @@ namespace Madera_MMB.View_Crtl
 
                         // Value Nombre de plans
                         lblNbPlans.Content = "";
-                        lblNbPlans.Content = this.projetCAD.countPlansProjet(proj.reference);
+                        lblNbPlans.Content = this.projetCAD.CountPlansProjet(proj.reference);
 
                         // Value Date modification
                         lblDateModification.Content = "";
@@ -149,27 +140,71 @@ namespace Madera_MMB.View_Crtl
 
         private void Initialize_Dialog_Creation_Projet()
         {
-            var window = new SelectModalWindow();
-            window.Title = "Nouveau Projet ";
-            window.Titlelabel.Content = " Sélectionner un client pour votre nouveau projet ";
-
-            window.Retour.Click += delegate(object sender, RoutedEventArgs e)
+            if (projetCAD.Projets != null)
             {
-                window.Close();
-            };
+                var window = new SelectModalWindow();
+                window.Title = "Nouveau Projet ";
+                window.TitleLabel.Content = "Nouveau Projet Client :";
 
-            window.Valider.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                window.Close();
-            };
+                window.DataSelect.Text = "Sélectionnez un client";
+                window.DataSelect.ItemsSource = clientCAD.Clients;
+                window.DataSelect.DisplayMemberPath = "nomprenom";
 
-            window.DataSelect.Text = "Sélectionnez un client";
-            window.DataSelect.ItemsSource = ClientCAD.Clients;
-            window.DataSelect.DisplayMemberPath = "nomprenom";
+                // Permet de set l'image dynamiquement
+                BitmapImage bm = new BitmapImage(new Uri("../../Lib/Images/folder_client.png", UriKind.RelativeOrAbsolute));
+                window.TitleImage.Source = bm;
 
-            window.ShowDialog();
+                //Projet NewProjet = new Projet();
+
+                window.Retour.Click += delegate(object sender, RoutedEventArgs e)
+                {
+                    window.Close();
+                };
+
+                window.Valider.Click += delegate(object sender, RoutedEventArgs e)
+                {
+                    Client getClient = new Client();
+                    
+                    if (window.DataSelect.SelectedIndex > 0)
+                    {
+                        getClient = (Client)window.DataSelect.SelectedItem;
+
+                        int i = 1;
+                        foreach (Projet proj in projetCAD.Projets)
+                        {
+                            if (proj.client.nomprenom == getClient.nomprenom)
+                            {
+                                i++;
+                            }
+                        }
+
+                        Projet NewProjet = new Projet(getClient, commercial);
+                        NewProjet.reference = generateKey(getClient, commercial);
+
+                        this.projetCAD.InsertProjet(NewProjet.reference, NewProjet.client.nomprenom + " (" + i + ") ", NewProjet.client.reference, NewProjet.commercial.reference);
+
+                        window.Close();
+
+                        this.projetCAD.ListAllProjects();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Vous devez sélectionner un client pour le nouveau projet !");
+                    }
+                };                   
+                window.ShowDialog();
+            }
         }
         #endregion
+
+        private string generateKey(Client client, Commercial comm)
+        {
+            string key = comm.nom.Substring(0, 1) + comm.prenom.Substring(0, 1) + client.nom.Substring(0, 1) + client.prenom.Substring(0, 1);
+            Random rand = new Random();
+            int temp = rand.Next(000000, 999999);
+            key += temp.ToString();
+            return key;
+        }
 
         #region Listeners
         // Afficher la liste des clients existants

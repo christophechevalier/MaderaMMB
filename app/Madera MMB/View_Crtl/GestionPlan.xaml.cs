@@ -60,7 +60,7 @@ namespace Madera_MMB.View_Crtl
             // Appel des méthodes dans le ctor
             InitializeComponent();
             Initialize_Plan_Wrapper();
-            planCAD.listAllPlansByProject();
+            planCAD.ListAllPlansByProject();
         }
         #endregion
 

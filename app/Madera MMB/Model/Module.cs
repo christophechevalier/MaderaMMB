@@ -9,7 +9,7 @@ namespace Madera_MMB.Model
     class Module
     {
         #region properties
-        public string nom { get; set; }
+        public int id { get; set; }
         public int debutPositionX { get;set; }
         public int debutPositionY { get; set; }
         public int finPositionY { get; set; }
@@ -30,9 +30,9 @@ namespace Madera_MMB.Model
                 this.slotsContenus.Add(slot);
             }
         }
-        public Module(string nom, int posXD, int posYD, int posXF, int posYF, MetaModule metaModule) 
+        public Module(int id, int posXD, int posYD, int posXF, int posYF, MetaModule metaModule) 
         {
-            this.nom = nom;
+            this.id = id;
             this.debutPositionX = posXD;
             this.debutPositionY = posYD;
             this.finPositionY = posYF;

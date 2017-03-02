@@ -36,7 +36,7 @@ namespace Madera_MMB.Lib
         public Connexion()
         {
             // Test Connexion MySQL //
-            MySQLconnected = OpenMySQLConnection();
+            //MySQLconnected = OpenMySQLConnection();
             // Test Connexion SQLite //
             SQLiteconnected = CreateSQLiteBase();
         }
@@ -423,38 +423,38 @@ namespace Madera_MMB.Lib
         /// Méthode testant la connexion à la base distante MySQL
         /// </summary>
         /// <returns>booléen renseignant le succès ou l'échec de la création/connexion à l base MySQL</returns>
-        private bool OpenMySQLConnection()
-        {
-            string connectionString = "SERVER=localhost;DATABASE=madera_mmb;UID=root;PASSWORD=;";
-            try
-            {
-                MySQLCo = new MySqlConnection(connectionString);
-                MySQLCo.Open();
-                Trace.WriteLine(" \n ################################################# MYSQL DATABASE REACHED,  BEGIN SYNCHRONISATION ... ################################################# \n");
-                return true;
-            }
-            catch (MySqlException ex)
-            {
-                Trace.WriteLine("################################################# ERROR CONNECTION MYSQL SERVER #################################################");
-                Trace.WriteLine(ex.ToString());
-                //When handling errors, you can your application's response based 
-                //on the error number.
-                //The two most common error numbers when connecting are as follows:
-                //0: Cannot connect to server.
-                //1045: Invalid user name and/or password.
-                switch (ex.Number)
-                {
-                    case 0:
-                        Trace.WriteLine("Cannot connect to server.  Contact administrator");
-                        break;
+        //private bool OpenMySQLConnection()
+        //{
+        //    string connectionString = "SERVER=localhost;DATABASE=madera_mmb;UID=root;PASSWORD=;";
+        //    try
+        //    {
+        //        MySQLCo = new MySqlConnection(connectionString);
+        //        MySQLCo.Open();
+        //        Trace.WriteLine(" \n ################################################# MYSQL DATABASE REACHED,  BEGIN SYNCHRONISATION ... ################################################# \n");
+        //        return true;
+        //    }
+        //    catch (MySqlException ex)
+        //    {
+        //        Trace.WriteLine("################################################# ERROR CONNECTION MYSQL SERVER #################################################");
+        //        Trace.WriteLine(ex.ToString());
+        //        //When handling errors, you can your application's response based 
+        //        //on the error number.
+        //        //The two most common error numbers when connecting are as follows:
+        //        //0: Cannot connect to server.
+        //        //1045: Invalid user name and/or password.
+        //        switch (ex.Number)
+        //        {
+        //            case 0:
+        //                Trace.WriteLine("Cannot connect to server.  Contact administrator");
+        //                break;
 
-                    case 1045:
-                        Trace.WriteLine("Invalid username/password, please try again");
-                        break;
-                }
-                return false;
-            }
-        }
+        //            case 1045:
+        //                Trace.WriteLine("Invalid username/password, please try again");
+        //                break;
+        //        }
+        //        return false;
+        //    }
+        //}
         #endregion
     }
 }

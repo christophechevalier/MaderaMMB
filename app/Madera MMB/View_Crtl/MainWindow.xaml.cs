@@ -56,11 +56,11 @@ namespace Madera_MMB.View_Crtl
                 );
             Projet projetTest = new Projet
             (
-                "PRO001",
+                "AT000001",
                 "Maison Familiale",
                 "10-10-2016",
                 "10-10-2016",
-                new Client("CLI001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
+                new Client("AT000001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
                 commercialTest
             );
 
@@ -135,11 +135,11 @@ namespace Madera_MMB.View_Crtl
                     );
                 Projet projetTest = new Projet
                     (
-                        "PRO001",
+                        "CCAT000001",
                         "Maison Familiale",
                         "10-10-2016",
                         "10-10-2016",
-                        new Client("CLI001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
+                        new Client("AT000001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
                         commercialTest
                     );
 

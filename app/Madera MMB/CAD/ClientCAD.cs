@@ -1,9 +1,6 @@
 ﻿using Madera_MMB.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
 using System.Diagnostics;
@@ -46,10 +43,7 @@ namespace Madera_MMB.CAD
         public ClientCAD(Connexion laConnexion)
         {
             // Instanciations
-            //Conn = laConnexion;
             Conn = new Connexion();
-
-            Clients = new List<Client>();
 
             // Appel des méthodes dans le ctor
             ListAllClients();

@@ -43,9 +43,15 @@ namespace Madera_MMB.CAD
                     {
                         while (reader.Read())
                         {
-                            Byte[] data = (Byte[])reader.GetValue(2);
+                            Byte[] data = (Byte[])reader.GetValue(3);
 
-                            Couverture couverture = new Couverture(reader.GetString(0), reader.GetInt32(1), ToImage(data));
+                            Couverture couverture = new Couverture
+                            (
+                                reader.GetString(0),
+                                reader.GetInt32(1),
+                                reader.GetBoolean(2),
+                                ToImage(data)
+                            );
                             Listecouverture.Add(couverture);
                         }
                     }

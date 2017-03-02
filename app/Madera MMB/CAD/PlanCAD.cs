@@ -41,7 +41,7 @@ namespace Madera_MMB.CAD
             plans = new List<Plan>();
 
             // Appel des méthodes dans le ctor
-            listAllPlansByProject();
+            ListAllPlansByProject();
         }
         #endregion
 
@@ -49,22 +49,12 @@ namespace Madera_MMB.CAD
         /// <summary>
         /// Méthode qui permet de récupérer la liste des plans par projet
         /// </summary>
-        public void listAllPlansByProject()
-        {
-            // Nom du/des champs mis directement dans la requête pour éviter d'avoir à passer par QSqlRecord 
-            //SQLQuery = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, id_coupe, nomGamme FROM plan WHERE refProjet = '" + projet.reference + "';";
-            //SQLQuery = "SELECT * FROM `plan` WHERE refProjet = \"" + projet.reference + "\"";
-
-            // TODO : Résoudre l'erreur retourner : SQLite error (1): near "=": syntax error
-            //SQLQuery = "SELECT * FROM plan WHERE refProjet = '" + projet.reference + "';";
-
-            //SQLQuery = "SELECT * FROM `plan` WHERE refProjet = \"" + projet.reference + "\"";
-
-
+        public void ListAllPlansByProject()
+        {          
             // Ouverture de la connexion
             conn.LiteCo.Open();
-            // CAST(id_coupe AS VARCHAR(255))
-            SQLQuery = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, id_coupe, nomGamme FROM plan WHERE refProjet = @refProjet;";
+            // Nom du/des champs mis directement dans la requête pour éviter d'avoir à passer par QSqlRecord 
+            SQLQuery = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme FROM plan WHERE refProjet = @refProjet;";
           
             //SQLQuery = "SELECT * FROM plan WHERE refProjet = @refProjet ;";
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
@@ -80,18 +70,6 @@ namespace Madera_MMB.CAD
                         Trace.WriteLine("#### GET PLANS DATA ####");
                         while (reader.Read())
                         {
-                            //Trace.WriteLine(
-                            //    reader.GetString(0) +
-                            //    reader.GetString(1) +
-                            //    reader.GetString(2) +
-                            //    reader.GetString(3) +
-                            //    projet +
-                            //    getPlancherbyType(reader.GetString(5)) +
-                            //    getCouvbyType(reader.GetString(6)) +
-                            //    getCoupebyId(reader.GetInt32(7)) +
-                            //    getModulesByRefPlan(reader.GetString(8)) +
-                            //    getGammebyNom(reader.GetString(9)));
-
                             Trace.WriteLine(
                                 reader.GetValue(0).GetType() + " || " +
                                 reader.GetValue(1).GetType() + " || " +
@@ -110,13 +88,13 @@ namespace Madera_MMB.CAD
                                     reader.GetString(2),
                                     reader.GetString(3),
                                     projet,
-                                    getCouvbyType(reader.GetString(6)),
-                                    getCoupebyId(reader.GetInt16(7)),
-                                    getPlancherbyType(reader.GetString(8)),
+                                    getCouvByType(reader.GetString(6)),
+                                    getCoupeById(reader.GetInt16(7)),
+                                    getPlancherByType(reader.GetString(8)),
                                     getModulesByRefPlan(reader.GetString(0)),
                                     getGammebyNom(reader.GetString(9))
                                 );
-                            //SQLQuery = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, id_coupe, nomGamme FROM plan WHERE refProjet = @refProjet;";
+                            //SQLQuery = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme FROM plan WHERE refProjet = @refProjet;";
                             //  string reference, string label, string creation, string modification, Projet unprojet, Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, List<Module> modules, Gamme unegamme = null
                             plans.Add(plan);
                         }
@@ -200,7 +178,7 @@ namespace Madera_MMB.CAD
         }
 
         /// <summary>
-        /// Méthode qui permet de récupérer les modules par id/refPlan
+        /// Méthode qui permet de récupérer les modules par id
         /// </summary>
         /// <param name="refPlan"></param>
         /// <returns></returns>
@@ -220,16 +198,12 @@ namespace Madera_MMB.CAD
                         {
                             Module module = new Module
                             (
-                                reader.GetString(0),
-                                //Convert.ToInt32(reader.GetValue(1)),
-                                //Convert.ToInt32(reader.GetValue(2)),
-                                //Convert.ToInt32(reader.GetValue(3)),
-                                //Convert.ToInt32(reader.GetValue(4)),
+                                reader.GetInt32(0),
                                 reader.GetInt32(1),
                                 reader.GetInt32(2),
                                 reader.GetInt32(3),
                                 reader.GetInt32(4),
-                                getMetaModuleByRef(refPlan)
+                                getMetaModuleByRef(reader.GetString(0))
                             );
                             modules.Add(module);
                         }
@@ -248,12 +222,12 @@ namespace Madera_MMB.CAD
         /// Création d'un nouveau plan
         /// </summary>
         /// <param name="plan"></param>
-        /// <param name="refClient"></param>
+        /// <param name="idClient"></param>
         /// <param name="refCommercial"></param>
-        private void insertPlan(Plan plan, string refClient, string refCommercial)
+        private void insertPlan(Plan plan, int idClient, string refCommercial)
         {
-            SQLQuery = "INSERT INTO plan (refPlan, label, dateCreation, dateModification, refProjet, refClient, refCommercial, typeCouverture, id_coupe, typePlancher, nomGamme)" +
-            "VALUES (" + plan.reference + "," + plan.label + "," + plan.creation + "," + plan.modification + "," + plan.projet.reference + "," + refClient + "," + refCommercial + "," + plan.couverture.type + "," + plan.coupePrincipe.id + "," + plan.plancher.type + "," + plan.gamme.nom + ";";
+            SQLQuery = "INSERT INTO plan (refPlan, label, dateCreation, dateModification, refProjet, idClient, refCommercial, typeCouverture, idCoupe, typePlancher, nomGamme)" +
+            "VALUES (" + plan.reference + "," + plan.label + "," + plan.creation + "," + plan.modification + "," + plan.projet.reference + "," + idClient + "," + refCommercial + "," + plan.couverture.type + "," + plan.coupePrincipe.id + "," + plan.plancher.type + "," + plan.gamme.nom + ";";
             conn.InsertSQliteQuery(SQLQuery);
             foreach (Module module in plan.modules)
             {
@@ -265,11 +239,11 @@ namespace Madera_MMB.CAD
         /// Création d'un nouveau module
         /// </summary>
         /// <param name="module"></param>
-        /// <param name="refplan"></param>
-        private void insertModule(Module module, string refplan)
+        /// <param name="refPlan"></param>
+        private void insertModule(Module module, string refPlan)
         {
-            SQLQuery = "INSERT INTO module (nom, prixHT, nbSlot, coordonneeDebutX , coordonneeDebutY, coordonneeFinX, coordonneeFinY, refMetaModule, refPlan)" +
-            "VALUES (" + module.nom + "," + module.getPrixHT() + "," + module.getNbSlot() + "," + module.debutPositionX + "," + module.debutPositionY + "," + module.finPositionX + "," + module.finPositionY + "," + module.getRefMetaModule() + "," + refplan + ";";
+            SQLQuery = "INSERT INTO module (idModule, prixHT, nbSlot, coordonneeDebutX , coordonneeDebutY, coordonneeFinX, coordonneeFinY, refMetaModule, refPlan)" +
+            "VALUES (" + module.id + "," + module.getPrixHT() + "," + module.getNbSlot() + "," + module.debutPositionX + "," + module.debutPositionY + "," + module.finPositionX + "," + module.finPositionY + "," + module.getRefMetaModule() + "," + refPlan + ";";
             conn.InsertSQliteQuery(SQLQuery);
         }
 
@@ -307,8 +281,6 @@ namespace Madera_MMB.CAD
                                 (
                                     reader.GetString(0),
                                     reader.GetString(1),
-                                    //Convert.ToInt32(reader.GetValue(2)),
-                                    //Convert.ToInt32(reader.GetValue(3)),
                                     reader.GetInt32(2),
                                     reader.GetInt32(3),                        
                                     getGammebyNom(reader.GetString(5)),
@@ -347,10 +319,10 @@ namespace Madera_MMB.CAD
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private CoupePrincipe getCoupebyId(int id)
+        private CoupePrincipe getCoupeById(int id)
         {
             CoupePrincipe coupe = new CoupePrincipe();
-            SQLQuery = "SELECT * FROM coupeprincipe WHERE id_coupe = @id;";
+            SQLQuery = "SELECT * FROM coupeprincipe WHERE idCoupe = @id;";
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
                 command.Parameters.AddWithValue("@id", id);
@@ -374,15 +346,11 @@ namespace Madera_MMB.CAD
                                 Byte[] data = (Byte[])reader.GetValue(5);
                                 coupe = new CoupePrincipe
                                 (
-                                    //Convert.ToInt32(reader.GetValue(0)),
-                                    reader.GetInt32(0),
+                                    reader.GetInt16(0),
                                     reader.GetString(1),
-                                    //Convert.ToInt32(reader.GetValue(2)),
-                                    //Convert.ToInt32(reader.GetValue(3)),
-                                    //Convert.ToInt32(reader.GetValue(4)),
-                                    reader.GetInt32(2),
-                                    reader.GetInt32(3),
-                                    reader.GetInt32(4),
+                                    reader.GetInt16(2),
+                                    reader.GetInt16(3),
+                                    reader.GetInt16(4),
                                     ToImage(data)
                                 );
                             }
@@ -390,11 +358,11 @@ namespace Madera_MMB.CAD
                             {
                                 coupe = new CoupePrincipe
                                 (
-                                    reader.GetInt32(0),
+                                    reader.GetInt16(0),
                                     reader.GetString(1),
-                                    reader.GetInt32(2),
-                                    reader.GetInt32(3),
-                                    reader.GetInt32(4)
+                                    reader.GetInt16(2),
+                                    reader.GetInt16(3),
+                                    reader.GetInt16(4)
                                 );
                             }
                         }
@@ -414,7 +382,7 @@ namespace Madera_MMB.CAD
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        private Couverture getCouvbyType(string type)
+        private Couverture getCouvByType(string type)
         {
             Couverture couv = new Couverture();
             SQLQuery = "SELECT * FROM couverture WHERE typeCouverture = @type;";
@@ -432,15 +400,17 @@ namespace Madera_MMB.CAD
                             "COUVERTURE : " +
                             reader.GetValue(0).GetType() + " || " +
                             reader.GetValue(1).GetType() + " || " +
-                            reader.GetValue(2).GetType());
-                            if (reader.GetValue(2) != null)
+                            reader.GetValue(2).GetType() + " || " +
+                            reader.GetValue(3).GetType());
+                            if (reader.GetValue(3) != null)
                             {
-                                Byte[] data = (Byte[])reader.GetValue(2);
+                                Byte[] data = (Byte[])reader.GetValue(3);
                                 couv = new Couverture
                                 (
                                     reader.GetString(0),
                                     //Convert.ToInt32(reader.GetValue(1)),
                                     reader.GetInt32(1),
+                                    reader.GetBoolean(2),
                                     ToImage(data)
                                 );
                             }
@@ -449,7 +419,8 @@ namespace Madera_MMB.CAD
                                 couv = new Couverture
                                 (
                                     reader.GetString(0),
-                                    reader.GetInt32(1)
+                                    reader.GetInt32(1),
+                                    reader.GetBoolean(2)
                                 );
                             }
                         }
@@ -490,10 +461,11 @@ namespace Madera_MMB.CAD
                             reader.GetValue(2).GetType() + " || " +
                             reader.GetValue(3).GetType() + " || " +
                             reader.GetValue(4).GetType() + " || " +
-                            reader.GetValue(5).GetType());
-                            if (reader.GetValue(5) != null)
+                            reader.GetValue(5).GetType() + " || " +
+                            reader.GetValue(6).GetType());
+                            if (reader.GetValue(6) != null)
                             {
-                                Byte[] data = (Byte[])reader.GetValue(5);
+                                Byte[] data = (Byte[])reader.GetValue(6);
                                 gamme = new Gamme
                                 (
                                     reader.GetString(0),
@@ -502,6 +474,7 @@ namespace Madera_MMB.CAD
                                     reader.GetString(2),
                                     reader.GetString(3),
                                     reader.GetString(4),
+                                    reader.GetBoolean(5),
                                     ToImage(data)
                                 );
                             }
@@ -513,7 +486,8 @@ namespace Madera_MMB.CAD
                                     reader.GetInt32(1),
                                     reader.GetString(2),
                                     reader.GetString(3),
-                                    reader.GetString(4)
+                                    reader.GetString(4),
+                                    reader.GetBoolean(5)
                                 );
                             }
                         }
@@ -533,7 +507,7 @@ namespace Madera_MMB.CAD
         /// </summary>
         /// <param name="type">type du plancher recherché</param>
         /// <returns></returns>
-        private Plancher getPlancherbyType(string type)
+        private Plancher getPlancherByType(string type)
         {
             Plancher plancher = new Plancher();
             SQLQuery = "SELECT * FROM plancher WHERE typePlancher = @type;";
