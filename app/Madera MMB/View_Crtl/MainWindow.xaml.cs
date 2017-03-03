@@ -57,9 +57,16 @@ namespace Madera_MMB.View_Crtl
         {
             InitializeComponent();
             initSynchro();
-            Initialize_Listeners();
 
-            Mainframe.Content = ParametresPlan;
+            conn.SyncCommMySQL();
+            conn.SyncParamPlan();
+            conn.SyncClient();
+
+            //Initialize_Listeners();
+
+            //Mainframe.Content = Authentification;
+
+
         }
 
         #region Process Synchro
@@ -74,11 +81,7 @@ namespace Madera_MMB.View_Crtl
                 mySQLSync = false;
                 MessageBox.Show("Mode déconnecté");
             }
-            else if (!this.conn.SyncCommMySQL())
-            {
-                MessageBox.Show("Erreur de synchronisation ! ");
-            }
-            if (!conn.SQLiteconnected)
+            else if (!conn.SQLiteconnected)
             {
                 MessageBox.Show("Base innaccessible ! Veuillez contacter l'administrateur. ");
                 Application.Current.Shutdown();
@@ -93,216 +96,216 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Listeners()
         {
             this.Authentification = new Authentification();
-            this.GestionProjet = new GestionProjet();
-            this.GestionPlan = new GestionPlan();
-            this.GestionClient = new GestionClient();
-            this.ParametresClient = new ParametresClient();
-            this.ParametresPlan = new ParametresPlan(conn);
-            this.GestionDevis = new GestionDevis();
-            this.Modelisation = new Modelisation();
+            //this.GestionProjet = new GestionProjet();
+            //this.GestionPlan = new GestionPlan();
+            //this.GestionClient = new GestionClient();
+            //this.ParametresClient = new ParametresClient();
+            //this.ParametresPlan = new ParametresPlan(conn);
+            //this.GestionDevis = new GestionDevis();
+            //this.Modelisation = new Modelisation();
 
-            Initialize_Listeners_Auth();
-            Initialize_Listeners_GestionProjet();
-            Initialize_Listeners_GestionClient();
-            Initialize_Listeners_ParametresClient();
-            Initialize_Listeners_GestionPlan();
-            Initialize_Listeners_ParametresPlan();
-            Initialize_Listeners_Modelisation();
-            Initialize_Listeners_Devis();
+            //Initialize_Listeners_Auth();
+            //Initialize_Listeners_GestionProjet();
+            //Initialize_Listeners_GestionClient();
+            //Initialize_Listeners_ParametresClient();
+            //Initialize_Listeners_GestionPlan();
+            //Initialize_Listeners_ParametresPlan();
+            //Initialize_Listeners_Modelisation();
+            //Initialize_Listeners_Devis();
         }
         #endregion
 
-        #region Initialisation Auth
-        /// <summary>
-        ///  Méthode d'abonnement à la validation du formulaire d'authentification avec contrôles des identifiants
-        /// </summary>
-        private void Initialize_Listeners_Auth()
-        {
-            commCAD = new CommercialCAD(this.conn);
-            // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
-            Authentification.BtnValiderAuth.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                string id = Authentification.username.Text;
-                string mdp = Authentification.password.Password;
-                foreach(var comm in commCAD.listeAllCommerciaux)
-                {
-                    Trace.WriteLine(comm.email + " " + comm.motDePasse);
-                    if(comm.email == id && comm.motDePasse == mdp)
-                        GestionProjet.commercialAuthentifié = comm;
-                }
-                if (GestionProjet.commercialAuthentifié != null)
-                {
-                    Mainframe.Content = GestionProjet;
-                }
-                else
-                {
-                    MessageBox.Show("Mauvais couple identifiant/mot de passe ! ");
-                }
-            };
-        }
-        #endregion
+        //#region Initialisation Auth
+        ///// <summary>
+        /////  Méthode d'abonnement à la validation du formulaire d'authentification avec contrôles des identifiants
+        ///// </summary>
+        //private void Initialize_Listeners_Auth()
+        //{
+        //    commCAD = new CommercialCAD(this.conn);
+        //    // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
+        //    Authentification.BtnValiderAuth.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        string id = Authentification.username.Text;
+        //        string mdp = Authentification.password.Password;
+        //        foreach(var comm in commCAD.listeAllCommerciaux)
+        //        {
+        //            Trace.WriteLine(comm.email + " " + comm.motDePasse);
+        //            if(comm.email == id && comm.motDePasse == mdp)
+        //                GestionProjet.commercialAuthentifié = comm;
+        //        }
+        //        if (GestionProjet.commercialAuthentifié != null)
+        //        {
+        //            Mainframe.Content = GestionProjet;
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Mauvais couple identifiant/mot de passe ! ");
+        //        }
+        //    };
+        //}
+        //#endregion
 
-        #region Initialisation Gestion Projet
-        /// <summary>
-        ///  Méthode d'abonnements à la vue Gestion Projet pour naviguer vers Gestion Client / Gestion Plan / Paramètre Client
-        /// </summary>
-        private void Initialize_Listeners_GestionProjet()
-        {
-            this.GestionProjet = new View_Crtl.GestionProjet();
-            // Click sur le bouton listes des clients pour aller dans la Vue Gestion Client
-            GestionProjet.BtnListeClient.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = GestionClient;
-            };
-            // Click sur le bouton ouvrir un projet client pour aller dans la Vue Gestion Plan
-            GestionProjet.BtnOuvrirProjet.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = GestionPlan;
-            };
-            // Click sur le bouton créer un nouveau client pour aller dans la Vue Paramètre Client
-            GestionProjet.BtnCreerClient.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = ParametresClient;
-            };
-            // Click sur le bouton se déconnecter de l'application pour aller dans la Vue Auth
-            GestionProjet.BtnSeDeconnecter.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = Authentification;
-            };
-        }
-        #endregion
+        //#region Initialisation Gestion Projet
+        ///// <summary>
+        /////  Méthode d'abonnements à la vue Gestion Projet pour naviguer vers Gestion Client / Gestion Plan / Paramètre Client
+        ///// </summary>
+        //private void Initialize_Listeners_GestionProjet()
+        //{
+        //    this.GestionProjet = new View_Crtl.GestionProjet();
+        //    // Click sur le bouton listes des clients pour aller dans la Vue Gestion Client
+        //    GestionProjet.BtnListeClient.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = GestionClient;
+        //    };
+        //    // Click sur le bouton ouvrir un projet client pour aller dans la Vue Gestion Plan
+        //    GestionProjet.BtnOuvrirProjet.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = GestionPlan;
+        //    };
+        //    // Click sur le bouton créer un nouveau client pour aller dans la Vue Paramètre Client
+        //    GestionProjet.BtnCreerClient.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = ParametresClient;
+        //    };
+        //    // Click sur le bouton se déconnecter de l'application pour aller dans la Vue Auth
+        //    GestionProjet.BtnSeDeconnecter.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = Authentification;
+        //    };
+        //}
+        //#endregion
 
-        #region Initialisation Gestion Client
-        /// <summary>
-        ///  Méthode d'abonnement à la vue Gestion CLient pour naviguer vers Paramètres Client / Gestion Projet
-        /// </summary>
-        private void Initialize_Listeners_GestionClient()
-        {
-            // Click sur le bouton éditer un client pour aller dans la Vue Paramètre Client
-            GestionClient.BtnEditerClient.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = ParametresClient;
-            };
-            // Click sur le bouton créer un nouveau client pour aller dans la Vue Paramètre Client
-            GestionClient.BtnCreerClient.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = ParametresClient;
-            };
-            // Click sur le bouton retour pour aller dans la Vue Gestion Projet
-            GestionClient.BtnRetourListeProjet.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = GestionProjet;
-            };
-        }
-        #endregion
+        //#region Initialisation Gestion Client
+        ///// <summary>
+        /////  Méthode d'abonnement à la vue Gestion CLient pour naviguer vers Paramètres Client / Gestion Projet
+        ///// </summary>
+        //private void Initialize_Listeners_GestionClient()
+        //{
+        //    // Click sur le bouton éditer un client pour aller dans la Vue Paramètre Client
+        //    GestionClient.BtnEditerClient.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = ParametresClient;
+        //    };
+        //    // Click sur le bouton créer un nouveau client pour aller dans la Vue Paramètre Client
+        //    GestionClient.BtnCreerClient.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = ParametresClient;
+        //    };
+        //    // Click sur le bouton retour pour aller dans la Vue Gestion Projet
+        //    GestionClient.BtnRetourListeProjet.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = GestionProjet;
+        //    };
+        //}
+        //#endregion
 
-        #region Initialisation Paramètres Client
-        /// <summary>
-        ///  Méthode d'abonnement à la vue Paramètres Client pour naviguer vers Gestion Client
-        /// </summary>
-        private void Initialize_Listeners_ParametresClient()
-        {
-            // Click sur le bouton valider paramètres client pour aller dans la Vue Gestion Client
-            ParametresClient.BtnConfirmerClient.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = GestionClient;
-            };
-            // Click sur le bouton retour pour aller dans la Vue Gestion Client
-            ParametresClient.BtnRetourListeProjet.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = GestionClient;
-            };
-        }
-        #endregion
+        //#region Initialisation Paramètres Client
+        ///// <summary>
+        /////  Méthode d'abonnement à la vue Paramètres Client pour naviguer vers Gestion Client
+        ///// </summary>
+        //private void Initialize_Listeners_ParametresClient()
+        //{
+        //    // Click sur le bouton valider paramètres client pour aller dans la Vue Gestion Client
+        //    ParametresClient.BtnConfirmerClient.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = GestionClient;
+        //    };
+        //    // Click sur le bouton retour pour aller dans la Vue Gestion Client
+        //    ParametresClient.BtnRetourListeProjet.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = GestionClient;
+        //    };
+        //}
+        //#endregion
 
-        #region Initialisation Gestion Plan
-        /// <summary>
-        ///  Méthode d'abonnement à la vue Gestion Plan pour naviguer vers Paramètres Plan / Modélisation
-        /// </summary>
-        private void Initialize_Listeners_GestionPlan()
-        {
-            // Click sur le bouton créer un nouveau plan pour aller dans la Vue Paramètres Plan
-            GestionPlan.BtnCréerPlan.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = ParametresPlan;
-            };
-            // Click sur le bouton ouvrir un plan pour aller dans la Vue Modélisation
-            GestionPlan.BtnOuvrirPlan.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = Modelisation;
-            };
-            // Click sur le bouton consulter le devis pour aller dans la Vue Gestion Devis
-            //GestionPlan.BtnConsulterDevis.Click += delegate(object sender, RoutedEventArgs e)
-            //{
-            //    Mainframe.Content = GestionDevis;
-            //};
-            // Click sur le bouton copier plan pour aller dans la Vue ???
-            GestionPlan.BtnCopierPlan.Click += delegate(object sender, RoutedEventArgs e)
-            {
+        //#region Initialisation Gestion Plan
+        ///// <summary>
+        /////  Méthode d'abonnement à la vue Gestion Plan pour naviguer vers Paramètres Plan / Modélisation
+        ///// </summary>
+        //private void Initialize_Listeners_GestionPlan()
+        //{
+        //    // Click sur le bouton créer un nouveau plan pour aller dans la Vue Paramètres Plan
+        //    GestionPlan.BtnCréerPlan.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = ParametresPlan;
+        //    };
+        //    // Click sur le bouton ouvrir un plan pour aller dans la Vue Modélisation
+        //    GestionPlan.BtnOuvrirPlan.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = Modelisation;
+        //    };
+        //    // Click sur le bouton consulter le devis pour aller dans la Vue Gestion Devis
+        //    //GestionPlan.BtnConsulterDevis.Click += delegate(object sender, RoutedEventArgs e)
+        //    //{
+        //    //    Mainframe.Content = GestionDevis;
+        //    //};
+        //    // Click sur le bouton copier plan pour aller dans la Vue ???
+        //    GestionPlan.BtnCopierPlan.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
 
-            };
-            // Click sur le bouton retour liste de projets pour aller dans la Vue Gestion Projet
-            GestionPlan.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = GestionProjet;
-            };
-        }
-        #endregion
+        //    };
+        //    // Click sur le bouton retour liste de projets pour aller dans la Vue Gestion Projet
+        //    GestionPlan.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = GestionProjet;
+        //    };
+        //}
+        //#endregion
 
-        #region Initialisation Paramètres Plan
-        /// <summary>
-        ///  Méthode d'abonnement à la vue Paramètres Plan pour naviguer vers Modélisation / Gestion Plan
-        /// </summary>
-        private void Initialize_Listeners_ParametresPlan()
-        {
-            // Click sur le bouton confirmer paramètres plan pour aller dans la Vue Modélisation
-            ParametresPlan.BtnConfirmerParamPlan.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                if(ParametresPlan.SetPlan())
-                {
-                    Mainframe.Content = Modelisation;
-                }
-            };
-            // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
-            ParametresPlan.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = GestionPlan;
-            };
-        }
-        #endregion
+        //#region Initialisation Paramètres Plan
+        ///// <summary>
+        /////  Méthode d'abonnement à la vue Paramètres Plan pour naviguer vers Modélisation / Gestion Plan
+        ///// </summary>
+        //private void Initialize_Listeners_ParametresPlan()
+        //{
+        //    // Click sur le bouton confirmer paramètres plan pour aller dans la Vue Modélisation
+        //    ParametresPlan.BtnConfirmerParamPlan.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        if(ParametresPlan.SetPlan())
+        //        {
+        //            Mainframe.Content = Modelisation;
+        //        }
+        //    };
+        //    // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
+        //    ParametresPlan.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = GestionPlan;
+        //    };
+        //}
+        //#endregion
 
-        #region Initialisation Modélisation
-        /// <summary>
-        ///  Méthode d'abonnement à la vue Modélisation pour naviguer vers Gestion Plan
-        /// </summary>
-        private void Initialize_Listeners_Modelisation()
-        {
-            // Click sur le bouton quitter modélisation pour aller dans la Vue Gestion Plan
-            Modelisation.BtnQuitterModelisation.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = GestionPlan;
-            };
-        }
-        #endregion
+        //#region Initialisation Modélisation
+        ///// <summary>
+        /////  Méthode d'abonnement à la vue Modélisation pour naviguer vers Gestion Plan
+        ///// </summary>
+        //private void Initialize_Listeners_Modelisation()
+        //{
+        //    // Click sur le bouton quitter modélisation pour aller dans la Vue Gestion Plan
+        //    Modelisation.BtnQuitterModelisation.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = GestionPlan;
+        //    };
+        //}
+        //#endregion
 
-        #region Initialisation Gestion Devis
-        /// <summary>
-        ///  Méthode d'abonnement à la vue Gestion Devis pour naviguer vers Gestion Plan
-        /// </summary>
-        private void Initialize_Listeners_Devis()
-        {
-            // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
-            GestionDevis.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                Mainframe.Content = GestionPlan;
-            };
-            // Click sur le bouton exporter un devis client pour ???
-            GestionDevis.BtnExportDevis.Click += delegate(object sender, RoutedEventArgs e)
-            {
+        //#region Initialisation Gestion Devis
+        ///// <summary>
+        /////  Méthode d'abonnement à la vue Gestion Devis pour naviguer vers Gestion Plan
+        ///// </summary>
+        //private void Initialize_Listeners_Devis()
+        //{
+        //    // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
+        //    GestionDevis.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
+        //        Mainframe.Content = GestionPlan;
+        //    };
+        //    // Click sur le bouton exporter un devis client pour ???
+        //    GestionDevis.BtnExportDevis.Click += delegate(object sender, RoutedEventArgs e)
+        //    {
 
-            };
-        }
-        #endregion
+        //    };
+        //}
+        //#endregion
 
         /// <summary>
         ///  Méthode définissant le comportement de l'application à la fermeture de la fenêtre

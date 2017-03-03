@@ -43,11 +43,13 @@ namespace Madera_MMB.Lib
         #endregion
 
         #region Public Methods
+
+        #region Synchro Import
         /// <summary>
         ///   Méthode de synchronisation des données des commerciaux depuis la base distante MYSQL vers la base locale SQLite
         /// </summary>
         /// <returns>booléen renseignant le succès ou l'échec de la synchronisation des données des Commerciaux</returns>
-        public bool SyncCommMySQL()
+        public void SyncCommMySQL()
         {
             MySqlDataReader Reader;
             string query;
@@ -77,20 +79,17 @@ namespace Madera_MMB.Lib
                     {
                         Trace.WriteLine(e.ToString());
                         LiteCo.Close();
-                        return false;
                     } 
                 }
                 LiteCo.Close();
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC COMMERCIAL SUCCESS ############# \n");
-                return true;
             }
             catch(MySqlException e)
             {
                 Trace.WriteLine(e.ToString());
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC COMMERCIAL FAIL ############# \n");
-                return false;
             }        
         }
 
@@ -107,207 +106,8 @@ namespace Madera_MMB.Lib
         }
 
         /// <summary>
-        ///   Méthode de synchronisation des données des coupes de principe depuis la base distante MYSQL vers la base locale SQLite
+        ///  Méthode de synchronisation des données des clients depuis la base distante MYSQL vers la base locale SQLite
         /// </summary>
-        public void SyncCoupePrincipe()
-        {
-            MySqlDataReader Reader;
-            string query;
-            Trace.WriteLine(" ############# TEST SYNC COUPE PRINCIPE ############# \n");
-            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM coupeprincipe", MySQLCo);
-            try
-            {
-                MySQLCo.Open();
-                Reader = selectComms.ExecuteReader();
-                int i = 0;
-                LiteCo.Open();
-                while (Reader.Read())
-                {
-                    Byte[] data = (Byte[])Reader.GetValue(5);
-                    query = "replace into coupeprincipe(id_coupe, label, longueur, largeur, prixHT, image) values(@id, @label, @longueur, @largeur, @prixHT, @image)";
-
-                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
-                    {
-                        command.Parameters.AddWithValue("@id", Reader.GetInt32(0));
-                        command.Parameters.AddWithValue("@label", Reader.GetString(1));
-                        command.Parameters.AddWithValue("@longueur", Reader.GetInt32(2));
-                        command.Parameters.AddWithValue("@largeur", Reader.GetInt32(3));
-                        command.Parameters.AddWithValue("@prixHT", Reader.GetInt32(3));
-                        command.Parameters.AddWithValue("@image", data);
-                        try
-                        {
-                            i = i + command.ExecuteNonQuery();
-                        }
-                        catch (System.Data.SQLite.SQLiteException e)
-                        {
-                            Trace.WriteLine(e.ToString());
-                            LiteCo.Close();
-                            MySQLCo.Close();
-                        }
-                    }
-                }
-                LiteCo.Close();
-                MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC COUPE PRINCIPE SUCESS ############# \n");
-            }
-            catch (MySqlException e)
-            {
-                Trace.WriteLine(e.ToString());
-                MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC COUPE PRINCIPE FAIL ############# \n");
-            }
-        }
-
-        /// <summary>
-        ///   Méthode de synchronisation des données des couvertures depuis la base distante MYSQL vers la base locale SQLite
-        /// </summary>
-        public void SyncCouverture()
-        {
-            MySqlDataReader Reader;
-            string query;
-            Trace.WriteLine(" ############# TEST SYNC COUVERTURE ############# \n");
-            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM couverture", MySQLCo);
-            try
-            {
-                MySQLCo.Open();
-                Reader = selectComms.ExecuteReader();
-                int i = 0;
-                LiteCo.Open();
-                while (Reader.Read())
-                {
-                    Byte[] data = (Byte[])Reader.GetValue(2);
-                    query = "replace into couverture(typeCouverture, prixHT, image) values(@typeCouverture, @prixHT, @image)";
-
-                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
-                    {
-                        command.Parameters.AddWithValue("@typeCouverture", Reader.GetString(0));
-                        command.Parameters.AddWithValue("@prixHT", Reader.GetUInt32(1));
-                        command.Parameters.AddWithValue("@image", data);
-                        try
-                        {
-                            i = i + command.ExecuteNonQuery();
-                        }
-                        catch (System.Data.SQLite.SQLiteException e)
-                        {
-                            Trace.WriteLine(e.ToString());
-                            LiteCo.Close();
-                            MySQLCo.Close();
-                        }
-                    }
-                }
-                LiteCo.Close();
-                MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC COUVERTURE SUCESS ############# \n");
-            }
-            catch (MySqlException e)
-            {
-                Trace.WriteLine(e.ToString());
-                MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC COUVERTURE FAIL ############# \n");
-            }
-        }
-
-        /// <summary>
-        ///   Méthode de synchronisation des données des planchers depuis la base distante MYSQL vers la base locale SQLite
-        /// </summary>
-        public void SyncPlancher()
-        {
-            MySqlDataReader Reader;
-            string query;
-            Trace.WriteLine(" ############# TEST SYNC PLANCHER ############# \n");
-            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM plancher", MySQLCo);
-            try
-            {
-                MySQLCo.Open();
-                Reader = selectComms.ExecuteReader();
-                int i = 0;
-                LiteCo.Open();
-                while (Reader.Read())
-                {
-                    Byte[] data = (Byte[])Reader.GetValue(2);
-                    query = "replace into plancher(typePlancher, prixHT, image) values(@typePlancher, @prixHT, @image)";
-
-                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
-                    {
-                        command.Parameters.AddWithValue("@typePlancher", Reader.GetString(0));
-                        command.Parameters.AddWithValue("@prixHT", Reader.GetUInt32(1));
-                        command.Parameters.AddWithValue("@image", data);
-                        try
-                        {
-                            i = i + command.ExecuteNonQuery();
-                        }
-                        catch (System.Data.SQLite.SQLiteException e)
-                        {
-                            Trace.WriteLine(e.ToString());
-                            LiteCo.Close();
-                            MySQLCo.Close();
-                        }
-                    }
-                }
-                LiteCo.Close();
-                MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC PLANCHER SUCESS ############# \n");
-            }
-            catch (MySqlException e)
-            {
-                Trace.WriteLine(e.ToString());
-                MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC PLANCHER FAIL ############# \n");
-            }
-        }
-
-        /// <summary>
-        ///   Méthode de synchronisation des données des gammes depuis la base distante MYSQL vers la base locale SQLite
-        /// </summary>
-        public void SyncGamme()
-        {
-            MySqlDataReader Reader;
-            string query;
-            Trace.WriteLine(" ############# TEST SYNC GAMME ############# \n");
-            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM gamme", MySQLCo);
-            try
-            {
-                MySQLCo.Open();
-                Reader = selectComms.ExecuteReader();
-                int i = 0;
-                LiteCo.Open();
-                while (Reader.Read())
-                {
-                    Byte[] data = (Byte[])Reader.GetValue(5);
-                    query = "replace into gamme(nom, offrePromo,typeIsolant,typeFinition,qualiteHuisserie, image) values(@nom, @offrePromo, @typeIsolant, @typeFinition, @qualiteHuisserie, @image)";
-
-                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
-                    {
-                        command.Parameters.AddWithValue("@nom", Reader.GetString(0));
-                        command.Parameters.AddWithValue("@offrePromo", Reader.GetUInt32(1));
-                        command.Parameters.AddWithValue("@typeIsolant", Reader.GetString(2));
-                        command.Parameters.AddWithValue("@typeFinition", Reader.GetString(3));
-                        command.Parameters.AddWithValue("@qualiteHuisserie", Reader.GetString(4));
-                        command.Parameters.AddWithValue("@image", data);
-                        try
-                        {
-                            i = i + command.ExecuteNonQuery();
-                        }
-                        catch (System.Data.SQLite.SQLiteException e)
-                        {
-                            Trace.WriteLine(e.ToString());
-                            LiteCo.Close();
-                            MySQLCo.Close();
-                        }
-                    }
-                }
-                LiteCo.Close();
-                MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC GAMME SUCESS ############# \n");
-            }
-            catch (MySqlException e)
-            {
-                Trace.WriteLine(e.ToString());
-                MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC GAMME FAIL ############# \n");
-            }
-        }
-
         public void SyncClient()
         {
             MySqlDataReader Reader;
@@ -327,12 +127,16 @@ namespace Madera_MMB.Lib
 
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
-                        command.Parameters.AddWithValue("@nom", Reader.GetString(0));
-                        command.Parameters.AddWithValue("@offrePromo", Reader.GetUInt32(1));
-                        command.Parameters.AddWithValue("@typeIsolant", Reader.GetString(2));
-                        command.Parameters.AddWithValue("@typeFinition", Reader.GetString(3));
-                        command.Parameters.AddWithValue("@qualiteHuisserie", Reader.GetString(4));
-                        command.Parameters.AddWithValue("@image", data);
+                        command.Parameters.AddWithValue("@refClient", Reader.GetString(0));
+                        command.Parameters.AddWithValue("@nom", Reader.GetString(1));
+                        command.Parameters.AddWithValue("@prenom", Reader.GetString(2));
+                        command.Parameters.AddWithValue("@adresse", Reader.GetString(3));
+                        command.Parameters.AddWithValue("@codePostal", Reader.GetString(4));
+                        command.Parameters.AddWithValue("@ville", Reader.GetString(5));
+                        command.Parameters.AddWithValue("@email", Reader.GetString(6));
+                        command.Parameters.AddWithValue("@dateCreation", Reader.GetString(7));
+                        command.Parameters.AddWithValue("@dateModification", Reader.GetString(8));
+
                         try
                         {
                             i = i + command.ExecuteNonQuery();
@@ -356,6 +160,9 @@ namespace Madera_MMB.Lib
                 Trace.WriteLine(" ############# SYNC CLIENT FAIL ############# \n");
             }
         }
+        #endregion
+
+        #region Test
 
         /// <summary>
         /// Méthode de test d'insertion dans la base SQLite
@@ -418,10 +225,213 @@ namespace Madera_MMB.Lib
                 Trace.WriteLine(ex.ToString());
             }
         }
- 
+        #endregion
+
         #endregion
 
         #region Privates Methods
+        /// <summary>
+        ///   Méthode de synchronisation des données des coupes de principe depuis la base distante MYSQL vers la base locale SQLite
+        /// </summary>
+        private void SyncCoupePrincipe()
+        {
+            MySqlDataReader Reader;
+            string query;
+            Trace.WriteLine(" ############# TEST SYNC COUPE PRINCIPE ############# \n");
+            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM coupeprincipe", MySQLCo);
+            try
+            {
+                MySQLCo.Open();
+                Reader = selectComms.ExecuteReader();
+                int i = 0;
+                LiteCo.Open();
+                while (Reader.Read())
+                {
+                    Byte[] data = (Byte[])Reader.GetValue(5);
+                    query = "replace into coupeprincipe(id_coupe, label, longueur, largeur, prixHT, image) values(@id, @label, @longueur, @largeur, @prixHT, @image)";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
+                    {
+                        command.Parameters.AddWithValue("@id", Reader.GetInt32(0));
+                        command.Parameters.AddWithValue("@label", Reader.GetString(1));
+                        command.Parameters.AddWithValue("@longueur", Reader.GetInt32(2));
+                        command.Parameters.AddWithValue("@largeur", Reader.GetInt32(3));
+                        command.Parameters.AddWithValue("@prixHT", Reader.GetInt32(3));
+                        command.Parameters.AddWithValue("@image", data);
+                        try
+                        {
+                            i = i + command.ExecuteNonQuery();
+                        }
+                        catch (System.Data.SQLite.SQLiteException e)
+                        {
+                            Trace.WriteLine(e.ToString());
+                            LiteCo.Close();
+                            MySQLCo.Close();
+                        }
+                    }
+                }
+                LiteCo.Close();
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC COUPE PRINCIPE SUCESS ############# \n");
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine(e.ToString());
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC COUPE PRINCIPE FAIL ############# \n");
+            }
+        }
+
+        /// <summary>
+        ///   Méthode de synchronisation des données des couvertures depuis la base distante MYSQL vers la base locale SQLite
+        /// </summary>
+        private void SyncCouverture()
+        {
+            MySqlDataReader Reader;
+            string query;
+            Trace.WriteLine(" ############# TEST SYNC COUVERTURE ############# \n");
+            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM couverture", MySQLCo);
+            try
+            {
+                MySQLCo.Open();
+                Reader = selectComms.ExecuteReader();
+                int i = 0;
+                LiteCo.Open();
+                while (Reader.Read())
+                {
+                    Byte[] data = (Byte[])Reader.GetValue(2);
+                    query = "replace into couverture(typeCouverture, prixHT, image) values(@typeCouverture, @prixHT, @image)";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
+                    {
+                        command.Parameters.AddWithValue("@typeCouverture", Reader.GetString(0));
+                        command.Parameters.AddWithValue("@prixHT", Reader.GetUInt32(1));
+                        command.Parameters.AddWithValue("@image", data);
+                        try
+                        {
+                            i = i + command.ExecuteNonQuery();
+                        }
+                        catch (System.Data.SQLite.SQLiteException e)
+                        {
+                            Trace.WriteLine(e.ToString());
+                            LiteCo.Close();
+                            MySQLCo.Close();
+                        }
+                    }
+                }
+                LiteCo.Close();
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC COUVERTURE SUCESS ############# \n");
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine(e.ToString());
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC COUVERTURE FAIL ############# \n");
+            }
+        }
+
+        /// <summary>
+        ///   Méthode de synchronisation des données des planchers depuis la base distante MYSQL vers la base locale SQLite
+        /// </summary>
+        private void SyncPlancher()
+        {
+            MySqlDataReader Reader;
+            string query;
+            Trace.WriteLine(" ############# TEST SYNC PLANCHER ############# \n");
+            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM plancher", MySQLCo);
+            try
+            {
+                MySQLCo.Open();
+                Reader = selectComms.ExecuteReader();
+                int i = 0;
+                LiteCo.Open();
+                while (Reader.Read())
+                {
+                    Byte[] data = (Byte[])Reader.GetValue(2);
+                    query = "replace into plancher(typePlancher, prixHT, image) values(@typePlancher, @prixHT, @image)";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
+                    {
+                        command.Parameters.AddWithValue("@typePlancher", Reader.GetString(0));
+                        command.Parameters.AddWithValue("@prixHT", Reader.GetUInt32(1));
+                        command.Parameters.AddWithValue("@image", data);
+                        try
+                        {
+                            i = i + command.ExecuteNonQuery();
+                        }
+                        catch (System.Data.SQLite.SQLiteException e)
+                        {
+                            Trace.WriteLine(e.ToString());
+                            LiteCo.Close();
+                            MySQLCo.Close();
+                        }
+                    }
+                }
+                LiteCo.Close();
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC PLANCHER SUCESS ############# \n");
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine(e.ToString());
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC PLANCHER FAIL ############# \n");
+            }
+        }
+
+        /// <summary>
+        ///   Méthode de synchronisation des données des gammes depuis la base distante MYSQL vers la base locale SQLite
+        /// </summary>
+        private void SyncGamme()
+        {
+            MySqlDataReader Reader;
+            string query;
+            Trace.WriteLine(" ############# TEST SYNC GAMME ############# \n");
+            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM gamme", MySQLCo);
+            try
+            {
+                MySQLCo.Open();
+                Reader = selectComms.ExecuteReader();
+                int i = 0;
+                LiteCo.Open();
+                while (Reader.Read())
+                {
+                    Byte[] data = (Byte[])Reader.GetValue(5);
+                    query = "replace into gamme(nom, offrePromo,typeIsolant,typeFinition,qualiteHuisserie, image) values(@nom, @offrePromo, @typeIsolant, @typeFinition, @qualiteHuisserie, @image)";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
+                    {
+                        command.Parameters.AddWithValue("@nom", Reader.GetString(0));
+                        command.Parameters.AddWithValue("@offrePromo", Reader.GetUInt32(1));
+                        command.Parameters.AddWithValue("@typeIsolant", Reader.GetString(2));
+                        command.Parameters.AddWithValue("@typeFinition", Reader.GetString(3));
+                        command.Parameters.AddWithValue("@qualiteHuisserie", Reader.GetString(4));
+                        command.Parameters.AddWithValue("@image", data);
+                        try
+                        {
+                            i = i + command.ExecuteNonQuery();
+                        }
+                        catch (System.Data.SQLite.SQLiteException e)
+                        {
+                            Trace.WriteLine(e.ToString());
+                            LiteCo.Close();
+                            MySQLCo.Close();
+                        }
+                    }
+                }
+                LiteCo.Close();
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC GAMME SUCESS ############# \n");
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine(e.ToString());
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC GAMME FAIL ############# \n");
+            }
+        }
+
         /// <summary>
         /// Méthode testant l'existence d'une base SQLite, la créé si inexistante
         /// </summary>
