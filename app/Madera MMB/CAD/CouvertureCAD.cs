@@ -33,7 +33,7 @@ namespace Madera_MMB.CAD
         #region privates methods
         private void listAllCouverture()
         {
-            SQLQuery = "SELECT * FROM couverture";
+            SQLQuery = "SELECT * FROM couverture WHERE statut = 1";
             conn.LiteCo.Open();
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
@@ -41,14 +41,15 @@ namespace Madera_MMB.CAD
                 {
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
+                        Trace.Write("#### GET COUVERTURES DATA #### \n");
                         while (reader.Read())
                         {
                             Byte[] data = (Byte[])reader.GetValue(2);
-
-                            Couverture couverture = new Couverture(reader.GetString(0), reader.GetInt32(1), ToImage(data));
+                            Couverture couverture = new Couverture(reader.GetString(0), reader.GetInt32(1), ToImage(data), reader.GetBoolean(3));
                             Listecouverture.Add(couverture);
                         }
                     }
+                    Trace.WriteLine("#### GET COUVERTURES DATA SUCCESS ####");
                 }
                 catch (SQLiteException ex)
                 {

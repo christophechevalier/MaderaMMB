@@ -33,7 +33,7 @@ namespace Madera_MMB.CAD
         #region privates methods
         private void listAllGamme()
         {
-            SQLQuery = "SELECT * FROM gamme";
+            SQLQuery = "SELECT * FROM gamme WHERE statut = 1";
             conn.LiteCo.Open();
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
@@ -41,13 +41,15 @@ namespace Madera_MMB.CAD
                 {
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
+                        Trace.Write("#### GET GAMMES DATA #### \n");
                         while (reader.Read())
                         {
                             Byte[] data = (Byte[])reader.GetValue(5);
-                            Gamme gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), ToImage(data));
+                            Gamme gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), ToImage(data), reader.GetBoolean(6));
                             Listegamme.Add(gamme);
                         }
                     }
+                    Trace.WriteLine("#### GET GAMMES DATA SUCCESS ####");
                 }
                 catch (SQLiteException ex)
                 {

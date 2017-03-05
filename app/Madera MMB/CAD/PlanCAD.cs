@@ -20,7 +20,6 @@ namespace Madera_MMB.CAD
         public string SQLQuery { get; set; }
         public List<Plan> plans { get; set; }
         public MetaSlotCAD metaslotCAD { get; set; }
-        public ComposantCAD compCAD { get; set; }
         #endregion
 
         #region Ctor
@@ -37,7 +36,6 @@ namespace Madera_MMB.CAD
 
             projet = unprojet;
             metaslotCAD = new MetaSlotCAD(conn);
-            compCAD = new ComposantCAD(conn);
             plans = new List<Plan>();
 
             // Appel des méthodes dans le ctor
@@ -51,21 +49,14 @@ namespace Madera_MMB.CAD
         /// </summary>
         public void listAllPlansByProject()
         {
-            // Nom du/des champs mis directement dans la requête pour éviter d'avoir à passer par QSqlRecord 
-            //SQLQuery = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, id_coupe, nomGamme FROM plan WHERE refProjet = '" + projet.reference + "';";
-            //SQLQuery = "SELECT * FROM `plan` WHERE refProjet = \"" + projet.reference + "\"";
-
-            // TODO : Résoudre l'erreur retourner : SQLite error (1): near "=": syntax error
-            SQLQuery = "SELECT * FROM `plan` WHERE refProjet = '" + projet.reference + "';";
-
-            // Ouverture de la connexion
+            SQLQuery = "SELECT * FROM plan WHERE refProjet = '@refProjet'";
             conn.LiteCo.Open();
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                Trace.WriteLine(SQLQuery);
+                command.Parameters.AddWithValue("@refProjet", projet.reference);
+                Trace.WriteLine(SQLQuery + " " + projet.reference);
                 try
                 {
-                    // Execute le lecteur de donnée
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
                         Trace.WriteLine("#### GET PLANS DATA ####");
@@ -111,11 +102,11 @@ namespace Madera_MMB.CAD
 
         #region Privates methods
         /// <summary>
-        /// 
+        /// Récupères tous les métamodules du catalogue qui sont à jour
         /// </summary>
         private List<MetaModule> listAllMetaModules()
         {
-            SQLQuery = "SELECT * FROM Metamodule";
+            SQLQuery = "SELECT * FROM Metamodule WHERE statut = 1";
             SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
             command.CommandText = SQLQuery;
             List<MetaModule> listMetaModule = new List<MetaModule>();
@@ -133,10 +124,9 @@ namespace Madera_MMB.CAD
                             reader.GetInt32(2),
                             reader.GetInt32(3),
                             ToImage(data),
-                            getGammebyNom(reader.GetString(5)),
-                            this.compCAD.listComposantByMetamodule(reader.GetString(0)),
-                            this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0))
-                            );
+                            getGammebyNom(reader.GetString(7)),
+                            this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
+                            reader.GetBoolean(5));
                         listMetaModule.Add(metamodule);
                     }
                 }
@@ -231,7 +221,7 @@ namespace Madera_MMB.CAD
                     while (reader.Read())
                     {
                         Byte[] data = (Byte[])reader.GetValue(5);
-                        coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), ToImage(data));
+                        coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), ToImage(data), reader.GetBoolean(6));
                     }
                 }
                 catch (SQLiteException ex)
@@ -267,9 +257,9 @@ namespace Madera_MMB.CAD
                         reader.GetInt32(2),
                         reader.GetInt32(3),
                         ToImage(data),
-                        getGammebyNom(reader.GetString(5)),
-                        this.compCAD.listComposantByMetamodule(reader.GetString(0)),
-                        this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)));
+                        getGammebyNom(reader.GetString(7)),
+                        this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
+                        reader.GetBoolean(5));
                         reader.Close();
                     }
                 }
@@ -300,7 +290,7 @@ namespace Madera_MMB.CAD
                     while (reader.Read())
                     {
                         Byte[] data = (Byte[])reader.GetValue(2);
-                        couv = new Couverture(reader.GetString(0), reader.GetInt32(1), ToImage(data));
+                        couv = new Couverture(reader.GetString(0), reader.GetInt32(1), ToImage(data), reader.GetBoolean(3));
                     }
                 }
                 catch (SQLiteException ex)
@@ -330,7 +320,7 @@ namespace Madera_MMB.CAD
                     while (reader.Read())
                     {
                         Byte[] data = (Byte[])reader.GetValue(5);
-                        gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), ToImage(data));
+                        gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), ToImage(data), reader.GetBoolean(6));
                     }
 
                 }
@@ -361,7 +351,7 @@ namespace Madera_MMB.CAD
                     while (reader.Read())
                     {
                         Byte[] data = (Byte[])reader.GetValue(2);
-                        plancher = new Plancher(reader.GetString(0), reader.GetInt32(1), ToImage(data));
+                        plancher = new Plancher(reader.GetString(0), reader.GetInt32(1), ToImage(data), reader.GetBoolean(3));
                     }
                 }
                 catch (SQLiteException ex)

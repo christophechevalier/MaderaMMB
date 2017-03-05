@@ -16,6 +16,7 @@ using System.Diagnostics;
 using Madera_MMB.View_Crtl;
 using Madera_MMB.Lib;
 using Madera_MMB.CAD;
+using Madera_MMB.Model;
 
 namespace Madera_MMB.View_Crtl
 {
@@ -58,15 +59,52 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             initSynchro();
 
+
+            /// Test SYNCHRO import ///
             conn.SyncCommMySQL();
             conn.SyncParamPlan();
             conn.SyncClient();
+            conn.SyncMetamodules();
+            conn.SyncMetaslot();
+            conn.SyncAssocMetaModuleMetaslot();
+
+
+            /// Test CAD avec nouvelles données ///
+            CommercialCAD commCAD = new CommercialCAD(conn);
+            ClientCAD clientCAD = new ClientCAD(conn);
+            CoupePrincipeCAD coupeCAD = new CoupePrincipeCAD(conn);
+            CouvertureCAD couvCAD = new CouvertureCAD(conn);
+            GammeCAD gamCAD = new GammeCAD(conn);
+            PlancherCAD plancherCAD = new PlancherCAD(conn);
+
+            Commercial commercialTest = new Commercial
+               (
+                   "COM003",
+                   "Chevalier",
+                   "Christophe",
+                   "monemail@gmail.com",
+                   "mdp"
+               );
+            Projet projetTest = new Projet
+            (
+                "PRO001",
+                "Maison Familiale",
+                "10-10-2016",
+                "10-10-2016",
+                new Client("CLI001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
+                commercialTest);
+            PlanCAD planCAD = new PlanCAD(conn, projetTest);
+
+
+            /// Test SYNCHRO export ///
+            conn.ExpClients();
+            conn.ExpProjets();
+            conn.ExpPlans();
+            conn.ExpModules();
+
 
             //Initialize_Listeners();
-
             //Mainframe.Content = Authentification;
-
-
         }
 
         #region Process Synchro
