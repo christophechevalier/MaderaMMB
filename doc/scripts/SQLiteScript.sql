@@ -13,7 +13,7 @@ CREATE TABLE commercial (
 -- Table Client OK
 
 CREATE TABLE client (
-  refClient TEXT PRIMARY KEY NOT NULL,
+  idClient INTEGER PRIMARY KEY AUTOINCREMENT,
   nom TEXT NOT NULL,
   prenom TEXT NOT NULL,
   adresse TEXT NOT NULL,
@@ -28,13 +28,13 @@ CREATE TABLE client (
 -- Table Projet OK
 
 CREATE TABLE projet (
-  refProjet TEXT PRIMARY KEY NOT NULL,
+  idProjet INTEGER PRIMARY KEY AUTOINCREMENT,
   nom TEXT NOT NULL,
   dateCreation TEXT NOT NULL,
   dateModification TEXT NOT NULL,
-  refClient TEXT NOT NULL,
+  idClient TEXT NOT NULL,
   refCommercial TEXT NOT NULL,
-  FOREIGN KEY (refClient) REFERENCES client,
+  FOREIGN KEY (idClient) REFERENCES client,
   FOREIGN KEY (refCommercial) REFERENCES commercial
 ); 
 
@@ -51,7 +51,7 @@ CREATE TABLE couverture (
 -- Table CoupePrincipe OK
 
 CREATE TABLE coupePrincipe (
-  id_coupe INTEGER PRIMARY KEY AUTOINCREMENT,
+  idCoupe INTEGER PRIMARY KEY AUTOINCREMENT,
   label TEXT NOT NULL,
   longueur INTEGER NOT NULL,
   largeur INTEGER NOT NULL,
@@ -88,18 +88,18 @@ CREATE TABLE gamme (
 -- Table Plan OK
 
 CREATE TABLE plan (
-  refPlan TEXT PRIMARY KEY NOT NULL,
+  idPlan INTEGER PRIMARY KEY AUTOINCREMENT,
   label TEXT NOT NULL,
   dateCreation datetime NOT NULL,
   dateModification datetime NOT NULL,
-  refProjet TEXT NOT NULL,
+  idProjet TEXT NOT NULL,
   typeCouverture TEXT NOT NULL,
-  id_coupe int NOT NULL,
+  idCoupe int NOT NULL,
   typePlancher TEXT NOT NULL,
   nomGamme TEXT NOT NULL,
-  FOREIGN KEY (refProjet) REFERENCES projet,
+  FOREIGN KEY (idProjet) REFERENCES projet,
   FOREIGN KEY (typeCouverture) REFERENCES couverture,
-  FOREIGN KEY (id_coupe) REFERENCES coupePrincipe,
+  FOREIGN KEY (idCoupe) REFERENCES coupePrincipe,
   FOREIGN KEY (typePlancher) REFERENCES plancher,
   FOREIGN KEY (nomGamme) REFERENCES gamme
 );
@@ -118,13 +118,13 @@ CREATE TABLE devis (
   margeEntreprise INTEGER NOT NULL,
   prixTotalHT INTEGER NOT NULL,
   prixTotalTTC INTEGER NOT NULL,
-  refPlan TEXT NOT NULL,
-  refProjet TEXT NOT NULL,
-  refClient TEXT NOT NULL,
+  idPlan TEXT NOT NULL,
+  idProjet TEXT NOT NULL,
+  idClient TEXT NOT NULL,
   refCommercial TEXT NOT NULL,
-  FOREIGN KEY (refPlan) REFERENCES plan,
-  FOREIGN KEY (refProjet) REFERENCES projet,
-  FOREIGN KEY (refClient) REFERENCES client,
+  FOREIGN KEY (idPlan) REFERENCES plan,
+  FOREIGN KEY (idProjet) REFERENCES projet,
+  FOREIGN KEY (idClient) REFERENCES client,
   FOREIGN KEY (refCommercial) REFERENCES commercial
 );
 
@@ -146,21 +146,21 @@ CREATE TABLE metamodule (
 -- Table Module OK
 
 CREATE TABLE module (
-  id_module INTEGER PRIMARY KEY NOT NULL,
-  coordonneeDebutX TEXT INT NULL,
+  idModule INTEGER PRIMARY KEY NOT NULL,
+  coordonneeDebutX INT NOT NULL,
   coordonneeDebutY INT NOT NULL,
   colspan INT NULL,
   rowspan INT NULL,
   refMetaModule TEXT NOT NULL,
-  refPlan TEXT NOT NULL,
-  FOREIGN KEY (refMetaModule) REFERENCES MetaModule,
-  FOREIGN KEY (refPlan) REFERENCES plan
+  idPlan TEXT NOT NULL,
+  FOREIGN KEY (refMetaModule) REFERENCES metamodule,
+  FOREIGN KEY (idPlan) REFERENCES plan
 ); 
 
 
 -- Table MetaSlot OK
 
-CREATE TABLE MetaSlot (
+CREATE TABLE metaslot (
   idMetaSlot INTEGER PRIMARY KEY AUTOINCREMENT,
   label TEXT NOT NULL,
   numSlotPosition INTEGER NOT NULL,
@@ -179,13 +179,13 @@ CREATE TABLE slot (
   idMetaSlot INTEGER NOT NULL,
   FOREIGN KEY (contenu) REFERENCES module,
   FOREIGN KEY (parent) REFERENCES module,
-  FOREIGN KEY (idMetaSlot) REFERENCES MetaSlot
+  FOREIGN KEY (idMetaSlot) REFERENCES metaslot
 ); 
 
 -- Table MetaModul_has_MetaSlot OK
 
 CREATE TABLE MetaModul_has_MetaSlot (
-  id_composition INTEGER PRIMARY KEY AUTOINCREMENT,
+  idComposition INTEGER PRIMARY KEY AUTOINCREMENT,
   refMetaModule TEXT NOT NULL,
   idMetaSlot INTEGER NOT NULL,
   FOREIGN KEY (refMetaModule) REFERENCES metamodule,
@@ -228,41 +228,41 @@ INSERT INTO commercial (refCommercial, nom, prenom, email, motDePasse) VALUES
 -- Contenu de la table `client`
 --
 
-INSERT INTO client (refClient, nom, prenom, adresse, codePostal, ville, email, telephone, dateCreation, dateModification) VALUES
-('CLI001', 'Arthur', 'Tv', '10 chemin des Albios', '31130', 'Balma', 'arthur@gmail.com', '06-06-06-06-06', '10-10-2016', '10-10-2016'),
-('CLI002', 'Beatrice', 'Tijuana', '9 chemin des iles', '31000', 'Toulouse', 'beatrice@gmail.com', '06-06-06-06-07', '11-10-2016', '11-10-2016'),
-('CLI003', 'Marco', 'Polo', '2 rue de la paume', '75000', 'Paris', 'marco@gmail.com', '06-06-06-06-08', '12-11-2016', '12-11-2016'),
-('CLI004', 'Jessica', 'Palmer', '69 rue de lalimapo', '33000', 'Bordeaux', 'jess@gmail.com', '06-06-06-06-08', '13-11-2016', '13-11-2016');
+INSERT INTO client (nom, prenom, adresse, codePostal, ville, email, telephone, dateCreation, dateModification) VALUES
+('Arthur', 'Tv', '10 chemin des Albios', '31130', 'Balma', 'arthur@gmail.com', '06-06-06-06-06', '10-10-2016', '10-10-2016'),
+('Beatrice', 'Tijuana', '9 chemin des iles', '31000', 'Toulouse', 'beatrice@gmail.com', '06-06-06-06-07', '11-10-2016', '11-10-2016'),
+('Marco', 'Polo', '2 rue de la paume', '75000', 'Paris', 'marco@gmail.com', '06-06-06-06-08', '12-11-2016', '12-11-2016'),
+('Jessica', 'Palmer', '69 rue de lalimapo', '33000', 'Bordeaux', 'jess@gmail.com', '06-06-06-06-08', '13-11-2016', '13-11-2016');
 
 
 --
 -- Contenu de la table `projet`
 --
 
-INSERT INTO projet (refProjet, nom, dateCreation, dateModification, refClient, refCommercial) VALUES
-('PRO001', 'Maison Familiale', '10-10-2016', '10-10-2016', 'CLI001', 'COM003'),
-('PRO002', 'Maison Vacance', '11-10-2016', '11-10-2016', 'CLI003', 'COM003'),
-('PRO003', 'Maison Montagne', '12-10-2016', '12-10-2016', 'CLI003', 'COM003'),
-('PRO004', 'Maison Mer', '13-10-2016', '13-10-2016', 'CLI004', 'COM003'),
-('PRO005', 'Maison Secondaire', '14-10-2016', '14-10-2016', 'CLI004', 'COM003');
+INSERT INTO projet (nom, dateCreation, dateModification, idClient, refCommercial) VALUES
+('Maison Familiale', '10-10-2016', '10-10-2016', 1, 'COM003'),
+('Maison Vacance', '11-10-2016', '11-10-2016', 3, 'COM003'),
+('Maison Montagne', '12-10-2016', '12-10-2016', 3, 'COM003'),
+('Maison Mer', '13-10-2016', '13-10-2016', 4, 'COM003'),
+('Maison Secondaire', '14-10-2016', '14-10-2016', 4, 'COM003');
 
 --
 -- Contenu de la table `plan`
 --
 
-INSERT INTO plan (refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, id_coupe, nomGamme) VALUES
-('PLA001', 'Test 1', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'PRO001', 'Bois', 'Ardoise pourpre', 2, 'Aluminium'),
-('PLA002', 'Test 2', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'PRO003', 'Bois', 'Ardoise pourpre', 3, 'Aluminium'),
-('PLA003', 'Test 3', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'PRO002', 'Bois', 'Ardoise pourpre', 4, 'Aluminium');
+INSERT INTO plan (label, dateCreation, dateModification, idProjet, typePlancher, typeCouverture, idCoupe, nomGamme) VALUES
+('Test 1', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 1, 'Bois', 'Ardoise pourpre', 2, 'Aluminium'),
+('Test 2', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 3, 'Bois', 'Ardoise pourpre', 3, 'Aluminium'),
+('Test 3', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 2, 'Bois', 'Ardoise pourpre', 4, 'Aluminium');
 
 --
 -- Contenu de la table `module`
 --
 
-INSERT INTO module (id_module, coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, refPlan) VALUES
-(1, 25, 35, 5, 0, '201443874685331', 'PLA001'),
-(2, 44, 44, 4, 0, '201443874685331', 'PLA001'),
-(3, 33, 33, 0, 3, '201443874685331', 'PLA001');
+INSERT INTO module (idModule, coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, idPlan) VALUES
+(1, 25, 35, 5, 0, '201443874685331', 1),
+(2, 44, 44, 4, 0, '201443874685331', 1),
+(3, 33, 33, 0, 3, '201443874685331', 1);
 
 
 
@@ -298,4 +298,3 @@ INSERT INTO plancher (typePlancher, prixHT, image) VALUES
 ('Bois', 50, ''),
 ('Carrelage', 90, '');
 */
-
