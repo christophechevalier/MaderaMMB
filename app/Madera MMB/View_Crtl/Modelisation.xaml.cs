@@ -7,17 +7,31 @@ using Madera_MMB.Lib.Tools;
 using Madera_MMB.Model;
 using Madera_MMB.CAD;
 using System.Windows.Media;
+using System.Windows.Input;
+using System.Windows.Controls.Primitives;
 
 namespace Madera_MMB.View_Crtl
 {
     /// <summary>
-    /// Logique d'interaction pour Modelisation.xaml
+    /// Controle de la vue Modelisation
+    /// Features en place :
+    ///     Placement de mur
+    ///     Retrait de mur
+    ///     Selection d'un mode
+    ///     Afficher/Masquer liste d'options
+    ///     Image des murInt
+    /// Restantes :
+    ///     Selection type du mur à placer
+    ///     Selection module à placer dans un slot
+    ///     Generation auto plan
+    ///     Sauvegarde plan
+    ///     Modelisation initiale
     /// </summary>
     public partial class Modelisation : Page
     {
-
+        #region Attributs
         private Grid grid = new Grid();
-        private ButtonM[,] listB = new ButtonM[30, 40];
+        private ButtonM[,] listB = new ButtonM[40, 30];
         private ListBox listBox = new ListBox();
         private string mode = "default";
 
@@ -38,21 +52,19 @@ namespace Madera_MMB.View_Crtl
         private Brush tGauche = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/tGauche.png", UriKind.RelativeOrAbsolute)));
         private Brush tDroite = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/tDroite.png", UriKind.RelativeOrAbsolute)));
 
-        private ButtonM slot = new ButtonM(ButtonM.type.SlotMur, 14, 5, 1, 1);
-        private ButtonM slot2 = new ButtonM(ButtonM.type.SlotMur, 14, 24, 1, 1);
-        private ButtonM murdroit = new ButtonM(ButtonM.type.Mur, 24, 5, 1, 20);
-        private ButtonM murgauche = new ButtonM(ButtonM.type.Mur, 4, 5, 1, 20);
-        private ButtonM murbas = new ButtonM(ButtonM.type.Mur, 5, 24, 20, 1);
-        private ButtonM murhaut = new ButtonM(ButtonM.type.Mur, 5, 5, 20, 1);
+        private Brush mur_beton = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/mur_beton.jpg", UriKind.RelativeOrAbsolute)));
+
+        private ButtonM slot = new ButtonM(ButtonM.type.SlotMur, 14, 5, 1, 1, "0");
+        private ButtonM slot2 = new ButtonM(ButtonM.type.SlotMur, 14, 24, 1, 1, "0");
+        private ButtonM murdroit = new ButtonM(ButtonM.type.Mur, 24, 5, 1, 20, "0");
+        private ButtonM murgauche = new ButtonM(ButtonM.type.Mur, 4, 5, 1, 20, "0");
+        private ButtonM murbas = new ButtonM(ButtonM.type.Mur, 5, 24, 20, 1, "0");
+        private ButtonM murhaut = new ButtonM(ButtonM.type.Mur, 5, 5, 20, 1, "0");
+        #endregion
 
         public Modelisation()
         {
             InitializeComponent();
-
-            /*********************************************************** BOUCHON *********************************************************************/
-            //planCad = new PlanCAD(new Connexion(), plan.projet, plan.couverture, plan.coupePrincipe, plan.plancher, plan.gamme, new MetamoduleCAD());
-            /*********************************************************** BOUCHON *********************************************************************/
-
             initialize();
         }
 
@@ -61,11 +73,17 @@ namespace Madera_MMB.View_Crtl
             grid.ShowGridLines = true;
             grid.Margin = new Thickness(7);
 
+            /*********************************************************** BOUCHON *********************************************************************/
+            //planCad = new PlanCAD(new Connexion(), plan.projet, plan.couverture, plan.coupePrincipe, plan.plancher, plan.gamme, new MetamoduleCAD());
+            /*********************************************************** BOUCHON *********************************************************************/
+
             slot.Click += new RoutedEventHandler(checkType);
+            slot2.Click += new RoutedEventHandler(checkType);
             tracer.Click += new RoutedEventHandler(changeMode);
             retirer.Click += new RoutedEventHandler(changeMode);
             Grid.SetColumn(listBox, 0);
-            Grid.SetRow(listBox, 1);
+            Grid.SetRow(listBox, 2);
+            listBox.Margin = new Thickness(10,10,10,10);
 
             ColumnDefinition col;
             RowDefinition row;
@@ -85,120 +103,22 @@ namespace Madera_MMB.View_Crtl
             }
 
             contenaire.Children.Add(grid);
-
-            //initializeImage();
-            loadGrid();
+            loadGridButton();
         }
 
-        //private void initializeImage()
-        //{
-        //    Uri imageUri;
-        //    Thickness margin;
-            
-        //    BitmapImage bit = new BitmapImage(new Uri(@"/Madera MMB;component/Lib/Images/croix.png", UriKind.RelativeOrAbsolute));
-        //    croix.Source = bit;
-        //    croix.MinWidth = 50;
-        //    croix.MinHeight = 50;
-        //    croix.HorizontalAlignment = HorizontalAlignment.Center;
-        //    croix.VerticalAlignment = VerticalAlignment.Center;
-        //    margin = croix.Margin;
-        //    margin.Left = -3;
-        //    margin.Right = -3;
-        //    margin.Bottom = -3;
-        //    margin.Top = -3;
-        //    croix.Margin = margin;
-
-        //    imageUri = new Uri(@"/Madera MMB;component/Lib/Images/mur_horizontal.png", UriKind.Relative);
-        //    murh.Source = new BitmapImage(imageUri);
-        //    murh.MinWidth = 50;
-        //    murh.MinHeight = 50;
-        //    murh.HorizontalAlignment = HorizontalAlignment.Center;
-        //    murh.VerticalAlignment = VerticalAlignment.Center;
-        //    margin = murh.Margin;
-        //    margin.Left = -3;
-        //    margin.Right = -3;
-        //    margin.Bottom = -3;
-        //    margin.Top = -3;
-        //    murh.Margin = margin;
-
-        //    imageUri = new Uri(@"/Madera MMB;component/Lib/Images/mur_vertical.png", UriKind.Relative);
-        //    murv.Source = new BitmapImage(imageUri);
-        //    murv.MinWidth = 50;
-        //    murv.MinHeight = 50;
-        //    murv.HorizontalAlignment = HorizontalAlignment.Center;
-        //    murv.VerticalAlignment = VerticalAlignment.Center;
-        //    margin = murv.Margin;
-        //    margin.Left = -3;
-        //    margin.Right = -3;
-        //    margin.Bottom = -3;
-        //    margin.Top = -3;
-        //    murv.Margin = margin;
-
-        //    imageUri = new Uri(@"/Madera MMB;component/Lib/Images/angle_bd.png", UriKind.Relative);
-        //    anglebd.Source = new BitmapImage(imageUri);
-        //    anglebd.MinWidth = 50;
-        //    anglebd.MinHeight = 50;
-        //    anglebd.HorizontalAlignment = HorizontalAlignment.Center;
-        //    anglebd.VerticalAlignment = VerticalAlignment.Center;
-        //    margin = anglebd.Margin;
-        //    margin.Left = -3;
-        //    margin.Right = -3;
-        //    margin.Bottom = -3;
-        //    margin.Top = -3;
-        //    anglebd.Margin = margin;
-
-        //    imageUri = new Uri(@"/Madera MMB;component/Lib/Images/angle_bg.png", UriKind.Relative);
-        //    anglebg.Source = new BitmapImage(imageUri);
-        //    anglebg.MinWidth = 50;
-        //    anglebg.MinHeight = 50;
-        //    anglebg.HorizontalAlignment = HorizontalAlignment.Center;
-        //    anglebg.VerticalAlignment = VerticalAlignment.Center;
-        //    margin = anglebg.Margin;
-        //    margin.Left = -3;
-        //    margin.Right = -3;
-        //    margin.Bottom = -3;
-        //    margin.Top = -3;
-        //    anglebg.Margin = margin;
-
-        //    imageUri = new Uri(@"/Madera MMB;component/Lib/Images/angle_hd.png", UriKind.Relative);
-        //    anglehd.Source = new BitmapImage(imageUri);
-        //    anglehd.MinWidth = 50;
-        //    anglehd.MinHeight = 50;
-        //    anglehd.HorizontalAlignment = HorizontalAlignment.Center;
-        //    anglehd.VerticalAlignment = VerticalAlignment.Center;
-        //    margin = anglehd.Margin;
-        //    margin.Left = -3;
-        //    margin.Right = -3;
-        //    margin.Bottom = -3;
-        //    margin.Top = -3;
-        //    anglehd.Margin = margin;
-
-        //    imageUri = new Uri(@"/Madera MMB;component/Lib/Images/angle_hg.png", UriKind.Relative);
-        //    anglehg.Source = new BitmapImage(imageUri);
-        //    anglehg.MinWidth = 50;
-        //    anglehg.MinHeight = 50;
-        //    anglehg.HorizontalAlignment = HorizontalAlignment.Center;
-        //    anglehg.VerticalAlignment = VerticalAlignment.Center;
-        //    margin = anglehg.Margin;
-        //    margin.Left = -3;
-        //    margin.Right = -3;
-        //    margin.Bottom = -3;
-        //    margin.Top = -3;
-        //    anglehg.Margin = margin;
-        //}
-
-        private void loadGrid()
+        private void loadGridButton()
         {
-            for (int i = 0; i < 30; i++)
+            for (int y = 0; y < 30; y++)
             {
-                for (int y = 0; y < 40; y++)
+                for (int x = 0; x < 40; x++)
                 {
-                    ButtonM but = new ButtonM(ButtonM.type.Rien, y, i, 1, 1);
+                    ButtonM but = new ButtonM(ButtonM.type.Rien, x, y, 1, 1, "0");
                     Grid.SetRow(but, but.y);
                     Grid.SetColumn(but, but.x);
                     but.Click += new RoutedEventHandler(checkType);
+                    but.MouseDoubleClick += new MouseButtonEventHandler(gotFocus);
 
-                    listB[i, y] = but;
+                    listB[x, y] = but;
                     grid.Children.Add(but);
                 }
             }
@@ -212,6 +132,8 @@ namespace Madera_MMB.View_Crtl
             placeComponent(murdroit);
             placeComponent(slot);
             placeComponent(slot2);
+
+            checkImage();
         }
 
         private void placeComponent(ButtonM but)
@@ -221,27 +143,53 @@ namespace Madera_MMB.View_Crtl
             Grid.SetRow(but, but.y);
             Grid.SetRowSpan(but, but.rowspan);
             listB[but.x, but.y] = but;
+
+            //Rajouter modification des boutons compris dans les span
+            if (but.rowspan > 1 )
+            {
+                for (int i = 1; i < but.rowspan; i++)
+                {
+                    listB[but.x, but.y + i].letype = but.letype;
+                }
+            }
+            else if (but.colspan > 1)
+            {
+                for (int i = 1; i < but.colspan; i++)
+                {
+                    listB[but.x + i, but.y].letype = but.letype;
+                }
+            }
+
             grid.Children.Add(but);
         }
 
         private void checkType(object sender, RoutedEventArgs e)
         {
             ButtonM but = sender as ButtonM;
+            checkMode();
             if (but.letype == ButtonM.type.Rien)
             {
-                MainGrid.Children.Remove(listBox);
-                if (mode == "tracer")
+                if (mode == "tracer" && tracer.Background != Brushes.LightGreen)
                 {
                     placeWall(but);
                 }
-            } else if (but.letype == ButtonM.type.SlotMur)
+                else
+                {
+                    tracer.IsChecked = false;
+                    mode = "default";
+                }
+            }
+            else if (but.letype == ButtonM.type.SlotMur)
             {
                 mode = "default";
+                MainGrid.Children.Remove(listBox);
+                listBox.Items.Clear();
                 MainGrid.Children.Add(listBox);
                 ListBoxItem item1 = new ListBoxItem();
                 item1.Content = "Yop !";
                 listBox.Items.Add(item1);
-            } else if (but.letype == ButtonM.type.MurInt)
+            }
+            else if (but.letype == ButtonM.type.MurInt)
             {
                 if (mode == "retirer")
                 {
@@ -250,145 +198,177 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
+        private void gotFocus(object sender, RoutedEventArgs e)
+        {
+            ButtonM but = sender as ButtonM;
+
+            if (but.texture == "mur_beton")
+            {
+                but.Background = mur_beton;
+            }
+        }
+
         private void changeMode(object sender, RoutedEventArgs e)
         {
-            Button but = sender as Button;
+            ToggleButton but = sender as ToggleButton;
             mode = but.Name;
+            checkMode();
             Console.WriteLine(mode);
+        }
+
+        private void checkMode()
+        {
+            if (mode == "tracer")
+            {
+                retirer.IsChecked = false;
+                loadListMur();
+            }
+            else if (mode == "retirer" || mode == "default") {
+                tracer.IsChecked = false;
+                MainGrid.Children.Remove(listBox);
+            }
+        }
+
+        private void loadListMur()
+        {
+            MainGrid.Children.Remove(listBox);
+            listBox.Items.Clear();
+            //Recupérer la liste des possiblités sur la BDD
+            ListBoxItem item1 = new ListBoxItem();
+            item1.Content = "Yop1 !";
+            ListBoxItem item2 = new ListBoxItem();
+            item2.Content = "Yop2 !";
+            ListBoxItem item3 = new ListBoxItem();
+            item3.Content = "Yop3 !";
+
+            listBox.Items.Add(item1);
+            listBox.Items.Add(item2);
+            listBox.Items.Add(item3);
+
+            MainGrid.Children.Add(listBox);
         }
 
         private void placeWall(ButtonM but)
         {
-            bool around = false;
-
-            for (int x = 0; x < listB.GetLength(0); x++)
-            {
-                for (int y = 0; y < listB.GetLength(1); y++)
-                {
-                    if (listB[x, y].letype == ButtonM.type.Mur || listB[x, y].letype == ButtonM.type.MurInt)
-                    {
-                        ButtonM but2 = listB[x,y];
-                        if (but2.rowspan != 1)
-                        {
-                            for (int span = 0; span < but2.rowspan; span++)
-                            {
-                                if ((but2.y + span == but.y && but2.x + 1 == but.x) || (but2.y + span == but.y && but2.x - 1 == but.x))
-                                {
-                                    around = true;
-                                }
-                            }
-                        }
-                        else if (but2.colspan !=1 )
-                        {
-                            for (int span = 0; span < but2.colspan; span++)
-                            {
-                                if ((but2.x + span == but.x && but2.y + 1 == but.y) || (but2.x + span == but.x && but2.y - 1 == but.y))
-                                {
-                                    around = true;
-                                }
-                            } 
-                        }
-                        else
-                        {
-                            if ((but2.x == but.x && but2.y + 1 == but.y) || (but2.x == but.x && but2.y - 1 == but.y) || (but2.x + 1 == but.x && but2.y == but.y) || (but2.x - 1 == but.x && but2.y == but.y))
-                            {
-                                around = true;
-                            }
-                        }
-                        
-                    }
-                }
-            }
-
-            if (around && isInside(but))
+            if (checkAround(but) && isInside(but))
             {
                 but.letype = ButtonM.type.MurInt;
-                //but.checkType();
-                for (int i = 1; i < listB.GetLength(0)-1; i++)
-                {
-                    for (int y = 1; y < listB.GetLength(1)-1; y++)
-                    {
-                        if (listB[i, y].letype == ButtonM.type.MurInt)
-                        {
-                            checkImage(listB[i, y]);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void checkImage(ButtonM but)
-        {
-            ButtonM butN = listB[but.y - 1, but.x];
-            ButtonM butS = listB[but.y + 1, but.x];
-            ButtonM butO = listB[but.y, but.x - 1];
-            ButtonM butE = listB[but.y ,but.x + 1];
-
-            if (butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt && butO.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt)
-            {
-                but.Background = croix;
-            }
-            else if (butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt && butO.letype == ButtonM.type.MurInt)
-            {
-                but.Background = tGauche;
-            }
-            else if (butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt)
-            {
-                but.Background = tDroite;
-            }
-            else if (butO.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt)
-            {
-                but.Background = tBas;
-            }
-            else if (butO.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt && butN.letype == ButtonM.type.MurInt)
-            {
-                but.Background = tHaut;
-            }
-            else if (butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt)
-            {
-                but.Background = murv;
-            }
-            else if (butO.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt)
-            {
-                but.Background = murh;
-            }
-            else if (butS.letype == ButtonM.type.MurInt && butO.letype == ButtonM.type.MurInt)
-            {
-                but.Background = anglehd;
-            }
-            else if (butS.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt)
-            {
-                but.Background = anglehg;
-            }
-            else if (butN.letype == ButtonM.type.MurInt && butO.letype == ButtonM.type.MurInt)
-            {
-                but.Background = anglebd;
-            }
-            else if (butN.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt)
-            {
-                but.Background = anglebg;
-            }
-            else if (butO.letype == ButtonM.type.MurInt || butE.letype == ButtonM.type.MurInt)
-            {
-                but.Background = murh;
-            }
-            else if (butN.letype == ButtonM.type.MurInt || butS.letype == ButtonM.type.MurInt)
-            {
-                but.Background = murv;
-            }
-            else
-            {
-                but.Background = Brushes.Aqua;
+                but.texture = "mur_beton";
+                checkImage();
             }
         }
 
         private void removeWall(ButtonM but)
         {
-            Console.WriteLine(but.letype);
-            but.letype = ButtonM.type.Rien;
-            Console.WriteLine(but.letype);
-            but.checkType();
-            Console.WriteLine(but.letype);
+            if (isInside(but))
+            {
+                but.letype = ButtonM.type.Rien;
+                checkImage();
+            }
+        }
+
+        private bool checkAround(ButtonM but)
+        {
+            bool around = false;
+
+            ButtonM butN = listB[but.x, but.y - 1];
+            ButtonM butS = listB[but.x, but.y + 1];
+            ButtonM butO = listB[but.x - 1, but.y];
+            ButtonM butE = listB[but.x + 1, but.y];
+
+            if ((butN.letype == ButtonM.type.Mur || butN.letype == ButtonM.type.MurInt) || (butS.letype == ButtonM.type.Mur || butS.letype == ButtonM.type.MurInt) || (butO.letype == ButtonM.type.Mur || butO.letype == ButtonM.type.MurInt) || (butE.letype == ButtonM.type.Mur || butE.letype == ButtonM.type.MurInt))
+            {
+                around = true;
+            }
+
+            return around;
+        }
+
+        private void checkImage()
+        {
+            for (int i = 1; i < listB.GetLength(0) - 1; i++)
+            {
+                for (int y = 1; y < listB.GetLength(1) - 1; y++)
+                {
+                    ButtonM but = listB[i, y];
+                    if (but.letype == ButtonM.type.MurInt || but.letype == ButtonM.type.Mur)
+                    {
+                        ButtonM butN = listB[but.x, but.y - 1];
+                        ButtonM butS = listB[but.x, but.y + 1];
+                        ButtonM butO = listB[but.x - 1, but.y];
+                        ButtonM butE = listB[but.x + 1, but.y];
+
+                        if (but.x == 4 && but.y == 5)
+                        {
+                            Console.WriteLine("butN" + butN.letype);
+                            Console.WriteLine("butN" + butN.letype);
+                            Console.WriteLine("butN" + butN.letype);
+                            Console.WriteLine("butN" + butN.letype);
+                        }
+
+                        if ((butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt && butO.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt) || (butN.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur && butO.letype == ButtonM.type.Mur && butE.letype == ButtonM.type.Mur))
+                        {
+                            but.Background = croix;
+                        }
+                        else if ((butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt && butO.letype == ButtonM.type.MurInt) || (butN.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur && butO.letype == ButtonM.type.Mur))
+                        {
+                            but.Background = tGauche;
+                        }
+                        else if ((butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt) || (butN.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur && butE.letype == ButtonM.type.Mur))
+                        {
+                            but.Background = tDroite;
+                        }
+                        else if ((butO.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt) || (butO.letype == ButtonM.type.Mur && butE.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur))
+                        {
+                            but.Background = tBas;
+                        }
+                        else if ((butO.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt && butN.letype == ButtonM.type.MurInt) || (butO.letype == ButtonM.type.Mur && butE.letype == ButtonM.type.Mur && butN.letype == ButtonM.type.Mur))
+                        {
+                            but.Background = tHaut;
+                        }
+                        else if ((butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt) || (butN.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur))
+                        {
+                            but.Background = murv;
+                        }
+                        else if ((butO.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt) || (butO.letype == ButtonM.type.Mur && butE.letype == ButtonM.type.Mur))
+                        {
+                            but.Background = murh;
+                        }
+                        else if ((butS.letype == ButtonM.type.MurInt && butO.letype == ButtonM.type.MurInt) || (butS.letype == ButtonM.type.Mur && butO.letype == ButtonM.type.Mur))
+                        {
+                            but.Background = anglehd;
+                        }
+                        else if ((butS.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt) || (butS.letype == ButtonM.type.Mur && butE.letype == ButtonM.type.Mur))
+                        {
+                            but.Background = anglehg;
+                        }
+                        else if ((butN.letype == ButtonM.type.MurInt && butO.letype == ButtonM.type.MurInt) || (butN.letype == ButtonM.type.Mur && butO.letype == ButtonM.type.Mur))
+                        {
+                            but.Background = anglebd;
+                        }
+                        else if ((butN.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt) || (butN.letype == ButtonM.type.Mur && butE.letype == ButtonM.type.Mur))
+                        {
+                            but.Background = anglebg;
+                        }
+                        else if ((butO.letype == ButtonM.type.MurInt || butE.letype == ButtonM.type.MurInt) || (butO.letype == ButtonM.type.Mur || butE.letype == ButtonM.type.Mur))
+                        {
+                            but.Background = murh;
+                        }
+                        else if ((butN.letype == ButtonM.type.MurInt || butS.letype == ButtonM.type.MurInt) || (butN.letype == ButtonM.type.Mur || butS.letype == ButtonM.type.Mur))
+                        {
+                            but.Background = murv;
+                        }
+                        else
+                        {
+                            but.Background = croix;
+                        }
+                    }
+                    else if (but.letype == ButtonM.type.Rien)
+                    {
+                        but.Background = Brushes.LightGray;
+                    }
+                }
+            }
         }
 
         private bool isInside (ButtonM but)

@@ -21,8 +21,9 @@ namespace Madera_MMB.Lib.Tools
         public int rowspan { get; set; }
         public int x { get; set; }
         public int y { get; set; }
+        public string texture { get; set; }
 
-        public ButtonM(ButtonM unparent, type type, int x, int y, int colspan, int rowspan)
+        public ButtonM(ButtonM unparent, type type, int x, int y, int colspan, int rowspan, string texture)
         {
             this.parent = unparent;
             this.letype = type;
@@ -31,9 +32,10 @@ namespace Madera_MMB.Lib.Tools
             this.colspan = colspan;
             this.rowspan = rowspan;
             this.slots = new List<ButtonM>();
+            this.texture = texture;
         }
 
-        public ButtonM(type type, int x, int y, int colspan, int rowspan)
+        public ButtonM(type type, int x, int y, int colspan, int rowspan, string texture)
         {
             this.letype = type;
             this.x = x;
@@ -41,7 +43,7 @@ namespace Madera_MMB.Lib.Tools
             this.colspan = colspan;
             this.rowspan = rowspan;
             this.slots = new List<ButtonM>();
-            checkType();
+            this.texture = texture;
         }
 
         public void checkType()
