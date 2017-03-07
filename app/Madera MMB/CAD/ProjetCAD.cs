@@ -9,6 +9,10 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using MySql.Data.MySqlClient;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Collections;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace Madera_MMB.CAD
 {
@@ -21,27 +25,25 @@ namespace Madera_MMB.CAD
         public Client client { get; set; }
         public ClientCAD clientCAD { get; set; }
         public CommercialCAD commercialCAD { get; set; }
-        public List<Client> Clients { get; set; }
-        private List<Projet> _projets;
-        public List<Projet> Projets
+        public ObservableCollection<Client> Clients { get; set; }
+        private ObservableCollection<Projet> _projets;
+        public ObservableCollection<Projet> Projets
         {
             get
             {
-                if (this._projets == null)
-                {
-                    this._projets = new List<Projet>();
-                }
                 return this._projets;
             }
-            set { _projets = value; RaisePropertyChanged("Projets"); }
+            set { _projets = value;}
         }
         #endregion
 
         #region Events
-        private void RaisePropertyChanged(String property)
+        private void Projets_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
             if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("Projets"));
+            }
         }
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
@@ -52,12 +54,13 @@ namespace Madera_MMB.CAD
         /// </summary>
         /// <param name="laConnexion"></param>
         /// <param name="com"></param>
-        public ProjetCAD(Connexion laConnexion, Commercial com, List<Client> Clients)
+        public ProjetCAD(Connexion laConnexion, Commercial com, ObservableCollection<Client> Clients)
         {
             // Instanciations
             conn = laConnexion;
             commercial = com;
-            Projets = new List<Projet>();
+            Projets = new ObservableCollection<Projet>();
+            _projets.CollectionChanged += Projets_CollectionChanged;
             this.Clients = Clients;
 
             // Appel des méthodes dans le ctor
@@ -138,7 +141,7 @@ namespace Madera_MMB.CAD
         /// <param name="projet"></param>
         /// <param name="refClient"></param>
         /// <param name="refCommercial"></param>
-        public void InsertProjet(string reference, string nom, string refClient, string refCommercial)
+        public void InsertProjet(Projet projet)
         {
             string SQLQuery = "INSERT INTO projet(refProjet, nom, dateCreation, dateModification, refClient, refCommercial)" + 
                 "VALUES (@refProjet, @nom, @dateCreation, @dateModification, @refClient, @refCommercial)";
@@ -150,12 +153,12 @@ namespace Madera_MMB.CAD
                 Trace.WriteLine(SQLQuery);
                 try
                 {
-                    command.Parameters.AddWithValue("@refProjet", reference);
-                    command.Parameters.AddWithValue("@nom", nom);
+                    command.Parameters.AddWithValue("@refProjet", projet.reference);
+                    command.Parameters.AddWithValue("@nom", projet.nom);
                     command.Parameters.AddWithValue("@dateCreation", DateTime.Today);
                     command.Parameters.AddWithValue("@dateModification", DateTime.Today);
-                    command.Parameters.AddWithValue("@refClient", refClient);
-                    command.Parameters.AddWithValue("@refCommercial", refCommercial);
+                    command.Parameters.AddWithValue("@refClient", projet.client.reference);
+                    command.Parameters.AddWithValue("@refCommercial", projet.commercial.reference);
 
                     command.ExecuteNonQuery();
                     Trace.WriteLine("#### INSERT NOUVEAU PROJET DATA SUCCESS ####");
