@@ -328,28 +328,29 @@
                       Grid.RowSpan="2" 
                       Grid.ColumnSpan="1"
                       >
-                <StackPanel Width="auto">
-
-                    <ItemsControl x:Name="WrapProjets" ItemsSource="{Binding Projets}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel  Orientation="Horizontal">
-                                </WrapPanel>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <!--DataContext="{Binding Projets}"-->
-                                <ToggleButton Background="White" Width="120" Height="120" Margin="20,20,20,20" Click="Btn_Select_Projet_Client_Click">
-                                    <StackPanel>
-                                        <Image Width="70" Height="70" VerticalAlignment="Top" Source="../Lib/Images/folder.png"/>
-                                        <TextBlock Text="{Binding nom}" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-                                    </StackPanel>
-                                </ToggleButton>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
+                <ScrollViewer Width="auto" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Width="auto" Cursor="Hand">
+                        <ItemsControl x:Name="WrapProjets" ItemsSource="{Binding Projets}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel  Orientation="Horizontal">
+                                    </WrapPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <!--DataContext="{Binding Projets}"-->
+                                    <ToggleButton Background="White" Width="120" Height="120" Margin="20,20,20,20" Click="Btn_Select_Projet_Client_Click">
+                                        <StackPanel>
+                                            <Image Width="70" Height="70" VerticalAlignment="Top" Source="../Lib/Images/folder.png"/>
+                                            <TextBlock Text="{Binding nom}" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </ToggleButton>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ScrollViewer>
             </GroupBox>
         </Grid>
         <!-- Fin Déclaration Liste Sélection Gestion Projet -->

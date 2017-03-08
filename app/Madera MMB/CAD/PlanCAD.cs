@@ -9,18 +9,43 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using System.Windows.Media.Imaging;
 using System.IO;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using MySql.Data.MySqlClient;
+using System.Collections;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace Madera_MMB.CAD
 {
-    class PlanCAD
+    public class PlanCAD : INotifyPropertyChanged
     {
         #region Properties
         public Connexion conn { get; set; }
         public Projet projet { get; set; }
         public string SQLQuery { get; set; }
-        public List<Plan> plans { get; set; }
         public MetaSlotCAD metaslotCAD { get; set; }
-        public ComposantCAD compCAD { get; set; }
+        public ObservableCollection<Projet> Projets { get; set; }
+        private ObservableCollection<Plan> _plans;
+        public ObservableCollection<Plan> Plans
+        {
+            get
+            {
+                return this._plans;
+            }
+            set { _plans = value; }
+        }
+        #endregion
+
+        #region Events
+        private void Plans_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("Plans"));
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
         #region Ctor
@@ -32,13 +57,12 @@ namespace Madera_MMB.CAD
         public PlanCAD(Connexion laConnexion, Projet unprojet)
         {
             // Instanciations
-            //conn = laConnexion;
-            conn = new Connexion();
-
+            //conn = new Connexion();
+            conn = laConnexion;
             projet = unprojet;
+            Plans = new ObservableCollection<Plan>();
+            _plans.CollectionChanged += Plans_CollectionChanged;
             metaslotCAD = new MetaSlotCAD(conn);
-            compCAD = new ComposantCAD(conn);
-            plans = new List<Plan>();
 
             // Appel des méthodes dans le ctor
             ListAllPlansByProject();
@@ -50,7 +74,7 @@ namespace Madera_MMB.CAD
         /// Méthode qui permet de récupérer la liste des plans par projet
         /// </summary>
         public void ListAllPlansByProject()
-        {          
+        {
             // Ouverture de la connexion
             conn.LiteCo.Open();
             // Nom du/des champs mis directement dans la requête pour éviter d'avoir à passer par QSqlRecord 
@@ -80,7 +104,6 @@ namespace Madera_MMB.CAD
                                 reader.GetValue(6).GetType() + " || " +
                                 reader.GetValue(7).GetType() + " || " +
                                 reader.GetValue(8).GetType());
-                                //reader.GetValue(9).ToString());
                             Plan plan = new Plan
                                 (
                                     reader.GetString(0),
@@ -88,15 +111,13 @@ namespace Madera_MMB.CAD
                                     reader.GetString(2),
                                     reader.GetString(3),
                                     projet,
+                                    getPlancherByType(reader.GetString(5)),
                                     getCouvByType(reader.GetString(6)),
                                     getCoupeById(reader.GetInt16(7)),
-                                    getPlancherByType(reader.GetString(8)),
-                                    getModulesByRefPlan(reader.GetString(0)),
-                                    getGammebyNom(reader.GetString(9))
+                                    getModulesByRefPlan(reader.GetString(0)),                           
+                                    getGammebyNom(reader.GetString(8))
                                 );
-                            //SQLQuery = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme FROM plan WHERE refProjet = @refProjet;";
-                            //  string reference, string label, string creation, string modification, Projet unprojet, Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, List<Module> modules, Gamme unegamme = null
-                            plans.Add(plan);
+                            Plans.Add(plan);
                         }
                     }
                     Trace.WriteLine("#### GET PLANS DATA SUCCESS ####");
@@ -108,6 +129,49 @@ namespace Madera_MMB.CAD
                 }
             }
             conn.LiteCo.Close();
+        }
+
+        /// <summary>
+        /// Création d'un nouveau plan
+        /// </summary>
+        /// <param name="plan"></param>
+        public void InsertPlan(Plan plan)
+        {
+            string SQLQuery = "INSERT INTO plan(refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme)" +
+            "VALUES (@refPlan, @label, @dateCreation, @dateModification, @refProjet, @typePlancher, @typeCouverture, @idCoupe, @nomGamme)";
+
+            // Ouverture de la connexion
+            conn.LiteCo.Open();
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            {
+                Trace.WriteLine(SQLQuery);
+                try
+                {
+                    command.Parameters.AddWithValue("@refPlan", plan.reference);
+                    command.Parameters.AddWithValue("@label", plan.label);
+                    command.Parameters.AddWithValue("@dateCreation", DateTime.Today);
+                    command.Parameters.AddWithValue("@dateModification", DateTime.Today);
+                    command.Parameters.AddWithValue("@refProjet", plan.projet.reference);
+                    command.Parameters.AddWithValue("@typePlancher", plan.plancher.type);
+                    command.Parameters.AddWithValue("@typeCouverture", plan.couverture.type);
+                    command.Parameters.AddWithValue("@idCoupe", plan.coupePrincipe.id);
+                    command.Parameters.AddWithValue("@nomGamme", plan.gamme.nom);
+
+                    command.ExecuteNonQuery();
+                    Trace.WriteLine("#### INSERT NOUVEAU PLAN DATA SUCCESS ####");
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# ERREUR INSERTION NOUVEAU PLAN ################################################# \n" + ex.ToString() + "\n");
+                }
+            }
+            conn.LiteCo.Close();
+
+            //conn.InsertSQliteQuery(SQLQuery);
+            //foreach (Module module in plan.modules)
+            //{
+            //    insertModule(module, plan.reference);
+            //}
         }
         #endregion
 
@@ -145,7 +209,6 @@ namespace Madera_MMB.CAD
                                     reader.GetInt32(2),
                                     reader.GetInt32(3),                                   
                                     getGammebyNom(reader.GetString(5)),
-                                    this.compCAD.listComposantByMetamodule(reader.GetString(0)),
                                     this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
                                     ToImage(data)
                                 );
@@ -160,7 +223,6 @@ namespace Madera_MMB.CAD
                                     reader.GetInt32(2),
                                     reader.GetInt32(3),
                                     getGammebyNom(reader.GetString(5)),
-                                    this.compCAD.listComposantByMetamodule(reader.GetString(0)),
                                     this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0))
                                 );
                                 listMetaModule.Add(metamodule);
@@ -219,23 +281,6 @@ namespace Madera_MMB.CAD
         }
 
         /// <summary>
-        /// Création d'un nouveau plan
-        /// </summary>
-        /// <param name="plan"></param>
-        /// <param name="idClient"></param>
-        /// <param name="refCommercial"></param>
-        private void insertPlan(Plan plan, int idClient, string refCommercial)
-        {
-            SQLQuery = "INSERT INTO plan (refPlan, label, dateCreation, dateModification, refProjet, idClient, refCommercial, typeCouverture, idCoupe, typePlancher, nomGamme)" +
-            "VALUES (" + plan.reference + "," + plan.label + "," + plan.creation + "," + plan.modification + "," + plan.projet.reference + "," + idClient + "," + refCommercial + "," + plan.couverture.type + "," + plan.coupePrincipe.id + "," + plan.plancher.type + "," + plan.gamme.nom + ";";
-            conn.InsertSQliteQuery(SQLQuery);
-            foreach (Module module in plan.modules)
-            {
-                insertModule(module, plan.reference);
-            }
-        }
-
-        /// <summary>
         /// Création d'un nouveau module
         /// </summary>
         /// <param name="module"></param>
@@ -284,7 +329,6 @@ namespace Madera_MMB.CAD
                                     reader.GetInt32(2),
                                     reader.GetInt32(3),                        
                                     getGammebyNom(reader.GetString(5)),
-                                    this.compCAD.listComposantByMetamodule(reader.GetString(0)),
                                     this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
                                     ToImage(data)
                                 );
@@ -298,7 +342,6 @@ namespace Madera_MMB.CAD
                                     reader.GetInt32(2),
                                     reader.GetInt32(3),
                                     getGammebyNom(reader.GetString(5)),
-                                    this.compCAD.listComposantByMetamodule(reader.GetString(0)),
                                     this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0))
                                 );
                             }
@@ -578,7 +621,7 @@ namespace Madera_MMB.CAD
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>

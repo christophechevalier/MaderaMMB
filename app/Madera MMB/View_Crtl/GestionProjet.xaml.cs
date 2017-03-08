@@ -41,17 +41,10 @@ namespace Madera_MMB.View_Crtl
             clientCAD = new ClientCAD(this.connexion);
             projetCAD = new ProjetCAD(this.connexion, this.commercial, clientCAD.Clients);
             DataContext = projetCAD;
-            // Appel des méthodes dans le ctor
-            Initialize_Menu_Wrapper();
         }
         #endregion
 
         #region Initialisation Container
-        private void Initialize_Menu_Wrapper()
-        {
-            // TODO : Faire en sorte que les boutons du menu soit activé lorsqu'on clic dessus
-        }
-
         private void Initialize_Dialog_Creation_Projet()
         {
             if (projetCAD.Projets != null)
@@ -108,8 +101,8 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Listeners
-    // Afficher la liste des clients existants
-    private void Btn_List_Client_Click(object sender, RoutedEventArgs e)
+        // Afficher la liste des clients existants
+        private void Btn_List_Client_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
         }
@@ -140,10 +133,6 @@ namespace Madera_MMB.View_Crtl
         }
         // Retour - Précedent
         private void Btn_Retour_Click(object sender, RoutedEventArgs e)
-        {
-        }
-        // Sélectionner un client pour créer un projet
-        private void Select_Nom_Client_Click(object sender, RoutedEventArgs e)
         {
         }
         // Editer un client

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Madera_MMB.Model
 {
-    class Module
+    public class Module
     {
         #region properties
         public int id { get; set; }

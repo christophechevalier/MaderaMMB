@@ -26,7 +26,7 @@ namespace Madera_MMB.View_Crtl
         private View_Crtl.GestionPlan gestionPlan { get; set; }
         private View_Crtl.GestionClient gestionClient { get; set; }
         private View_Crtl.ParametresClient parametresClient { get; set; }
-        //private View_Crtl.ParametresPlan parametresPlan { get; set; }
+        private View_Crtl.ParametresPlan parametresPlan { get; set; }
         //private View_Crtl.GestionDevis gestionDevis { get; set; }
         //private View_Crtl.Modelisation modelisation { get; set; }
         private Connexion connexion;
@@ -44,7 +44,6 @@ namespace Madera_MMB.View_Crtl
             //this.gestionClient = new GestionClient(connexion);
             //this.parametresClient = new ParametresClient();
             Mainframe.Content = gestionClient;
-
 
             Commercial commercialTest = new Commercial
                 (
@@ -64,9 +63,10 @@ namespace Madera_MMB.View_Crtl
                 commercialTest
             );
 
-            //this.authentification = new Authentification();
+            this.authentification = new Authentification();
             this.gestionProjet = new GestionProjet(connexion, commercialTest);
-            //this.gestionPlan = new GestionPlan(connexion, projetTest);
+            this.gestionPlan = new GestionPlan(connexion, projetTest);
+            this.parametresPlan = new ParametresPlan(connexion);
             Mainframe.Content = gestionProjet;
 
             // Démarrage de l'application sur la vue authentification
@@ -86,12 +86,12 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void Initialize_Listeners()
         {
-            //Initialize_Listeners_Auth();
+            Initialize_Listeners_Auth();
             Initialize_Listeners_GestionProjet();
             //Initialize_Listeners_GestionClient();
             //Initialize_Listeners_ParametresClient();
-            //Initialize_Listeners_GestionPlan();
-            //Initialize_Listeners_ParametresPlan();
+            Initialize_Listeners_GestionPlan();
+            Initialize_Listeners_ParametresPlan();
             //Initialize_Listeners_Modelisation();
             //Initialize_Listeners_Devis();
         }
@@ -210,10 +210,10 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Listeners_GestionPlan()
         {
             // Click sur le bouton créer un nouveau plan pour aller dans la Vue Paramètres Plan
-            //gestionPlan.BtnCréerPlan.Click += delegate(object sender, RoutedEventArgs e)
-            //{
-            //    Mainframe.Content = parametresPlan;
-            //};
+            gestionPlan.BtnCréerPlan.Click += delegate (object sender, RoutedEventArgs e)
+            {
+                Mainframe.Content = parametresPlan;
+            };
             // Click sur le bouton ouvrir un plan pour aller dans la Vue Modélisation
             //gestionPlan.BtnOuvrirPlan.Click += delegate(object sender, RoutedEventArgs e)
             //{
@@ -241,19 +241,32 @@ namespace Madera_MMB.View_Crtl
         /// <summary>
         /// Méthode qui contient l'ensemble des listeners de la vue paramètres plan
         /// </summary>
-        //private void Initialize_Listeners_ParametresPlan()
-        //{
-        //    // Click sur le bouton confirmer paramètres plan pour aller dans la Vue Modélisation
-        //    parametresPlan.BtnConfirmerParamPlan.Click += delegate(object sender, RoutedEventArgs e)
-        //    {
-        //        Mainframe.Content = modelisation;
-        //    };
-        //    // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
-        //    parametresPlan.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
-        //    {
-        //        Mainframe.Content = gestionPlan;
-        //    };
-        //}
+        private void Initialize_Listeners_ParametresPlan()
+        {
+            // Click sur le bouton confirmer paramètres plan pour aller dans la Vue Modélisation
+            parametresPlan.BtnConfirmerParamPlan.Click += delegate (object sender, RoutedEventArgs e)
+            {
+                Mainframe.Content = gestionPlan;
+
+                Client getClient = new Client();
+
+                //Plan NewPlan = new Plan(projet);
+                //NewPlan.reference = generateKey(projet);
+                //NewPlan.nom = NewPlan.client.nomprenom + " (" + i + ") ";
+                //planCAD.Projets.Add(NewPlan);
+                //planCAD.InsertPlan(NewPlan);
+                //}
+                //else
+                //{
+                //    MessageBox.Show("Vous devez avoir rempli tout les champs !");
+                //}
+            };
+            // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
+            parametresPlan.BtnRetour.Click += delegate (object sender, RoutedEventArgs e)
+            {
+                Mainframe.Content = gestionPlan;
+            };
+        }
         #endregion
 
         #region Initialisation Modélisation

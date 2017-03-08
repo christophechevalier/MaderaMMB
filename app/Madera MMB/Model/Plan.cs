@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Madera_MMB.Model
 {
-    class Plan
+    public class Plan
     {
         #region Properties
         public string reference { get; set; }
@@ -31,7 +31,7 @@ namespace Madera_MMB.Model
             this.coupePrincipe = unecoupe;
             this.gamme = unegamme;
         }
-        public Plan(string reference, string label, string creation, string modification, Projet unprojet, Couverture unecouverture, CoupePrincipe unecoupe, Plancher unplancher, List<Module> modules, Gamme unegamme = null)
+        public Plan(string reference, string label, string creation, string modification, Projet unprojet, Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, List<Module> modules, Gamme unegamme = null)
         {
             this.reference = reference;
             this.label = label;

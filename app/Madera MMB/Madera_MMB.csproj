@@ -80,11 +80,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CAD\CommercialCAD.cs" />
-    <Compile Include="CAD\ComposantCAD.cs" />
     <Compile Include="CAD\CoupePrincipeCAD.cs" />
     <Compile Include="CAD\CouvertureCAD.cs" />
     <Compile Include="CAD\DevisCAD.cs" />
-    <Compile Include="CAD\FamilleComposantCAD.cs" />
     <Compile Include="CAD\GammeCAD.cs" />
     <Compile Include="CAD\MetaSlotCAD.cs" />
     <Compile Include="CAD\PlanCAD.cs" />
@@ -101,11 +99,9 @@
     <Compile Include="View_Crtl\App.cs" />
     <Compile Include="Model\Client.cs" />
     <Compile Include="Model\Commercial.cs" />
-    <Compile Include="Model\Composant.cs" />
     <Compile Include="Model\CoupePrincipe.cs" />
     <Compile Include="Model\Couverture.cs" />
     <Compile Include="Model\Devis.cs" />
-    <Compile Include="Model\FamilleDeComposant.cs" />
     <Compile Include="Model\Gamme.cs" />
     <Compile Include="Model\MetaModule.cs" />
     <Compile Include="Model\MetaSlot.cs" />

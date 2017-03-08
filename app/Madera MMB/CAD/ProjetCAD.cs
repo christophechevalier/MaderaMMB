@@ -120,6 +120,11 @@ namespace Madera_MMB.CAD
             conn.LiteCo.Close();
         }
 
+        /// <summary>
+        /// Méthode qui permet de récupérer un client parmis la liste de clients existante
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Client getClient(string id)
         {
             Trace.WriteLine(id);
@@ -139,8 +144,6 @@ namespace Madera_MMB.CAD
         /// Méthode qui permet de créer un nouveau projet avec un client et un commercial pour ref
         /// </summary>
         /// <param name="projet"></param>
-        /// <param name="refClient"></param>
-        /// <param name="refCommercial"></param>
         public void InsertProjet(Projet projet)
         {
             string SQLQuery = "INSERT INTO projet(refProjet, nom, dateCreation, dateModification, refClient, refCommercial)" + 

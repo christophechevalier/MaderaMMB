@@ -41,6 +41,7 @@ namespace Madera_MMB.CAD
                 {
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
+                        Trace.Write("#### GET GAMMES DATA #### \n");
                         while (reader.Read())
                         {
                             Byte[] data = (Byte[])reader.GetValue(6);
@@ -56,6 +57,7 @@ namespace Madera_MMB.CAD
                             Listegamme.Add(gamme);
                         }
                     }
+                    Trace.WriteLine("#### GET GAMMES DATA SUCCESS ####");
                 }
                 catch (SQLiteException ex)
                 {
