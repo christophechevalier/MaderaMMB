@@ -7,40 +7,13 @@
       d:DesignHeight="300" d:DesignWidth="300"
 	  Title="GestionClient">
 
-    <!-- Début Déclaration Template-->
     <Page.Resources>
-        <!-- Image Logo -->
-        <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png" />
-        <!-- Label style -->
-        <Style TargetType="{x:Type Label}">
-            <Setter Property="FontSize" Value="12" />
-        </Style>
-
-        <Style TargetType="{x:Type Button}">
-            <!-- Bouton style -->
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="bdr" CornerRadius="2" Margin="3" Background="LightGray" BorderBrush="Black" BorderThickness="1 1 2 2">
-                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="{x:Type GridViewColumnHeader}">
-            <!-- Header List style -->
-            <Setter Property="HorizontalContentAlignment" Value="Left" />
-        </Style>
-
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Lib/Tools/Template_Madera.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Page.Resources>
-    <!-- Fin Déclaration Template-->
 
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
@@ -86,42 +59,42 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.3*" />
                     <ColumnDefinition Width="0.4*" />
-                    <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.3*" />
                     <ColumnDefinition Width="0.4*" />
                     <ColumnDefinition Width="0.05*" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Partie de gauche -->
-                <Viewbox Margin="15,0,0,0"
-                         Grid.Row="1"
-                         Grid.Column="1" 
-                         HorizontalAlignment="Left" 
-                         VerticalAlignment="Center">
-                    <Label x:Name="NomClient" Content="Nom du client : " FontSize="6" />
-                </Viewbox>
+                <!-- Date de création -->
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="3"
                          Grid.Column="1" 
+                         HorizontalAlignment="Right" 
+                         VerticalAlignment="Center">
+                    <Label Content="Date de création :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="2" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label x:Name="DateCreation"  Content="Date de création : " FontSize="6" />
+                    <Label x:Name="lblDateCreation" FontSize="6"/>
                 </Viewbox>
-
-                <!-- Partie de droite -->
+                <!-- Date de dernière mise à jour -->
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="3"
                          Grid.Column="3" 
-                         HorizontalAlignment="Left" 
+                         HorizontalAlignment="Right" 
                          VerticalAlignment="Center">
-                    <Label x:Name="DateMaj"  Content="Dernière mise à jour : " FontSize="6" />
+                    <Label Content="Dernière mise à jour :" FontSize="6" />
                 </Viewbox>
                 <Viewbox Margin="15,0,0,0"
-                         Grid.Row="5"
-                         Grid.Column="3" 
+                         Grid.Row="3"
+                         Grid.Column="4" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label x:Name="NomCommercial" Content="Nom du commercial : " FontSize="6" />
+                    <Label x:Name="lblDateModification" FontSize="6" />
                 </Viewbox>
 
             </Grid>
@@ -145,7 +118,7 @@
                    Grid.Column="0" 
                    Source="{StaticResource Logo}" 
                    Grid.Row="0" 
-                   Width="{Binding ActualHeight, ElementName=rowDefinition0}" 
+                   Width="auto" 
                    Margin="10"/>
         </Grid>
         <!-- Fin Déclaration Logo Madera -->
@@ -282,18 +255,28 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <ListView x:Name="ListeClients" 
+                <ListBox x:Name="ListeClients" 
                           Grid.Row="1"
                           Grid.Column="1"
                           VerticalAlignment="Stretch" 
                           HorizontalAlignment="Stretch"
+                          SelectionMode="Extended"
                           SelectionChanged="ListeClients_SelectionChanged">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Client" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock >
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} {1}">
+                                            <Binding Path="nom" />
+                                            <Binding Path="prenom" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
             </Grid>
             <!-- Fin Déclaration Liste Client -->
@@ -319,8 +302,8 @@
                           Header=" Détails du client "
                           VerticalAlignment="Stretch" 
                           HorizontalAlignment="Stretch" 
-                          Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                          Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
+                          Width="auto" 
+                          Height="auto" 
                           FontSize="16">
 
                     <Grid x:Name="GridDetailsClient"

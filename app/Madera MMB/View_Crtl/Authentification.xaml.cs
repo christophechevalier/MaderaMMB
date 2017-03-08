@@ -26,16 +26,12 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
         }
 
+        #region listeners
         // Quitter l'application
         private void Btn_Quitter_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
-
-        #region listeners
-
         #endregion
-
-
     }
 }

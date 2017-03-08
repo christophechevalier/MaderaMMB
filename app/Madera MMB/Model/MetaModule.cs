@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
+using System.Windows.Media.Imaging;
 
 namespace Madera_MMB.Model
 {
@@ -14,15 +14,14 @@ namespace Madera_MMB.Model
         public string label { get; set; }
         public int prixHT { get; set; }
         public int nbSlot { get; set; }
-        public Bitmap image { get; set; }
+        public BitmapImage image { get; set; }
         public Gamme gamme { get; set; }
         public List<MetaSlot> metaslots { get; set; }
         public List<Composant> composants { get; set; }
-
         #endregion
 
         #region Ctor
-        public MetaModule(string reference, string label, int prix, int nbslot, Bitmap image, Gamme gamme, List<Composant> composants, List<MetaSlot> metaslots)
+        public MetaModule(string reference, string label, int prix, int nbslot, Gamme gamme, List<Composant> composants, List<MetaSlot> metaslots, BitmapImage image = null)
         {
             this.reference = reference;
             this.label = label;
@@ -33,10 +32,7 @@ namespace Madera_MMB.Model
             this.composants = composants;
             this.metaslots = metaslots;
         }
-        #endregion
-
-        #region privates methods
-
+        public MetaModule() { }
         #endregion
     }
 }
