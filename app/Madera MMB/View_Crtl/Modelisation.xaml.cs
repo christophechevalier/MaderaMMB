@@ -54,12 +54,12 @@ namespace Madera_MMB.View_Crtl
 
         private Brush mur_beton = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/mur_beton.jpg", UriKind.RelativeOrAbsolute)));
 
-        private ButtonM slot = new ButtonM(ButtonM.type.SlotMur, 14, 5, 1, 1, "0");
-        private ButtonM slot2 = new ButtonM(ButtonM.type.SlotMur, 14, 24, 1, 1, "0");
-        private ButtonM murdroit = new ButtonM(ButtonM.type.Mur, 24, 5, 1, 20, "0");
-        private ButtonM murgauche = new ButtonM(ButtonM.type.Mur, 4, 5, 1, 20, "0");
-        private ButtonM murbas = new ButtonM(ButtonM.type.Mur, 5, 24, 20, 1, "0");
-        private ButtonM murhaut = new ButtonM(ButtonM.type.Mur, 5, 5, 20, 1, "0");
+        private ButtonM slot = new ButtonM(ButtonM.type.SlotMur, 14, 5, 1, 1, null);
+        private ButtonM slot2 = new ButtonM(ButtonM.type.SlotMur, 14, 24, 1, 1, null);
+        private ButtonM murdroit = new ButtonM(ButtonM.type.Mur, 24, 5, 1, 20, null);
+        private ButtonM murgauche = new ButtonM(ButtonM.type.Mur, 4, 5, 1, 20, null);
+        private ButtonM murbas = new ButtonM(ButtonM.type.Mur, 5, 24, 20, 1, null);
+        private ButtonM murhaut = new ButtonM(ButtonM.type.Mur, 5, 5, 20, 1, null);
         #endregion
 
         public Modelisation()
@@ -83,7 +83,7 @@ namespace Madera_MMB.View_Crtl
             retirer.Click += new RoutedEventHandler(changeMode);
             Grid.SetColumn(listBox, 0);
             Grid.SetRow(listBox, 2);
-            listBox.Margin = new Thickness(10,10,10,10);
+            listBox.Margin = new Thickness(7,7,7,7);
 
             ColumnDefinition col;
             RowDefinition row;
@@ -112,11 +112,10 @@ namespace Madera_MMB.View_Crtl
             {
                 for (int x = 0; x < 40; x++)
                 {
-                    ButtonM but = new ButtonM(ButtonM.type.Rien, x, y, 1, 1, "0");
+                    ButtonM but = new ButtonM(ButtonM.type.Rien, x, y, 1, 1, null);
                     Grid.SetRow(but, but.y);
                     Grid.SetColumn(but, but.x);
                     but.Click += new RoutedEventHandler(checkType);
-                    but.MouseDoubleClick += new MouseButtonEventHandler(gotFocus);
 
                     listB[x, y] = but;
                     grid.Children.Add(but);
@@ -198,16 +197,6 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
-        private void gotFocus(object sender, RoutedEventArgs e)
-        {
-            ButtonM but = sender as ButtonM;
-
-            if (but.texture == "mur_beton")
-            {
-                but.Background = mur_beton;
-            }
-        }
-
         private void changeMode(object sender, RoutedEventArgs e)
         {
             ToggleButton but = sender as ToggleButton;
@@ -253,7 +242,7 @@ namespace Madera_MMB.View_Crtl
             if (checkAround(but) && isInside(but))
             {
                 but.letype = ButtonM.type.MurInt;
-                but.texture = "mur_beton";
+                but.texture = mur_beton;
                 checkImage();
             }
         }
@@ -383,6 +372,20 @@ namespace Madera_MMB.View_Crtl
             }
 
             return inside;
+        }
+
+        private void afficheTexture(object sender, RoutedEventArgs e)
+        {
+            for (int i = 1; i < listB.GetLength(0) - 1; i++)
+            {
+                for (int y = 1; y < listB.GetLength(1) - 1; y++)
+                {
+                    if (listB[i,y].texture != null)
+                    {
+                        listB[i, y].Background = listB[i, y].Background = listB[i, y].texture;
+                    }
+                }
+            }
         }
     }
 }

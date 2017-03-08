@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Madera_MMB.Lib.Tools
 {
@@ -21,9 +22,9 @@ namespace Madera_MMB.Lib.Tools
         public int rowspan { get; set; }
         public int x { get; set; }
         public int y { get; set; }
-        public string texture { get; set; }
+        public Brush texture { get; set; }
 
-        public ButtonM(ButtonM unparent, type type, int x, int y, int colspan, int rowspan, string texture)
+        public ButtonM(ButtonM unparent, type type, int x, int y, int colspan, int rowspan, Brush texture)
         {
             this.parent = unparent;
             this.letype = type;
@@ -35,7 +36,7 @@ namespace Madera_MMB.Lib.Tools
             this.texture = texture;
         }
 
-        public ButtonM(type type, int x, int y, int colspan, int rowspan, string texture)
+        public ButtonM(type type, int x, int y, int colspan, int rowspan, Brush texture)
         {
             this.letype = type;
             this.x = x;

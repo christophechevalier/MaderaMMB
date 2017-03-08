@@ -10,7 +10,7 @@
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Lib/Tools/Template_Madera.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="../Lib/Tools/Template_Modelisation.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
@@ -41,17 +41,30 @@
 
         <Grid Grid.Row="1" Grid.Column="0" >
             <Grid.RowDefinitions>
+                <RowDefinition Height="0.1*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.1*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.1*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.1*"/>
             </Grid.ColumnDefinitions>
 
-            <Border BorderBrush="Black" BorderThickness="2" Margin="5"/>
-
-            <ToggleButton x:Name="tracer" Content="Tracer un slot" HorizontalAlignment="Center" Margin="0,30,0,0" VerticalAlignment="Top" Height="45" Width="250" Grid.Row="1" Grid.Column="0"/>
-            <ToggleButton x:Name="retirer" Content="Supprimer un slot" HorizontalAlignment="center" Margin="0,80,0,0" VerticalAlignment="Top" Height="45" Width="250" Grid.Row="1" Grid.Column="0"/>
+            <Viewbox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <ToggleButton x:Name="tracer" Content="Tracer un slot" Height="60" Width="400" FontSize="20"/>
+            </Viewbox>
+            <Viewbox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <ToggleButton x:Name="retirer" Content="Supprimer un slot" Height="60" Width="400" FontSize="20"/>
+            </Viewbox>
+            <Viewbox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Button x:Name="texturer" Content="Afficher la composition" Height="60" Width="400" FontSize="20" Click="afficheTexture"/>
+            </Viewbox>
+            
         </Grid>
+        <Border BorderBrush="Black" BorderThickness="2" Margin="5" Grid.Row="1" Grid.Column="0"/>
 
         <Grid Grid.Row="2" Grid.Column="0" >
             <Grid.RowDefinitions>
@@ -67,17 +80,26 @@
 
         <Grid Grid.Row="3" Grid.Column="0" >
             <Grid.RowDefinitions>
+                <RowDefinition Height="0.1*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.1*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.1*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.1*"/>
             </Grid.ColumnDefinitions>
 
-            <Border BorderBrush="Black" BorderThickness="2" Margin="5" />
-            <Button Content="Sauvegarder" HorizontalAlignment="Center" Margin="0,25,0,0" VerticalAlignment="Top" Width="250" Height="55" Grid.Row="2" Grid.Column="0"/>
-            <Button Content="Quitter" Name="BtnQuitterModelisation" HorizontalAlignment="center" Margin="0,0,0,25" VerticalAlignment="Bottom" Width="250" Height="55" Grid.Row="2" Grid.Column="0"/>
-
+            <Viewbox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Button Content="Sauvegarder" Name="save" Height="60" Width="400" FontSize="20"/>
+            </Viewbox>
+            <Viewbox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch">
+                <Button Content="Quitter" Name="BtnQuitterModelisation" Height="60" Width="400" FontSize="20"/>
+            </Viewbox>
+            
         </Grid>
+        <Border BorderBrush="Black" BorderThickness="2" Margin="5" Grid.Row="3" Grid.Column="0"/>
 
         <!-- Début Déclaration Vue-->
         <Grid x:Name="contenaire" Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.RowSpan="4" Grid.ColumnSpan="1">
