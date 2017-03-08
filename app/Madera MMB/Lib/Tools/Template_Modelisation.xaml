@@ -54,7 +54,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
+                            <Setter TargetName="bdr" Property="Background" Value="#FF69D451" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="bdr" Property="Background" Value="#FF69D451" />

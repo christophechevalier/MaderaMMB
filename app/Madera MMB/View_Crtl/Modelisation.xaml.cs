@@ -54,11 +54,11 @@ namespace Madera_MMB.View_Crtl
 
         private Brush mur_beton = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/mur_beton.jpg", UriKind.RelativeOrAbsolute)));
 
-        private ButtonM slot = new ButtonM(ButtonM.type.SlotMur, 14, 5, 1, 1, null);
-        private ButtonM slot2 = new ButtonM(ButtonM.type.SlotMur, 14, 24, 1, 1, null);
-        private ButtonM murdroit = new ButtonM(ButtonM.type.Mur, 24, 5, 1, 20, null);
-        private ButtonM murgauche = new ButtonM(ButtonM.type.Mur, 4, 5, 1, 20, null);
-        private ButtonM murbas = new ButtonM(ButtonM.type.Mur, 5, 24, 20, 1, null);
+        private ButtonM slot = new ButtonM(ButtonM.type.SlotMur, 15, 5, 1, 1, null);
+        private ButtonM slot2 = new ButtonM(ButtonM.type.SlotMur, 15, 25, 1, 1, null);
+        private ButtonM murdroit = new ButtonM(ButtonM.type.Mur, 25, 5, 1, 20, null);
+        private ButtonM murgauche = new ButtonM(ButtonM.type.Mur, 5, 6, 1, 20, null);
+        private ButtonM murbas = new ButtonM(ButtonM.type.Mur, 6, 25, 20, 1, null);
         private ButtonM murhaut = new ButtonM(ButtonM.type.Mur, 5, 5, 20, 1, null);
         #endregion
 
@@ -200,7 +200,14 @@ namespace Madera_MMB.View_Crtl
         private void changeMode(object sender, RoutedEventArgs e)
         {
             ToggleButton but = sender as ToggleButton;
-            mode = but.Name;
+            if (mode == but.Name)
+            {
+                mode = "default";
+            }
+            else
+            {
+                mode = but.Name;
+            }
             checkMode();
             Console.WriteLine(mode);
         }
@@ -287,69 +294,87 @@ namespace Madera_MMB.View_Crtl
                         ButtonM butO = listB[but.x - 1, but.y];
                         ButtonM butE = listB[but.x + 1, but.y];
 
-                        if (but.x == 4 && but.y == 5)
+                        if (but.x == 4 && but.y == 24)
                         {
-                            Console.WriteLine("butN" + butN.letype);
-                            Console.WriteLine("butN" + butN.letype);
-                            Console.WriteLine("butN" + butN.letype);
-                            Console.WriteLine("butN" + butN.letype);
+                            Console.WriteLine("butN " + butN.letype);
+                            Console.WriteLine("butS " + butS.letype);
+                            Console.WriteLine("butO " + butO.letype);
+                            Console.WriteLine("butE " + butE.letype);
                         }
 
-                        if ((butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt && butO.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt) || (butN.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur && butO.letype == ButtonM.type.Mur && butE.letype == ButtonM.type.Mur))
+                        if ((butN.letype == ButtonM.type.MurInt || butN.letype == ButtonM.type.Mur) && (butS.letype == ButtonM.type.MurInt || butS.letype == ButtonM.type.Mur) && (butO.letype == ButtonM.type.MurInt || butO.letype == ButtonM.type.Mur) && (butE.letype == ButtonM.type.MurInt || butE.letype == ButtonM.type.Mur))
                         {
                             but.Background = croix;
+                            but.back = "croix";
                         }
-                        else if ((butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt && butO.letype == ButtonM.type.MurInt) || (butN.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur && butO.letype == ButtonM.type.Mur))
+                        else if ((butN.letype == ButtonM.type.MurInt || butN.letype == ButtonM.type.Mur) && (butS.letype == ButtonM.type.MurInt || butS.letype == ButtonM.type.Mur) && (butO.letype == ButtonM.type.MurInt || butO.letype == ButtonM.type.Mur))
                         {
                             but.Background = tGauche;
+                            but.back = "tGauche";
                         }
-                        else if ((butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt) || (butN.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur && butE.letype == ButtonM.type.Mur))
+                        else if ((butN.letype == ButtonM.type.MurInt || butN.letype == ButtonM.type.Mur) && (butS.letype == ButtonM.type.MurInt || butS.letype == ButtonM.type.Mur) && (butE.letype == ButtonM.type.MurInt || butE.letype == ButtonM.type.Mur))
                         {
                             but.Background = tDroite;
+                            but.back = "tDroite";
                         }
-                        else if ((butO.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt) || (butO.letype == ButtonM.type.Mur && butE.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur))
+                        else if ((butO.letype == ButtonM.type.MurInt || butO.letype == ButtonM.type.Mur) && (butE.letype == ButtonM.type.MurInt || butE.letype == ButtonM.type.Mur) &&( butS.letype == ButtonM.type.MurInt || butS.letype == ButtonM.type.Mur))
                         {
                             but.Background = tBas;
+                            but.back = "tBas";
                         }
-                        else if ((butO.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt && butN.letype == ButtonM.type.MurInt) || (butO.letype == ButtonM.type.Mur && butE.letype == ButtonM.type.Mur && butN.letype == ButtonM.type.Mur))
+                        else if ((butO.letype == ButtonM.type.MurInt || butO.letype == ButtonM.type.Mur) && (butE.letype == ButtonM.type.MurInt || butE.letype == ButtonM.type.Mur) && (butN.letype == ButtonM.type.MurInt || butN.letype == ButtonM.type.Mur))
                         {
                             but.Background = tHaut;
+                            but.back = "tHaut";
                         }
-                        else if ((butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt) || (butN.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur))
+                        else if ((butN.letype == ButtonM.type.MurInt || butN.letype == ButtonM.type.Mur) && (butS.letype == ButtonM.type.MurInt || butS.letype == ButtonM.type.Mur))
                         {
                             but.Background = murv;
+                            but.back = "murv";
                         }
-                        else if ((butO.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt) || (butO.letype == ButtonM.type.Mur && butE.letype == ButtonM.type.Mur))
+                        else if ((butO.letype == ButtonM.type.MurInt || butO.letype == ButtonM.type.Mur) && (butE.letype == ButtonM.type.MurInt || butE.letype == ButtonM.type.Mur))
                         {
                             but.Background = murh;
+                            but.back = "murh";
                         }
-                        else if ((butS.letype == ButtonM.type.MurInt && butO.letype == ButtonM.type.MurInt) || (butS.letype == ButtonM.type.Mur && butO.letype == ButtonM.type.Mur))
+                        else if ((butS.letype == ButtonM.type.MurInt || butS.letype == ButtonM.type.Mur) && (butO.letype == ButtonM.type.MurInt || butO.letype == ButtonM.type.Mur))
                         {
                             but.Background = anglehd;
+                            but.back = "anglehd";
                         }
-                        else if ((butS.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt) || (butS.letype == ButtonM.type.Mur && butE.letype == ButtonM.type.Mur))
+                        else if ((butS.letype == ButtonM.type.MurInt || butS.letype == ButtonM.type.Mur) && (butE.letype == ButtonM.type.MurInt || butE.letype == ButtonM.type.Mur))
                         {
                             but.Background = anglehg;
+                            but.back = "anglehg";
                         }
-                        else if ((butN.letype == ButtonM.type.MurInt && butO.letype == ButtonM.type.MurInt) || (butN.letype == ButtonM.type.Mur && butO.letype == ButtonM.type.Mur))
+                        else if ((butN.letype == ButtonM.type.MurInt || butN.letype == ButtonM.type.Mur) && (butO.letype == ButtonM.type.MurInt || butO.letype == ButtonM.type.Mur))
                         {
                             but.Background = anglebd;
+                            but.back = "anglebd";
                         }
-                        else if ((butN.letype == ButtonM.type.MurInt && butE.letype == ButtonM.type.MurInt) || (butN.letype == ButtonM.type.Mur && butE.letype == ButtonM.type.Mur))
+                        else if ((butN.letype == ButtonM.type.MurInt || butN.letype == ButtonM.type.Mur) && (butE.letype == ButtonM.type.MurInt || butE.letype == ButtonM.type.Mur))
                         {
                             but.Background = anglebg;
+                            but.back = "anglebg";
                         }
-                        else if ((butO.letype == ButtonM.type.MurInt || butE.letype == ButtonM.type.MurInt) || (butO.letype == ButtonM.type.Mur || butE.letype == ButtonM.type.Mur))
+                        else if (butO.letype == ButtonM.type.MurInt || butE.letype == ButtonM.type.MurInt || butO.letype == ButtonM.type.Mur || butE.letype == ButtonM.type.Mur)
                         {
                             but.Background = murh;
+                            but.back = "murh";
                         }
-                        else if ((butN.letype == ButtonM.type.MurInt || butS.letype == ButtonM.type.MurInt) || (butN.letype == ButtonM.type.Mur || butS.letype == ButtonM.type.Mur))
+                        else if (butN.letype == ButtonM.type.MurInt || butS.letype == ButtonM.type.MurInt || butN.letype == ButtonM.type.Mur || butS.letype == ButtonM.type.Mur)
                         {
                             but.Background = murv;
+                            but.back = "murv";
                         }
                         else
                         {
                             but.Background = croix;
+                            but.back = "croix";
+                        }
+                        if (but.x == 4 && but.y == 24)
+                        {
+                            Console.WriteLine("but.type " + but.back);
                         }
                     }
                     else if (but.letype == ButtonM.type.Rien)
@@ -363,12 +388,36 @@ namespace Madera_MMB.View_Crtl
         private bool isInside (ButtonM but)
         {
             bool inside = false;
-            if (but.y > murgauche.y && but.y < (murgauche.y + murgauche.rowspan -1))
+            bool gauche = false;
+            bool droite = false;
+            bool haut = false;
+            bool bas = false;
+
+            for (int i = 0; i < listB.GetLength(0); i++)
             {
-                if (but.x > murgauche.x && but.x < murdroit.x)
+                if (listB[i,but.y].x < but.x && listB[i, but.y].letype != ButtonM.type.Rien)
                 {
-                    inside = true;
+                    gauche = true;
                 }
+                if (listB[i, but.y].x > but.x && listB[i, but.y].letype != ButtonM.type.Rien)
+                {
+                    droite = true;
+                }
+            }
+            for (int i = 0; i < listB.GetLength(1); i++)
+            {
+                if (listB[but.x, i].y < but.x && listB[but.x, i].letype != ButtonM.type.Rien)
+                {
+                    haut = true;
+                }
+                if (listB[but.x, i].y > but.x && listB[but.x, i].letype != ButtonM.type.Rien)
+                {
+                    bas = true;
+                }
+            }
+            if (haut && bas && gauche && droite)
+            {
+                inside = true;
             }
 
             return inside;
