@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using MySql.Data.MySqlClient;
 using System.Data.SQLite;
@@ -22,7 +18,6 @@ namespace Madera_MMB.Lib
           set { _MySQLconnected = value; RaisePropertyChanged("MySQLconnected");}
         }
         public bool SQLiteconnected { get; set; }
-        public SQLiteDataAdapter DataAdapter { get; set; }
         #endregion
 
         private void RaisePropertyChanged(String property)
