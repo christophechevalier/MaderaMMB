@@ -255,7 +255,7 @@
         <!-- Début Déclaration Affichage Devis -->
 
         <Grid x:Name="AffichageDevis"
-              Visibility="Hidden"
+              Visibility="Visible"
               Grid.Column="1"
               Grid.Row="0" 
               VerticalAlignment="Stretch" 
@@ -492,7 +492,7 @@
         <!-- Début Déclaration Affichage Dossier Technique -->
 
         <Grid x:Name="AfficherDevisTechnique"
-              Visibility="Visible"
+              Visibility="Hidden"
               Grid.Column="1"
               Grid.Row="0" 
               VerticalAlignment="Stretch" 

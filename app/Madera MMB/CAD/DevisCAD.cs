@@ -86,7 +86,7 @@ namespace Madera_MMB.CAD
                                 commercial);
 
                             Devis devis = new Devis
-                                (
+                            (
                                     reader.GetString(0),
                                     reader.GetString(1),
                                     reader.GetString(2),
@@ -99,9 +99,9 @@ namespace Madera_MMB.CAD
                                     reader.GetInt32(9),
                                     new Plan("Ref001", "Plan X 50x50", "2017-01-01", "2017-28-02", projet, plancher, couverture, coupe, gamme, modules),
                                     new Projet(client, commercial),
-                                    new Client("Ref0001", "Bolzinger", "Gabriel", "362 Route de Villemur", "31340", "Mirepoix sur Tarn", "gabriel.bolzinge@gmail.com", "0562571665"),
-                                    new Commercial("RefX5968", "Crocco", "David", "")
-                                );
+                                    client,
+                                    commercial
+                              );
                         }
                     }
                     Trace.WriteLine("#### GET DEVIS DATA SUCCESS ####");

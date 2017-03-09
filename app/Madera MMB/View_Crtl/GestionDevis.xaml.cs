@@ -39,15 +39,13 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Constructeur
-        public GestionDevis(Plan pln)
+        public GestionDevis(Connexion con, Plan pln)
         {
             InitializeComponent();
             plan = pln;
+            connexion = con;
             devisCAD = new DevisCAD(this.plan);
-
-            modules = new List<Module>();
-            //modules = getModulesByRefPlan(this.plan.reference);
-
+            
             Initialize_Labels();
             Initialize_Devis();
         }

@@ -27,7 +27,7 @@ namespace Madera_MMB.View_Crtl
         private View_Crtl.GestionClient gestionClient { get; set; }
         private View_Crtl.ParametresClient parametresClient { get; set; }
         //private View_Crtl.ParametresPlan parametresPlan { get; set; }
-        //private View_Crtl.GestionDevis gestionDevis { get; set; }
+        private View_Crtl.GestionDevis gestionDevis { get; set; }
         //private View_Crtl.Modelisation modelisation { get; set; }
         private Connexion connexion;
         #endregion
@@ -43,39 +43,32 @@ namespace Madera_MMB.View_Crtl
             connexion = new Connexion();
             //this.gestionClient = new GestionClient(connexion);
             //this.parametresClient = new ParametresClient();
-            Mainframe.Content = gestionClient;
+            //Mainframe.Content = gestionClient;
+            
+            Commercial commercialTest = new Commercial ("COM003", "Chevalier", "Christophe", "monemail@gmail.com", "mdp");
+            Client clientTest = new Client ("CLI056", "Bolzinger", "Gabriel", "362 Route de Villemur", "31340", "Mirepoix sur Tarn", "gony@gmail.com", "06 59 48 62 49", "01-01-2017", "01-01-2017");
+            Projet projetTest = new Projet ("AT000001", "Maison Familiale", "10-10-2016", "10-10-2016", clientTest, commercialTest);
+            BitmapImage image1 = new BitmapImage();
+            BitmapImage image2 = new BitmapImage();
+            BitmapImage image3 = new BitmapImage();
+            BitmapImage image4 = new BitmapImage();
 
+            Plancher plancherA = new Plancher("Bois", 1500, image1);
+            Couverture couvertureA = new Couverture ("Bois", 2500, true, image2);
+            CoupePrincipe coupeA = new CoupePrincipe (1, "Carré", 50, 50, 25000, image3);
+            Gamme gammeA = new Gamme ("Aluminium", 5, "Tungstène", "Metal", "Metal", true, image4);
 
-            Commercial commercialTest = new Commercial
-                (
-                    "COM003",
-                    "Chevalier",
-                    "Christophe",
-                    "monemail@gmail.com",
-                    "mdp"
-                );
-            Projet projetTest = new Projet
-            (
-                "AT000001",
-                "Maison Familiale",
-                "10-10-2016",
-                "10-10-2016",
-                new Client("AT000001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
-                commercialTest
-            );
+            Plan plan = new Plan("Plan carré", projetTest, plancherA, couvertureA, coupeA, gammeA);
 
             //this.authentification = new Authentification();
             this.gestionProjet = new GestionProjet(connexion, commercialTest);
             //this.gestionPlan = new GestionPlan(connexion, projetTest);
-            Mainframe.Content = gestionProjet;
-
+            this.gestionDevis = new GestionDevis(connexion, plan);
+            
             // Démarrage de l'application sur la vue authentification
+            Mainframe.Content = gestionDevis;
 
-
-            // Tmp : Commercial authentifié avec la référence COM003
-            //string query = " SELECT * FROM projet WHERE refCommercial = 'COM003'";
-            //connexion.SelectSQLiteQuery(query);
-
+            
             Initialize_Listeners();
         }
         #endregion
@@ -87,13 +80,13 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Listeners()
         {
             //Initialize_Listeners_Auth();
-            Initialize_Listeners_GestionProjet();
+            //Initialize_Listeners_GestionProjet();
             //Initialize_Listeners_GestionClient();
             //Initialize_Listeners_ParametresClient();
             //Initialize_Listeners_GestionPlan();
             //Initialize_Listeners_ParametresPlan();
             //Initialize_Listeners_Modelisation();
-            //Initialize_Listeners_Devis();
+            Initialize_Listeners_Devis();
         }
         #endregion
 
@@ -274,19 +267,19 @@ namespace Madera_MMB.View_Crtl
         /// <summary>
         /// Méthode qui contient l'ensemble des listeners de la vue gestion devis
         /// </summary>
-        //private void Initialize_Listeners_Devis()
-        //{
-        //    // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
-        //    gestionDevis.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
-        //    {
-        //        Mainframe.Content = GestionPlan;
-        //    };
-        //    // Click sur le bouton exporter un devis client pour ???
-        //    gestionDevis.BtnExportDevis.Click += delegate(object sender, RoutedEventArgs e)
-        //    {
+        private void Initialize_Listeners_Devis()
+        {
+            // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
+            gestionDevis.BtnRetour.Click += delegate (object sender, RoutedEventArgs e)
+            {
+                Mainframe.Content = GestionPlan;
+            };
+            // Click sur le bouton exporter un devis client pour ???
+            gestionDevis.BtnExportDevis.Click += delegate (object sender, RoutedEventArgs e)
+            {
 
-        //    };
-        //}
+            };
+        }
         #endregion
     }
 }
