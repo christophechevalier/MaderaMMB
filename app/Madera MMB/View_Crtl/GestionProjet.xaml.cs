@@ -24,6 +24,7 @@ namespace Madera_MMB.View_Crtl
         private ProjetCAD projetCAD { get; set; }
         private GestionPlan gestionPlan { get; set; }
         public ClientCAD clientCAD { get; set; }
+        public Projet proj { get; set; }
         #endregion
 
         #region Constructeur
@@ -143,7 +144,7 @@ namespace Madera_MMB.View_Crtl
         private void Btn_Select_Projet_Client_Click(object sender, RoutedEventArgs e)
         {
             ToggleButton btn = sender as ToggleButton;
-            Projet proj = (Projet)btn.DataContext;
+            proj = (Projet)btn.DataContext;
 
             foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(WrapProjets))
             {

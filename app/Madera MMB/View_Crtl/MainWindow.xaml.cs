@@ -53,28 +53,12 @@ namespace Madera_MMB.View_Crtl
                     "monemail@gmail.com",
                     "mdp"
                 );
-            Projet projetTest = new Projet
-            (
-                "AT000001",
-                "Maison Familiale",
-                "10-10-2016",
-                "10-10-2016",
-                new Client("AT000001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
-                commercialTest
-            );
 
             this.authentification = new Authentification();
             this.gestionProjet = new GestionProjet(connexion, commercialTest);
-            this.gestionPlan = new GestionPlan(connexion, projetTest);
-            this.parametresPlan = new ParametresPlan(connexion);
+            //this.gestionPlan = new GestionPlan(connexion, gestionProjet.proj);
+            //this.parametresPlan = new ParametresPlan(connexion);
             Mainframe.Content = gestionProjet;
-
-            // Démarrage de l'application sur la vue authentification
-
-
-            // Tmp : Commercial authentifié avec la référence COM003
-            //string query = " SELECT * FROM projet WHERE refCommercial = 'COM003'";
-            //connexion.SelectSQLiteQuery(query);
 
             Initialize_Listeners();
         }
@@ -90,8 +74,7 @@ namespace Madera_MMB.View_Crtl
             Initialize_Listeners_GestionProjet();
             //Initialize_Listeners_GestionClient();
             //Initialize_Listeners_ParametresClient();
-            Initialize_Listeners_GestionPlan();
-            Initialize_Listeners_ParametresPlan();
+            //Initialize_Listeners_ParametresPlan();
             //Initialize_Listeners_Modelisation();
             //Initialize_Listeners_Devis();
         }
@@ -106,6 +89,7 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
             authentification.BtnValiderAuth.Click += delegate(object sender, RoutedEventArgs e)
             {
+                Initialize_Listeners_GestionProjet();
                 Mainframe.Content = gestionProjet;
             };
         }
@@ -133,17 +117,8 @@ namespace Madera_MMB.View_Crtl
                         "monemail@gmail.com",
                         "mdp"
                     );
-                Projet projetTest = new Projet
-                    (
-                        "CCAT000001",
-                        "Maison Familiale",
-                        "10-10-2016",
-                        "10-10-2016",
-                        new Client("AT000001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
-                        commercialTest
-                    );
 
-                this.gestionPlan = new GestionPlan(connexion, projetTest);
+                this.gestionPlan = new GestionPlan(connexion, gestionProjet.proj);
                 Initialize_Listeners_GestionPlan();
                 Mainframe.Content = gestionPlan;
             };
@@ -212,6 +187,8 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton créer un nouveau plan pour aller dans la Vue Paramètres Plan
             gestionPlan.BtnCréerPlan.Click += delegate (object sender, RoutedEventArgs e)
             {
+                this.parametresPlan = new ParametresPlan(connexion);
+                Initialize_Listeners_ParametresPlan();
                 Mainframe.Content = parametresPlan;
             };
             // Click sur le bouton ouvrir un plan pour aller dans la Vue Modélisation
@@ -247,8 +224,6 @@ namespace Madera_MMB.View_Crtl
             parametresPlan.BtnConfirmerParamPlan.Click += delegate (object sender, RoutedEventArgs e)
             {
                 Mainframe.Content = gestionPlan;
-
-                Client getClient = new Client();
 
                 //Plan NewPlan = new Plan(projet);
                 //NewPlan.reference = generateKey(projet);
