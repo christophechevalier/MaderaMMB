@@ -137,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Lib\Tools\Template_Madera2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View_Crtl\GestionClient.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
