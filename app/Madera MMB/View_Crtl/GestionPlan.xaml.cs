@@ -121,7 +121,6 @@ namespace Madera_MMB.View_Crtl
         #region Tools
         public string generateKey(Projet projet)
         {
-            //string key = comm.nom.Substring(0, 1) + comm.prenom.Substring(0, 1) + client.nom.Substring(0, 1) + client.prenom.Substring(0, 1);
             int count = 0;
             for (int i = 0; i < planCAD.Plans.Count; i++)
             {

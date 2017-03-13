@@ -118,9 +118,23 @@ namespace Madera_MMB.View_Crtl
                         "mdp"
                     );
 
-                this.gestionPlan = new GestionPlan(connexion, gestionProjet.proj);
-                Initialize_Listeners_GestionPlan();
-                Mainframe.Content = gestionPlan;
+                if (gestionProjet.proj != null)
+                {
+                    if (gestionProjet.lblNbPlans != null)
+                    {
+                        this.gestionPlan = new GestionPlan(connexion, gestionProjet.proj);
+                        Initialize_Listeners_GestionPlan();
+                        Mainframe.Content = gestionPlan;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Vous n'avez pas de plans existant dans ce projet !");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Vous devez sélectionner un projet avant de l'ouvrir !");
+                }
             };
             // Click sur le bouton créer un nouveau client pour aller dans la Vue Paramètre Client
             gestionProjet.BtnCreerClient.Click += delegate(object sender, RoutedEventArgs e)
@@ -223,19 +237,14 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton confirmer paramètres plan pour aller dans la Vue Modélisation
             parametresPlan.BtnConfirmerParamPlan.Click += delegate (object sender, RoutedEventArgs e)
             {
-                Mainframe.Content = gestionPlan;
+                //Mainframe.Content = gestionPlan;
 
                 //Plan NewPlan = new Plan(projet);
                 //NewPlan.reference = generateKey(projet);
-                //NewPlan.nom = NewPlan.client.nomprenom + " (" + i + ") ";
-                //planCAD.Projets.Add(NewPlan);
+                //parametresCAD.Projets.Add(NewPlan);
                 //planCAD.InsertPlan(NewPlan);
-                //}
-                //else
-                //{
-                //    MessageBox.Show("Vous devez avoir rempli tout les champs !");
-                //}
             };
+
             // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
             parametresPlan.BtnRetour.Click += delegate (object sender, RoutedEventArgs e)
             {
