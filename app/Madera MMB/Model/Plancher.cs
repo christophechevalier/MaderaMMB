@@ -17,7 +17,7 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
-        public Plancher(string type, int prix, BitmapImage img, bool statut)
+        public Plancher(string type, int prix, bool statut, BitmapImage img)
         {
             this.type = type;
             this.prixHT = prix;

@@ -20,7 +20,7 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
-        public Gamme(string nom, int offre, string isolant, string finition, string huisserie, bool statut, BitmapImage img = null)
+        public Gamme(string nom, int offre, string isolant, string finition, string huisserie, bool statut, BitmapImage img)
         {
             this.nom = nom;
             this.offrePromo = offre;

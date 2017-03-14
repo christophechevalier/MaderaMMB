@@ -33,7 +33,7 @@ namespace Madera_MMB.CAD
         #region privates methods
         private void listAllGamme()
         {
-            SQLQuery = "SELECT * FROM gamme";
+            SQLQuery = "SELECT * FROM gamme WHERE statut = 1";
             conn.LiteCo.Open();
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {

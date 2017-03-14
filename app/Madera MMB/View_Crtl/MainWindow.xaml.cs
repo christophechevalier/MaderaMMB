@@ -12,15 +12,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 using Madera_MMB.View_Crtl;
 using Madera_MMB.Model;
 using Madera_MMB.Lib;
+using Madera_MMB.CAD;
 
 namespace Madera_MMB.View_Crtl
 {
     public partial class MainWindow : Window
     {
         #region Properties
+        private Connexion connexion;
+        private bool mySQLSync { get; set; }
         private View_Crtl.Authentification authentification { get; set; }
         private View_Crtl.GestionProjet gestionProjet { get; set; }
         private View_Crtl.GestionPlan gestionPlan { get; set; }
@@ -29,7 +33,6 @@ namespace Madera_MMB.View_Crtl
         private View_Crtl.ParametresPlan parametresPlan { get; set; }
         //private View_Crtl.GestionDevis gestionDevis { get; set; }
         //private View_Crtl.Modelisation modelisation { get; set; }
-        private Connexion connexion;
         #endregion
 
         #region Ctor
@@ -39,6 +42,23 @@ namespace Madera_MMB.View_Crtl
         public MainWindow()
         {
             InitializeComponent();
+            initSynchro();
+
+            /// Test SYNCHRO import ///
+            connexion.SyncCommMySQL();
+            connexion.SyncParamPlan();
+            connexion.SyncClient();
+            connexion.SyncMetamodules();
+            connexion.SyncMetaslot();
+            connexion.SyncAssocMetaModuleMetaslot();
+
+            /// Test CAD avec nouvelles données ///
+            CommercialCAD commCAD = new CommercialCAD(connexion);
+            ClientCAD clientCAD = new ClientCAD(connexion);
+            CoupePrincipeCAD coupeCAD = new CoupePrincipeCAD(connexion);
+            CouvertureCAD couvCAD = new CouvertureCAD(connexion);
+            GammeCAD gamCAD = new GammeCAD(connexion);
+            PlancherCAD plancherCAD = new PlancherCAD(connexion);
 
             connexion = new Connexion();
             //this.gestionClient = new GestionClient(connexion);
@@ -60,7 +80,33 @@ namespace Madera_MMB.View_Crtl
             //this.parametresPlan = new ParametresPlan(connexion);
             Mainframe.Content = gestionProjet;
 
+            /// Test SYNCHRO export ///
+            connexion.ExpClients();
+            connexion.ExpProjets();
+            connexion.ExpPlans();
+            connexion.ExpModules();
+
             Initialize_Listeners();
+        }
+        #endregion
+
+        #region Process Synchro
+        /// <summary>
+        ///  Méthode testant les possibilitées de connexion aux bases de données locale et distante 
+        /// </summary>
+        private void initSynchro()
+        {
+            this.connexion = new Connexion();
+            if (connexion.MySQLconnected == false)
+            {
+                mySQLSync = false;
+                MessageBox.Show("Mode déconnecté");
+            }
+            else if (!connexion.SQLiteconnected)
+            {
+                MessageBox.Show("Base innaccessible ! Veuillez contacter l'administrateur. ");
+                Application.Current.Shutdown();
+            }
         }
         #endregion
 
@@ -277,6 +323,18 @@ namespace Madera_MMB.View_Crtl
 
         //    };
         //}
+        #endregion
+
+        #region Settings
+        /// <summary>
+        ///  Méthode définissant le comportement de l'application à la fermeture de la fenêtre
+        /// </summary>
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            Application.Current.Shutdown();
+        }
         #endregion
     }
 }
