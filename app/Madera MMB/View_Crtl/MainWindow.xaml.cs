@@ -120,16 +120,9 @@ namespace Madera_MMB.View_Crtl
 
                 if (gestionProjet.proj != null)
                 {
-                    if (gestionProjet.lblNbPlans != null)
-                    {
-                        this.gestionPlan = new GestionPlan(connexion, gestionProjet.proj);
-                        Initialize_Listeners_GestionPlan();
-                        Mainframe.Content = gestionPlan;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Vous n'avez pas de plans existant dans ce projet !");
-                    }
+                    this.gestionPlan = new GestionPlan(connexion, gestionProjet.proj);
+                    Initialize_Listeners_GestionPlan();
+                    Mainframe.Content = gestionPlan;
                 }
                 else
                 {
