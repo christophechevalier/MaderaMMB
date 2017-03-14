@@ -16,10 +16,11 @@ namespace Madera_MMB.Model
         public int largeur { get; set; }
         public int prixHT { get; set; }
         public BitmapImage image { get; set; }
+        public bool statut { get; set; }
         #endregion
 
         #region Ctor
-        public CoupePrincipe(int id, string label, int longueur, int largeur, int prix, BitmapImage img = null)
+        public CoupePrincipe(int id, string label, int longueur, int largeur, int prix, BitmapImage img, bool statut)
         {
             this.id = id;
             this.label = label;
@@ -27,6 +28,7 @@ namespace Madera_MMB.Model
             this.largeur = largeur;
             this.prixHT = prix;
             image = img;
+            this.statut = statut;
         }
         public CoupePrincipe() { }
         #endregion
