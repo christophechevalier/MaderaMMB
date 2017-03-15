@@ -14,8 +14,9 @@ namespace Madera_MMB.Lib
         public MySqlConnection MySQLCo { get; set; }
         private bool _MySQLconnected;
         public bool MySQLconnected
-        { get { return _MySQLconnected; }
-          set { _MySQLconnected = value; RaisePropertyChanged("MySQLconnected");}
+        {
+            get { return _MySQLconnected; }
+            set { _MySQLconnected = value; RaisePropertyChanged("MySQLconnected"); }
         }
         public bool SQLiteconnected { get; set; }
         #endregion
@@ -67,24 +68,24 @@ namespace Madera_MMB.Lib
                     SQLiteCommand command = new SQLiteCommand(query, LiteCo);
                     try
                     {
-                        i = i + command.ExecuteNonQuery();  
+                        i = i + command.ExecuteNonQuery();
                     }
                     catch (System.Data.SQLite.SQLiteException e)
                     {
                         Trace.WriteLine(e.ToString());
                         LiteCo.Close();
-                    } 
+                    }
                 }
                 LiteCo.Close();
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC COMMERCIAL SUCCESS ############# \n");
             }
-            catch(MySqlException e)
+            catch (MySqlException e)
             {
                 Trace.WriteLine(e.ToString());
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC COMMERCIAL FAIL ############# \n");
-            }        
+            }
         }
 
         /// <summary>
@@ -286,10 +287,10 @@ namespace Madera_MMB.Lib
                 int i = 0;
                 while (Reader.Read())
                 {
-                    query = "replace into Composant_has_MetaModule(idComposition,refMetaModule,idMetaSlot) values(@id_composition,@refMetaModule,@idMetaSlot)";
+                    query = "replace into Composant_has_MetaModule(id_composition,refMetaModule,idMetaSlot) values(@id_composition,@refMetaModule,@idMetaSlot)";
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
-                        command.Parameters.AddWithValue("@idComposition", Reader.GetInt32(0));
+                        command.Parameters.AddWithValue("@id_composition", Reader.GetInt32(0));
                         command.Parameters.AddWithValue("@refMetaModule", Reader.GetString(1));
                         command.Parameters.AddWithValue("@idMetaSlot", Reader.GetInt32(2));
                         try
@@ -335,8 +336,8 @@ namespace Madera_MMB.Lib
                     {
                         while (reader.Read())
                         {
-                            string mySQLquery = "INSERT into client (refClient, nom, prenom, adresse, codePostal, ville, email, telephone, dateCreation, dateModification)"+
-                                "VALUES(@refClient, @nom,  @prenom, @adresse, @codePostal, @ville, @email, @telephone, @dateCreation, @dateModification)"+
+                            string mySQLquery = "INSERT into client (refClient, nom, prenom, adresse, codePostal, ville, email, telephone, dateCreation, dateModification)" +
+                                "VALUES(@refClient, @nom,  @prenom, @adresse, @codePostal, @ville, @email, @telephone, @dateCreation, @dateModification)" +
                                 "ON DUPLICATE KEY UPDATE nom= @nom, prenom= @prenom, adresse= @adresse, codePostal= @codePostal, ville= @ville, email= @email, telephone= @telephone, dateCreation= @dateCreation, dateModification= @dateModification";
                             using (MySqlCommand expClients = new MySqlCommand(mySQLquery, MySQLCo))
                             {
@@ -389,8 +390,8 @@ namespace Madera_MMB.Lib
                     {
                         while (reader.Read())
                         {
-                            string mySQLquery = "INSERT into projet(refProjet, nom,  dateCreation, dateModification, refClient, refCommercial)"+
-                                "VALUES(@refProjet, @nom,  @dateCreation, @dateModification, @refClient, @refCommercial)"+
+                            string mySQLquery = "INSERT into projet(refProjet, nom,  dateCreation, dateModification, refClient, refCommercial)" +
+                                "VALUES(@refProjet, @nom,  @dateCreation, @dateModification, @refClient, @refCommercial)" +
                                 "ON DUPLICATE KEY UPDATE nom= @nom,dateCreation= @dateCreation,dateModification= @dateModification,refClient= @refClient,refCommercial= @refCommercial";
                             using (MySqlCommand expProjets = new MySqlCommand(mySQLquery, MySQLCo))
                             {
@@ -429,7 +430,7 @@ namespace Madera_MMB.Lib
         {
             LiteCo.Open();
             Trace.WriteLine(" ############# TEST EXPORT PLANS ############# \n");
-            string query = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme FROM plan";
+            string query = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, id_coupe, nomGamme FROM plan";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 MySQLCo.Open();
@@ -450,9 +451,9 @@ namespace Madera_MMB.Lib
                                 reader.GetValue(7).GetType() + " || " +
                                 reader.GetValue(8).GetType());
                             //reader.GetValue(9).ToString());
-                            string mySQLquery = "INSERT into plan(refPlan, label,  dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme)" +
-                                "VALUES(@refPlan, @label,  @dateCreation, @dateModification, @refProjet, @typePlancher, @typeCouverture, @idCoupe, @nomGamme)" +
-                                "ON DUPLICATE KEY UPDATE label= @label, dateCreation= @dateCreation,dateModification= @dateModification,refProjet= @refProjet,typePlancher= @typePlancher,typeCouverture= @typeCouverture,idCoupe= @idCoupe,nomGamme= @nomGamme";
+                            string mySQLquery = "INSERT into plan(refPlan, label,  dateCreation, dateModification, refProjet, typeCouverture, id_coupe, typePlancher, nomGamme)" +
+                                "VALUES(@refPlan, @label,  @dateCreation, @dateModification, @refProjet, @typeCouverture, @id_coupe, @typePlancher, @nomGamme)" +
+                                "ON DUPLICATE KEY UPDATE label= @label, dateCreation= @dateCreation,dateModification= @dateModification,refProjet= @refProjet,typeCouverture= @typeCouverture,id_coupe= @id_coupe,typePlancher= @typePlancher,nomGamme= @nomGamme";
                             using (MySqlCommand expPlans = new MySqlCommand(mySQLquery, MySQLCo))
                             {
                                 Trace.WriteLine(mySQLquery);
@@ -463,7 +464,7 @@ namespace Madera_MMB.Lib
                                 expPlans.Parameters.AddWithValue("@refProjet", reader.GetString(4));
                                 expPlans.Parameters.AddWithValue("@typePlancher", reader.GetString(5));
                                 expPlans.Parameters.AddWithValue("@typeCouverture", reader.GetString(6));
-                                expPlans.Parameters.AddWithValue("@idCoupe", reader.GetInt32(7));                               
+                                expPlans.Parameters.AddWithValue("@id_coupe", reader.GetInt32(7));
                                 expPlans.Parameters.AddWithValue("@nomGamme", reader.GetString(8));
                                 try
                                 {
@@ -504,12 +505,12 @@ namespace Madera_MMB.Lib
                     {
                         while (reader.Read())
                         {
-                            string mySQLquery = "INSERT into module(idModule, coordonneeDebutX,  coordonneeDebutY, colspan, rowspan, refMetaModule, refPlan)" +
-                                "VALUES(@idModule, @coordonneeDebutX,  @coordonneeDebutY, @colspan, @rowspan, @refMetaModule, @refPlan)" +
+                            string mySQLquery = "INSERT into module(id_module, coordonneeDebutX,  coordonneeDebutY, colspan, rowspan, refMetaModule, refPlan)" +
+                                "VALUES(@id_module, @coordonneeDebutX,  @coordonneeDebutY, @colspan, @rowspan, @refMetaModule, @refPlan)" +
                                 "ON DUPLICATE KEY UPDATE coordonneeDebutX= @coordonneeDebutX, coordonneeDebutY= @coordonneeDebutY,colspan= @colspan,rowspan= @rowspan,refMetaModule= @refMetaModule,refPlan= @refPlan";
                             using (MySqlCommand expModules = new MySqlCommand(mySQLquery, MySQLCo))
                             {
-                                expModules.Parameters.AddWithValue("@idModule", reader.GetInt32(0));
+                                expModules.Parameters.AddWithValue("@id_module", reader.GetInt32(0));
                                 expModules.Parameters.AddWithValue("@coordonneeDebutX", reader.GetInt32(1));
                                 expModules.Parameters.AddWithValue("@coordonneeDebutY", reader.GetInt32(2));
                                 expModules.Parameters.AddWithValue("@colspan", reader.GetInt32(3));
@@ -554,10 +555,10 @@ namespace Madera_MMB.Lib
                 {
                     command.ExecuteNonQuery();
                 }
-                catch(System.Data.SQLite.SQLiteException e)
+                catch (System.Data.SQLite.SQLiteException e)
                 {
                     Trace.WriteLine(e.ToString());
-                    LiteCo.Close(); 
+                    LiteCo.Close();
                 }
             }
             catch (SQLiteException ex)
@@ -626,11 +627,11 @@ namespace Madera_MMB.Lib
                 while (Reader.Read())
                 {
                     Byte[] data = (Byte[])Reader.GetValue(5);
-                    query = "replace into coupeprincipe(idCoupe, label, longueur, largeur, prixHT, image, statut, dateModification) values(@idCoupe, @label, @longueur, @largeur, @prixHT, @image, @statut, @dateModification)";
+                    query = "replace into coupeprincipe(id_coupe, label, longueur, largeur, prixHT, image, statut, dateModification) values(@id, @label, @longueur, @largeur, @prixHT, @image, @statut, @dateModification)";
 
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
-                        command.Parameters.AddWithValue("@idCoupe", Reader.GetInt32(0));
+                        command.Parameters.AddWithValue("@id", Reader.GetInt32(0));
                         command.Parameters.AddWithValue("@label", Reader.GetString(1));
                         command.Parameters.AddWithValue("@longueur", Reader.GetInt32(2));
                         command.Parameters.AddWithValue("@largeur", Reader.GetInt32(3));

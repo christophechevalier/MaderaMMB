@@ -90,7 +90,6 @@
     <Compile Include="CAD\ProjetCAD.cs" />
     <Compile Include="CAD\SlotCAD.cs" />
     <Compile Include="Lib\Connexion.cs" />
-    <Compile Include="Lib\Tools\Connexion.cs" />
     <Compile Include="Lib\Tools\InputModalWindow.xaml.cs">
       <DependentUpon>InputModalWindow.xaml</DependentUpon>
     </Compile>
@@ -265,13 +264,13 @@
     <Resource Include="Lib\Images\folder_client.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Lib\Tools\bois.png" />
-    <Resource Include="Lib\Tools\carre.png" />
-    <Resource Include="Lib\Tools\carrelage.jpg" />
-    <Resource Include="Lib\Tools\L.png" />
-    <Resource Include="Lib\Tools\rectangle.png" />
-    <Resource Include="Lib\Tools\T.png" />
-    <Resource Include="Lib\Tools\tuile.jpg" />
+    <Resource Include="Lib\bois.png" />
+    <Resource Include="Lib\carre.png" />
+    <Resource Include="Lib\carrelage.jpg" />
+    <Resource Include="Lib\L.png" />
+    <Resource Include="Lib\rectangle.png" />
+    <Resource Include="Lib\T.png" />
+    <Resource Include="Lib\tuile.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.104.0\build\net45\System.Data.SQLite.Core.targets')" />

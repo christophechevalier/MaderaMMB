@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 namespace Madera_MMB.CAD
 {
     // INotifyPropertyChanged permet de signaler au moteur de bindings qu'un élément a changé
-    class ClientCAD : INotifyPropertyChanged
+    public class ClientCAD : INotifyPropertyChanged
     {
         #region properties
         public Connexion Conn { get; set; }
