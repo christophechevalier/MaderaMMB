@@ -14,8 +14,9 @@ namespace Madera_MMB.Lib
         public MySqlConnection MySQLCo { get; set; }
         private bool _MySQLconnected;
         public bool MySQLconnected
-        { get { return _MySQLconnected; }
-          set { _MySQLconnected = value; RaisePropertyChanged("MySQLconnected");}
+        {
+            get { return _MySQLconnected; }
+            set { _MySQLconnected = value; RaisePropertyChanged("MySQLconnected"); }
         }
         public bool SQLiteconnected { get; set; }
         #endregion
@@ -67,24 +68,24 @@ namespace Madera_MMB.Lib
                     SQLiteCommand command = new SQLiteCommand(query, LiteCo);
                     try
                     {
-                        i = i + command.ExecuteNonQuery();  
+                        i = i + command.ExecuteNonQuery();
                     }
                     catch (System.Data.SQLite.SQLiteException e)
                     {
                         Trace.WriteLine(e.ToString());
                         LiteCo.Close();
-                    } 
+                    }
                 }
                 LiteCo.Close();
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC COMMERCIAL SUCCESS ############# \n");
             }
-            catch(MySqlException e)
+            catch (MySqlException e)
             {
                 Trace.WriteLine(e.ToString());
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC COMMERCIAL FAIL ############# \n");
-            }        
+            }
         }
 
         /// <summary>
@@ -335,8 +336,8 @@ namespace Madera_MMB.Lib
                     {
                         while (reader.Read())
                         {
-                            string mySQLquery = "INSERT into client (refClient, nom, prenom, adresse, codePostal, ville, email, telephone, dateCreation, dateModification)"+
-                                "VALUES(@refClient, @nom,  @prenom, @adresse, @codePostal, @ville, @email, @telephone, @dateCreation, @dateModification)"+
+                            string mySQLquery = "INSERT into client (refClient, nom, prenom, adresse, codePostal, ville, email, telephone, dateCreation, dateModification)" +
+                                "VALUES(@refClient, @nom,  @prenom, @adresse, @codePostal, @ville, @email, @telephone, @dateCreation, @dateModification)" +
                                 "ON DUPLICATE KEY UPDATE nom= @nom, prenom= @prenom, adresse= @adresse, codePostal= @codePostal, ville= @ville, email= @email, telephone= @telephone, dateCreation= @dateCreation, dateModification= @dateModification";
                             using (MySqlCommand expClients = new MySqlCommand(mySQLquery, MySQLCo))
                             {
@@ -389,8 +390,8 @@ namespace Madera_MMB.Lib
                     {
                         while (reader.Read())
                         {
-                            string mySQLquery = "INSERT into projet(refProjet, nom,  dateCreation, dateModification, refClient, refCommercial)"+
-                                "VALUES(@refProjet, @nom,  @dateCreation, @dateModification, @refClient, @refCommercial)"+
+                            string mySQLquery = "INSERT into projet(refProjet, nom,  dateCreation, dateModification, refClient, refCommercial)" +
+                                "VALUES(@refProjet, @nom,  @dateCreation, @dateModification, @refClient, @refCommercial)" +
                                 "ON DUPLICATE KEY UPDATE nom= @nom,dateCreation= @dateCreation,dateModification= @dateModification,refClient= @refClient,refCommercial= @refCommercial";
                             using (MySqlCommand expProjets = new MySqlCommand(mySQLquery, MySQLCo))
                             {
@@ -463,7 +464,7 @@ namespace Madera_MMB.Lib
                                 expPlans.Parameters.AddWithValue("@refProjet", reader.GetString(4));
                                 expPlans.Parameters.AddWithValue("@typePlancher", reader.GetString(5));
                                 expPlans.Parameters.AddWithValue("@typeCouverture", reader.GetString(6));
-                                expPlans.Parameters.AddWithValue("@idCoupe", reader.GetInt32(7));                               
+                                expPlans.Parameters.AddWithValue("@idCoupe", reader.GetInt32(7));
                                 expPlans.Parameters.AddWithValue("@nomGamme", reader.GetString(8));
                                 try
                                 {
@@ -554,10 +555,10 @@ namespace Madera_MMB.Lib
                 {
                     command.ExecuteNonQuery();
                 }
-                catch(System.Data.SQLite.SQLiteException e)
+                catch (System.Data.SQLite.SQLiteException e)
                 {
                     Trace.WriteLine(e.ToString());
-                    LiteCo.Close(); 
+                    LiteCo.Close();
                 }
             }
             catch (SQLiteException ex)
