@@ -33,7 +33,7 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             connexion = co;
             this.clientCAD = CADclient;
-            clientCAD.ListAllClients();
+            clientCAD.listAllClients();
             DataContext = connexion;
             ListeClients.ItemsSource = clientCAD.Clients;
         }
