@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Madera_MMB.Model
 {
-    class Slot
+    public class Slot
     {
         #region properties
         private int numSlotPosition { get; set; }

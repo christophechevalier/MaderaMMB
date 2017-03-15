@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace Madera_MMB.CAD
 {
-    class CommercialCAD
+    public class CommercialCAD
     {
         #region properties
         public Connexion conn { get; set; }

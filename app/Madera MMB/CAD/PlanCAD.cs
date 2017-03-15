@@ -9,18 +9,43 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using System.Windows.Media.Imaging;
 using System.IO;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using MySql.Data.MySqlClient;
+using System.Collections;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace Madera_MMB.CAD
 {
-    class PlanCAD
+    public class PlanCAD : INotifyPropertyChanged
     {
         #region Properties
         public Connexion conn { get; set; }
         public Projet projet { get; set; }
         public string SQLQuery { get; set; }
-        public List<Plan> plans { get; set; }
         public MetaSlotCAD metaslotCAD { get; set; }
-        public ComposantCAD compCAD { get; set; }
+        public ObservableCollection<Projet> Projets { get; set; }
+        private ObservableCollection<Plan> _plans;
+        public ObservableCollection<Plan> Plans
+        {
+            get
+            {
+                return this._plans;
+            }
+            set { _plans = value; }
+        }
+        #endregion
+
+        #region Events
+        private void Plans_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("Plans"));
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
         #region Ctor
@@ -32,16 +57,15 @@ namespace Madera_MMB.CAD
         public PlanCAD(Connexion laConnexion, Projet unprojet)
         {
             // Instanciations
-            //conn = laConnexion;
-            conn = new Connexion();
-
+            //conn = new Connexion();
+            conn = laConnexion;
             projet = unprojet;
+            Plans = new ObservableCollection<Plan>();
+            _plans.CollectionChanged += Plans_CollectionChanged;
             metaslotCAD = new MetaSlotCAD(conn);
-            compCAD = new ComposantCAD(conn);
-            plans = new List<Plan>();
 
             // Appel des méthodes dans le ctor
-            listAllPlansByProject();
+            ListAllPlansByProject();
         }
         #endregion
 
@@ -49,22 +73,12 @@ namespace Madera_MMB.CAD
         /// <summary>
         /// Méthode qui permet de récupérer la liste des plans par projet
         /// </summary>
-        public void listAllPlansByProject()
+        public void ListAllPlansByProject()
         {
-            // Nom du/des champs mis directement dans la requête pour éviter d'avoir à passer par QSqlRecord 
-            //SQLQuery = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, id_coupe, nomGamme FROM plan WHERE refProjet = '" + projet.reference + "';";
-            //SQLQuery = "SELECT * FROM `plan` WHERE refProjet = \"" + projet.reference + "\"";
-
-            // TODO : Résoudre l'erreur retourner : SQLite error (1): near "=": syntax error
-            //SQLQuery = "SELECT * FROM plan WHERE refProjet = '" + projet.reference + "';";
-
-            //SQLQuery = "SELECT * FROM `plan` WHERE refProjet = \"" + projet.reference + "\"";
-
-
             // Ouverture de la connexion
             conn.LiteCo.Open();
-            // CAST(id_coupe AS VARCHAR(255))
-            SQLQuery = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, id_coupe, nomGamme FROM plan WHERE refProjet = @refProjet;";
+            // Nom du/des champs mis directement dans la requête pour éviter d'avoir à passer par QSqlRecord 
+            SQLQuery = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme FROM plan WHERE refProjet = @refProjet;";
           
             //SQLQuery = "SELECT * FROM plan WHERE refProjet = @refProjet ;";
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
@@ -80,18 +94,6 @@ namespace Madera_MMB.CAD
                         Trace.WriteLine("#### GET PLANS DATA ####");
                         while (reader.Read())
                         {
-                            //Trace.WriteLine(
-                            //    reader.GetString(0) +
-                            //    reader.GetString(1) +
-                            //    reader.GetString(2) +
-                            //    reader.GetString(3) +
-                            //    projet +
-                            //    getPlancherbyType(reader.GetString(5)) +
-                            //    getCouvbyType(reader.GetString(6)) +
-                            //    getCoupebyId(reader.GetInt32(7)) +
-                            //    getModulesByRefPlan(reader.GetString(8)) +
-                            //    getGammebyNom(reader.GetString(9)));
-
                             Trace.WriteLine(
                                 reader.GetValue(0).GetType() + " || " +
                                 reader.GetValue(1).GetType() + " || " +
@@ -102,7 +104,6 @@ namespace Madera_MMB.CAD
                                 reader.GetValue(6).GetType() + " || " +
                                 reader.GetValue(7).GetType() + " || " +
                                 reader.GetValue(8).GetType());
-                                //reader.GetValue(9).ToString());
                             Plan plan = new Plan
                                 (
                                     reader.GetString(0),
@@ -110,15 +111,13 @@ namespace Madera_MMB.CAD
                                     reader.GetString(2),
                                     reader.GetString(3),
                                     projet,
-                                    getCouvbyType(reader.GetString(6)),
-                                    getCoupebyId(reader.GetInt16(7)),
-                                    getPlancherbyType(reader.GetString(8)),
-                                    getModulesByRefPlan(reader.GetString(0)),
-                                    getGammebyNom(reader.GetString(9))
+                                    getPlancherByType(reader.GetString(5)),
+                                    getCouvByType(reader.GetString(6)),
+                                    getCoupeById(reader.GetInt16(7)),
+                                    getModulesByRefPlan(reader.GetString(0)),                           
+                                    getGammebyNom(reader.GetString(8))
                                 );
-                            //SQLQuery = "SELECT refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, id_coupe, nomGamme FROM plan WHERE refProjet = @refProjet;";
-                            //  string reference, string label, string creation, string modification, Projet unprojet, Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, List<Module> modules, Gamme unegamme = null
-                            plans.Add(plan);
+                            Plans.Add(plan);
                         }
                     }
                     Trace.WriteLine("#### GET PLANS DATA SUCCESS ####");
@@ -131,6 +130,49 @@ namespace Madera_MMB.CAD
             }
             conn.LiteCo.Close();
         }
+
+        /// <summary>
+        /// Création d'un nouveau plan
+        /// </summary>
+        /// <param name="plan"></param>
+        public void InsertPlan(Plan plan)
+        {
+            string SQLQuery = "INSERT INTO plan(refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme)" +
+            "VALUES (@refPlan, @label, @dateCreation, @dateModification, @refProjet, @typePlancher, @typeCouverture, @idCoupe, @nomGamme)";
+
+            // Ouverture de la connexion
+            conn.LiteCo.Open();
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            {
+                Trace.WriteLine(SQLQuery);
+                try
+                {
+                    command.Parameters.AddWithValue("@refPlan", plan.reference);
+                    command.Parameters.AddWithValue("@label", plan.label);
+                    command.Parameters.AddWithValue("@dateCreation", DateTime.Today);
+                    command.Parameters.AddWithValue("@dateModification", DateTime.Today);
+                    command.Parameters.AddWithValue("@refProjet", plan.projet.reference);
+                    command.Parameters.AddWithValue("@typePlancher", plan.plancher.type);
+                    command.Parameters.AddWithValue("@typeCouverture", plan.couverture.type);
+                    command.Parameters.AddWithValue("@idCoupe", plan.coupePrincipe.id);
+                    command.Parameters.AddWithValue("@nomGamme", plan.gamme.nom);
+
+                    command.ExecuteNonQuery();
+                    Trace.WriteLine("#### INSERT NOUVEAU PLAN DATA SUCCESS ####");
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# ERREUR INSERTION NOUVEAU PLAN ################################################# \n" + ex.ToString() + "\n");
+                }
+            }
+            conn.LiteCo.Close();
+
+            //conn.InsertSQliteQuery(SQLQuery);
+            //foreach (Module module in plan.modules)
+            //{
+            //    insertModule(module, plan.reference);
+            //}
+        }
         #endregion
 
         #region Privates methods
@@ -140,7 +182,7 @@ namespace Madera_MMB.CAD
         private List<MetaModule> listAllMetaModules()
         {
             List<MetaModule> listMetaModule = new List<MetaModule>();
-            SQLQuery = "SELECT * FROM metamodule";
+            SQLQuery = "SELECT * FROM metamodule WHERE statut = 1";
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
                 using (SQLiteDataReader reader = command.ExecuteReader())
@@ -156,37 +198,22 @@ namespace Madera_MMB.CAD
                             reader.GetValue(2).GetType() + " || " +
                             reader.GetValue(3).GetType() + " || " +
                             reader.GetValue(4).ToString().GetType() + " || " +
-                            reader.GetValue(5).ToString().GetType());
-                            if (reader.GetValue(5) != null)
-                            {
-                                Byte[] data = (Byte[])reader.GetValue(4);
-                                MetaModule metamodule = new MetaModule
-                                (
-                                    reader.GetString(0),
-                                    reader.GetString(1),
-                                    reader.GetInt32(2),
-                                    reader.GetInt32(3),                                   
-                                    getGammebyNom(reader.GetString(5)),
-                                    this.compCAD.listComposantByMetamodule(reader.GetString(0)),
-                                    this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
-                                    ToImage(data)
-                                );
-                                listMetaModule.Add(metamodule);
-                            }
-                            else
-                            {
-                                MetaModule metamodule = new MetaModule
-                                (
-                                    reader.GetString(0),
-                                    reader.GetString(1),
-                                    reader.GetInt32(2),
-                                    reader.GetInt32(3),
-                                    getGammebyNom(reader.GetString(5)),
-                                    this.compCAD.listComposantByMetamodule(reader.GetString(0)),
-                                    this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0))
-                                );
-                                listMetaModule.Add(metamodule);
-                            }
+                            reader.GetValue(5).ToString().GetType() + " || " +
+                            reader.GetValue(6).GetType());
+
+                            Byte[] data = (Byte[])reader.GetValue(4);
+                            MetaModule metamodule = new MetaModule
+                            (
+                                reader.GetString(0),
+                                reader.GetString(1),
+                                reader.GetInt32(2),
+                                reader.GetInt32(3),
+                                getGammebyNom(reader.GetString(5)),
+                                this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
+                                reader.GetBoolean(6),
+                                ToImage(data)
+                            );
+                            listMetaModule.Add(metamodule);                          
                         }
                     }
                     catch (SQLiteException ex)
@@ -200,7 +227,7 @@ namespace Madera_MMB.CAD
         }
 
         /// <summary>
-        /// Méthode qui permet de récupérer les modules par id/refPlan
+        /// Méthode qui permet de récupérer les modules par id
         /// </summary>
         /// <param name="refPlan"></param>
         /// <returns></returns>
@@ -220,16 +247,12 @@ namespace Madera_MMB.CAD
                         {
                             Module module = new Module
                             (
-                                reader.GetString(0),
-                                //Convert.ToInt32(reader.GetValue(1)),
-                                //Convert.ToInt32(reader.GetValue(2)),
-                                //Convert.ToInt32(reader.GetValue(3)),
-                                //Convert.ToInt32(reader.GetValue(4)),
+                                reader.GetInt32(0),
                                 reader.GetInt32(1),
                                 reader.GetInt32(2),
                                 reader.GetInt32(3),
                                 reader.GetInt32(4),
-                                getMetaModuleByRef(refPlan)
+                                getMetaModuleByRef(reader.GetString(0))
                             );
                             modules.Add(module);
                         }
@@ -245,31 +268,14 @@ namespace Madera_MMB.CAD
         }
 
         /// <summary>
-        /// Création d'un nouveau plan
-        /// </summary>
-        /// <param name="plan"></param>
-        /// <param name="refClient"></param>
-        /// <param name="refCommercial"></param>
-        private void insertPlan(Plan plan, string refClient, string refCommercial)
-        {
-            SQLQuery = "INSERT INTO plan (refPlan, label, dateCreation, dateModification, refProjet, refClient, refCommercial, typeCouverture, id_coupe, typePlancher, nomGamme)" +
-            "VALUES (" + plan.reference + "," + plan.label + "," + plan.creation + "," + plan.modification + "," + plan.projet.reference + "," + refClient + "," + refCommercial + "," + plan.couverture.type + "," + plan.coupePrincipe.id + "," + plan.plancher.type + "," + plan.gamme.nom + ";";
-            conn.InsertSQliteQuery(SQLQuery);
-            foreach (Module module in plan.modules)
-            {
-                insertModule(module, plan.reference);
-            }
-        }
-
-        /// <summary>
         /// Création d'un nouveau module
         /// </summary>
         /// <param name="module"></param>
-        /// <param name="refplan"></param>
-        private void insertModule(Module module, string refplan)
+        /// <param name="refPlan"></param>
+        private void insertModule(Module module, string refPlan)
         {
-            SQLQuery = "INSERT INTO module (nom, prixHT, nbSlot, coordonneeDebutX , coordonneeDebutY, coordonneeFinX, coordonneeFinY, refMetaModule, refPlan)" +
-            "VALUES (" + module.nom + "," + module.getPrixHT() + "," + module.getNbSlot() + "," + module.debutPositionX + "," + module.debutPositionY + "," + module.finPositionX + "," + module.finPositionY + "," + module.getRefMetaModule() + "," + refplan + ";";
+            SQLQuery = "INSERT INTO module (idModule, prixHT, nbSlot, coordonneeDebutX , coordonneeDebutY, coordonneeFinX, coordonneeFinY, refMetaModule, refPlan)" +
+            "VALUES (" + module.id + "," + module.getPrixHT() + "," + module.getNbSlot() + "," + module.debutPositionX + "," + module.debutPositionY + "," + module.finPositionX + "," + module.finPositionY + "," + module.getRefMetaModule() + "," + refPlan + ";";
             conn.InsertSQliteQuery(SQLQuery);
         }
 
@@ -299,37 +305,21 @@ namespace Madera_MMB.CAD
                             reader.GetValue(2).GetType() + " || " +
                             reader.GetValue(3).GetType() + " || " +
                             reader.GetValue(4).GetType() + " || " +
-                            reader.GetValue(5).GetType());
-                            if (reader.GetValue(5) != null)
-                            {
-                                Byte[] data = (Byte[])reader.GetValue(4);
-                                metaModule = new MetaModule
-                                (
-                                    reader.GetString(0),
-                                    reader.GetString(1),
-                                    //Convert.ToInt32(reader.GetValue(2)),
-                                    //Convert.ToInt32(reader.GetValue(3)),
-                                    reader.GetInt32(2),
-                                    reader.GetInt32(3),                        
-                                    getGammebyNom(reader.GetString(5)),
-                                    this.compCAD.listComposantByMetamodule(reader.GetString(0)),
-                                    this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
-                                    ToImage(data)
-                                );
-                            }
-                            else
-                            {
-                                metaModule = new MetaModule
-                                (
-                                    reader.GetString(0),
-                                    reader.GetString(1),
-                                    reader.GetInt32(2),
-                                    reader.GetInt32(3),
-                                    getGammebyNom(reader.GetString(5)),
-                                    this.compCAD.listComposantByMetamodule(reader.GetString(0)),
-                                    this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0))
-                                );
-                            }
+                            reader.GetValue(5).GetType() + " || " +
+                            reader.GetValue(6).GetType());
+
+                            Byte[] data = (Byte[])reader.GetValue(4);
+                            metaModule = new MetaModule
+                            (
+                                reader.GetString(0),
+                                reader.GetString(1),
+                                reader.GetInt32(2),
+                                reader.GetInt32(3),                        
+                                getGammebyNom(reader.GetString(5)),
+                                this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
+                                reader.GetBoolean(6),
+                                ToImage(data)
+                            );
                         }
                     }
                     catch (SQLiteException ex)
@@ -347,10 +337,10 @@ namespace Madera_MMB.CAD
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private CoupePrincipe getCoupebyId(int id)
+        private CoupePrincipe getCoupeById(int id)
         {
             CoupePrincipe coupe = new CoupePrincipe();
-            SQLQuery = "SELECT * FROM coupeprincipe WHERE id_coupe = @id;";
+            SQLQuery = "SELECT * FROM coupeprincipe WHERE idCoupe = @id;";
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
                 command.Parameters.AddWithValue("@id", id);
@@ -368,35 +358,20 @@ namespace Madera_MMB.CAD
                             reader.GetValue(2).GetType() + " || " +
                             reader.GetValue(3).GetType() + " || " +
                             reader.GetValue(4).GetType() + " || " +
-                            reader.GetValue(5).GetType());
-                            if (reader.GetValue(5) != null)
-                            {
-                                Byte[] data = (Byte[])reader.GetValue(5);
-                                coupe = new CoupePrincipe
-                                (
-                                    //Convert.ToInt32(reader.GetValue(0)),
-                                    reader.GetInt32(0),
-                                    reader.GetString(1),
-                                    //Convert.ToInt32(reader.GetValue(2)),
-                                    //Convert.ToInt32(reader.GetValue(3)),
-                                    //Convert.ToInt32(reader.GetValue(4)),
-                                    reader.GetInt32(2),
-                                    reader.GetInt32(3),
-                                    reader.GetInt32(4),
-                                    ToImage(data)
-                                );
-                            }
-                            else
-                            {
-                                coupe = new CoupePrincipe
-                                (
-                                    reader.GetInt32(0),
-                                    reader.GetString(1),
-                                    reader.GetInt32(2),
-                                    reader.GetInt32(3),
-                                    reader.GetInt32(4)
-                                );
-                            }
+                            reader.GetValue(5).GetType() + " || " +
+                            reader.GetValue(6).GetType());
+
+                            Byte[] data = (Byte[])reader.GetValue(5);
+                            coupe = new CoupePrincipe
+                            (
+                                reader.GetInt16(0),
+                                reader.GetString(1),
+                                reader.GetInt16(2),
+                                reader.GetInt16(3),
+                                reader.GetInt16(4),
+                                reader.GetBoolean(6),
+                                ToImage(data)
+                            );
                         }
                     }
                     catch (SQLiteException ex)
@@ -414,7 +389,7 @@ namespace Madera_MMB.CAD
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        private Couverture getCouvbyType(string type)
+        private Couverture getCouvByType(string type)
         {
             Couverture couv = new Couverture();
             SQLQuery = "SELECT * FROM couverture WHERE typeCouverture = @type;";
@@ -432,26 +407,17 @@ namespace Madera_MMB.CAD
                             "COUVERTURE : " +
                             reader.GetValue(0).GetType() + " || " +
                             reader.GetValue(1).GetType() + " || " +
-                            reader.GetValue(2).GetType());
-                            if (reader.GetValue(2) != null)
-                            {
-                                Byte[] data = (Byte[])reader.GetValue(2);
-                                couv = new Couverture
-                                (
-                                    reader.GetString(0),
-                                    //Convert.ToInt32(reader.GetValue(1)),
-                                    reader.GetInt32(1),
-                                    ToImage(data)
-                                );
-                            }
-                            else
-                            {
-                                couv = new Couverture
-                                (
-                                    reader.GetString(0),
-                                    reader.GetInt32(1)
-                                );
-                            }
+                            reader.GetValue(2).GetType() + " || " +
+                            reader.GetValue(3).GetType());
+
+                            Byte[] data = (Byte[])reader.GetValue(3);
+                            couv = new Couverture
+                            (
+                                reader.GetString(0),
+                                reader.GetInt32(1),
+                                reader.GetBoolean(2),
+                                ToImage(data)
+                            );
                         }
                     }
                     catch (SQLiteException ex)
@@ -490,32 +456,20 @@ namespace Madera_MMB.CAD
                             reader.GetValue(2).GetType() + " || " +
                             reader.GetValue(3).GetType() + " || " +
                             reader.GetValue(4).GetType() + " || " +
-                            reader.GetValue(5).GetType());
-                            if (reader.GetValue(5) != null)
-                            {
-                                Byte[] data = (Byte[])reader.GetValue(5);
-                                gamme = new Gamme
-                                (
-                                    reader.GetString(0),
-                                    //Convert.ToInt32(reader.GetValue(1)),
-                                    reader.GetInt32(1),
-                                    reader.GetString(2),
-                                    reader.GetString(3),
-                                    reader.GetString(4),
-                                    ToImage(data)
-                                );
-                            }
-                            else
-                            {
-                                gamme = new Gamme
-                                (
-                                    reader.GetString(0),
-                                    reader.GetInt32(1),
-                                    reader.GetString(2),
-                                    reader.GetString(3),
-                                    reader.GetString(4)
-                                );
-                            }
+                            reader.GetValue(5).GetType() + " || " +
+                            reader.GetValue(6).GetType());
+
+                            Byte[] data = (Byte[])reader.GetValue(6);
+                            gamme = new Gamme
+                            (
+                                reader.GetString(0),
+                                reader.GetInt32(1),
+                                reader.GetString(2),
+                                reader.GetString(3),
+                                reader.GetString(4),
+                                reader.GetBoolean(5),
+                                ToImage(data)
+                            );
                         }
                     }
                     catch (SQLiteException ex)
@@ -533,7 +487,7 @@ namespace Madera_MMB.CAD
         /// </summary>
         /// <param name="type">type du plancher recherché</param>
         /// <returns></returns>
-        private Plancher getPlancherbyType(string type)
+        private Plancher getPlancherByType(string type)
         {
             Plancher plancher = new Plancher();
             SQLQuery = "SELECT * FROM plancher WHERE typePlancher = @type;";
@@ -551,26 +505,17 @@ namespace Madera_MMB.CAD
                             "PLANCHER : " +
                             reader.GetValue(0).GetType() + " || " +
                             reader.GetValue(1).GetType() + " || " +
-                            reader.GetValue(2).GetType());
-                            if (reader.GetValue(2) != null)
-                            {
-                                Byte[] data = (Byte[])reader.GetValue(2);
-                                plancher = new Plancher
-                                (
-                                    reader.GetString(0),
-                                    //Convert.ToInt32(reader.GetValue(1)),
-                                    reader.GetInt32(1),
-                                    ToImage(data)
-                                );
-                            }
-                            else
-                            {
-                                plancher = new Plancher
-                                (
-                                    reader.GetString(0),
-                                    reader.GetInt32(1)
-                                );
-                            }
+                            reader.GetValue(2).GetType() + " || " +
+                            reader.GetValue(3).GetType());
+
+                            Byte[] data = (Byte[])reader.GetValue(2);
+                            plancher = new Plancher
+                            (
+                                reader.GetString(0),
+                                reader.GetInt32(1),
+                                reader.GetBoolean(2),
+                                ToImage(data)
+                            );
                         }
                     }
                     catch (SQLiteException ex)
@@ -604,7 +549,7 @@ namespace Madera_MMB.CAD
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>

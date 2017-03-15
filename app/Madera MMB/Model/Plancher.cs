@@ -13,14 +13,16 @@ namespace Madera_MMB.Model
         public string type { get; set; }
         public int prixHT { get; set; }
         public BitmapImage image { get; set; }
+        public bool statut { get; set; }
         #endregion
 
         #region Ctor
-        public Plancher(string type, int prix, BitmapImage img = null)
+        public Plancher(string type, int prix, bool statut, BitmapImage img)
         {
             this.type = type;
             this.prixHT = prix;
             image = img;
+            this.statut = statut;
         }
         public Plancher() { }
         #endregion

@@ -1,13 +1,12 @@
 ﻿using Madera_MMB.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Collections.Specialized;
+using System.Collections.ObjectModel;
 
 namespace Madera_MMB.CAD
 {
@@ -18,26 +17,28 @@ namespace Madera_MMB.CAD
         public Connexion Conn { get; set; }
         public string SQLQuery { get; set; }
 
-        private List<Client> _clients;
-        public List<Client> Clients
+        private ObservableCollection<Client> _clients;
+        public ObservableCollection<Client> Clients
         {
             get
             {
                 if (this._clients == null)
                 {
-                    this._clients = new List<Client>();
+                    this._clients = new ObservableCollection<Client>();
                 }
                 return this._clients;
             }
-            set { _clients = value; RaisePropertyChanged("Clients"); }
+            set { _clients = value; }
         }
         #endregion
 
         #region Events
-        private void RaisePropertyChanged(String property)
+        private void Clients_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
             if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("Clients"));
+            }
         }
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
@@ -46,11 +47,9 @@ namespace Madera_MMB.CAD
         public ClientCAD(Connexion laConnexion)
         {
             // Instanciations
-            //Conn = laConnexion;
             Conn = new Connexion();
-
-            Clients = new List<Client>();
-
+            Clients = new ObservableCollection<Client>();
+            _clients.CollectionChanged += Clients_CollectionChanged;
             // Appel des méthodes dans le ctor
             ListAllClients();
         }

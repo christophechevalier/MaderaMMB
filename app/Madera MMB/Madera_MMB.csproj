@@ -23,8 +23,9 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>2</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -79,11 +80,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CAD\CommercialCAD.cs" />
-    <Compile Include="CAD\ComposantCAD.cs" />
     <Compile Include="CAD\CoupePrincipeCAD.cs" />
     <Compile Include="CAD\CouvertureCAD.cs" />
     <Compile Include="CAD\DevisCAD.cs" />
-    <Compile Include="CAD\FamilleComposantCAD.cs" />
     <Compile Include="CAD\GammeCAD.cs" />
     <Compile Include="CAD\MetaSlotCAD.cs" />
     <Compile Include="CAD\PlanCAD.cs" />
@@ -91,6 +90,7 @@
     <Compile Include="CAD\ProjetCAD.cs" />
     <Compile Include="CAD\SlotCAD.cs" />
     <Compile Include="Lib\Connexion.cs" />
+    <Compile Include="Lib\Tools\Connexion.cs" />
     <Compile Include="Lib\Tools\InputModalWindow.xaml.cs">
       <DependentUpon>InputModalWindow.xaml</DependentUpon>
     </Compile>
@@ -100,11 +100,9 @@
     <Compile Include="View_Crtl\App.cs" />
     <Compile Include="Model\Client.cs" />
     <Compile Include="Model\Commercial.cs" />
-    <Compile Include="Model\Composant.cs" />
     <Compile Include="Model\CoupePrincipe.cs" />
     <Compile Include="Model\Couverture.cs" />
     <Compile Include="Model\Devis.cs" />
-    <Compile Include="Model\FamilleDeComposant.cs" />
     <Compile Include="Model\Gamme.cs" />
     <Compile Include="Model\MetaModule.cs" />
     <Compile Include="Model\MetaSlot.cs" />
@@ -139,6 +137,10 @@
     <Page Include="Lib\Tools\SelectModalWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Lib\Tools\Template_Madera2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View_Crtl\GestionClient.xaml">
       <SubType>Designer</SubType>
@@ -258,6 +260,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Lib\logo_offline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Lib\Images\folder_client.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Lib\Tools\bois.png" />
+    <Resource Include="Lib\Tools\carre.png" />
+    <Resource Include="Lib\Tools\carrelage.jpg" />
+    <Resource Include="Lib\Tools\L.png" />
+    <Resource Include="Lib\Tools\rectangle.png" />
+    <Resource Include="Lib\Tools\T.png" />
+    <Resource Include="Lib\Tools\tuile.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.104.0\build\net45\System.Data.SQLite.Core.targets')" />

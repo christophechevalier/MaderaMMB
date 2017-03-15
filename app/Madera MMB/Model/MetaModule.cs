@@ -7,7 +7,7 @@ using System.Windows.Media.Imaging;
 
 namespace Madera_MMB.Model
 {
-    class MetaModule
+    public class MetaModule
     {
         #region properties
         public string reference { get; set; }
@@ -17,11 +17,11 @@ namespace Madera_MMB.Model
         public BitmapImage image { get; set; }
         public Gamme gamme { get; set; }
         public List<MetaSlot> metaslots { get; set; }
-        public List<Composant> composants { get; set; }
+        public bool statut { get; set; }
         #endregion
 
         #region Ctor
-        public MetaModule(string reference, string label, int prix, int nbslot, Gamme gamme, List<Composant> composants, List<MetaSlot> metaslots, BitmapImage image = null)
+        public MetaModule(string reference, string label, int prix, int nbslot, Gamme gamme, List<MetaSlot> metaslots, bool statut, BitmapImage image)
         {
             this.reference = reference;
             this.label = label;
@@ -29,8 +29,8 @@ namespace Madera_MMB.Model
             this.nbSlot = nbslot;
             this.image = image;
             this.gamme = gamme;
-            this.composants = composants;
             this.metaslots = metaslots;
+            this.statut = statut;
         }
         public MetaModule() { }
         #endregion

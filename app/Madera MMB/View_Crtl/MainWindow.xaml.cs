@@ -12,24 +12,27 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 using Madera_MMB.View_Crtl;
 using Madera_MMB.Model;
 using Madera_MMB.Lib;
+using Madera_MMB.CAD;
 
 namespace Madera_MMB.View_Crtl
 {
     public partial class MainWindow : Window
     {
         #region Properties
+        private Connexion connexion;
+        private bool mySQLSync { get; set; }
         private View_Crtl.Authentification authentification { get; set; }
         private View_Crtl.GestionProjet gestionProjet { get; set; }
         private View_Crtl.GestionPlan gestionPlan { get; set; }
         private View_Crtl.GestionClient gestionClient { get; set; }
         private View_Crtl.ParametresClient parametresClient { get; set; }
-        //private View_Crtl.ParametresPlan parametresPlan { get; set; }
+        private View_Crtl.ParametresPlan parametresPlan { get; set; }
         //private View_Crtl.GestionDevis gestionDevis { get; set; }
         //private View_Crtl.Modelisation modelisation { get; set; }
-        private Connexion connexion;
         #endregion
 
         #region Ctor
@@ -39,12 +42,28 @@ namespace Madera_MMB.View_Crtl
         public MainWindow()
         {
             InitializeComponent();
+            initSynchro();
+
+            /// Test SYNCHRO import ///
+            connexion.SyncCommMySQL();
+            connexion.SyncParamPlan();
+            connexion.SyncClient();
+            connexion.SyncMetamodules();
+            connexion.SyncMetaslot();
+            connexion.SyncAssocMetaModuleMetaslot();
+
+            /// Test CAD avec nouvelles données ///
+            CommercialCAD commCAD = new CommercialCAD(connexion);
+            ClientCAD clientCAD = new ClientCAD(connexion);
+            CoupePrincipeCAD coupeCAD = new CoupePrincipeCAD(connexion);
+            CouvertureCAD couvCAD = new CouvertureCAD(connexion);
+            GammeCAD gamCAD = new GammeCAD(connexion);
+            PlancherCAD plancherCAD = new PlancherCAD(connexion);
 
             connexion = new Connexion();
             //this.gestionClient = new GestionClient(connexion);
             //this.parametresClient = new ParametresClient();
             Mainframe.Content = gestionClient;
-
 
             Commercial commercialTest = new Commercial
                 (
@@ -54,29 +73,40 @@ namespace Madera_MMB.View_Crtl
                     "monemail@gmail.com",
                     "mdp"
                 );
-            Projet projetTest = new Projet
-            (
-                "PRO001",
-                "Maison Familiale",
-                "10-10-2016",
-                "10-10-2016",
-                new Client("CLI001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
-                commercialTest
-            );
 
-            //this.authentification = new Authentification();
+            this.authentification = new Authentification();
             this.gestionProjet = new GestionProjet(connexion, commercialTest);
-            //this.gestionPlan = new GestionPlan(connexion, projetTest);
+            //this.gestionPlan = new GestionPlan(connexion, gestionProjet.proj);
+            //this.parametresPlan = new ParametresPlan(connexion);
             Mainframe.Content = gestionProjet;
 
-            // Démarrage de l'application sur la vue authentification
-
-
-            // Tmp : Commercial authentifié avec la référence COM003
-            //string query = " SELECT * FROM projet WHERE refCommercial = 'COM003'";
-            //connexion.SelectSQLiteQuery(query);
+            /// Test SYNCHRO export ///
+            connexion.ExpClients();
+            connexion.ExpProjets();
+            connexion.ExpPlans();
+            connexion.ExpModules();
 
             Initialize_Listeners();
+        }
+        #endregion
+
+        #region Process Synchro
+        /// <summary>
+        ///  Méthode testant les possibilitées de connexion aux bases de données locale et distante 
+        /// </summary>
+        private void initSynchro()
+        {
+            this.connexion = new Connexion();
+            if (connexion.MySQLconnected == false)
+            {
+                mySQLSync = false;
+                MessageBox.Show("Mode déconnecté");
+            }
+            else if (!connexion.SQLiteconnected)
+            {
+                MessageBox.Show("Base innaccessible ! Veuillez contacter l'administrateur. ");
+                Application.Current.Shutdown();
+            }
         }
         #endregion
 
@@ -86,11 +116,10 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void Initialize_Listeners()
         {
-            //Initialize_Listeners_Auth();
+            Initialize_Listeners_Auth();
             Initialize_Listeners_GestionProjet();
             //Initialize_Listeners_GestionClient();
             //Initialize_Listeners_ParametresClient();
-            //Initialize_Listeners_GestionPlan();
             //Initialize_Listeners_ParametresPlan();
             //Initialize_Listeners_Modelisation();
             //Initialize_Listeners_Devis();
@@ -106,6 +135,7 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
             authentification.BtnValiderAuth.Click += delegate(object sender, RoutedEventArgs e)
             {
+                Initialize_Listeners_GestionProjet();
                 Mainframe.Content = gestionProjet;
             };
         }
@@ -133,19 +163,17 @@ namespace Madera_MMB.View_Crtl
                         "monemail@gmail.com",
                         "mdp"
                     );
-                Projet projetTest = new Projet
-                    (
-                        "PRO001",
-                        "Maison Familiale",
-                        "10-10-2016",
-                        "10-10-2016",
-                        new Client("CLI001", "Arthur", "Tv", "10 chemin des Albios", "31130", "Balma", "arthur@gmail.com", "06-06-06-06-06", "10-10-2016", "10-10-2016"),
-                        commercialTest
-                    );
 
-                this.gestionPlan = new GestionPlan(connexion, projetTest);
-                Initialize_Listeners_GestionPlan();
-                Mainframe.Content = gestionPlan;
+                if (gestionProjet.proj != null)
+                {
+                    this.gestionPlan = new GestionPlan(connexion, gestionProjet.proj);
+                    Initialize_Listeners_GestionPlan();
+                    Mainframe.Content = gestionPlan;
+                }
+                else
+                {
+                    MessageBox.Show("Vous devez sélectionner un projet avant de l'ouvrir !");
+                }
             };
             // Click sur le bouton créer un nouveau client pour aller dans la Vue Paramètre Client
             gestionProjet.BtnCreerClient.Click += delegate(object sender, RoutedEventArgs e)
@@ -210,10 +238,12 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Listeners_GestionPlan()
         {
             // Click sur le bouton créer un nouveau plan pour aller dans la Vue Paramètres Plan
-            //gestionPlan.BtnCréerPlan.Click += delegate(object sender, RoutedEventArgs e)
-            //{
-            //    Mainframe.Content = parametresPlan;
-            //};
+            gestionPlan.BtnCréerPlan.Click += delegate (object sender, RoutedEventArgs e)
+            {
+                this.parametresPlan = new ParametresPlan(connexion);
+                Initialize_Listeners_ParametresPlan();
+                Mainframe.Content = parametresPlan;
+            };
             // Click sur le bouton ouvrir un plan pour aller dans la Vue Modélisation
             //gestionPlan.BtnOuvrirPlan.Click += delegate(object sender, RoutedEventArgs e)
             //{
@@ -241,19 +271,25 @@ namespace Madera_MMB.View_Crtl
         /// <summary>
         /// Méthode qui contient l'ensemble des listeners de la vue paramètres plan
         /// </summary>
-        //private void Initialize_Listeners_ParametresPlan()
-        //{
-        //    // Click sur le bouton confirmer paramètres plan pour aller dans la Vue Modélisation
-        //    parametresPlan.BtnConfirmerParamPlan.Click += delegate(object sender, RoutedEventArgs e)
-        //    {
-        //        Mainframe.Content = modelisation;
-        //    };
-        //    // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
-        //    parametresPlan.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
-        //    {
-        //        Mainframe.Content = gestionPlan;
-        //    };
-        //}
+        private void Initialize_Listeners_ParametresPlan()
+        {
+            // Click sur le bouton confirmer paramètres plan pour aller dans la Vue Modélisation
+            parametresPlan.BtnConfirmerParamPlan.Click += delegate (object sender, RoutedEventArgs e)
+            {
+                //Mainframe.Content = gestionPlan;
+
+                //Plan NewPlan = new Plan(projet);
+                //NewPlan.reference = generateKey(projet);
+                //parametresCAD.Projets.Add(NewPlan);
+                //planCAD.InsertPlan(NewPlan);
+            };
+
+            // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
+            parametresPlan.BtnRetour.Click += delegate (object sender, RoutedEventArgs e)
+            {
+                Mainframe.Content = gestionPlan;
+            };
+        }
         #endregion
 
         #region Initialisation Modélisation
@@ -287,6 +323,18 @@ namespace Madera_MMB.View_Crtl
 
         //    };
         //}
+        #endregion
+
+        #region Settings
+        /// <summary>
+        ///  Méthode définissant le comportement de l'application à la fermeture de la fenêtre
+        /// </summary>
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            Application.Current.Shutdown();
+        }
         #endregion
     }
 }
