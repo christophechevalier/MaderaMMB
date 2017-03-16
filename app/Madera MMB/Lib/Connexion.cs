@@ -174,18 +174,18 @@ namespace Madera_MMB.Lib
                 int i = 0;
                 while (Reader.Read())
                 {
-                    Byte[] data = (Byte[])Reader.GetValue(4);
-                    query = "replace into metamodule(refMetaModule,label,prixHT,nbSlot,image,statut,dateModification,nomGamme) values(@refMetaModule,@label,@prixHT,@nbSlot,@image,@statut,@dateModification,@nomGamme)";
+                    Byte[] data = (Byte[])Reader.GetValue(7);
+                    query = "replace into metamodule(refMetaModule,label,prixHT,nbSlot,dateModification,nomGamme,statut,image) values(@refMetaModule,@label,@prixHT,@nbSlot,@dateModification,@nomGamme,@statut,@image)";
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
                         command.Parameters.AddWithValue("@refMetaModule", Reader.GetString(0));
                         command.Parameters.AddWithValue("@label", Reader.GetString(1));
                         command.Parameters.AddWithValue("@prixHT", Reader.GetInt32(2));
-                        command.Parameters.AddWithValue("@nbSlot", Reader.GetInt32(3));
-                        command.Parameters.AddWithValue("@image", data);
-                        command.Parameters.AddWithValue("@statut", sqlitebool);
+                        command.Parameters.AddWithValue("@nbSlot", Reader.GetInt32(3));                 
                         command.Parameters.AddWithValue("@dateModification", dateSQLite);
                         command.Parameters.AddWithValue("@nomGamme", Reader.GetString(5));
+                        command.Parameters.AddWithValue("@statut", sqlitebool);
+                        command.Parameters.AddWithValue("@image", data);
                         try
                         {
                             i = i + command.ExecuteNonQuery();
@@ -287,7 +287,7 @@ namespace Madera_MMB.Lib
                 int i = 0;
                 while (Reader.Read())
                 {
-                    query = "replace into Composant_has_MetaModule(idComposition,refMetaModule,idMetaSlot) values(@id_composition,@refMetaModule,@idMetaSlot)";
+                    query = "replace into Composant_has_MetaModule(idComposition,refMetaModule,idMetaSlot) values(@idComposition,@refMetaModule,@idMetaSlot)";
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
                         command.Parameters.AddWithValue("@idComposition", Reader.GetInt32(0));

@@ -12,17 +12,19 @@ namespace Madera_MMB.Model
         #region properties
         public string type { get;set; }
         public int prixHT { get; set; }
-        public BitmapImage image { get; set; }
+        public string modification { get; set; }
         public bool statut { get; set; }
+        public BitmapImage image { get; set; }
         #endregion
 
         #region Ctor
-        public Couverture(string type, int prix, bool statut, BitmapImage img)
+        public Couverture(string type, int prix, string modification, bool statut, BitmapImage img)
         {
             this.type = type;
-            prixHT = prix;
-            image = img;
+            this.prixHT = prix;
+            this.modification = modification;
             this.statut = statut;
+            this.image = img;
         }
         public Couverture() { }
         #endregion

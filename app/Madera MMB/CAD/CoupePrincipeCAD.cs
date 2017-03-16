@@ -50,7 +50,16 @@ namespace Madera_MMB.CAD
                         {
                             Byte[] data = (Byte[])reader.GetValue(5);
 
-                            CoupePrincipe coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), reader.GetBoolean(6), ToImage(data));
+                            CoupePrincipe coupe = new CoupePrincipe
+                            (
+                                reader.GetInt32(0), 
+                                reader.GetString(1), 
+                                reader.GetInt32(2), 
+                                reader.GetInt32(3), 
+                                reader.GetInt32(4),
+                                reader.GetString(5),
+                                reader.GetBoolean(7), 
+                                ToImage(data));
                             Listecoupeprincipe.Add(coupe);
                         }
                     }

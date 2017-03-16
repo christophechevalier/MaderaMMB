@@ -50,7 +50,8 @@ namespace Madera_MMB.CAD
                             (
                                 reader.GetString(0),
                                 reader.GetInt32(1),
-                                reader.GetBoolean(2),
+                                reader.GetString(2),
+                                reader.GetBoolean(3),
                                 ToImage(data)
                             );
                             Listecouverture.Add(couverture);
