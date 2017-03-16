@@ -44,14 +44,13 @@ namespace Madera_MMB.CAD
                         Trace.Write("#### GET COUVERTURES DATA #### \n");
                         while (reader.Read())
                         {
-                            Byte[] data = (Byte[])reader.GetValue(3);
+                            Byte[] data = (Byte[])reader.GetValue(2);
 
                             Couverture couverture = new Couverture
                             (
                                 reader.GetString(0),
                                 reader.GetInt32(1),
-                                reader.GetString(2),
-                                reader.GetBoolean(3),
+                                reader.GetBoolean(2),
                                 ToImage(data)
                             );
                             Listecouverture.Add(couverture);

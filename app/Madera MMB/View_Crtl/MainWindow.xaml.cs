@@ -84,7 +84,7 @@ namespace Madera_MMB.View_Crtl
             connexion.ExpClients();
             connexion.ExpProjets();
             connexion.ExpPlans();
-            connexion.ExpModules();
+            // connexion.ExpModules();
 
             Initialize_Listeners();
         }

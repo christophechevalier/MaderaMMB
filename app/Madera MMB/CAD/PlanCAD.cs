@@ -197,22 +197,20 @@ namespace Madera_MMB.CAD
                             reader.GetValue(1).GetType() + " || " +
                             reader.GetValue(2).GetType() + " || " +
                             reader.GetValue(3).GetType() + " || " +
-                            reader.GetValue(4).GetType() + " || " +
+                            reader.GetValue(4).ToString().GetType() + " || " +
                             reader.GetValue(5).ToString().GetType() + " || " +
-                            reader.GetValue(6).ToString().GetType() + " || " +
-                            reader.GetValue(7).GetType());
+                            reader.GetValue(6).GetType());
 
-                            Byte[] data = (Byte[])reader.GetValue(4);
+                            Byte[] data = (Byte[])reader.GetValue(7);
                             MetaModule metamodule = new MetaModule
                             (
                                 reader.GetString(0),
                                 reader.GetString(1),
                                 reader.GetInt32(2),
                                 reader.GetInt32(3),
-                                reader.GetString(4),
-                                getGammebyNom(reader.GetString(6)),
+                                getGammebyNom(reader.GetString(4)),
                                 this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
-                                reader.GetBoolean(7),
+                                reader.GetBoolean(6),
                                 ToImage(data)
                             );
                             listMetaModule.Add(metamodule);                          
@@ -308,20 +306,18 @@ namespace Madera_MMB.CAD
                             reader.GetValue(3).GetType() + " || " +
                             reader.GetValue(4).GetType() + " || " +
                             reader.GetValue(5).GetType() + " || " +
-                            reader.GetValue(6).GetType() + " || " +
-                            reader.GetValue(7).GetType());
+                            reader.GetValue(6).GetType());
 
-                            Byte[] data = (Byte[])reader.GetValue(4);
+                            Byte[] data = (Byte[])reader.GetValue(7);
                             metaModule = new MetaModule
                             (
                                 reader.GetString(0),
                                 reader.GetString(1),
                                 reader.GetInt32(2),
                                 reader.GetInt32(3),
-                                reader.GetString(4),
-                                getGammebyNom(reader.GetString(6)),
+                                getGammebyNom(reader.GetString(4)),
                                 this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
-                                reader.GetBoolean(7),
+                                reader.GetBoolean(6),
                                 ToImage(data)
                             );
                         }
@@ -363,8 +359,7 @@ namespace Madera_MMB.CAD
                             reader.GetValue(3).GetType() + " || " +
                             reader.GetValue(4).GetType() + " || " +
                             reader.GetValue(5).GetType() + " || " +
-                            reader.GetValue(6).GetType() + " || " +
-                            reader.GetValue(7).GetType());
+                            reader.GetValue(6).GetType());
 
                             Byte[] data = (Byte[])reader.GetValue(5);
                             coupe = new CoupePrincipe
@@ -374,7 +369,6 @@ namespace Madera_MMB.CAD
                                 reader.GetInt16(2),
                                 reader.GetInt16(3),
                                 reader.GetInt16(4),
-                                reader.GetString(5),
                                 reader.GetBoolean(6),
                                 ToImage(data)
                             );
@@ -414,15 +408,13 @@ namespace Madera_MMB.CAD
                             reader.GetValue(0).GetType() + " || " +
                             reader.GetValue(1).GetType() + " || " +
                             reader.GetValue(2).GetType() + " || " +
-                            reader.GetValue(3).GetType() + " || " +
-                            reader.GetValue(4).GetType());
+                            reader.GetValue(3).GetType());
 
-                            Byte[] data = (Byte[])reader.GetValue(3);
+                            Byte[] data = (Byte[])reader.GetValue(2);
                             couv = new Couverture
                             (
                                 reader.GetString(0),
                                 reader.GetInt32(1),
-                                reader.GetString(2),
                                 reader.GetBoolean(3),
                                 ToImage(data)
                             );
@@ -465,10 +457,9 @@ namespace Madera_MMB.CAD
                             reader.GetValue(3).GetType() + " || " +
                             reader.GetValue(4).GetType() + " || " +
                             reader.GetValue(5).GetType() + " || " +
-                            reader.GetValue(6).GetType() + " || " +
-                            reader.GetValue(7).GetType());
+                            reader.GetValue(6).GetType());
 
-                            Byte[] data = (Byte[])reader.GetValue(6);
+                            Byte[] data = (Byte[])reader.GetValue(5);
                             gamme = new Gamme
                             (
                                 reader.GetString(0),
@@ -476,10 +467,8 @@ namespace Madera_MMB.CAD
                                 reader.GetString(2),
                                 reader.GetString(3),
                                 reader.GetString(4),
-                                reader.GetString(5),
                                 reader.GetBoolean(6),
-                                ToImage(data)
-                            );
+                                ToImage(data));
                         }
                     }
                     catch (SQLiteException ex)
@@ -516,15 +505,13 @@ namespace Madera_MMB.CAD
                             reader.GetValue(0).GetType() + " || " +
                             reader.GetValue(1).GetType() + " || " +
                             reader.GetValue(2).GetType() + " || " +
-                            reader.GetValue(3).GetType() + " || " +
-                            reader.GetValue(4).GetType());
+                            reader.GetValue(3).GetType());
 
                             Byte[] data = (Byte[])reader.GetValue(2);
                             plancher = new Plancher
                             (
                                 reader.GetString(0),
                                 reader.GetInt32(1),
-                                reader.GetString(2),
                                 reader.GetBoolean(3),
                                 ToImage(data)
                             );

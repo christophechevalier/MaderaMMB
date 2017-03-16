@@ -15,21 +15,19 @@ namespace Madera_MMB.Model
         public string typeIsolant { get; set; }
         public string typeFinition { get; set; }
         public string qualiteHuisserie { get; set; }
-        public string modification { get; set; }
         public bool statut { get; set; }
         public BitmapImage image { get; set; }
 
         #endregion
 
         #region Ctor
-        public Gamme(string nom, int offre, string isolant, string finition, string huisserie, string modification, bool statut, BitmapImage img)
+        public Gamme(string nom, int offre, string isolant, string finition, string huisserie, bool statut, BitmapImage img)
         {
             this.nom = nom;
             this.offrePromo = offre;
             this.typeIsolant = isolant;
             this.typeFinition = finition;
             this.qualiteHuisserie = huisserie;
-            this.modification = modification;
             this.statut = statut;
             this.image = img;
         }

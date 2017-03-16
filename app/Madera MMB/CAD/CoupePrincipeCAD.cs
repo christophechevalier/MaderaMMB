@@ -57,8 +57,7 @@ namespace Madera_MMB.CAD
                                 reader.GetInt32(2), 
                                 reader.GetInt32(3), 
                                 reader.GetInt32(4),
-                                reader.GetString(5),
-                                reader.GetBoolean(7), 
+                                reader.GetBoolean(6), 
                                 ToImage(data));
                             Listecoupeprincipe.Add(coupe);
                         }
