@@ -476,10 +476,8 @@ namespace Madera_MMB.CAD
                                 reader.GetString(2),
                                 reader.GetString(3),
                                 reader.GetString(4),
-                                reader.GetString(5),
                                 reader.GetBoolean(6),
-                                ToImage(data)
-                            );
+                                ToImage(data));
                         }
                     }
                     catch (SQLiteException ex)

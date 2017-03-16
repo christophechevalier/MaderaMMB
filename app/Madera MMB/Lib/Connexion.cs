@@ -174,7 +174,7 @@ namespace Madera_MMB.Lib
                 int i = 0;
                 while (Reader.Read())
                 {
-                    Byte[] data = (Byte[])Reader.GetValue(7);
+                    Byte[] data = (Byte[])Reader.GetValue(4);
                     query = "replace into metamodule(refMetaModule,label,prixHT,nbSlot,dateModification,nomGamme,statut,image) values(@refMetaModule,@label,@prixHT,@nbSlot,@dateModification,@nomGamme,@statut,@image)";
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
@@ -329,7 +329,6 @@ namespace Madera_MMB.Lib
             string query = "SELECT * FROM client";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
-                MySQLCo.Open();
                 try
                 {
                     using (SQLiteDataReader reader = command.ExecuteReader())
@@ -357,7 +356,7 @@ namespace Madera_MMB.Lib
                                 }
                                 catch (MySqlException e)
                                 {
-                                    Trace.WriteLine(e.ToString());
+                                    Trace.WriteLine(" \n ################################################# EXPORT CLIENTS FAIL ################################################# \n" + e.ToString() + "\n");
                                 }
                             }
                         }
@@ -407,7 +406,7 @@ namespace Madera_MMB.Lib
                                 }
                                 catch (MySqlException e)
                                 {
-                                    Trace.WriteLine(e.ToString());
+                                    Trace.WriteLine(" \n ################################################# EXPORT PROJETS FAIL ################################################# \n" + e.ToString() + "\n");
                                 }
                             }
                         }
@@ -440,23 +439,11 @@ namespace Madera_MMB.Lib
                     {
                         while (reader.Read())
                         {
-                            Trace.WriteLine(
-                                reader.GetValue(0).GetType() + " || " +
-                                reader.GetValue(1).GetType() + " || " +
-                                reader.GetValue(2).GetType() + " || " +
-                                reader.GetValue(3).GetType() + " || " +
-                                reader.GetValue(4).GetType() + " || " +
-                                reader.GetValue(5).GetType() + " || " +
-                                reader.GetValue(6).GetType() + " || " +
-                                reader.GetValue(7).GetType() + " || " +
-                                reader.GetValue(8).GetType());
-                            //reader.GetValue(9).ToString());
                             string mySQLquery = "INSERT into plan(refPlan, label,  dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme)" +
                                 "VALUES(@refPlan, @label,  @dateCreation, @dateModification, @refProjet, @typePlancher, @typeCouverture, @idCoupe, @nomGamme)" +
                                 "ON DUPLICATE KEY UPDATE label= @label, dateCreation= @dateCreation,dateModification= @dateModification,refProjet= @refProjet,typePlancher= @typePlancher,typeCouverture= @typeCouverture,idCoupe= @idCoupe,nomGamme= @nomGamme";
                             using (MySqlCommand expPlans = new MySqlCommand(mySQLquery, MySQLCo))
                             {
-                                Trace.WriteLine(mySQLquery);
                                 expPlans.Parameters.AddWithValue("@refPlan", reader.GetString(0));
                                 expPlans.Parameters.AddWithValue("@label", reader.GetString(1));
                                 expPlans.Parameters.AddWithValue("@dateCreation", reader.GetString(2));
@@ -472,7 +459,7 @@ namespace Madera_MMB.Lib
                                 }
                                 catch (MySqlException e)
                                 {
-                                    Trace.WriteLine(e.ToString());
+                                    Trace.WriteLine(" \n ################################################# EXPORT PLANS FAIL ################################################# \n" + e.ToString() + "\n");
                                 }
                             }
                         }
@@ -505,11 +492,12 @@ namespace Madera_MMB.Lib
                     {
                         while (reader.Read())
                         {
-                            string mySQLquery = "INSERT into module(idModule, coordonneeDebutX,  coordonneeDebutY, colspan, rowspan, refMetaModule, refPlan)" +
+                            string mySQLquery = "INSERT into module(idModule, coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, refPlan)" +
                                 "VALUES(@idModule, @coordonneeDebutX,  @coordonneeDebutY, @colspan, @rowspan, @refMetaModule, @refPlan)" +
-                                "ON DUPLICATE KEY UPDATE coordonneeDebutX= @coordonneeDebutX, coordonneeDebutY= @coordonneeDebutY,colspan= @colspan,rowspan= @rowspan,refMetaModule= @refMetaModule,refPlan= @refPlan";
+                                "ON DUPLICATE KEY UPDATE colspan= @colspan,rowspan= @rowspan,refMetaModule= @refMetaModule";
                             using (MySqlCommand expModules = new MySqlCommand(mySQLquery, MySQLCo))
                             {
+                                //Trace.WriteLine(mySQLquery);
                                 expModules.Parameters.AddWithValue("@idModule", reader.GetInt32(0));
                                 expModules.Parameters.AddWithValue("@coordonneeDebutX", reader.GetInt32(1));
                                 expModules.Parameters.AddWithValue("@coordonneeDebutY", reader.GetInt32(2));
@@ -646,6 +634,7 @@ namespace Madera_MMB.Lib
                         catch (SQLiteException e)
                         {
                             Trace.WriteLine(e.ToString());
+                            Trace.WriteLine(" ############# SYNC COUPE PRINCIPE FAIL ############# \n");
                         }
                     }
                 }
@@ -712,6 +701,7 @@ namespace Madera_MMB.Lib
                         {
                             Trace.WriteLine(e.ToString());
                             MySQLCo.Close();
+                            Trace.WriteLine(" ############# SYNC COUVERTURE FAIL ############# \n");
                         }
                     }
                 }
