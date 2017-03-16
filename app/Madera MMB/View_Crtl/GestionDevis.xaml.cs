@@ -89,7 +89,7 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Dialog_Modification_Devis()
         {
             var window = new SelectModalWindow();
-            window.Titlelabel.Content = " Sélectionner l'état du devis";
+            window.TitleLabel.Content = " Sélectionner l'état du devis";
 
             window.Retour.Click += delegate(object sender, RoutedEventArgs e)
             {
@@ -101,13 +101,6 @@ namespace Madera_MMB.View_Crtl
                 window.Close();
             };
 
-            window.DataSelect.Text = "-- Choisir un état --";
-            window.DataSelect.Items.Add("Accepté");
-            window.DataSelect.Items.Add("Refusé");
-            window.DataSelect.Items.Add("Facturé");
-            window.DataSelect.Items.Add("En attente de paiement");
-            window.DataSelect.Items.Add("Nouveau");
-            window.DataSelect.Items.Add("Brouillon");
 
             window.ShowDialog();
         }

@@ -7,70 +7,84 @@ using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
 using System.Data;
+using System.Diagnostics;
+using System.Windows.Media.Imaging;
 
 namespace Madera_MMB.CAD
 {
-    class CouvertureCAD
+    public class CouvertureCAD
     {
         #region properties
-        private List<Couverture> listecouverture { get; set; }
-        public string SQLQuery { get; set; }
+        public List<Couverture> Listecouverture { get; set; }
         public Connexion conn { get; set; }
-        public Couverture couv { get; set; }
+        private Couverture couverture { get; set; }
+        private string SQLQuery { get; set; }
         #endregion
 
         #region Ctor
         public CouvertureCAD(Connexion co)
         {
-            listecouverture = new List<Couverture>();
             this.conn = co;
+            Listecouverture = new List<Couverture>();
+            listAllCouverture();
         }
         #endregion
 
         #region privates methods
-        private void listAllCouverture() 
+        private void listAllCouverture()
         {
-            SQLQuery = "SELECT * FROM Couverture";
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
+            SQLQuery = "SELECT * FROM couverture WHERE statut = 1";
+            conn.LiteCo.Open();
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                while (reader.Read())
+                try
                 {
-                    Couverture couverture = new Couverture(reader.GetString(0), reader.GetInt32(1));
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        Trace.Write("#### GET COUVERTURES DATA #### \n");
+                        while (reader.Read())
+                        {
+                            Byte[] data = (Byte[])reader.GetValue(3);
 
-                    listecouverture.Add(couverture);
+                            Couverture couverture = new Couverture
+                            (
+                                reader.GetString(0),
+                                reader.GetInt32(1),
+                                reader.GetString(2),
+                                reader.GetBoolean(3),
+                                ToImage(data)
+                            );
+                            Listecouverture.Add(couverture);
+                        }
+                    }
+                    Trace.WriteLine("#### GET COUVERTURES DATA SUCCESS ####");
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# ERREUR RECUPERATION COUVERTURES ################################################# \n" + ex.ToString() + "\n");
                 }
             }
-            finally
-            {
-                reader.Close();
-            }
+            conn.LiteCo.Close();
         }
         #endregion
 
-        #region public methods
-        public Couverture getCouvbyType(string type)
+        #region Tools
+        /// <summary>
+        /// Méthode de conversion de type byte array en BitmapImage
+        /// </summary>
+        /// <param name="array">tableau d'octets de l'image</param>
+        /// <returns></returns>
+        public BitmapImage ToImage(byte[] array)
         {
-            SQLQuery = "SELECT * FROM Couverture WHERE typeCouverture = " + type;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
+            using (var ms = new System.IO.MemoryStream(array))
             {
-                while (reader.Read())
-                {
-                    this.couv = new Couverture(reader.GetString(0), reader.GetInt32(1));
-                }
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.StreamSource = ms;
+                image.EndInit();
+                return image;
             }
-            finally
-            {
-                reader.Close();
-            }
-            return couv;
         }
         #endregion
     }

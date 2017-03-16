@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Madera_MMB.Model
 {
-    class Plan
+    public class Plan
     {
-        #region properties
+        #region Properties
         public string reference { get; set; }
         public string label { get; set; }
         public Projet projet { get; set; }
@@ -22,7 +22,7 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
-        public Plan(string label, Projet unprojet,Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, Gamme unegamme)
+        public Plan(string label, Projet unprojet, Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, Gamme unegamme = null)
         {
             this.label = label;
             this.projet = unprojet;
@@ -31,7 +31,7 @@ namespace Madera_MMB.Model
             this.coupePrincipe = unecoupe;
             this.gamme = unegamme;
         }
-        public Plan(string reference, string label, string creation, string modification, Projet unprojet, Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, Gamme unegamme, List<Module> modules)
+        public Plan(string reference, string label, string creation, string modification, Projet unprojet, Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, List<Module> modules, Gamme unegamme = null)
         {
             this.reference = reference;
             this.label = label;
@@ -44,35 +44,38 @@ namespace Madera_MMB.Model
             this.gamme = unegamme;
             this.modules = modules;
         }
+        //public Plan(Projet projet)
+        //{
+        //    this.projet = projet;
+        //}
         #endregion
 
-        #region privates methods
-        private void tracerSlot()
-        {
-        }
-
-
+        #region Privates methods
+        //private void tracerSlot()
+        //{
+        //}
         #endregion
-        #region public methods
-        public Devis genereDevis()
-        {
-            Devis generateDevis = new Devis();
-            return generateDevis;
-        }
+
+        #region Public methods
+        //public Devis GenererDevis()
+        //{
+        //    Devis generateDevis = new Devis();
+        //    return generateDevis;
+        //}
 
         // Copie de Plan //
-        public Plan DeepCopy()
-        {
-            Plan other = (Plan)this.MemberwiseClone();
-            other.reference = this.reference + "Copied";
-            other.label = String.Copy(label+"(Copie)");
-            other.coupePrincipe = this.coupePrincipe;
-            other.couverture = this.couverture;
-            other.plancher = this.plancher;
-            other.gamme = this.gamme;
-            other.modules = this.modules;
-            return other;
-        }
+        //public Plan DeepCopy()
+        //{
+        //    Plan other = (Plan)this.MemberwiseClone();
+        //    other.reference = this.reference + "Copied";
+        //    other.label = String.Copy(label+"(Copie)");
+        //    other.coupePrincipe = this.coupePrincipe;
+        //    other.couverture = this.couverture;
+        //    other.plancher = this.plancher;
+        //    other.gamme = this.gamme;
+        //    other.modules = this.modules;
+        //    return other;
+        //}
         #endregion
     }
 }
