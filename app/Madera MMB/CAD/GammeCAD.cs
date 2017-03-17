@@ -7,70 +7,84 @@ using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
 using System.Data;
+using System.Diagnostics;
+using System.Windows.Media.Imaging;
 
 namespace Madera_MMB.CAD
 {
-    class GammeCAD
+    public class GammeCAD
     {
         #region properties
-        private List<Gamme> listegamme { get; set; }
+        public List<Gamme> Listegamme { get; set; }
         public string SQLQuery { get; set; }
         public Connexion conn { get; set; }
-        public Gamme gamme { get; set; }
+        private Gamme gamme { get; set; }
         #endregion
 
         #region Ctor
         public GammeCAD(Connexion co)
         {
-            listegamme = new List<Gamme>();
+            Listegamme = new List<Gamme>();
             this.conn = co;
+            listAllGamme();
         }
         #endregion
 
         #region privates methods
-        private void listAllGamme() 
+        private void listAllGamme()
         {
-            SQLQuery = "SELECT * FROM Gamme";
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
+            SQLQuery = "SELECT * FROM gamme WHERE statut = 1";
+            conn.LiteCo.Open();
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                while (reader.Read())
+                try
                 {
-                    Gamme gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
-                    listegamme.Add(gamme);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        Trace.Write("#### GET GAMMES DATA #### \n");
+                        while (reader.Read())
+                        {
+                            Byte[] data = (Byte[])reader.GetValue(5);
+                            Gamme gamme = new Gamme
+                            (
+                                reader.GetString(0),
+                                reader.GetInt32(1),
+                                reader.GetString(2),
+                                reader.GetString(3),
+                                reader.GetString(4),
+                                reader.GetBoolean(6),
+                                ToImage(data));
+                            Listegamme.Add(gamme);
+                        }
+                    }
+                    Trace.WriteLine("#### GET GAMMES DATA SUCCESS ####");
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# ERREUR RECUPERATION GAMMES ################################################# \n" + ex.ToString() + "\n");
                 }
             }
-            finally
-            {
-                reader.Close();
-            }
+            conn.LiteCo.Close();
         }
-
         #endregion
 
-        #region public methods
-        public Gamme getGammebyNom(string nom)
+        #region Tools
+        /// <summary>
+        /// Méthode de conversion de type byte array en BitmapImage
+        /// </summary>
+        /// <param name="array">tableau d'octets de l'image</param>
+        /// <returns></returns>
+        public BitmapImage ToImage(byte[] array)
         {
-            SQLQuery = "SELECT * FROM Gamme WHERE nom = " + nom;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
+            using (var ms = new System.IO.MemoryStream(array))
             {
-                while (reader.Read())
-                {
-                    this.gamme = new Gamme(reader.GetString(0), reader.GetInt32(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
-                }
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.StreamSource = ms;
+                image.EndInit();
+                return image;
             }
-            finally
-            {
-                reader.Close();
-            }
-            return gamme;
         }
         #endregion
     }

@@ -6,70 +6,81 @@ using System.Text;
 using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
+using System.Diagnostics;
+using System.Windows.Media.Imaging;
 
 namespace Madera_MMB.CAD
 {
-    class PlancherCAD
+    public class PlancherCAD
     {
         #region properties
-        private List<Plancher> listeplancher { get; set; }
+        public List<Plancher> Listeplancher { get; set; }
         public string SQLQuery { get; set; }
         public Connexion conn { get; set; }
-        public Plancher plancher { get; set; }
+        private Plancher plancher { get; set; }
         #endregion
 
         #region Ctor
         public PlancherCAD(Connexion co)
         {
-            listeplancher = new List<Plancher>();
+            Listeplancher = new List<Plancher>();
             this.conn = co;
+            listAllPlancher();
         }
         #endregion
 
         #region privates methods
-        private void listAllPlancher() 
+        private void listAllPlancher()
         {
-            SQLQuery = "SELECT * FROM Plancher";
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
+            SQLQuery = "SELECT * FROM plancher WHERE statut = 1";
+            conn.LiteCo.Open();
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                while (reader.Read())
+                try
                 {
-                    Plancher plancher = new Plancher(reader.GetString(0), reader.GetInt32(1));
-
-                    listeplancher.Add(plancher);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        Trace.Write("#### GET PLANCHERS DATA #### \n");
+                        while (reader.Read())
+                        {
+                            Byte[] data = (Byte[])reader.GetValue(2);
+                            Plancher plancher = new Plancher
+                            (
+                                reader.GetString(0), 
+                                reader.GetInt32(1),
+                                reader.GetBoolean(3), 
+                                ToImage(data));
+                            Listeplancher.Add(plancher);
+                        }
+                    }
+                    Trace.Write("#### GET PLANCHERS DATA SUCCESS #### \n");
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# ERREUR RECUPERATION PLANCHERS ################################################# \n" + ex.ToString() + "\n");
                 }
             }
-            finally
-            {
-                reader.Close();
-            }
+            conn.LiteCo.Close();
         }
         #endregion
 
-        #region public methods
-        public Plancher getPlancherbyType(string type)
+        #region Tools
+        /// <summary>
+        /// Méthode de conversion de type byte array en BitmapImage
+        /// </summary>
+        /// <param name="array">tableau d'octets de l'image</param>
+        /// <returns></returns>
+        public BitmapImage ToImage(byte[] array)
         {
-            SQLQuery = "SELECT * FROM Plancher WHERE typePlancher = " + type;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
+            using (var ms = new System.IO.MemoryStream(array))
             {
-                while (reader.Read())
-                {
-                    this.plancher = new Plancher(reader.GetString(0), reader.GetInt32(1));
-                }
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.StreamSource = ms;
+                image.EndInit();
+                return image;
             }
-            finally
-            {
-                reader.Close();
-            }
-            return plancher;
         }
         #endregion
     }

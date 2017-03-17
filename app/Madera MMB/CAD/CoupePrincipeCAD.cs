@@ -7,16 +7,21 @@ using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
 using System.Data;
+using System.Diagnostics;
+using System.IO;
+using System.Drawing;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace Madera_MMB.CAD
 {
-    class CoupePrincipeCAD
+    public class CoupePrincipeCAD
     {
         #region properties
-        private List<CoupePrincipe> listecoupeprincipe { get; set; }
-        public string SQLQuery { get; set; }
+        public List<CoupePrincipe> Listecoupeprincipe { get; set; }
         public Connexion conn { get; set; }
         public CoupePrincipe coupe { get; set; }
+        private string SQLQuery { get; set; }
 
         #endregion
 
@@ -24,54 +29,67 @@ namespace Madera_MMB.CAD
         public CoupePrincipeCAD(Connexion co)
         {
             this.conn = co;
-            listecoupeprincipe = new List<CoupePrincipe>();
+            Listecoupeprincipe = new List<CoupePrincipe>();
+            listAllCoupePrincipe();
         }
         #endregion
 
         #region privates methods
-        private void listAllCoupePrincipe() 
+        private void listAllCoupePrincipe()
         {
-            SQLQuery = "SELECT * FROM Coupeprincipe";
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
+            SQLQuery = "SELECT * FROM coupeprincipe WHERE statut = 1 order by label desc";
+            conn.LiteCo.Open();
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                while (reader.Read())
+                try
                 {
-                    CoupePrincipe coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4));
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        Trace.Write("#### GET COUPE PRINCIPE DATA #### \n");
+                        while (reader.Read())
+                        {
+                            Byte[] data = (Byte[])reader.GetValue(5);
 
-                    listecoupeprincipe.Add(coupe);
+                            CoupePrincipe coupe = new CoupePrincipe
+                            (
+                                reader.GetInt32(0), 
+                                reader.GetString(1), 
+                                reader.GetInt32(2), 
+                                reader.GetInt32(3), 
+                                reader.GetInt32(4),
+                                reader.GetBoolean(6), 
+                                ToImage(data));
+                            Listecoupeprincipe.Add(coupe);
+                        }
+                    }
+                    Trace.WriteLine("#### GET COUPE PRINCIPE DATA SUCCESS ####");
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# ERREUR RECUPERATION COUPES PRINCIPE ################################################# \n" + ex.ToString() + "\n");
                 }
             }
-            finally
-            {
-                reader.Close();
-            }
+            conn.LiteCo.Close();
         }
         #endregion
 
-        #region public methods
-        public CoupePrincipe getCoupebyId(int id)
+        #region Tools
+        /// <summary>
+        /// Méthode de conversion de type byte array en BitmapImage
+        /// </summary>
+        /// <param name="array"> tableau d'octets de l'image</param>
+        /// <returns></returns>
+        public BitmapImage ToImage(byte[] array)
         {
-            SQLQuery = "SELECT * FROM Coupeprincipe WHERE id_coupe = " + id;
-            SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
-            command.CommandText = SQLQuery;
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            try
+            using (var ms = new System.IO.MemoryStream(array))
             {
-                while (reader.Read())
-                {
-                    this.coupe = new CoupePrincipe(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4));
-                }
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad; // here
+                image.StreamSource = ms;
+                image.EndInit();
+                return image;
             }
-            finally
-            {
-                reader.Close();
-            }
-            return coupe;
         }
         #endregion
     }
