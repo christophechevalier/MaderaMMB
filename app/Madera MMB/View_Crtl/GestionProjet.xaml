@@ -173,12 +173,19 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Image Name="Logo" 
-                   Grid.Column="0" 
-                   Source="{StaticResource Logo}" 
-                   Grid.Row="0" 
-                   Width="auto" 
-                   Margin="10" />
+            <Image x:Name="logo" DataContext="{Binding connexion}">
+                <Image.Style>
+                    <Style TargetType="Image">
+
+                        <Setter Property="Source" Value="{StaticResource LogoOff}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                                <Setter Property="Source" Value="{StaticResource Logo}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
         </Grid>
         <!-- Fin Déclaration Logo Madera -->
 

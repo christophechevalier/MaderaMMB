@@ -54,7 +54,6 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             connexion = co;
             projet = unprojet;
-            //DataContext = connexion;
 
             planCAD = new PlanCAD(this.connexion, this.projet);
             DataContext = planCAD;
