@@ -160,7 +160,7 @@ namespace Madera_MMB.Lib
         /// </summary>
         public void SyncMetamodules()
         {
-            string dateSQLite = DateTimeSQLite(DateTime.Now);
+            string dateSQLite = "'" + DateTime.Now.ToString() + "'";
             MySqlDataReader Reader;
             string query;
             int sqlitebool = 1;
@@ -576,7 +576,7 @@ namespace Madera_MMB.Lib
                     {
                         for (int i = 0; i < reader.VisibleFieldCount; i++)
                         {
-                            Trace.WriteLine(" ############# " + reader.GetValue(i).ToString() + " ############# \n");
+                            Trace.WriteLine(" ############# " + reader.GetValue(i).GetType().ToString() + " ############# \n");
                         }
                     }
                 }
@@ -600,7 +600,7 @@ namespace Madera_MMB.Lib
         /// </summary>
         private void SyncCoupePrincipe()
         {
-            string dateSQLite = DateTimeSQLite(DateTime.Now);
+            string dateSQLite = "'" + DateTime.Now.ToString() + "'";
             MySqlDataReader Reader;
             string query;
             int sqlitebool = 1;
@@ -630,6 +630,7 @@ namespace Madera_MMB.Lib
                         try
                         {
                             i = i + command.ExecuteNonQuery();
+
                         }
                         catch (SQLiteException e)
                         {
@@ -669,7 +670,7 @@ namespace Madera_MMB.Lib
         /// </summary>
         private void SyncCouverture()
         {
-            string dateSQLite = DateTimeSQLite(DateTime.Now);
+            string dateSQLite = "'" + DateTime.Now.ToString() + "'";
             MySqlDataReader Reader;
             string query;
             int sqlitebool = 1;
@@ -714,7 +715,7 @@ namespace Madera_MMB.Lib
                 Trace.WriteLine(" ############# SYNC COUVERTURE FAIL ############# \n");
             }
 
-            query = "UPDATE couverture SET statut = 0 WHERE dateMaj !=" + dateSQLite + ";";
+            query = "UPDATE couverture SET statut = 0 WHERE dateMaj != " + dateSQLite + ";";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try
@@ -736,7 +737,7 @@ namespace Madera_MMB.Lib
         /// </summary>
         private void SyncPlancher()
         {
-            string dateSQLite = DateTimeSQLite(DateTime.Now);
+            string dateSQLite = "'" + DateTime.Now.ToString() + "'"; ;
             MySqlDataReader Reader;
             string query;
             int sqlitebool = 1;
@@ -780,7 +781,7 @@ namespace Madera_MMB.Lib
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC PLANCHER FAIL ############# \n");
             }
-            query = "UPDATE plancher SET statut = 0 WHERE dateMaj !=" + dateSQLite + ";";
+            query = "UPDATE plancher SET statut = 0 WHERE dateMaj <>" + dateSQLite + ";";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try
@@ -802,7 +803,7 @@ namespace Madera_MMB.Lib
         /// </summary>
         private void SyncGamme()
         {
-            string dateSQLite = DateTimeSQLite(DateTime.Now);
+            string dateSQLite = "'"+DateTime.Now.ToString()+"'";
             MySqlDataReader Reader;
             string query;
             int sqlitebool = 1;
@@ -833,6 +834,7 @@ namespace Madera_MMB.Lib
                         try
                         {
                             i = i + command.ExecuteNonQuery();
+                            Trace.WriteLine("Date générée : " + dateSQLite);
                         }
                         catch (System.Data.SQLite.SQLiteException e)
                         {
@@ -849,13 +851,14 @@ namespace Madera_MMB.Lib
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC GAMME FAIL ############# \n");
             }
-            query = "UPDATE plancher SET statut = 0 WHERE dateMaj !=" + dateSQLite + ";";
+            query = "UPDATE gamme SET statut = 0 WHERE dateMaj <>" + dateSQLite + ";";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try
                 {
                     command.ExecuteNonQuery();
                     Trace.WriteLine(" ############# SYNC GAMME SUCCESS ############# \n");
+                    Trace.WriteLine(query);
                 }
                 catch (SQLiteException e)
                 {
@@ -922,7 +925,7 @@ namespace Madera_MMB.Lib
             try
             {
                 MySQLCo = new MySqlConnection(connectionString);
-                MySQLCo.Open();
+                MySQLCo.Close();
                 Trace.WriteLine(" \n ################################################# MYSQL DATABASE REACHED,  BEGIN SYNCHRONISATION ... ################################################# \n");
                 return true;
             }
@@ -951,16 +954,6 @@ namespace Madera_MMB.Lib
         #endregion
 
         #region Tools
-        /// <summary>
-        /// Méthode qui convertit un type .NET DateTime en chaîne au format datetime SQLite 
-        /// </summary>
-        /// <param name="datetime">un objet de type DateTime</param>
-        /// <returns>Une chaîne au format datetime SQLite</returns>
-        private string DateTimeSQLite(DateTime datetime)
-        {
-            string dateTimeFormat = "'{0}-{1}-{2} {3}:{4}:{5}.{6}'";
-            return string.Format(dateTimeFormat, datetime.Year, datetime.Month, datetime.Day, datetime.Hour, datetime.Minute, datetime.Second, datetime.Millisecond);
-        }
         #endregion
     }
 }

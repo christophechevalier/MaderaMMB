@@ -45,12 +45,12 @@ namespace Madera_MMB.View_Crtl
             initSynchro();
 
             /// Test SYNCHRO import ///
-            connexion.SyncCommMySQL();
+            //connexion.SyncCommMySQL();
             connexion.SyncParamPlan();
-            connexion.SyncClient();
-            connexion.SyncMetamodules();
-            connexion.SyncMetaslot();
-            connexion.SyncAssocMetaModuleMetaslot();
+            //connexion.SyncClient();
+            //connexion.SyncMetamodules();
+            //connexion.SyncMetaslot();
+            //connexion.SyncAssocMetaModuleMetaslot();
 
             /// Test CAD avec nouvelles données ///
             CommercialCAD commCAD = new CommercialCAD(connexion);
@@ -62,8 +62,7 @@ namespace Madera_MMB.View_Crtl
 
             connexion = new Connexion();
             //this.gestionClient = new GestionClient(connexion);
-            //this.parametresClient = new ParametresClient();
-            Mainframe.Content = gestionClient;
+            //this.parametresClient = new ParametresClient();;
 
             Commercial commercialTest = new Commercial
                 (
@@ -73,18 +72,31 @@ namespace Madera_MMB.View_Crtl
                     "monemail@gmail.com",
                     "mdp"
                 );
+            Client clientTest = new Client();
+            clientTest.reference = "AT000001";
+
+            Projet projetTest = new Projet
+                (
+                    "CCAT000001",
+                    "Maison Familiale",
+                    "10-10-2016",
+                    "10-10-2016",
+                    clientTest,
+                    commercialTest
+                );
+
+            PlanCAD planCAD = new PlanCAD(connexion, projetTest);
 
             this.authentification = new Authentification();
             this.gestionProjet = new GestionProjet(connexion, commercialTest);
             //this.gestionPlan = new GestionPlan(connexion, gestionProjet.proj);
-            //this.parametresPlan = new ParametresPlan(connexion);
-            Mainframe.Content = gestionProjet;
+            this.parametresPlan = new ParametresPlan(connexion, planCAD);
 
             /// Test SYNCHRO export ///
-            connexion.ExpClients();
-            connexion.ExpProjets();
-            connexion.ExpPlans();
-            // connexion.ExpModules();
+            //connexion.ExpClients();
+            //connexion.ExpProjets();
+            //connexion.ExpPlans();
+            //connexion.ExpModules();
 
             Initialize_Listeners();
         }
@@ -116,11 +128,11 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void Initialize_Listeners()
         {
-            Initialize_Listeners_Auth();
-            Initialize_Listeners_GestionProjet();
+            //Initialize_Listeners_Auth();
+            //Initialize_Listeners_GestionProjet();
             //Initialize_Listeners_GestionClient();
             //Initialize_Listeners_ParametresClient();
-            //Initialize_Listeners_ParametresPlan();
+            Initialize_Listeners_ParametresPlan();
             //Initialize_Listeners_Modelisation();
             //Initialize_Listeners_Devis();
         }
@@ -240,7 +252,7 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton créer un nouveau plan pour aller dans la Vue Paramètres Plan
             gestionPlan.BtnCréerPlan.Click += delegate (object sender, RoutedEventArgs e)
             {
-                this.parametresPlan = new ParametresPlan(connexion);
+                this.parametresPlan = new ParametresPlan(connexion, gestionPlan.planCAD);
                 Initialize_Listeners_ParametresPlan();
                 Mainframe.Content = parametresPlan;
             };
@@ -276,12 +288,18 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton confirmer paramètres plan pour aller dans la Vue Modélisation
             parametresPlan.BtnConfirmerParamPlan.Click += delegate (object sender, RoutedEventArgs e)
             {
-                //Mainframe.Content = gestionPlan;
-
-                //Plan NewPlan = new Plan(projet);
-                //NewPlan.reference = generateKey(projet);
-                //parametresCAD.Projets.Add(NewPlan);
-                //planCAD.InsertPlan(NewPlan);
+                if (parametresPlan.SetPlan())
+                {
+                    MessageBox.Show("Plan créé/modifié");
+                    parametresPlan.planCAD.InsertPlan(parametresPlan.Plan);
+                    parametresPlan.Plan = null;
+                    Mainframe.Content = gestionPlan;
+                    connexion.SelectSQLiteQuery("SELECT label from plan");
+                }
+                else
+                {
+                    MessageBox.Show("Un des champs obligatoires n'est pas renseigné");
+                }
             };
 
             // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
