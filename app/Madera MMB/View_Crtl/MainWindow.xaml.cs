@@ -24,6 +24,8 @@ namespace Madera_MMB.View_Crtl
     {
         #region Properties
         private Connexion connexion;
+        private Plan unplan;
+
         private bool mySQLSync { get; set; }
         private View_Crtl.Authentification authentification { get; set; }
         private View_Crtl.GestionProjet gestionProjet { get; set; }
@@ -32,7 +34,7 @@ namespace Madera_MMB.View_Crtl
         private View_Crtl.ParametresClient parametresClient { get; set; }
         private View_Crtl.ParametresPlan parametresPlan { get; set; }
         //private View_Crtl.GestionDevis gestionDevis { get; set; }
-        //private View_Crtl.Modelisation modelisation { get; set; }
+        private View_Crtl.Modelisation modelisation { get; set; }
         #endregion
 
         #region Ctor
@@ -70,27 +72,11 @@ namespace Madera_MMB.View_Crtl
                     "monemail@gmail.com",
                     "mdp"
                 );
-            Client clientTest = new Client();
-            Projet projetTest = new Projet
-                (
-                    "refTest",
-                    "nomTest",
-                    "creationTest",
-                    "modifTest",
-                    clientTest,
-                    commercialTest
-                );
 
             this.authentification = new Authentification(connexion);
             this.gestionProjet = new GestionProjet(connexion, commercialTest);
-            this.gestionPlan = new GestionPlan(connexion, projetTest);
-            this.parametresPlan = new ParametresPlan(connexion);
-            this.gestionClient = new GestionClient(connexion, clientCAD);
-            this.parametresClient = new ParametresClient(connexion);
 
-            Mainframe.Content = gestionPlan;
-
-            Trace.WriteLine(connexion.MySQLconnected.ToString());
+            Mainframe.Content = gestionProjet;
 
             /// Test SYNCHRO export ///
             //connexion.ExpClients();
@@ -257,10 +243,19 @@ namespace Madera_MMB.View_Crtl
                 Mainframe.Content = parametresPlan;
             };
             // Click sur le bouton ouvrir un plan pour aller dans la Vue Modélisation
-            //gestionPlan.BtnOuvrirPlan.Click += delegate(object sender, RoutedEventArgs e)
-            //{
-            //    Mainframe.Content = modelisation;
-            //};
+            gestionPlan.BtnOuvrirPlan.Click += delegate (object sender, RoutedEventArgs e)
+            {
+                if (gestionPlan.plan != null)
+                {
+                    this.modelisation = new Modelisation(connexion, gestionPlan.planCAD, gestionPlan.plan);
+                    Initialize_Listeners_Modelisation();
+                    Mainframe.Content = modelisation;
+                }
+                else
+                {
+                    MessageBox.Show("Vous devez sélectionner un plan avant de l'ouvrir !");
+                }
+            };
             // Click sur le bouton consulter le devis pour aller dans la Vue Gestion Devis
             //gestionPlan.BtnConsulterDevis.Click += delegate(object sender, RoutedEventArgs e)
             //{
@@ -308,14 +303,14 @@ namespace Madera_MMB.View_Crtl
         /// <summary>
         /// Méthode qui contient l'ensemble des listeners de la vue modélisation
         /// </summary>
-        //private void Initialize_Listeners_Modelisation()
-        //{
-        //    // Click sur le bouton quitter modélisation pour aller dans la Vue Gestion Plan
-        //    modelisation.BtnQuitterModelisation.Click += delegate(object sender, RoutedEventArgs e)
-        //    {
-        //        Mainframe.Content = GestionPlan;
-        //    };
-        //}
+        private void Initialize_Listeners_Modelisation()
+        {
+            // Click sur le bouton quitter modélisation pour aller dans la Vue Gestion Plan
+            modelisation.BtnQuitterModelisation.Click += delegate (object sender, RoutedEventArgs e)
+            {
+                Mainframe.Content = gestionPlan;
+            };
+        }
         #endregion
 
         #region Initialisation Gestion Devis
