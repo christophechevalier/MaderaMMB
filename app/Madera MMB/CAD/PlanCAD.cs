@@ -74,6 +74,7 @@ namespace Madera_MMB.CAD
         /// </summary>
         public void ListAllPlansByProject()
         {
+            Plans.Clear();
             // Ouverture de la connexion
             conn.LiteCo.Open();
             // Nom du/des champs mis directement dans la requête pour éviter d'avoir à passer par QSqlRecord 
@@ -167,7 +168,8 @@ namespace Madera_MMB.CAD
                     }
                 }
                 conn.LiteCo.Close();
-            } else
+            }
+            else
             {
                 string SQLQuery = "REPLACE INTO plan(refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe)" +
 "VALUES (@refPlan, @label, @dateCreation, @dateModification, @refProjet, @typePlancher, @typeCouverture, @idCoupe)";
