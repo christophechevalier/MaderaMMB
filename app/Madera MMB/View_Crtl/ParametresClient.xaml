@@ -58,19 +58,42 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.3*" />
                     <ColumnDefinition Width="0.4*" />
-                    <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.3*" />
                     <ColumnDefinition Width="0.4*" />
                     <ColumnDefinition Width="0.05*" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Partie de droite -->
+                <!-- Date de création -->
                 <Viewbox Margin="15,0,0,0"
-                         Grid.Row="5"
-                         Grid.Column="3"
-                         HorizontalAlignment="Left"
+                         Grid.Row="3"
+                         Grid.Column="1" 
+                         HorizontalAlignment="Right" 
                          VerticalAlignment="Center">
-                    <Label x:Name="NomCommercial" Content="Nom du commercial : " FontSize="6" />
+                    <Label Content="Date de création :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="2" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblDateCreation" FontSize="6"/>
+                </Viewbox>
+                <!-- Date de dernière mise à jour -->
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="3" 
+                         HorizontalAlignment="Right" 
+                         VerticalAlignment="Center">
+                    <Label Content="Dernière mise à jour :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="4" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblDateModification" FontSize="6" />
                 </Viewbox>
 
             </Grid>
@@ -94,7 +117,7 @@
                    Grid.Column="0" 
                    Source="{StaticResource Logo}" 
                    Grid.Row="0" 
-                   Width="{Binding ActualHeight, ElementName=rowDefinition0}" 
+                   Width="auto" 
                    Margin="10"/>
         </Grid>
         <!-- Fin Déclaration Logo Madera -->
@@ -205,8 +228,8 @@
                           Header=" Paramètres du client "
                           VerticalAlignment="Stretch" 
                           HorizontalAlignment="Stretch" 
-                          Width="{Binding ActualWidth, ElementName=columnDefinition1}" 
-                          Height="{Binding ActualHeight, ElementName=rowDefinition1}" 
+                          Width="auto" 
+                          Height="auto" 
                           FontSize="16">
 
                     <Grid x:Name="GridDetailsClient"

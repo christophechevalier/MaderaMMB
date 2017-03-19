@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Madera_MMB.Model
 {
-    class Module
+    public class Module
     {
         #region properties
-        public string nom { get; set; }
-        public int debutPositionX { get; set; }
+        public int id { get; set; }
+        public int debutPositionX { get;set; }
         public int debutPositionY { get; set; }
-        public int hauteur { get; set; }
-        public int longueur { get; set; }
+        public int finPositionY { get; set; }
+        public int finPositionX { get; set; }
         public int nbSlot { get; set; }
         public MetaModule metaModule { get; set; }
         public List<Slot> slotsContenus { get; set; }
@@ -24,25 +24,21 @@ namespace Madera_MMB.Model
         public Module(MetaModule meta)
         {
             this.metaModule = meta;
-            foreach (MetaSlot a in meta.metaslots)
+            foreach(MetaSlot a in meta.metaslots)
             {
                 Slot slot = new Slot(a);
                 this.slotsContenus.Add(slot);
             }
         }
-        public Module(string nom, int posXD, int posYD, int longueur, int hauteur, MetaModule metaModule)
+        public Module(int id, int posXD, int posYD, int posXF, int posYF, MetaModule metaModule) 
         {
-            this.nom = nom;
+            this.id = id;
             this.debutPositionX = posXD;
             this.debutPositionY = posYD;
-            this.hauteur = hauteur;
-            this.longueur = longueur;
-            this.metaModule = metaModule;
+            this.finPositionY = posYF;
+            this.finPositionX = posXF;
+            this.metaModule = metaModule;  
         }
-        #endregion
-
-        #region privates methods
-
         #endregion
 
         #region public methods
@@ -58,7 +54,6 @@ namespace Madera_MMB.Model
         {
             return this.metaModule.reference;
         }
-
         #endregion
     }
 }

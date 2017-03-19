@@ -13,7 +13,7 @@ CREATE TABLE commercial (
 -- Table Client OK
 
 CREATE TABLE client (
-  idClient INTEGER PRIMARY KEY AUTOINCREMENT,
+  refClient TEXT PRIMARY KEY NOT NULL,
   nom TEXT NOT NULL,
   prenom TEXT NOT NULL,
   adresse TEXT NOT NULL,
@@ -28,13 +28,13 @@ CREATE TABLE client (
 -- Table Projet OK
 
 CREATE TABLE projet (
-  idProjet INTEGER PRIMARY KEY AUTOINCREMENT,
+  refProjet TEXT PRIMARY KEY NOT NULL,
   nom TEXT NOT NULL,
   dateCreation TEXT NOT NULL,
   dateModification TEXT NOT NULL,
-  idClient TEXT NOT NULL,
+  refClient TEXT NOT NULL,
   refCommercial TEXT NOT NULL,
-  FOREIGN KEY (idClient) REFERENCES client,
+  FOREIGN KEY (refClient) REFERENCES client,
   FOREIGN KEY (refCommercial) REFERENCES commercial
 ); 
 
@@ -45,7 +45,7 @@ CREATE TABLE couverture (
   prixHT INT NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj datetime NOT NULL
 );
 
 -- Table CoupePrincipe OK
@@ -58,7 +58,7 @@ CREATE TABLE coupePrincipe (
   prixHT INTEGER NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj datetime NOT NULL
 );
 
 -- Table Plancher OK
@@ -68,7 +68,7 @@ CREATE TABLE plancher (
   prixHT INTEGER NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj datetime NOT NULL
 );
 
 
@@ -82,25 +82,25 @@ CREATE TABLE gamme (
   qualiteHuisserie TEXT NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj datetime NOT NULL
 );
 
 -- Table Plan OK
 
 CREATE TABLE plan (
-  idPlan INTEGER PRIMARY KEY AUTOINCREMENT,
+  refPlan TEXT PRIMARY KEY NOT NULL,
   label TEXT NOT NULL,
   dateCreation datetime NOT NULL,
   dateModification datetime NOT NULL,
-  idProjet TEXT NOT NULL,
-  typeCouverture TEXT NOT NULL,
-  idCoupe int NOT NULL,
+  refProjet TEXT NOT NULL,
   typePlancher TEXT NOT NULL,
+  typeCouverture TEXT NOT NULL,
+  idCoupe INT NOT NULL,
   nomGamme TEXT NOT NULL,
-  FOREIGN KEY (idProjet) REFERENCES projet,
+  FOREIGN KEY (refProjet) REFERENCES projet,
+  FOREIGN KEY (typePlancher) REFERENCES plancher,
   FOREIGN KEY (typeCouverture) REFERENCES couverture,
   FOREIGN KEY (idCoupe) REFERENCES coupePrincipe,
-  FOREIGN KEY (typePlancher) REFERENCES plancher,
   FOREIGN KEY (nomGamme) REFERENCES gamme
 );
 
@@ -118,13 +118,13 @@ CREATE TABLE devis (
   margeEntreprise INTEGER NOT NULL,
   prixTotalHT INTEGER NOT NULL,
   prixTotalTTC INTEGER NOT NULL,
-  idPlan TEXT NOT NULL,
-  idProjet TEXT NOT NULL,
-  idClient TEXT NOT NULL,
+  refPlan TEXT NOT NULL,
+  refProjet TEXT NOT NULL,
+  refClient TEXT NOT NULL,
   refCommercial TEXT NOT NULL,
-  FOREIGN KEY (idPlan) REFERENCES plan,
-  FOREIGN KEY (idProjet) REFERENCES projet,
-  FOREIGN KEY (idClient) REFERENCES client,
+  FOREIGN KEY (refPlan) REFERENCES plan,
+  FOREIGN KEY (refProjet) REFERENCES projet,
+  FOREIGN KEY (refClient) REFERENCES client,
   FOREIGN KEY (refCommercial) REFERENCES commercial
 );
 
@@ -138,7 +138,7 @@ CREATE TABLE metamodule (
   nbSlot INT NOT NULL,
   image BLOB NULL,
   statut BOOLEAN NOT NULL,
-  dateModification datetime NOT NULL,
+  dateMaj datetime NOT NULL,
   nomGamme TEXT NOT NULL,
   FOREIGN KEY (nomGamme)REFERENCES gamme
 ); 
@@ -146,15 +146,15 @@ CREATE TABLE metamodule (
 -- Table Module OK
 
 CREATE TABLE module (
-  idModule INTEGER PRIMARY KEY NOT NULL,
+  idModule INTEGER PRIMARY KEY AUTOINCREMENT,
   coordonneeDebutX INT NOT NULL,
   coordonneeDebutY INT NOT NULL,
   colspan INT NULL,
   rowspan INT NULL,
   refMetaModule TEXT NOT NULL,
-  idPlan TEXT NOT NULL,
+  refPlan TEXT NOT NULL,
   FOREIGN KEY (refMetaModule) REFERENCES metamodule,
-  FOREIGN KEY (idPlan) REFERENCES plan
+  FOREIGN KEY (refPlan) REFERENCES plan
 ); 
 
 
@@ -228,41 +228,44 @@ INSERT INTO commercial (refCommercial, nom, prenom, email, motDePasse) VALUES
 -- Contenu de la table `client`
 --
 
-INSERT INTO client (nom, prenom, adresse, codePostal, ville, email, telephone, dateCreation, dateModification) VALUES
-('Arthur', 'Tv', '10 chemin des Albios', '31130', 'Balma', 'arthur@gmail.com', '06-06-06-06-06', '10-10-2016', '10-10-2016'),
-('Beatrice', 'Tijuana', '9 chemin des iles', '31000', 'Toulouse', 'beatrice@gmail.com', '06-06-06-06-07', '11-10-2016', '11-10-2016'),
-('Marco', 'Polo', '2 rue de la paume', '75000', 'Paris', 'marco@gmail.com', '06-06-06-06-08', '12-11-2016', '12-11-2016'),
-('Jessica', 'Palmer', '69 rue de lalimapo', '33000', 'Bordeaux', 'jess@gmail.com', '06-06-06-06-08', '13-11-2016', '13-11-2016');
+INSERT INTO client (refClient, nom, prenom, adresse, codePostal, ville, email, telephone, dateCreation, dateModification) VALUES
+('AT000001', 'Arthur', 'Tv', '10 chemin des Albios', '31130', 'Balma', 'arthur@gmail.com', '06-06-06-06-06', '10-10-2016', '10-10-2016'),
+('BT000002', 'Beatrice', 'Tijuana', '9 chemin des iles', '31000', 'Toulouse', 'beatrice@gmail.com', '06-06-06-06-07', '11-10-2016', '11-10-2016'),
+('MP000003', 'Marco', 'Polo', '2 rue de la paume', '75000', 'Paris', 'marco@gmail.com', '06-06-06-06-08', '12-11-2016', '12-11-2016'),
+('JP000004', 'Jessica', 'Palmer', '69 rue de lalimapo', '33000', 'Bordeaux', 'jess@gmail.com', '06-06-06-06-08', '13-11-2016', '13-11-2016');
 
 
 --
 -- Contenu de la table `projet`
 --
 
-INSERT INTO projet (nom, dateCreation, dateModification, idClient, refCommercial) VALUES
-('Maison Familiale', '10-10-2016', '10-10-2016', 1, 'COM003'),
-('Maison Vacance', '11-10-2016', '11-10-2016', 3, 'COM003'),
-('Maison Montagne', '12-10-2016', '12-10-2016', 3, 'COM003'),
-('Maison Mer', '13-10-2016', '13-10-2016', 4, 'COM003'),
-('Maison Secondaire', '14-10-2016', '14-10-2016', 4, 'COM003');
+INSERT INTO projet (refProjet, nom, dateCreation, dateModification, refClient, refCommercial) VALUES
+('CCAT000001', 'Maison Familiale', '10-10-2016', '10-10-2016', 'AT000001', 'COM003'),
+('CCMP000002', 'Maison Vacance', '11-10-2016', '11-10-2016', 'AT000001', 'COM003'),
+('CCMP000003', 'Maison Montagne', '12-10-2016', '12-10-2016', 'MP000003', 'COM003'),
+('CCJP000004', 'Maison Mer', '13-10-2016', '13-10-2016', 'AT000001', 'COM003'),
+('CCJP000005', 'Maison Secondaire', '14-10-2016', '14-10-2016', 'AT000001', 'COM003');
 
 --
 -- Contenu de la table `plan`
 --
 
-INSERT INTO plan (label, dateCreation, dateModification, idProjet, typePlancher, typeCouverture, idCoupe, nomGamme) VALUES
-('Test 1', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 1, 'Bois', 'Ardoise pourpre', 2, 'Aluminium'),
-('Test 2', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 3, 'Bois', 'Ardoise pourpre', 3, 'Aluminium'),
-('Test 3', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 2, 'Bois', 'Ardoise pourpre', 4, 'Aluminium');
+INSERT INTO plan (refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme) VALUES
+('CCAT000001-P01', 'Test 1', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCAT000001', 'Bois', 'Ardoise pourpre', 2, 'Aluminium'),
+('CCAT000001-P02', 'Test 2', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCAT000001', 'Bois', 'Ardoise pourpre', 3, 'Aluminium'),
+('CCAT000001-P03', 'Test 3', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCAT000001', 'Bois', 'Ardoise pourpre', 4, 'Aluminium'),
+('CCAT000002-P01', 'Test 4', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCMP000002', 'Bois', 'Ardoise pourpre', 2, 'Aluminium'),
+('CCAT000002-P02', 'Test 5', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCMP000002', 'Bois', 'Ardoise pourpre', 3, 'Aluminium'),
+('CCAT000002-P03', 'Test 6', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCMP000002', 'Bois', 'Ardoise pourpre', 4, 'Aluminium');
 
 --
 -- Contenu de la table `module`
 --
 
-INSERT INTO module (idModule, coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, idPlan) VALUES
-(1, 25, 35, 5, 0, '201443874685331', 1),
-(2, 44, 44, 4, 0, '201443874685331', 1),
-(3, 33, 33, 0, 3, '201443874685331', 1);
+INSERT INTO module (coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, refPlan) VALUES
+(25, 35, 5, 0, '201443874685331', 1),
+(44, 44, 4, 0, '201443874685331', 1),
+(33, 33, 0, 3, '201443874685331', 1);
 
 
 

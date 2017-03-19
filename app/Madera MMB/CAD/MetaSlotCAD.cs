@@ -10,7 +10,7 @@ using System.Data;
 
 namespace Madera_MMB.CAD
 {
-    class MetaSlotCAD
+    public class MetaSlotCAD
     {
         #region properties
         private List<MetaSlot> listemetaslot { get; set; }
