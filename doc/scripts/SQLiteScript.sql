@@ -45,7 +45,7 @@ CREATE TABLE couverture (
   prixHT INT NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj datetime NOT NULL
 );
 
 -- Table CoupePrincipe OK
@@ -58,7 +58,7 @@ CREATE TABLE coupePrincipe (
   prixHT INTEGER NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj datetime NOT NULL
 );
 
 -- Table Plancher OK
@@ -68,7 +68,7 @@ CREATE TABLE plancher (
   prixHT INTEGER NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj datetime NOT NULL
 );
 
 
@@ -82,7 +82,7 @@ CREATE TABLE gamme (
   qualiteHuisserie TEXT NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj datetime NOT NULL
 );
 
 -- Table Plan OK
@@ -138,7 +138,7 @@ CREATE TABLE metamodule (
   nbSlot INT NOT NULL,
   image BLOB NULL,
   statut BOOLEAN NOT NULL,
-  dateModification datetime NOT NULL,
+  dateMaj datetime NOT NULL,
   nomGamme TEXT NOT NULL,
   FOREIGN KEY (nomGamme)REFERENCES gamme
 ); 

@@ -48,8 +48,7 @@ namespace Madera_MMB.CAD
                             (
                                 reader.GetString(0), 
                                 reader.GetInt32(1),
-                                reader.GetString(2),
-                                reader.GetBoolean(4), 
+                                reader.GetBoolean(3), 
                                 ToImage(data));
                             Listeplancher.Add(plancher);
                         }

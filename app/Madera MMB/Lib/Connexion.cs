@@ -175,14 +175,14 @@ namespace Madera_MMB.Lib
                 while (Reader.Read())
                 {
                     Byte[] data = (Byte[])Reader.GetValue(4);
-                    query = "replace into metamodule(refMetaModule,label,prixHT,nbSlot,dateModification,nomGamme,statut,image) values(@refMetaModule,@label,@prixHT,@nbSlot,@dateModification,@nomGamme,@statut,@image)";
+                    query = "replace into metamodule(refMetaModule,label,prixHT,nbSlot,dateMaj,nomGamme,statut,image) values(@refMetaModule,@label,@prixHT,@nbSlot,@dateMaj,@nomGamme,@statut,@image)";
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
                         command.Parameters.AddWithValue("@refMetaModule", Reader.GetString(0));
                         command.Parameters.AddWithValue("@label", Reader.GetString(1));
                         command.Parameters.AddWithValue("@prixHT", Reader.GetInt32(2));
                         command.Parameters.AddWithValue("@nbSlot", Reader.GetInt32(3));                 
-                        command.Parameters.AddWithValue("@dateModification", dateSQLite);
+                        command.Parameters.AddWithValue("@dateMaj", dateSQLite);
                         command.Parameters.AddWithValue("@nomGamme", Reader.GetString(5));
                         command.Parameters.AddWithValue("@statut", sqlitebool);
                         command.Parameters.AddWithValue("@image", data);
@@ -206,7 +206,7 @@ namespace Madera_MMB.Lib
                 Trace.WriteLine(" ############# SYNC METAMODULES FAIL ############# \n");
             }
 
-            query = "UPDATE metamodule SET statut = 0 WHERE dateModification !=" + dateSQLite + ";";
+            query = "UPDATE metamodule SET statut = 0 WHERE dateMaj !=" + dateSQLite + ";";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try
@@ -615,7 +615,7 @@ namespace Madera_MMB.Lib
                 while (Reader.Read())
                 {
                     Byte[] data = (Byte[])Reader.GetValue(5);
-                    query = "replace into coupeprincipe(idCoupe, label, longueur, largeur, prixHT, image, statut, dateModification) values(@idCoupe, @label, @longueur, @largeur, @prixHT, @image, @statut, @dateModification)";
+                    query = "replace into coupeprincipe(idCoupe, label, longueur, largeur, prixHT, image, statut, dateMaj) values(@idCoupe, @label, @longueur, @largeur, @prixHT, @image, @statut, @dateMaj)";
 
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
@@ -623,10 +623,10 @@ namespace Madera_MMB.Lib
                         command.Parameters.AddWithValue("@label", Reader.GetString(1));
                         command.Parameters.AddWithValue("@longueur", Reader.GetInt32(2));
                         command.Parameters.AddWithValue("@largeur", Reader.GetInt32(3));
-                        command.Parameters.AddWithValue("@prixHT", Reader.GetInt32(3));
+                        command.Parameters.AddWithValue("@prixHT", Reader.GetInt32(4));
                         command.Parameters.AddWithValue("@image", data);
                         command.Parameters.AddWithValue("@statut", sqlitebool);
-                        command.Parameters.AddWithValue("@dateModification", dateSQLite);
+                        command.Parameters.AddWithValue("@dateMaj", dateSQLite);
                         try
                         {
                             i = i + command.ExecuteNonQuery();
@@ -647,7 +647,7 @@ namespace Madera_MMB.Lib
                 Trace.WriteLine(" ############# SYNC COUPE PRINCIPE FAIL ############# \n");
             }
 
-            query = "UPDATE coupeprincipe SET statut = 0 WHERE dateModification !=" + dateSQLite + ";";
+            query = "UPDATE coupeprincipe SET statut = 0 WHERE dateMaj !=" + dateSQLite + ";";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try
@@ -684,7 +684,7 @@ namespace Madera_MMB.Lib
                 while (Reader.Read())
                 {
                     Byte[] data = (Byte[])Reader.GetValue(2);
-                    query = "replace into couverture(typeCouverture, prixHT, image, statut, dateModification) values(@typeCouverture, @prixHT, @image, @statut, @dateModification)";
+                    query = "replace into couverture(typeCouverture, prixHT, image, statut, dateMaj) values(@typeCouverture, @prixHT, @image, @statut, @dateMaj)";
 
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
@@ -692,7 +692,7 @@ namespace Madera_MMB.Lib
                         command.Parameters.AddWithValue("@prixHT", Reader.GetUInt32(1));
                         command.Parameters.AddWithValue("@image", data);
                         command.Parameters.AddWithValue("@statut", sqlitebool);
-                        command.Parameters.AddWithValue("@dateModification", dateSQLite);
+                        command.Parameters.AddWithValue("@dateMaj", dateSQLite);
                         try
                         {
                             i = i + command.ExecuteNonQuery();
@@ -714,7 +714,7 @@ namespace Madera_MMB.Lib
                 Trace.WriteLine(" ############# SYNC COUVERTURE FAIL ############# \n");
             }
 
-            query = "UPDATE couverture SET statut = 0 WHERE dateModification !=" + dateSQLite + ";";
+            query = "UPDATE couverture SET statut = 0 WHERE dateMaj !=" + dateSQLite + ";";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try
@@ -752,7 +752,7 @@ namespace Madera_MMB.Lib
                 while (Reader.Read())
                 {
                     Byte[] data = (Byte[])Reader.GetValue(2);
-                    query = "replace into plancher(typePlancher, prixHT, image, statut, dateModification) values(@typePlancher, @prixHT, @image, @statut, @dateModification)";
+                    query = "replace into plancher(typePlancher, prixHT, image, statut, dateMaj) values(@typePlancher, @prixHT, @image, @statut, @dateMaj)";
 
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
@@ -760,7 +760,7 @@ namespace Madera_MMB.Lib
                         command.Parameters.AddWithValue("@prixHT", Reader.GetUInt32(1));
                         command.Parameters.AddWithValue("@image", data);
                         command.Parameters.AddWithValue("@statut", sqlitebool);
-                        command.Parameters.AddWithValue("@dateModification", dateSQLite);
+                        command.Parameters.AddWithValue("@dateMaj", dateSQLite);
                         try
                         {
                             i = i + command.ExecuteNonQuery();
@@ -780,7 +780,7 @@ namespace Madera_MMB.Lib
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC PLANCHER FAIL ############# \n");
             }
-            query = "UPDATE plancher SET statut = 0 WHERE dateModification !=" + dateSQLite + ";";
+            query = "UPDATE plancher SET statut = 0 WHERE dateMaj !=" + dateSQLite + ";";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try
@@ -818,7 +818,7 @@ namespace Madera_MMB.Lib
                 while (Reader.Read())
                 {
                     Byte[] data = (Byte[])Reader.GetValue(5);
-                    query = "replace into gamme(nomGamme, offrePromo,typeIsolant,typeFinition,qualiteHuisserie, image, statut, dateModification) values(@nom, @offrePromo, @typeIsolant, @typeFinition, @qualiteHuisserie, @image, @statut, @dateModification)";
+                    query = "replace into gamme(nomGamme, offrePromo,typeIsolant,typeFinition,qualiteHuisserie, image, statut, dateMaj) values(@nom, @offrePromo, @typeIsolant, @typeFinition, @qualiteHuisserie, @image, @statut, @dateMaj)";
 
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
@@ -829,7 +829,7 @@ namespace Madera_MMB.Lib
                         command.Parameters.AddWithValue("@qualiteHuisserie", Reader.GetString(4));
                         command.Parameters.AddWithValue("@image", data);
                         command.Parameters.AddWithValue("@statut", sqlitebool);
-                        command.Parameters.AddWithValue("@dateModification", dateSQLite);
+                        command.Parameters.AddWithValue("@dateMaj", dateSQLite);
                         try
                         {
                             i = i + command.ExecuteNonQuery();
@@ -849,7 +849,7 @@ namespace Madera_MMB.Lib
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC GAMME FAIL ############# \n");
             }
-            query = "UPDATE plancher SET statut = 0 WHERE dateModification !=" + dateSQLite + ";";
+            query = "UPDATE plancher SET statut = 0 WHERE dateMaj !=" + dateSQLite + ";";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try

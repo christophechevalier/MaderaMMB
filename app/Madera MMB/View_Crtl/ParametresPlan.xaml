@@ -388,8 +388,7 @@
             <GroupBox x:Name="forme" Visibility="Hidden" Header="Sélection d'une forme"  Grid.Column="2" Grid.Row="0" Grid.RowSpan="5"
                       Height="Auto"
                       Margin="25,0,25,0">
-                <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
-                        VerticalScrollBarVisibility="Auto">
+                <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapformes" Cursor="Hand"/>
                 </ScrollViewer>
             </GroupBox>
@@ -397,8 +396,7 @@
             <GroupBox Grid.Column="2" Grid.Row="5" Grid.RowSpan="6"
                     Margin="25,0,25,0" x:Name="taille" Visibility="Hidden" Header="Sélection d'une taille" >
                 <!--<StackPanel Height="Auto">-->
-                <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
-                        VerticalScrollBarVisibility="Auto">
+                <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wraptailles" Cursor="Hand"/>
                 </ScrollViewer>
                 <!--</StackPanel>-->
@@ -408,8 +406,7 @@
                       Height="Auto"
                       Margin="25,0,25,0">
                 <StackPanel  Width="Auto">
-                    <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
-                        VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                         <WrapPanel x:Name="wrapcouv" Cursor="Hand"/>
                     </ScrollViewer>
                 </StackPanel>
@@ -418,8 +415,7 @@
             <GroupBox x:Name="planch" Visibility="Hidden" Header="Sélection d'un plancher"  Grid.Column="2" Grid.Row="2" Grid.RowSpan="5"
                       Height="Auto"
                       Margin="25,0,25,0">
-                <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
-                        VerticalScrollBarVisibility="Auto">
+                <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapplanch" Cursor="Hand"/>
                 </ScrollViewer>
             </GroupBox>
@@ -427,8 +423,7 @@
             <GroupBox x:Name="gam" Visibility="Hidden" Header="Sélection d'une gamme"  Grid.Column="2" Grid.Row="2" Grid.RowSpan="5"
                       Height="Auto"
                       Margin="25,0,25,0">
-                <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
-                        VerticalScrollBarVisibility="Auto">
+                <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapgamme"/>
                 </ScrollViewer>
             </GroupBox>
