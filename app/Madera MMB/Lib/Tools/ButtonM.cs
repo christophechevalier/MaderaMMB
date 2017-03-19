@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Madera_MMB.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Madera_MMB.Lib.Tools
     {
         public enum type
         {
-            Mur, MurInt, Fenetre, Porte, Rien, SlotMur, SlotFen, SlotPorte
+            Mur, MurInt, Fenetre, Porte, Rien, SlotMur, SlotFen, SlotPorte, Slot
         }
 
         public type letype { get; set; }
@@ -23,7 +24,7 @@ namespace Madera_MMB.Lib.Tools
         public int x { get; set; }
         public int y { get; set; }
         public Brush texture { get; set; }
-        public string back { get; set; }
+        public MetaModule meta { get; set; }
 
         public ButtonM(ButtonM unparent, type type, int x, int y, int colspan, int rowspan, Brush texture)
         {
@@ -53,28 +54,28 @@ namespace Madera_MMB.Lib.Tools
             switch (this.letype)
             {
                 case type.Rien:
-                    this.Background = System.Windows.Media.Brushes.LightGray;
+                    this.Background = Brushes.LightGray;
                     break;
                 case type.Mur:
-                    this.Background = System.Windows.Media.Brushes.Brown;
+                    this.Background = Brushes.Brown;
                     break;
                 case type.MurInt:
-                    this.Background = System.Windows.Media.Brushes.Red;
+                    this.Background = Brushes.Red;
                     break;
                 case type.Fenetre:
-                    this.Background = System.Windows.Media.Brushes.Blue;
+                    this.Background = Brushes.Blue;
                     break;
                 case type.Porte:
-                    this.Background = System.Windows.Media.Brushes.Olive;
+                    this.Background = Brushes.Olive;
                     break;
                 case type.SlotMur:
-                    this.Background = System.Windows.Media.Brushes.Cyan;
+                    this.Background = Brushes.Cyan;
                     break;
                 case type.SlotFen:
-                    this.Background = System.Windows.Media.Brushes.LightGreen;
+                    this.Background = Brushes.LightGreen;
                     break;
                 case type.SlotPorte:
-                    this.Background = System.Windows.Media.Brushes.LightBlue;
+                    this.Background = Brushes.LightBlue;
                     break;
             }
         }

@@ -54,10 +54,10 @@
             </Grid.ColumnDefinitions>
 
             <Viewbox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <ToggleButton x:Name="tracer" Content="Tracer un slot" Height="60" Width="400" FontSize="20"/>
+                <ToggleButton x:Name="tracer" Content="Tracer un mur" Height="60" Width="400" FontSize="20"/>
             </Viewbox>
             <Viewbox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <ToggleButton x:Name="retirer" Content="Supprimer un slot" Height="60" Width="400" FontSize="20"/>
+                <ToggleButton x:Name="retirer" Content="Supprimer un mur" Height="60" Width="400" FontSize="20"/>
             </Viewbox>
             <Viewbox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Button x:Name="texturer" Content="Afficher la composition" Height="60" Width="400" FontSize="20" Click="afficheTexture"/>

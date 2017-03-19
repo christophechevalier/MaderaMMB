@@ -14,13 +14,7 @@ namespace Madera_MMB.View_Crtl
 {
     /// <summary>
     /// Controle de la vue Modelisation
-    /// Features en place :
-    ///     Placement de mur
-    ///     Retrait de mur
-    ///     Selection d'un mode
-    ///     Afficher/Masquer liste d'options
-    ///     Image des murInt
-    /// Restantes :
+    /// Features Restantes :
     ///     Selection type du mur à placer
     ///     Selection module à placer dans un slot
     ///     Generation auto plan
@@ -33,13 +27,16 @@ namespace Madera_MMB.View_Crtl
         private Grid grid = new Grid();
         private ButtonM[,] listB = new ButtonM[40, 30];
         private ListBox listBox = new ListBox();
+        private StackPanel stackP = new StackPanel();
         private string mode = "default";
+        private string modeAffich = "tracage";
 
         /*********************************************************** BOUCHON *********************************************************************/
         private Plan plan = new Plan("Plan1", new Projet(), new Plancher("Bois", 50), new Couverture("Tuiles", 200), new CoupePrincipe(1, "Carré", 50, 50, 1000), new Gamme("Aucune", 0, "Aucun", "Aucunes", "Fer"));
-        private PlanCAD planCad;
-        /*********************************************************** BOUCHON *********************************************************************/
-        
+        private PlanCAD planCad { get; set; }
+        private Connexion con { get; set; }
+    /*********************************************************** BOUCHON *********************************************************************/
+
         private Brush croix = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/croix.png", UriKind.RelativeOrAbsolute)));
         private Brush murh = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/mur_horizontal.png", UriKind.RelativeOrAbsolute)));
         private Brush murv = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/mur_vertical.png", UriKind.RelativeOrAbsolute)));
@@ -55,6 +52,8 @@ namespace Madera_MMB.View_Crtl
         private Brush slotFV = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/slotF_vertical.png", UriKind.RelativeOrAbsolute)));
         private Brush slotPH = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/slotP_horizontal.png", UriKind.RelativeOrAbsolute)));
         private Brush slotPV = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/slotP_vertical.png", UriKind.RelativeOrAbsolute)));
+        private Brush slotH = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/slot_horizontal.png", UriKind.RelativeOrAbsolute)));
+        private Brush slotV = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/slot_vertical.png", UriKind.RelativeOrAbsolute)));
 
         private Brush mur_beton = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/mur_beton.jpg", UriKind.RelativeOrAbsolute)));
 
@@ -67,9 +66,13 @@ namespace Madera_MMB.View_Crtl
         private ButtonM murhaut = new ButtonM(ButtonM.type.Mur, 5, 5, 20, 1, null);
         #endregion
 
-        public Modelisation()
+        public Modelisation(/*Connexion con, Plan plan, PlanCAD planCad*/)
         {
+            /*this.con = con;
+            this.plan = plan;
+            this.planCad = planCad;*/
             InitializeComponent();
+            //this.DataContext = this.con;
             initialize();
         }
 
@@ -89,6 +92,10 @@ namespace Madera_MMB.View_Crtl
             Grid.SetColumn(listBox, 0);
             Grid.SetRow(listBox, 2);
             listBox.Margin = new Thickness(7,7,7,7);
+
+            Grid.SetColumn(stackP, 0);
+            Grid.SetRow(stackP, 2);
+            stackP.Margin = new Thickness(20, 20, 20, 20);
 
             ColumnDefinition col;
             RowDefinition row;
@@ -146,8 +153,7 @@ namespace Madera_MMB.View_Crtl
             Grid.SetRow(but, but.y);
             Grid.SetRowSpan(but, but.rowspan);*/
             listB[but.x, but.y].letype = but.letype;
-
-            //Rajouter modification des boutons compris dans les span
+            
             if (but.rowspan > 1 )
             {
                 for (int i = 0; i < but.rowspan; i++)
@@ -202,6 +208,58 @@ namespace Madera_MMB.View_Crtl
                 {
                     removeWall(but);
                 }
+            }
+            else if (but.letype == ButtonM.type.SlotPorte)
+            {
+
+            }
+            else if (but.letype == ButtonM.type.SlotFen)
+            {
+
+            }
+            else if (but.letype == ButtonM.type.Slot)
+            {
+                loadChoiceButton(but);
+            }
+        }
+
+        private void loadChoiceButton (ButtonM but)
+        {
+            MainGrid.Children.Remove(stackP);
+
+            /*if (but.meta )
+            {
+                Charger les informations du module pour les afficher
+            }*/
+            stackP.Children.Clear();
+
+            Button butFen = new Button();
+            butFen.Height = 50;
+            butFen.Content = "Fenêtres";
+            butFen.Click += new RoutedEventHandler(loadFiltre);
+            Button butPor = new Button();
+            butPor.Height = 50;
+            butPor.Content = "Portes";
+            butPor.Click += new RoutedEventHandler(loadFiltre);
+
+            stackP.Children.Add(butFen);
+            stackP.Children.Add(butPor);
+
+            MainGrid.Children.Add(stackP);
+        }
+
+        private void loadFiltre(object sender, RoutedEventArgs e)
+        {
+            Button but = sender as Button;
+            if ((string)but.Content == "Fenêtres")
+            {
+                // Charger la liste des gammes possibiles pour les fenetres sous forme de liste de boutons dans le stack panel
+                // en utilisant le planCAD
+            }
+            else if ((string)but.Content == "Portes")
+            {
+                // Charger la liste des gammes possibiles pour les portes sous forme de liste de boutons dans le stack panel
+                // en utilisant le planCAD
             }
         }
 
@@ -279,7 +337,7 @@ namespace Madera_MMB.View_Crtl
                 for (int y = 1; y < listB.GetLength(1) - 1; y++)
                 {
                     ButtonM but = listB[i, y];
-                    if (but.letype == ButtonM.type.MurInt || but.letype == ButtonM.type.SlotPorte)
+                    if (but.letype == ButtonM.type.MurInt || but.letype == ButtonM.type.Slot)
                     {
                         ButtonM butN = listB[but.x, but.y - 1];
                         ButtonM butN2 = listB[but.x, but.y - 2];
@@ -292,24 +350,24 @@ namespace Madera_MMB.View_Crtl
 
                         if ((butN.Background == murv && butS.Background == murv) && (butO.letype == ButtonM.type.Rien && butE.letype == ButtonM.type.Rien))
                         {
-                            if (butN2.letype != ButtonM.type.SlotPorte && butS2.letype != ButtonM.type.SlotPorte)
+                            if (butN2.letype != ButtonM.type.Slot && butS2.letype != ButtonM.type.Slot)
                             {
-                                but.letype = ButtonM.type.SlotPorte;
+                                but.letype = ButtonM.type.Slot;
                             }
                         }
                         else if ((butO.Background == murh && butE.Background == murh) && (butN.letype == ButtonM.type.Rien && butS.letype == ButtonM.type.Rien))
                         {
-                            if (butO2.letype != ButtonM.type.SlotPorte && butE2.letype != ButtonM.type.SlotPorte)
+                            if (butO2.letype != ButtonM.type.Slot && butE2.letype != ButtonM.type.Slot)
                             {
-                                but.letype = ButtonM.type.SlotPorte;
+                                but.letype = ButtonM.type.Slot;
                             }
                         }
                         else
                         {
-                            if (butN.letype != ButtonM.type.Mur && butS.letype != ButtonM.type.Mur && butO.letype != ButtonM.type.Mur && butE.letype != ButtonM.type.Mur)
-                            {
+                            //if (butN.letype != ButtonM.type.Mur && butS.letype != ButtonM.type.Mur && butO.letype != ButtonM.type.Mur && butE.letype != ButtonM.type.Mur)
+                            //{
                                 but.letype = ButtonM.type.MurInt;
-                            }
+                            //}
                         }
 
                         checkImage();
@@ -327,7 +385,7 @@ namespace Madera_MMB.View_Crtl
             ButtonM butO = listB[but.x - 1, but.y];
             ButtonM butE = listB[but.x + 1, but.y];
 
-            if ((butN.letype == ButtonM.type.Mur || butN.letype == ButtonM.type.MurInt) || (butS.letype == ButtonM.type.Mur || butS.letype == ButtonM.type.MurInt) || (butO.letype == ButtonM.type.Mur || butO.letype == ButtonM.type.MurInt) || (butE.letype == ButtonM.type.Mur || butE.letype == ButtonM.type.MurInt))
+            if (butN.letype != ButtonM.type.Rien || butS.letype != ButtonM.type.Rien || butO.letype != ButtonM.type.Rien || butE.letype != ButtonM.type.Rien)
             {
                 if (butN.letype != ButtonM.type.SlotPorte && butN.letype != ButtonM.type.SlotFen && butS.letype != ButtonM.type.SlotPorte && butS.letype != ButtonM.type.SlotFen && butE.letype != ButtonM.type.SlotPorte && butE.letype != ButtonM.type.SlotFen && butO.letype != ButtonM.type.SlotPorte && butO.letype != ButtonM.type.SlotFen)
                 {
@@ -430,6 +488,17 @@ namespace Madera_MMB.View_Crtl
                             but.Background = slotPH;
                         }
                     }
+                    else if (but.letype == ButtonM.type.Slot)
+                    {
+                        if ((butN.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur) || (butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt))
+                        {
+                            but.Background = slotV;
+                        }
+                        else
+                        {
+                            but.Background = slotH;
+                        }
+                    }
                     else if (but.letype == ButtonM.type.Rien)
                     {
                         but.Background = Brushes.LightGray;
@@ -478,15 +547,24 @@ namespace Madera_MMB.View_Crtl
 
         private void afficheTexture(object sender, RoutedEventArgs e)
         {
-            for (int i = 1; i < listB.GetLength(0) - 1; i++)
+            if (modeAffich == "tracage")
             {
-                for (int y = 1; y < listB.GetLength(1) - 1; y++)
+                modeAffich = "texture";
+                for (int i = 1; i < listB.GetLength(0) - 1; i++)
                 {
-                    if (listB[i,y].texture != null)
+                    for (int y = 1; y < listB.GetLength(1) - 1; y++)
                     {
-                        listB[i, y].Background = listB[i, y].Background = listB[i, y].texture;
+                        if (listB[i, y].texture != null)
+                        {
+                            listB[i, y].Background = listB[i, y].texture;
+                        }
                     }
                 }
+            }
+            else
+            {
+                modeAffich = "tracage";
+                checkImage();
             }
         }
     }
