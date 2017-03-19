@@ -47,12 +47,12 @@ namespace Madera_MMB.View_Crtl
             initSynchro();
 
             /// Test SYNCHRO import ///
-            connexion.SyncCommMySQL();
-            connexion.SyncParamPlan();
-            connexion.SyncClient();
-            connexion.SyncMetamodules();
-            connexion.SyncMetaslot();
-            connexion.SyncAssocMetaModuleMetaslot();
+            //connexion.SyncCommMySQL();
+            //connexion.SyncParamPlan();
+            //connexion.SyncClient();
+            //connexion.SyncMetamodules();
+            //connexion.SyncMetaslot();
+            //connexion.SyncAssocMetaModuleMetaslot();
 
             /// Test CAD avec nouvelles données ///
             CommercialCAD commCAD = new CommercialCAD(connexion);
@@ -63,9 +63,6 @@ namespace Madera_MMB.View_Crtl
             PlancherCAD plancherCAD = new PlancherCAD(connexion);
 
             connexion = new Connexion();
-            //this.gestionClient = new GestionClient(connexion);
-            //this.parametresClient = new ParametresClient();
-            Mainframe.Content = gestionClient;
 
             Commercial commercialTest = new Commercial
                 (
@@ -76,15 +73,15 @@ namespace Madera_MMB.View_Crtl
                     "mdp"
                 );
 
-            this.authentification = new Authentification();
+            this.authentification = new Authentification(connexion);
             this.gestionProjet = new GestionProjet(connexion, commercialTest);
 
             Mainframe.Content = gestionProjet;
 
             /// Test SYNCHRO export ///
-            connexion.ExpClients();
-            connexion.ExpProjets();
-            connexion.ExpPlans();
+            //connexion.ExpClients();
+            //connexion.ExpProjets();
+            //connexion.ExpPlans();
             // connexion.ExpModules();
 
             Initialize_Listeners();

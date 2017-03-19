@@ -37,12 +37,19 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Image Name="Logo" 
-                   Grid.Column="0" 
-                   Source="{StaticResource Logo}" 
-                   Grid.Row="0" 
-                   Width="auto" 
-                   Margin="10"/>
+            <Image x:Name="logo" Grid.Column="0" Grid.Row="0" Width="Auto" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10">
+                <Image.Style>
+                    <Style TargetType="Image">
+
+                        <Setter Property="Source" Value="{StaticResource LogoOff}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding MySQLconnected}" Value="True">
+                                <Setter Property="Source" Value="{StaticResource Logo}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
         </Grid>
         <!-- Fin Déclaration Logo Madera -->
 
@@ -91,8 +98,7 @@
                             FontSize="20"
                             Width="400"
                             Height="60"
-                            Content="Confirmer"
-                            Click="BtnConfirmerParamPlan_Click">
+                            Content="Confirmer">
                     </Button>
                 </Viewbox>
                 <Viewbox Grid.Row="3"
@@ -103,8 +109,7 @@
                             FontSize="20"
                             Width="400"
                             Height="60"
-                            Content="Retour"
-                            Click="BtnRetour_Click">
+                            Content="Retour">
                     </Button>
                 </Viewbox>
             </Grid>
@@ -386,7 +391,6 @@
             </Viewbox>
 
             <GroupBox x:Name="forme" Visibility="Hidden" Header="Sélection d'une forme"  Grid.Column="2" Grid.Row="0" Grid.RowSpan="5"
-                      Height="Auto"
                       Margin="25,0,25,0">
                 <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapformes" Cursor="Hand"/>
@@ -395,33 +399,29 @@
 
             <GroupBox Grid.Column="2" Grid.Row="5" Grid.RowSpan="6"
                     Margin="25,0,25,0" x:Name="taille" Visibility="Hidden" Header="Sélection d'une taille" >
-                <!--<StackPanel Height="Auto">-->
                 <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wraptailles" Cursor="Hand"/>
                 </ScrollViewer>
-                <!--</StackPanel>-->
             </GroupBox>
 
             <GroupBox x:Name="couv" Visibility="Hidden" Header="Sélection d'une couverture"  Grid.Column="2" Grid.Row="2" Grid.RowSpan="5"
-                      Height="Auto"
+                      
                       Margin="25,0,25,0">
-                <StackPanel  Width="Auto">
-                    <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
-                        <WrapPanel x:Name="wrapcouv" Cursor="Hand"/>
-                    </ScrollViewer>
-                </StackPanel>
+                <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
+                    <WrapPanel x:Name="wrapcouv" Cursor="Hand"/>
+                </ScrollViewer>
             </GroupBox>
 
-            <GroupBox x:Name="planch" Visibility="Hidden" Header="Sélection d'un plancher"  Grid.Column="2" Grid.Row="2" Grid.RowSpan="5"
-                      Height="Auto"
+            <GroupBox x:Name="planch" Visibility="Hidden" Header="Sélection d'un plancher"  Grid.Column="2" Grid.Row="2"
+                      Grid.RowSpan="5"                      
                       Margin="25,0,25,0">
                 <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapplanch" Cursor="Hand"/>
                 </ScrollViewer>
             </GroupBox>
 
-            <GroupBox x:Name="gam" Visibility="Hidden" Header="Sélection d'une gamme"  Grid.Column="2" Grid.Row="2" Grid.RowSpan="5"
-                      Height="Auto"
+            <GroupBox x:Name="gam" Visibility="Hidden" Header="Sélection d'une gamme"  Grid.Column="2" Grid.Row="2"
+                      Grid.RowSpan="5"
                       Margin="25,0,25,0">
                 <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapgamme"/>
