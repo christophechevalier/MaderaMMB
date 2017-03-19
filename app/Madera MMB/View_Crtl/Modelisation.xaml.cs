@@ -32,7 +32,7 @@ namespace Madera_MMB.View_Crtl
         private string modeAffich = "tracage";
 
         /*********************************************************** BOUCHON *********************************************************************/
-        private Plan plan = new Plan("Plan1", new Projet(), new Plancher("Bois", 50), new Couverture("Tuiles", 200), new CoupePrincipe(1, "Carré", 50, 50, 1000), new Gamme("Aucune", 0, "Aucun", "Aucunes", "Fer"));
+        //private Plan plan = new Plan("Plan1", new Projet(), new Plancher("Bois", 50), new Couverture("Tuiles", 200), new CoupePrincipe(1, "Carré", 50, 50, 1000), new Gamme("Aucune", 0, "Aucun", "Aucunes", "Fer"));
         private PlanCAD planCad { get; set; }
         private Connexion con { get; set; }
     /*********************************************************** BOUCHON *********************************************************************/
