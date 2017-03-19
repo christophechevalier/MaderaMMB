@@ -136,35 +136,69 @@ namespace Madera_MMB.CAD
         /// <param name="plan"></param>
         public void InsertPlan(Plan plan)
         {
-            string SQLQuery = "INSERT INTO plan(refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme)" +
-            "VALUES (@refPlan, @label, @dateCreation, @dateModification, @refProjet, @typePlancher, @typeCouverture, @idCoupe, @nomGamme)";
-
-            // Ouverture de la connexion
-            conn.LiteCo.Open();
-            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            if(plan.gamme != null)
             {
-                Trace.WriteLine(SQLQuery);
-                try
-                {
-                    command.Parameters.AddWithValue("@refPlan", plan.reference);
-                    command.Parameters.AddWithValue("@label", plan.label);
-                    command.Parameters.AddWithValue("@dateCreation", DateTime.Today);
-                    command.Parameters.AddWithValue("@dateModification", DateTime.Today);
-                    command.Parameters.AddWithValue("@refProjet", plan.projet.reference);
-                    command.Parameters.AddWithValue("@typePlancher", plan.plancher.type);
-                    command.Parameters.AddWithValue("@typeCouverture", plan.couverture.type);
-                    command.Parameters.AddWithValue("@idCoupe", plan.coupePrincipe.id);
-                    command.Parameters.AddWithValue("@nomGamme", plan.gamme.nom);
+                string SQLQuery = "REPLACE INTO plan(refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme)" +
+"VALUES (@refPlan, @label, @dateCreation, @dateModification, @refProjet, @typePlancher, @typeCouverture, @idCoupe, @nomGamme)";
 
-                    command.ExecuteNonQuery();
-                    Trace.WriteLine("#### INSERT NOUVEAU PLAN DATA SUCCESS ####");
-                }
-                catch (SQLiteException ex)
+                // Ouverture de la connexion
+                conn.LiteCo.Open();
+                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
                 {
-                    Trace.WriteLine(" \n ################################################# ERREUR INSERTION NOUVEAU PLAN ################################################# \n" + ex.ToString() + "\n");
+                    Trace.WriteLine(SQLQuery);
+                    try
+                    {
+                        command.Parameters.AddWithValue("@refPlan", plan.reference);
+                        command.Parameters.AddWithValue("@label", plan.label);
+                        command.Parameters.AddWithValue("@dateCreation", DateTime.Today);
+                        command.Parameters.AddWithValue("@dateModification", DateTime.Today);
+                        command.Parameters.AddWithValue("@refProjet", plan.projet.reference);
+                        command.Parameters.AddWithValue("@typePlancher", plan.plancher.type);
+                        command.Parameters.AddWithValue("@typeCouverture", plan.couverture.type);
+                        command.Parameters.AddWithValue("@idCoupe", plan.coupePrincipe.id);
+                        command.Parameters.AddWithValue("@nomGamme", plan.gamme.nom);
+
+                        command.ExecuteNonQuery();
+                        Trace.WriteLine("#### INSERT NOUVEAU PLAN DATA SUCCESS ####");
+                    }
+                    catch (SQLiteException ex)
+                    {
+                        Trace.WriteLine(" \n ################################################# ERREUR INSERTION NOUVEAU PLAN ################################################# \n" + ex.ToString() + "\n");
+                    }
                 }
+                conn.LiteCo.Close();
+            } else
+            {
+                string SQLQuery = "REPLACE INTO plan(refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe)" +
+"VALUES (@refPlan, @label, @dateCreation, @dateModification, @refProjet, @typePlancher, @typeCouverture, @idCoupe)";
+
+                // Ouverture de la connexion
+                conn.LiteCo.Open();
+                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+                {
+                    Trace.WriteLine(SQLQuery);
+                    try
+                    {
+                        command.Parameters.AddWithValue("@refPlan", plan.reference);
+                        command.Parameters.AddWithValue("@label", plan.label);
+                        command.Parameters.AddWithValue("@dateCreation", DateTime.Today);
+                        command.Parameters.AddWithValue("@dateModification", DateTime.Today);
+                        command.Parameters.AddWithValue("@refProjet", plan.projet.reference);
+                        command.Parameters.AddWithValue("@typePlancher", plan.plancher.type);
+                        command.Parameters.AddWithValue("@typeCouverture", plan.couverture.type);
+                        command.Parameters.AddWithValue("@idCoupe", plan.coupePrincipe.id);
+
+                        command.ExecuteNonQuery();
+                        Trace.WriteLine("#### INSERT NOUVEAU PLAN DATA SUCCESS ####");
+                    }
+                    catch (SQLiteException ex)
+                    {
+                        Trace.WriteLine(" \n ################################################# ERREUR INSERTION NOUVEAU PLAN ################################################# \n" + ex.ToString() + "\n");
+                    }
+                }
+                conn.LiteCo.Close();
             }
-            conn.LiteCo.Close();
+            ListAllPlansByProject();
 
             //conn.InsertSQliteQuery(SQLQuery);
             //foreach (Module module in plan.modules)
@@ -251,7 +285,7 @@ namespace Madera_MMB.CAD
                                 reader.GetInt32(2),
                                 reader.GetInt32(3),
                                 reader.GetInt32(4),
-                                getMetaModuleByRef(reader.GetString(0))
+                                getMetaModuleByRef(reader.GetString(5))
                             );
                             modules.Add(module);
                         }
