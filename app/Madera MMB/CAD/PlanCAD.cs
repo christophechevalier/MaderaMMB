@@ -108,8 +108,8 @@ namespace Madera_MMB.CAD
                                 (
                                     reader.GetString(0),
                                     reader.GetString(1),
-                                    reader.GetString(2),
-                                    reader.GetString(3),
+                                    reader.GetDateTime(2),
+                                    reader.GetDateTime(3),
                                     projet,
                                     getPlancherByType(reader.GetString(5)),
                                     getCouvByType(reader.GetString(6)),
@@ -343,16 +343,16 @@ namespace Madera_MMB.CAD
                             reader.GetValue(5).GetType() + " || " +
                             reader.GetValue(6).GetType());
 
-                            Byte[] data = (Byte[])reader.GetValue(7);
+                            Byte[] data = (Byte[])reader.GetValue(4);
                             metaModule = new MetaModule
                             (
                                 reader.GetString(0),
                                 reader.GetString(1),
                                 reader.GetInt32(2),
                                 reader.GetInt32(3),
-                                getGammebyNom(reader.GetString(4)),
+                                getGammebyNom(reader.GetString(7)),
                                 this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
-                                reader.GetBoolean(6),
+                                reader.GetBoolean(5),
                                 ToImage(data)
                             );
                         }

@@ -28,9 +28,6 @@ namespace Madera_MMB.View_Crtl
     public partial class ParametresPlan : Page
     {
         #region Properties
-
-        public Connexion Conn { get; set; }
-
         private CoupePrincipeCAD coupeCAD { get; set; }
         private CouvertureCAD couvCAD { get; set; }
         private PlancherCAD planchCAD { get; set; }
@@ -41,21 +38,34 @@ namespace Madera_MMB.View_Crtl
         private Couverture couvChoisie { get; set; }
         private Plancher planchChoisi { get; set; }
         private Gamme gammChoisie { get; set; }
+        private Plan _plan { get; set; }
 
+        public PlanCAD planCAD { get; set; }
+        public Plan Plan
+        {
+            get { return this._plan; }
+            set
+            {                
+                _plan = value;
+                setbuttonslabels();
+            }
+        }
         public Projet projet { get; set; }
+        public Connexion Conn { get; set; }
 
         #endregion
 
         #region Constructeur
-        public ParametresPlan(Connexion co)
+        public ParametresPlan(Connexion co, PlanCAD plancad)
         {
             InitializeComponent();
             Conn = co;
+            planCAD = plancad;
+            projet = planCAD.projet;
             DataContext = Conn;
 
             if (Conn.MySQLconnected != false)
                 Conn.SyncParamPlan();
-
 
             coupeCAD = new CoupePrincipeCAD(this.Conn);
             couvCAD = new CouvertureCAD(this.Conn);
@@ -348,6 +358,23 @@ namespace Madera_MMB.View_Crtl
                 }
             }
         }
+
+        /// <summary>
+        /// Change les valeurs des boutons selon les informations du plan reçu
+        /// </summary>
+        private void setbuttonslabels()
+        {
+            coupeChoisie = this.Plan.coupePrincipe;
+            couvChoisie = this.Plan.couverture;
+            planchChoisi = this.Plan.plancher;
+            gammChoisie = this.Plan.gamme;
+
+            this.PlanNom.Text = this.Plan.label;
+            this.BoutonChoixCoupe.Content = this.Plan.coupePrincipe.label;
+            this.BoutonChoixCouverture.Content = this.Plan.couverture.type;
+            this.BoutonChoixPlancher.Content = this.Plan.plancher.type;
+            this.BoutonChoixGamme.Content = this.Plan.gamme.nom;
+        }
         #endregion
 
         /// <summary>
@@ -446,14 +473,30 @@ namespace Madera_MMB.View_Crtl
         #region public methods
         public bool SetPlan()
         {
-            if(this.coupeChoisie != null && this.couvChoisie != null && this.planchChoisi != null)
+            if (this.coupeChoisie != null && this.couvChoisie != null && this.planchChoisi != null && PlanNom.Text != "")
             {
-                string label = "qqch";
-                Plan plan = new Plan(label, this.projet, this.planchChoisi, this.couvChoisie, this.coupeChoisie, this.gammChoisie);
+                string key = projet.nom.Substring(0, 1);
+                Random rand = new Random();
+                int temp = rand.Next(000000, 999999);
+                key += temp.ToString();
+
+                if (Plan != null)
+                {
+                    Plan.coupePrincipe = this.coupeChoisie;
+                    Plan.couverture = this.couvChoisie;
+                    Plan.plancher = this.planchChoisi;
+                    if (gammChoisie != null)
+                        Plan.gamme = this.gammChoisie;
+                }
+                else
+                {
+                    this.Plan = new Plan(key, this.PlanNom.Text, DateTime.Now, this.projet, this.planchChoisi, this.couvChoisie, this.coupeChoisie, this.gammChoisie);
+                }
                 return true;
             }
             return false;
         }
+
         #endregion
 
         #region Tools
