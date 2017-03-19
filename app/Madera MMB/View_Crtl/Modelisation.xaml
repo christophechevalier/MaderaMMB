@@ -41,7 +41,7 @@
                     <Style TargetType="Image">
                         <Setter Property="Source" Value="{StaticResource LogoOff}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                            <DataTrigger Binding="{Binding MySQLconnected}" Value="True">
                                 <Setter Property="Source" Value="{StaticResource Logo}" />
                             </DataTrigger>
                         </Style.Triggers>

@@ -8,8 +8,8 @@
     </Style>
 
     <!-- Image Logo -->
-    <BitmapImage x:Key="Logo" UriSource="/Lib/logo_madera.png"></BitmapImage>
-    <BitmapImage x:Key="LogoOff" UriSource="/Lib/logo_offline.png"></BitmapImage>
+    <ImageSource x:Key="Logo">../logo_madera.png</ImageSource>
+    <ImageSource x:Key="LogoOff">../logo_offline.png</ImageSource>
     <!--<ImageSource x:Key="LogoOff">pack://application:,,,/Madera_MMB;component/Lib/logo_offline.png</ImageSource>-->
 
     <!--<Image Name="Logo" Grid.Column="0" Source="{DynamicResource Logo}" Grid.Row="0" Width="Auto" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10"/>-->

@@ -88,7 +88,9 @@ namespace Madera_MMB.View_Crtl
             this.gestionClient = new GestionClient(connexion, clientCAD);
             this.parametresClient = new ParametresClient(connexion);
 
-            Mainframe.Content = parametresClient;
+            Mainframe.Content = gestionPlan;
+
+            Trace.WriteLine(connexion.MySQLconnected.ToString());
 
             /// Test SYNCHRO export ///
             //connexion.ExpClients();
