@@ -74,14 +74,11 @@ namespace Madera_MMB.View_Crtl
                     "monemail@gmail.com",
                     "mdp"
                 );
-                
-            PlanCAD planCAD = new PlanCAD(connexion, projetTest);
 
             this.authentification = new Authentification(connexion);
             this.gestionProjet = new GestionProjet(connexion, commercialTest);
 
-            //this.gestionPlan = new GestionPlan(connexion, gestionProjet.proj);
-            this.parametresPlan = new ParametresPlan(connexion, planCAD);
+            //this.parametresPlan = new ParametresPlan(connexion, gestionPlan.planCAD);
 
             Mainframe.Content = gestionProjet;
 
@@ -123,11 +120,11 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void Initialize_Listeners()
         {
-            //Initialize_Listeners_Auth();
-            //Initialize_Listeners_GestionProjet();
+            Initialize_Listeners_Auth();
+            Initialize_Listeners_GestionProjet();
             //Initialize_Listeners_GestionClient();
             //Initialize_Listeners_ParametresClient();
-            Initialize_Listeners_ParametresPlan();
+            //Initialize_Listeners_ParametresPlan();
             //Initialize_Listeners_Modelisation();
             //Initialize_Listeners_Devis();
         }

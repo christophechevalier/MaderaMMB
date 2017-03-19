@@ -48,11 +48,11 @@ namespace Madera_MMB.Lib
         {
             MySqlDataReader Reader;
             string query;
-
             Trace.WriteLine(" ############# TEST SYNC COMMERCIAL ############# \n");
             MySqlCommand selectComms = new MySqlCommand("SELECT * FROM Commercial", MySQLCo);
             try
             {
+                MySQLCo.Open();
                 Reader = selectComms.ExecuteReader();
                 int i = 0;
                 LiteCo.Open();
