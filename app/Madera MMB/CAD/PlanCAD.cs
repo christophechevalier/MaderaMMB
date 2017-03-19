@@ -25,7 +25,6 @@ namespace Madera_MMB.CAD
         public Projet projet { get; set; }
         public string SQLQuery { get; set; }
         public MetaSlotCAD metaslotCAD { get; set; }
-        public ObservableCollection<Projet> Projets { get; set; }
         private ObservableCollection<Plan> _plans;
         public ObservableCollection<Plan> Plans
         {
