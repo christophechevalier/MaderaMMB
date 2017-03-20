@@ -42,7 +42,7 @@ namespace Madera_MMB.Lib
 
         #region Synchro Import
         /// <summary>
-        ///   Méthode de synchronisation des données des commerciaux depuis la base distante MYSQL vers la base locale SQLite
+        ///  Méthode de synchronisation des données des commerciaux depuis la base distante MYSQL vers la base locale SQLite
         /// </summary>
         public void SyncCommMySQL()
         {
@@ -85,6 +85,107 @@ namespace Madera_MMB.Lib
                 Trace.WriteLine(e.ToString());
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC COMMERCIAL FAIL ############# \n");
+            }
+        }
+
+        /// <summary>
+        ///  Méthode de synchronisation des données des projets selon un commercial depuis la base distante MYSQL vers la base locale SQLite
+        /// </summary>
+        /// <param name="commercial">le commercial dont les projets vont être chargés</param>
+        public void SynCProjetsComm(Model.Commercial commercial)
+        {
+            MySqlDataReader Reader;
+            string query;
+            Trace.WriteLine(" ############# TEST SYNC PROJETS FROM COMMERCIAL ############# \n");
+            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM projet WHERE refCommercial = '"+commercial.reference+"'", MySQLCo);
+            try
+            {
+                MySQLCo.Open();
+                Reader = selectComms.ExecuteReader();
+                int i = 0;
+                LiteCo.Open();
+                while (Reader.Read())
+                {
+                    query = "replace into projet(refProjet, nom, dateCreation, dateModification, refClient, refCommercial) values('" +
+                    Reader.GetValue(0).ToString() + "','" +
+                    Reader.GetValue(1).ToString() + "','" +
+                    Reader.GetValue(2).ToString() + "','" +
+                    Reader.GetValue(3).ToString() + "','" +
+                    Reader.GetValue(4).ToString() + "','" +
+                    Reader.GetValue(5).ToString() + "')";
+
+                    SQLiteCommand command = new SQLiteCommand(query, LiteCo);
+                    try
+                    {
+                        i = i + command.ExecuteNonQuery();
+                    }
+                    catch (System.Data.SQLite.SQLiteException e)
+                    {
+                        Trace.WriteLine(e.ToString());
+                        LiteCo.Close();
+                    }
+                }
+                LiteCo.Close();
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC PROJETS FROM COMMERCIAL SUCCESS ############# \n");
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine(e.ToString());
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC PROJETS FROM COMMERCIAL FAIL ############# \n");
+            }
+        }
+
+        /// <summary>
+        ///  Méthode de synchronisation des données des projets selon un commercial depuis la base distante MYSQL vers la base locale SQLite
+        /// </summary>
+        /// <param name="commercial">le commercial dont les projets vont être chargés</param>
+        public void SynCPlansProj(Model.Projet projet)
+        {
+            MySqlDataReader Reader;
+            string query;
+            Trace.WriteLine(" ############# TEST SYNC PLANS FROM PROJET ############# \n");
+            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM plan WHERE refProjet = '"+projet.reference+"'", MySQLCo);
+            try
+            {
+                MySQLCo.Open();
+                Reader = selectComms.ExecuteReader();
+                int i = 0;
+                LiteCo.Open();
+                while (Reader.Read())
+                {
+                    query = "replace into plan(refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme) values('" +
+                    Reader.GetValue(0).ToString() + "','" +
+                    Reader.GetValue(1).ToString() + "','" +
+                    Reader.GetValue(2).ToString() + "','" +
+                    Reader.GetValue(3).ToString() + "','" +
+                    Reader.GetValue(4).ToString() + "','" +
+                    Reader.GetValue(5).ToString() + "','" +
+                    Reader.GetValue(6).ToString() + "','" +
+                    Reader.GetValue(7).ToString() + "','" +
+                    Reader.GetValue(8).ToString() + "')";
+
+                    SQLiteCommand command = new SQLiteCommand(query, LiteCo);
+                    try
+                    {
+                        i = i + command.ExecuteNonQuery();
+                    }
+                    catch (System.Data.SQLite.SQLiteException e)
+                    {
+                        Trace.WriteLine(e.ToString());
+                        LiteCo.Close();
+                    }
+                }
+                LiteCo.Close();
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC PLANS FROM PROJET SUCCESS ############# \n");
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine(e.ToString());
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC PLANS FROM PROJET FAIL ############# \n");
             }
         }
 
@@ -572,17 +673,28 @@ namespace Madera_MMB.Lib
 
                 try
                 {
+                    Trace.WriteLine(" ############# DATA ############# ");
                     while (reader.Read())
                     {
+                        
                         for (int i = 0; i < reader.VisibleFieldCount; i++)
                         {
+                            if (reader.GetValue(i).GetType() == typeof (DateTime))
+                            {
+                                Trace.Write("["+reader.GetDateTime(i).ToString()+"]");
+                            }
+                            else
+                                Trace.Write("["+reader.GetValue(i).ToString()+"]");
                             Trace.WriteLine(" ############# " + reader.GetValue(i).GetType().ToString() + " ############# \n");
                         }
+                        Trace.WriteLine(""); 
                     }
+                    Trace.WriteLine(" ############# END DATA ############# ");
                 }
                 finally
                 {
                     reader.Close();
+                    LiteCo.Close();
                 }
             }
             catch (SQLiteException ex)

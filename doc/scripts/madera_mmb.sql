@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Client :  127.0.0.1
--- Généré le :  Jeu 16 Mars 2017 à 21:53
+-- Généré le :  Lun 20 Mars 2017 à 12:56
 -- Version du serveur :  5.7.14
 -- Version de PHP :  5.6.25
 
@@ -80,11 +80,45 @@ INSERT INTO `commercial` (`refCommercial`, `nom`, `prenom`, `email`, `motDePasse
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `composant`
+--
+
+CREATE TABLE `composant` (
+  `id_composant` int(11) NOT NULL,
+  `nom` varchar(45) NOT NULL,
+  `nomFamilleComposant` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Contenu de la table `composant`
+--
+
+INSERT INTO `composant` (`id_composant`, `nom`, `nomFamilleComposant`) VALUES
+(1, 'Lysse', 'Section'),
+(2, 'Contrefort', 'Section'),
+(3, 'Sabot assemblage', 'Section'),
+(4, 'Goujeon de fixation', 'Section'),
+(5, 'Equerre', 'Section'),
+(6, 'Support de sol', 'Section'),
+(7, 'Départ', 'Montant'),
+(8, 'Arrivée', 'Montant'),
+(9, 'Tasseau', 'Montant'),
+(10, 'Isolation', 'Remplissage'),
+(11, 'Panneau structurel', 'Remplissage'),
+(12, 'Pare-Pluie', 'Remplissage'),
+(13, 'Boulon', 'Visseries'),
+(14, 'Tire-fond', 'Visseries'),
+(15, 'Vis', 'Visseries'),
+(16, 'Tire-fond', 'Visseries');
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `coupeprincipe`
 --
 
 CREATE TABLE `coupeprincipe` (
-  `idCoupe` int(11) NOT NULL,
+  `id_coupe` int(11) NOT NULL,
   `label` varchar(45) NOT NULL,
   `longueur` int(11) NOT NULL,
   `largeur` int(11) NOT NULL,
@@ -96,7 +130,7 @@ CREATE TABLE `coupeprincipe` (
 -- Contenu de la table `coupeprincipe`
 --
 
-INSERT INTO `coupeprincipe` (`idCoupe`, `label`, `longueur`, `largeur`, `prixHT`, `image`) VALUES
+INSERT INTO `coupeprincipe` (`id_coupe`, `label`, `longueur`, `largeur`, `prixHT`, `image`) VALUES
 (1, 'L', 50, 50, 45000, 0x89504e470d0a1a0a0000000d494844520000003200000032080300000029e17883000000a2504c5445000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a011253a0000003574524e5300514e4a8e8be69169532395623d0cf7f338302918080401f9eadfd96d581e130fefd4cfaba29b8785827134c67c5cc0bab3a77643fac2adc5000001244944415448c7edd3476ec33014045053b27a897ab164ab77c989ede4fe570b196419101819c8cab3e0ee817f08fec32bcf25b2edb22c638498ca368d77172123096ddb102022d2e3089141c0098189b48368ff46941d44c4eaef23064c628c1c19e971d24184bd6f74c7492b2084ad4a782308e919f9d000113362bf9f11d2d199ca1521514b49d15c1172d328a901429bd39982cc04c84ff3cb0922eb9511152065432fd065841438096a4a7c394748a652920284356764f03d6f5916d7752d169d4f72da25abe4b4aa1cc779a34992640d38446735224f2467539db749528cbeebb2d4e792f98fe5763c2e6955359fe7c7639ba671908e8a62188de37248d1d67576a24d1c56e2eb37b2c7fd9745105c74df5b5ceb53140542348d102b3cbcf24cbe01535318287c2ec31f0000000049454e44ae426082),
 (2, 'T', 50, 50, 50000, 0x89504e470d0a1a0a0000000d494844520000003200000032080300000029e17883000000a5504c544500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000054fe49e10000003774524e5300eb29761e032dd44f39273236242112c3736c3b15f880420df1cfc9ac998e705f1b1709e3b45d53eddfdbbca6a2615a4b48b8878556622d8e76590000011e4944415448c7edd5cb7282301480e1001108e1d6022105a17217d08256fbfe8fd6c0b8a4e31cdbb2f25fe7cbe4248ba067bf6b33571405e78eefe779866ff99b85d598298ac2d8679a26c9f1b0ad7ad775e3288ab4b9585d2024b16ddb1219862cab2aa5a68810e24d35edb84452f473b8d397c871dedcf4c2f0a41371741eea534d731d06455a221963ec729ba4ea1d84768154b69da64571ecba677ae7d2ecad20ca5e372c9ce5bec3392fd09df04c2403f03cf62ac4aa1e203e9418673091fb99c800a2ba3994503831e30ca11710211198781a869250b3a1e4d481c9d85a50a297069434a558fd0e2257381924154aea47088592dd5e90d7ff261f6fe62a844c4485ccb20aa9834bfd750091510a441a0690824eff12dda0677fd1379e0a193c471cd2550000000049454e44ae426082),
 (3, 'carré', 50, 50, 35000, 0x89504e470d0a1a0a0000000d494844520000003200000032080300000029e17883000000a5504c544500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000054fe49e10000003674524e5300221ea828250fd54811723514ea1ad07a6b666217e3dd6f2df7e7ca310d09fcf2edbaaeaaa27656514cc2b4867e5a3a378f5e419c9645699b58000001284944415448c7edd5596f8240148661061991c5417610a85b2dfba2b6feff9f56e892343993436c0cf1c2f7f24b9eccc55c1ce1d9a3f7d297247345d71d26122a49411c6b9ad675da10e380baaaebaa3a9d3ede8fb343b92f8a288a0c43fec9dd2b8024c74019d2fb471c8731b18f7c4729252b8f71882820591c323f128c989e08c90c25be7b33515d722b799b84acd6d3103a0559de8528ff20aff8bf2ca5fb1011232a87e838f179e4801293439c11b20b202951627108db139cc4601371626f2121c508d1c046a311d2824d8a284ac20bd80243c2c9026cb18c126b9383adf3464806b6d63517bfe57996a569733edb96659abeafaaeae1da00424a6348963dcf5d2f77db300c37d73f6d5201940c57827d1da3406b2f8b3c4b1b7b78441df26d5d78f6d07d02bbe91b457009db4e0000000049454e44ae426082),
@@ -148,6 +182,26 @@ CREATE TABLE `devis` (
   `refClient` varchar(20) NOT NULL,
   `refCommercial` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `famillecomposant`
+--
+
+CREATE TABLE `famillecomposant` (
+  `nom` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Contenu de la table `famillecomposant`
+--
+
+INSERT INTO `famillecomposant` (`nom`) VALUES
+('Montant'),
+('Remplissage'),
+('Section'),
+('Visseries');
 
 -- --------------------------------------------------------
 
@@ -204,7 +258,7 @@ INSERT INTO `metamodule` (`refMetaModule`, `label`, `prixHT`, `nbSlot`, `image`,
 --
 
 CREATE TABLE `metamodul_has_metaslot` (
-  `idComposition` int(11) NOT NULL,
+  `id_composition` int(11) NOT NULL,
   `refMetaModule` varchar(45) NOT NULL,
   `idMetaSlot` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -238,6 +292,15 @@ CREATE TABLE `module` (
   `refPlan` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Contenu de la table `module`
+--
+
+INSERT INTO `module` (`idModule`, `coordonneeDebutX`, `coordonneeDebutY`, `colspan`, `rowspan`, `refMetaModule`, `refPlan`) VALUES
+(1, 25, 35, 5, 0, '201443874685331', 'CCAT000001-P01'),
+(2, 44, 44, 4, 0, '201443874685331', 'CCAT000001-P01'),
+(3, 33, 33, 0, 3, '201443874685331', 'CCAT000001-P01');
+
 -- --------------------------------------------------------
 
 --
@@ -247,14 +310,26 @@ CREATE TABLE `module` (
 CREATE TABLE `plan` (
   `refPlan` varchar(20) NOT NULL,
   `label` varchar(45) NOT NULL,
-  `dateCreation` date NOT NULL,
-  `dateModification` date NOT NULL,
+  `dateCreation` varchar(20) NOT NULL,
+  `dateModification` varchar(20) NOT NULL,
   `refProjet` varchar(20) NOT NULL,
   `typeCouverture` varchar(45) NOT NULL,
   `idCoupe` int(11) NOT NULL,
   `typePlancher` varchar(45) NOT NULL,
   `nomGamme` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Contenu de la table `plan`
+--
+
+INSERT INTO `plan` (`refPlan`, `label`, `dateCreation`, `dateModification`, `refProjet`, `typeCouverture`, `idCoupe`, `typePlancher`, `nomGamme`) VALUES
+('CCAT000001-P01', 'Test 1', '2017-03-22', '2017-03-23', 'CCAT000001', 'Ardoise pourpre', 2, 'Bois', 'Aluminium'),
+('CCAT000001-P02', 'Test 2', '2017-03-03', '2017-03-03', 'CCAT000001', 'Ardoise pourpre', 3, 'Bois', 'Aluminium'),
+('CCAT000001-P03', 'Test 3', '2017-03-03', '2017-03-03', 'CCAT000001', 'Ardoise pourpre', 4, 'Bois', 'Aluminium'),
+('CCAT000002-P01', 'Test 4', '2017-03-03', '2017-03-03', 'CCMP000002', 'Ardoise pourpre', 2, 'Bois', 'Aluminium'),
+('CCAT000002-P02', 'Test 5', '2017-03-03', '2017-03-03', 'CCMP000002', 'Ardoise pourpre', 3, 'Bois', 'Aluminium'),
+('CCAT000002-P03', 'Test 6', '2017-03-03', '2017-03-03', 'CCMP000002', 'Ardoise pourpre', 4, 'Bois', 'Aluminium');
 
 -- --------------------------------------------------------
 
@@ -342,10 +417,17 @@ ALTER TABLE `commercial`
   ADD UNIQUE KEY `refCommercial` (`refCommercial`);
 
 --
+-- Index pour la table `composant`
+--
+ALTER TABLE `composant`
+  ADD PRIMARY KEY (`id_composant`),
+  ADD KEY `composant_ibfk_1` (`nomFamilleComposant`);
+
+--
 -- Index pour la table `coupeprincipe`
 --
 ALTER TABLE `coupeprincipe`
-  ADD PRIMARY KEY (`idCoupe`);
+  ADD PRIMARY KEY (`id_coupe`);
 
 --
 -- Index pour la table `couverture`
@@ -366,6 +448,12 @@ ALTER TABLE `devis`
   ADD KEY `devis_ibfk_4` (`refCommercial`);
 
 --
+-- Index pour la table `famillecomposant`
+--
+ALTER TABLE `famillecomposant`
+  ADD PRIMARY KEY (`nom`);
+
+--
 -- Index pour la table `gamme`
 --
 ALTER TABLE `gamme`
@@ -383,7 +471,7 @@ ALTER TABLE `metamodule`
 -- Index pour la table `metamodul_has_metaslot`
 --
 ALTER TABLE `metamodul_has_metaslot`
-  ADD PRIMARY KEY (`idComposition`),
+  ADD PRIMARY KEY (`id_composition`),
   ADD KEY `ibfk_1` (`refMetaModule`),
   ADD KEY `ibfk_2` (`idMetaSlot`);
 
@@ -442,15 +530,20 @@ ALTER TABLE `slot`
 --
 
 --
+-- AUTO_INCREMENT pour la table `composant`
+--
+ALTER TABLE `composant`
+  MODIFY `id_composant` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+--
 -- AUTO_INCREMENT pour la table `coupeprincipe`
 --
 ALTER TABLE `coupeprincipe`
-  MODIFY `idCoupe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_coupe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT pour la table `metamodul_has_metaslot`
 --
 ALTER TABLE `metamodul_has_metaslot`
-  MODIFY `idComposition` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_composition` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT pour la table `slot`
 --
@@ -459,6 +552,12 @@ ALTER TABLE `slot`
 --
 -- Contraintes pour les tables exportées
 --
+
+--
+-- Contraintes pour la table `composant`
+--
+ALTER TABLE `composant`
+  ADD CONSTRAINT `composant_ibfk_1` FOREIGN KEY (`nomFamilleComposant`) REFERENCES `famillecomposant` (`nom`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `devis`
@@ -499,7 +598,7 @@ ALTER TABLE `module`
 ALTER TABLE `plan`
   ADD CONSTRAINT `plan_ibfk_1` FOREIGN KEY (`refProjet`) REFERENCES `projet` (`refProjet`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `plan_ibfk_4` FOREIGN KEY (`typeCouverture`) REFERENCES `couverture` (`typeCouverture`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `plan_ibfk_5` FOREIGN KEY (`idCoupe`) REFERENCES `coupeprincipe` (`idCoupe`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `plan_ibfk_5` FOREIGN KEY (`idCoupe`) REFERENCES `coupeprincipe` (`id_coupe`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `plan_ibfk_6` FOREIGN KEY (`typePlancher`) REFERENCES `plancher` (`typePlancher`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `plan_ibfk_7` FOREIGN KEY (`nomGamme`) REFERENCES `gamme` (`nom`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
