@@ -4,21 +4,18 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-
       d:DesignHeight="1661.667" d:DesignWidth="2650.333"
 	Title="Authentification">
 
     <Page.Resources>
+
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-
-
                 <ResourceDictionary Source="../Lib/Tools/Template_Madera.xaml" />
-
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </Page.Resources>
 
+    </Page.Resources>
 
 
     <Grid x:Name="MainGrid" Background="White">
@@ -79,19 +76,19 @@
                 <ColumnDefinition Width="0.20*"/>
             </Grid.ColumnDefinitions>
 
-            <!--<Image x:Name="logo">
+            <Image x:Name="logo">
                 <Image.Style>
                     <Style TargetType="Image">
 
                         <Setter Property="Source" Value="{StaticResource LogoOff}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                            <DataTrigger Binding="{Binding MySQLconnected}" Value="True">
                                 <Setter Property="Source" Value="{StaticResource Logo}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Image.Style>
-            </Image>-->
+            </Image>
             
             <Viewbox Margin="20,0,20,0" 
                      Grid.Row="1"

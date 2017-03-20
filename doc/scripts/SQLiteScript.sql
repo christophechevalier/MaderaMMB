@@ -9,7 +9,6 @@ CREATE TABLE commercial (
   motDePasse TEXT NOT NULL
 );
 
-
 -- Table Client OK
 
 CREATE TABLE client (
@@ -45,7 +44,7 @@ CREATE TABLE couverture (
   prixHT INT NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj TEXT NOT NULL
 );
 
 -- Table CoupePrincipe OK
@@ -58,7 +57,7 @@ CREATE TABLE coupePrincipe (
   prixHT INTEGER NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj TEXT NOT NULL
 );
 
 -- Table Plancher OK
@@ -68,7 +67,7 @@ CREATE TABLE plancher (
   prixHT INTEGER NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj TEXT NOT NULL
 );
 
 
@@ -82,7 +81,7 @@ CREATE TABLE gamme (
   qualiteHuisserie TEXT NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj TEXT NOT NULL
 );
 
 -- Table Plan OK
@@ -138,7 +137,7 @@ CREATE TABLE metamodule (
   nbSlot INT NOT NULL,
   image BLOB NULL,
   statut BOOLEAN NOT NULL,
-  dateModification datetime NOT NULL,
+  dateMaj TEXT NOT NULL,
   nomGamme TEXT NOT NULL,
   FOREIGN KEY (nomGamme)REFERENCES gamme
 ); 
@@ -263,9 +262,9 @@ INSERT INTO plan (refPlan, label, dateCreation, dateModification, refProjet, typ
 --
 
 INSERT INTO module (coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, refPlan) VALUES
-(25, 35, 5, 0, '201443874685331', 1),
-(44, 44, 4, 0, '201443874685331', 1),
-(33, 33, 0, 3, '201443874685331', 1);
+(25, 35, 5, 0, '201443874685331', 'CCAT000001-P01'),
+(44, 44, 4, 0, '201443874685331', 'CCAT000001-P01'),
+(33, 33, 0, 3, '201443874685331', 'CCAT000001-P01');
 
 
 

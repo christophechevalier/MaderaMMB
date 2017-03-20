@@ -1,4 +1,5 @@
-﻿using Madera_MMB.Lib.Tools;
+﻿using Madera_MMB.Lib;
+using Madera_MMB.Lib.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,15 +26,17 @@ namespace Madera_MMB.View_Crtl
     public partial class GestionDevis : Page
     {
         #region Properties
-
+        public Connexion co { get; set; }
         #endregion
 
         #region Constructeur
-        public GestionDevis()
+        public GestionDevis(Connexion conn)
         {
             InitializeComponent();
             Initialize_Labels();
             Initialize_Devis();
+            this.co = conn;
+            this.DataContext = co;
         }
         #endregion
 

@@ -38,8 +38,9 @@ namespace Madera_MMB.View_Crtl
         #region Properties
         private Connexion connexion { get; set; }
         private Projet projet { get; set; }
-        private PlanCAD planCAD { get; set; }
+        public PlanCAD planCAD { get; set; }
         private ProjetCAD projetCAD { get; set; }
+        public Plan plan { get; set; }
         #endregion
 
         #region Constructeur
@@ -54,13 +55,8 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             connexion = co;
             projet = unprojet;
-            //DataContext = connexion;
-
             planCAD = new PlanCAD(this.connexion, this.projet);
             DataContext = planCAD;
-
-            // Appel des méthodes dans le ctor
-            InitializeComponent();
         }
         #endregion
 
@@ -88,12 +84,18 @@ namespace Madera_MMB.View_Crtl
         private void BtnCopierPlan_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
+            Plan plan2 = plan;
+            plan2.label += "(copy)";
+            plan2.reference = generateKey(projet, 1);
+            Trace.WriteLine("plan2 Reference : " + plan2.reference);
+
+            planCAD.InsertPlan(plan2);
         }
 
         private void Btn_Select_Plan_Projet_Click(object sender, RoutedEventArgs e)
         {
             ToggleButton btn = sender as ToggleButton;
-            Plan plan = (Plan)btn.DataContext;
+            plan = (Plan)btn.DataContext;
 
             foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(WrapPlans))
             {
@@ -119,16 +121,15 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Tools
-        public string generateKey(Projet projet)
+        public string generateKey(Projet projet, int x)
         {
             int count = 0;
             for (int i = 0; i < planCAD.Plans.Count; i++)
             {
-                i++;
+                count++;
             }
 
-            string key = projet.reference + "-P" + count;
-            return key;
+            return projet.reference + "-P" + (count + x);
         }
         private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
         {
