@@ -9,7 +9,6 @@ CREATE TABLE commercial (
   motDePasse TEXT NOT NULL
 );
 
-
 -- Table Client OK
 
 CREATE TABLE client (

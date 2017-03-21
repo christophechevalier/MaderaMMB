@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Markup;
+using Madera_MMB.Lib;
 
 namespace Madera_MMB.View_Crtl
 {
@@ -21,9 +22,16 @@ namespace Madera_MMB.View_Crtl
     /// </summary>
     public partial class Authentification : Page, IComponentConnector
     {
-        public Authentification()
+        #region Properties
+
+        public Connexion co { get; set; }
+        #endregion
+        public Authentification(Connexion conn)
         {
+
             InitializeComponent();
+            this.co = conn;
+            this.DataContext = co;
         }
 
         #region listeners

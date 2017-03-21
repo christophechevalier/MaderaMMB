@@ -42,17 +42,17 @@ namespace Madera_MMB.Lib
 
         #region Synchro Import
         /// <summary>
-        ///   Méthode de synchronisation des données des commerciaux depuis la base distante MYSQL vers la base locale SQLite
+        ///  Méthode de synchronisation des données des commerciaux depuis la base distante MYSQL vers la base locale SQLite
         /// </summary>
         public void SyncCommMySQL()
         {
             MySqlDataReader Reader;
             string query;
-
             Trace.WriteLine(" ############# TEST SYNC COMMERCIAL ############# \n");
             MySqlCommand selectComms = new MySqlCommand("SELECT * FROM Commercial", MySQLCo);
             try
             {
+                MySQLCo.Open();
                 Reader = selectComms.ExecuteReader();
                 int i = 0;
                 LiteCo.Open();
@@ -85,6 +85,107 @@ namespace Madera_MMB.Lib
                 Trace.WriteLine(e.ToString());
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC COMMERCIAL FAIL ############# \n");
+            }
+        }
+
+        /// <summary>
+        ///  Méthode de synchronisation des données des projets selon un commercial depuis la base distante MYSQL vers la base locale SQLite
+        /// </summary>
+        /// <param name="commercial">le commercial dont les projets vont être chargés</param>
+        public void SynCProjetsComm(Model.Commercial commercial)
+        {
+            MySqlDataReader Reader;
+            string query;
+            Trace.WriteLine(" ############# TEST SYNC PROJETS FROM COMMERCIAL ############# \n");
+            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM projet WHERE refCommercial = '"+commercial.reference+"'", MySQLCo);
+            try
+            {
+                MySQLCo.Open();
+                Reader = selectComms.ExecuteReader();
+                int i = 0;
+                LiteCo.Open();
+                while (Reader.Read())
+                {
+                    query = "replace into projet(refProjet, nom, dateCreation, dateModification, refClient, refCommercial) values('" +
+                    Reader.GetValue(0).ToString() + "','" +
+                    Reader.GetValue(1).ToString() + "','" +
+                    Reader.GetValue(2).ToString() + "','" +
+                    Reader.GetValue(3).ToString() + "','" +
+                    Reader.GetValue(4).ToString() + "','" +
+                    Reader.GetValue(5).ToString() + "')";
+
+                    SQLiteCommand command = new SQLiteCommand(query, LiteCo);
+                    try
+                    {
+                        i = i + command.ExecuteNonQuery();
+                    }
+                    catch (System.Data.SQLite.SQLiteException e)
+                    {
+                        Trace.WriteLine(e.ToString());
+                        LiteCo.Close();
+                    }
+                }
+                LiteCo.Close();
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC PROJETS FROM COMMERCIAL SUCCESS ############# \n");
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine(e.ToString());
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC PROJETS FROM COMMERCIAL FAIL ############# \n");
+            }
+        }
+
+        /// <summary>
+        ///  Méthode de synchronisation des données des projets selon un commercial depuis la base distante MYSQL vers la base locale SQLite
+        /// </summary>
+        /// <param name="commercial">le commercial dont les projets vont être chargés</param>
+        public void SynCPlansProj(Model.Projet projet)
+        {
+            MySqlDataReader Reader;
+            string query;
+            Trace.WriteLine(" ############# TEST SYNC PLANS FROM PROJET ############# \n");
+            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM plan WHERE refProjet = '"+projet.reference+"'", MySQLCo);
+            try
+            {
+                MySQLCo.Open();
+                Reader = selectComms.ExecuteReader();
+                int i = 0;
+                LiteCo.Open();
+                while (Reader.Read())
+                {
+                    query = "replace into plan(refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme) values('" +
+                    Reader.GetValue(0).ToString() + "','" +
+                    Reader.GetValue(1).ToString() + "','" +
+                    Reader.GetValue(2).ToString() + "','" +
+                    Reader.GetValue(3).ToString() + "','" +
+                    Reader.GetValue(4).ToString() + "','" +
+                    Reader.GetValue(5).ToString() + "','" +
+                    Reader.GetValue(6).ToString() + "','" +
+                    Reader.GetValue(7).ToString() + "','" +
+                    Reader.GetValue(8).ToString() + "')";
+
+                    SQLiteCommand command = new SQLiteCommand(query, LiteCo);
+                    try
+                    {
+                        i = i + command.ExecuteNonQuery();
+                    }
+                    catch (System.Data.SQLite.SQLiteException e)
+                    {
+                        Trace.WriteLine(e.ToString());
+                        LiteCo.Close();
+                    }
+                }
+                LiteCo.Close();
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC PLANS FROM PROJET SUCCESS ############# \n");
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine(e.ToString());
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC PLANS FROM PROJET FAIL ############# \n");
             }
         }
 
@@ -160,7 +261,7 @@ namespace Madera_MMB.Lib
         /// </summary>
         public void SyncMetamodules()
         {
-            string dateSQLite = DateTimeSQLite(DateTime.Now);
+            string dateSQLite = "'" + DateTime.Now.ToString() + "'";
             MySqlDataReader Reader;
             string query;
             int sqlitebool = 1;
@@ -572,17 +673,28 @@ namespace Madera_MMB.Lib
 
                 try
                 {
+                    Trace.WriteLine(" ############# DATA ############# ");
                     while (reader.Read())
                     {
+                        
                         for (int i = 0; i < reader.VisibleFieldCount; i++)
                         {
-                            Trace.WriteLine(" ############# " + reader.GetValue(i).ToString() + " ############# \n");
+                            if (reader.GetValue(i).GetType() == typeof (DateTime))
+                            {
+                                Trace.Write("["+reader.GetDateTime(i).ToString()+"]");
+                            }
+                            else
+                                Trace.Write("["+reader.GetValue(i).ToString()+"]");
+                            Trace.WriteLine(" ############# " + reader.GetValue(i).GetType().ToString() + " ############# \n");
                         }
+                        Trace.WriteLine(""); 
                     }
+                    Trace.WriteLine(" ############# END DATA ############# ");
                 }
                 finally
                 {
                     reader.Close();
+                    LiteCo.Close();
                 }
             }
             catch (SQLiteException ex)
@@ -600,7 +712,7 @@ namespace Madera_MMB.Lib
         /// </summary>
         private void SyncCoupePrincipe()
         {
-            string dateSQLite = DateTimeSQLite(DateTime.Now);
+            string dateSQLite = "'" + DateTime.Now.ToString() + "'";
             MySqlDataReader Reader;
             string query;
             int sqlitebool = 1;
@@ -630,6 +742,7 @@ namespace Madera_MMB.Lib
                         try
                         {
                             i = i + command.ExecuteNonQuery();
+
                         }
                         catch (SQLiteException e)
                         {
@@ -669,7 +782,7 @@ namespace Madera_MMB.Lib
         /// </summary>
         private void SyncCouverture()
         {
-            string dateSQLite = DateTimeSQLite(DateTime.Now);
+            string dateSQLite = "'" + DateTime.Now.ToString() + "'";
             MySqlDataReader Reader;
             string query;
             int sqlitebool = 1;
@@ -714,7 +827,7 @@ namespace Madera_MMB.Lib
                 Trace.WriteLine(" ############# SYNC COUVERTURE FAIL ############# \n");
             }
 
-            query = "UPDATE couverture SET statut = 0 WHERE dateMaj !=" + dateSQLite + ";";
+            query = "UPDATE couverture SET statut = 0 WHERE dateMaj != " + dateSQLite + ";";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try
@@ -736,7 +849,7 @@ namespace Madera_MMB.Lib
         /// </summary>
         private void SyncPlancher()
         {
-            string dateSQLite = DateTimeSQLite(DateTime.Now);
+            string dateSQLite = "'" + DateTime.Now.ToString() + "'"; ;
             MySqlDataReader Reader;
             string query;
             int sqlitebool = 1;
@@ -780,7 +893,7 @@ namespace Madera_MMB.Lib
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC PLANCHER FAIL ############# \n");
             }
-            query = "UPDATE plancher SET statut = 0 WHERE dateMaj !=" + dateSQLite + ";";
+            query = "UPDATE plancher SET statut = 0 WHERE dateMaj <>" + dateSQLite + ";";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try
@@ -802,7 +915,7 @@ namespace Madera_MMB.Lib
         /// </summary>
         private void SyncGamme()
         {
-            string dateSQLite = DateTimeSQLite(DateTime.Now);
+            string dateSQLite = "'"+DateTime.Now.ToString()+"'";
             MySqlDataReader Reader;
             string query;
             int sqlitebool = 1;
@@ -833,6 +946,7 @@ namespace Madera_MMB.Lib
                         try
                         {
                             i = i + command.ExecuteNonQuery();
+                            Trace.WriteLine("Date générée : " + dateSQLite);
                         }
                         catch (System.Data.SQLite.SQLiteException e)
                         {
@@ -849,13 +963,14 @@ namespace Madera_MMB.Lib
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC GAMME FAIL ############# \n");
             }
-            query = "UPDATE plancher SET statut = 0 WHERE dateMaj !=" + dateSQLite + ";";
+            query = "UPDATE gamme SET statut = 0 WHERE dateMaj <>" + dateSQLite + ";";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try
                 {
                     command.ExecuteNonQuery();
                     Trace.WriteLine(" ############# SYNC GAMME SUCCESS ############# \n");
+                    Trace.WriteLine(query);
                 }
                 catch (SQLiteException e)
                 {
@@ -922,8 +1037,9 @@ namespace Madera_MMB.Lib
             try
             {
                 MySQLCo = new MySqlConnection(connectionString);
-                MySQLCo.Open();
+                MySQLCo.Close();
                 Trace.WriteLine(" \n ################################################# MYSQL DATABASE REACHED,  BEGIN SYNCHRONISATION ... ################################################# \n");
+                MySQLCo.Close();
                 return true;
             }
             catch (MySqlException ex)
@@ -951,16 +1067,6 @@ namespace Madera_MMB.Lib
         #endregion
 
         #region Tools
-        /// <summary>
-        /// Méthode qui convertit un type .NET DateTime en chaîne au format datetime SQLite 
-        /// </summary>
-        /// <param name="datetime">un objet de type DateTime</param>
-        /// <returns>Une chaîne au format datetime SQLite</returns>
-        private string DateTimeSQLite(DateTime datetime)
-        {
-            string dateTimeFormat = "'{0}-{1}-{2} {3}:{4}:{5}.{6}'";
-            return string.Format(dateTimeFormat, datetime.Year, datetime.Month, datetime.Day, datetime.Hour, datetime.Minute, datetime.Second, datetime.Millisecond);
-        }
         #endregion
     }
 }
