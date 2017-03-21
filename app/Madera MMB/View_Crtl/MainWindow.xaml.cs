@@ -47,26 +47,26 @@ namespace Madera_MMB.View_Crtl
             initSynchro();
 
             /// Test SYNCHRO import ///
-            connexion.SyncCommMySQL();
+            //connexion.SyncCommMySQL();
             connexion.SyncParamPlan();
-            connexion.SyncClient();
+            //connexion.SyncClient();
             connexion.SyncMetamodules();
             connexion.SyncMetaslot();
-            connexion.SyncAssocMetaModuleMetaslot();
 
             /// Test CAD avec nouvelles données ///
-            CommercialCAD commCAD = new CommercialCAD(connexion);
-            ClientCAD clientCAD = new ClientCAD(connexion);
+            //CommercialCAD commCAD = new CommercialCAD(connexion);
+            //ClientCAD clientCAD = new ClientCAD(connexion);
             CoupePrincipeCAD coupeCAD = new CoupePrincipeCAD(connexion);
             CouvertureCAD couvCAD = new CouvertureCAD(connexion);
             GammeCAD gamCAD = new GammeCAD(connexion);
             PlancherCAD plancherCAD = new PlancherCAD(connexion);
+            this.modelisation = new Modelisation();
 
             connexion = new Connexion();
 
             //this.gestionClient = new GestionClient(connexion);
             //this.parametresClient = new ParametresClient();;
-            Commercial commercialTest = new Commercial
+            /*Commercial commercialTest = new Commercial
                 (
                     "COM003",
                     "Chevalier",
@@ -76,11 +76,11 @@ namespace Madera_MMB.View_Crtl
                 );
 
             this.authentification = new Authentification(connexion);
-            this.gestionProjet = new GestionProjet(connexion, commercialTest);
+            this.gestionProjet = new GestionProjet(connexion, commercialTest);*/
 
             //this.parametresPlan = new ParametresPlan(connexion, gestionPlan.planCAD);
 
-            Mainframe.Content = gestionProjet;
+            Mainframe.Content = modelisation;
 
 
             /// Test SYNCHRO export ///
@@ -120,8 +120,8 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void Initialize_Listeners()
         {
-            Initialize_Listeners_Auth();
-            Initialize_Listeners_GestionProjet();
+            //Initialize_Listeners_Auth();
+            //Initialize_Listeners_GestionProjet();
             //Initialize_Listeners_GestionClient();
             //Initialize_Listeners_ParametresClient();
             //Initialize_Listeners_ParametresPlan();
@@ -253,7 +253,8 @@ namespace Madera_MMB.View_Crtl
             {
                 if (gestionPlan.plan != null)
                 {
-                    this.modelisation = new Modelisation(connexion, gestionPlan.planCAD, gestionPlan.plan);
+                    //this.modelisation = new Modelisation(connexion, gestionPlan.planCAD, gestionPlan.plan);
+                    this.modelisation = new Modelisation();
                     Initialize_Listeners_Modelisation();
                     Mainframe.Content = modelisation;
                 }

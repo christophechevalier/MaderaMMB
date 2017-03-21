@@ -208,16 +208,15 @@ namespace Madera_MMB.CAD
             //    insertModule(module, plan.reference);
             //}
         }
-        #endregion
 
-        #region Privates methods
         /// <summary>
         /// Méthode qui permet de récupérer les metamodules
         /// </summary>
-        private List<MetaModule> listAllMetaModules()
+        public List<MetaModule> listAllMetaModules()
         {
+            conn.LiteCo.Open();
             List<MetaModule> listMetaModule = new List<MetaModule>();
-            SQLQuery = "SELECT * FROM metamodule WHERE statut = 1";
+            SQLQuery = "SELECT * FROM metamodule WHERE statut = 0";
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
                 using (SQLiteDataReader reader = command.ExecuteReader())
@@ -236,11 +235,11 @@ namespace Madera_MMB.CAD
                             reader.GetValue(5).ToString().GetType() + " || " +
                             reader.GetValue(6).GetType());
 
-                            Byte[] data = (Byte[])reader.GetValue(7);
-                            MetaModule metamodule = new MetaModule
+                            Byte[] data = (Byte[])reader.GetValue(3);
+                            /*MetaModule metamodule = new MetaModule
                             (
                                 reader.GetString(0),
-                                reader.GetString(1),
+                                Int32.Parse(reader.GetString(0)),
                                 reader.GetInt32(2),
                                 reader.GetInt32(3),
                                 getGammebyNom(reader.GetString(4)),
@@ -248,7 +247,7 @@ namespace Madera_MMB.CAD
                                 reader.GetBoolean(6),
                                 ToImage(data)
                             );
-                            listMetaModule.Add(metamodule);                          
+                            listMetaModule.Add(metamodule);*/
                         }
                     }
                     catch (SQLiteException ex)
@@ -256,10 +255,15 @@ namespace Madera_MMB.CAD
                         Trace.WriteLine(SQLQuery);
                         Trace.WriteLine(ex.ToString());
                     }
+                    conn.LiteCo.Close();
                     return listMetaModule;
                 }
             }
         }
+
+        #endregion
+
+        #region Privates methods
 
         /// <summary>
         /// Méthode qui permet de récupérer les modules par id

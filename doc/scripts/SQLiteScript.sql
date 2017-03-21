@@ -134,7 +134,6 @@ CREATE TABLE metamodule (
   refMetaModule TEXT PRIMARY KEY NOT NULL,
   label TEXT NOT NULL,
   prixHT INT NOT NULL,
-  nbSlot INT NOT NULL,
   image BLOB NULL,
   statut BOOLEAN NOT NULL,
   dateMaj TEXT NOT NULL,
@@ -192,7 +191,8 @@ CREATE TABLE slot (
 --
 -- Contenu de la table `metamodule`
 --
-insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateMaj, taille, ecart) VALUES 
+/*
+insert into metamodule (refMetaModule, label, prixHT, nomGamme, statut, dateMaj, taille, ecart) VALUES 
 ('M406587', 'Mur exterieur 2F', 390, NULL, 'Aluminium', 1, '2017-03-03 16:54:30.30', 12, 2),
 ('M406588', 'Mur exterieur 2F 1P', 420, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 12, 2),
 ('M406589', 'Mur exterieur 1P', 400, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 12, 2),
@@ -209,11 +209,12 @@ insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, 
 ('M406604', 'Mur exterieur 2P 1F', 500, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 23, 5),
 ('M406605', 'Mur exterieur 1F 1P', 420, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 15, 3),
 ('M40696', 'Mur exterieur NO', 410, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 19, 4);
- 
+ */
  
 --
 -- Contenu de la table `metaslot`
 --
+/*
  INSERT INTO metaslot (idMetaSlot, numSlotPosition, type, refMetaModule) VALUES
 (1, 1, 'F', 'M406587'),
 (2, 3, 'F', 'M406587'),
@@ -242,6 +243,7 @@ insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, 
 (27, 3, 'P', 'M406604'),
 (28, 1, 'F', 'M406605'),
 (29, 2, 'P', 'M406605');
+*/
 
 --
 -- Contenu de la table `commercial`

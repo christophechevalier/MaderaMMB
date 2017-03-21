@@ -14,24 +14,26 @@ namespace Madera_MMB.Model
         public string reference { get; set; }
         public string label { get; set; }
         public int prixHT { get; set; }
-        public int nbSlot { get; set; }
         public Gamme gamme { get; set; }
         public List<MetaSlot> metaslots { get; set; }
         public bool statut { get; set; }
         public BitmapImage image { get; set; }
+        public int taille { get; set; }
+        public int ecart { get; set; }
         #endregion
 
         #region Ctor
-        public MetaModule(string reference, string label, int prix, int nbslot, Gamme gamme, List<MetaSlot> metaslots, bool statut, BitmapImage image)
+        public MetaModule(string reference, string label, int prix, Gamme gamme, bool statut, BitmapImage image, int taille, int ecart)
         {
             this.reference = reference;
             this.label = label;
             this.prixHT = prix;
-            this.nbSlot = nbslot;
             this.gamme = gamme;
-            this.metaslots = metaslots;
+            this.metaslots = new List<MetaSlot>();
             this.statut = statut;
             this.image = image;
+            this.taille = taille;
+            this.ecart = ecart;
         }
         public MetaModule() { }
         #endregion

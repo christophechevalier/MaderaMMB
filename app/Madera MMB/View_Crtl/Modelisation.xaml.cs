@@ -9,6 +9,8 @@ using Madera_MMB.CAD;
 using System.Windows.Media;
 using System.Windows.Input;
 using System.Windows.Controls.Primitives;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Madera_MMB.View_Crtl
 {
@@ -80,10 +82,13 @@ namespace Madera_MMB.View_Crtl
         {
             //grid.ShowGridLines = true;
             grid.Margin = new Thickness(7);
-
-            /*********************************************************** BOUCHON *********************************************************************/
-            //planCad = new PlanCAD(new Connexion(), plan.projet, plan.couverture, plan.coupePrincipe, plan.plancher, plan.gamme, new MetamoduleCAD());
-            /*********************************************************** BOUCHON *********************************************************************/
+            
+            planCad = new PlanCAD(new Connexion(), new Projet(new Client(), new Commercial()));
+            /*List<MetaModule> listMeta = planCad.listAllMetaModules();
+            foreach (MetaModule meta in listMeta)
+            {
+                Trace.WriteLine(meta.label);
+            }*/
 
             slot.Click += new RoutedEventHandler(checkType);
             slot2.Click += new RoutedEventHandler(checkType);
