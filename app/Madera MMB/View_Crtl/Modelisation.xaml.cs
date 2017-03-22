@@ -32,12 +32,12 @@ namespace Madera_MMB.View_Crtl
         private StackPanel stackP = new StackPanel();
         private string mode = "default";
         private string modeAffich = "tracage";
+        List<MetaModule> listMeta;
 
-        /*********************************************************** BOUCHON *********************************************************************/
-        //private Plan plan = new Plan("Plan1", new Projet(), new Plancher("Bois", 50), new Couverture("Tuiles", 200), new CoupePrincipe(1, "Carré", 50, 50, 1000), new Gamme("Aucune", 0, "Aucun", "Aucunes", "Fer"));
+
+        private Plan plan { get; set; }
         private PlanCAD planCad { get; set; }
         private Connexion con { get; set; }
-    /*********************************************************** BOUCHON *********************************************************************/
 
         private Brush croix = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/croix.png", UriKind.RelativeOrAbsolute)));
         private Brush murh = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/mur_horizontal.png", UriKind.RelativeOrAbsolute)));
@@ -68,30 +68,34 @@ namespace Madera_MMB.View_Crtl
         private ButtonM murhaut = new ButtonM(ButtonM.type.Mur, 5, 5, 20, 1, null);
         #endregion
 
-        public Modelisation(/*Connexion con, Plan plan, PlanCAD planCad*/)
+        #region Constructeurs
+        public Modelisation()
         {
-            /*this.con = con;
-            this.plan = plan;
-            this.planCad = planCad;*/
             InitializeComponent();
-            //this.DataContext = this.con;
             initialize();
         }
 
+        public Modelisation(Connexion con, Plan plan, PlanCAD planCad)
+        {
+            this.con = con;
+            this.plan = plan;
+            this.planCad = planCad;
+            InitializeComponent();
+            this.DataContext = this.con;
+            initialize();
+        }
+        #endregion
+
+        #region Méthodes initialisation
         private void initialize()
         {
-            //grid.ShowGridLines = true;
             grid.Margin = new Thickness(7);
             
             planCad = new PlanCAD(new Connexion(), new Projet(new Client(), new Commercial()));
-            /*List<MetaModule> listMeta = planCad.listAllMetaModules();
-            foreach (MetaModule meta in listMeta)
-            {
-                Trace.WriteLine(meta.label);
-            }*/
+            listMeta = planCad.listAllMetaModules();
 
-            slot.Click += new RoutedEventHandler(checkType);
-            slot2.Click += new RoutedEventHandler(checkType);
+            //slot.Click += new RoutedEventHandler(checkType);
+            //slot2.Click += new RoutedEventHandler(checkType);
             tracer.Click += new RoutedEventHandler(changeMode);
             retirer.Click += new RoutedEventHandler(changeMode);
             Grid.SetColumn(listBox, 0);
@@ -150,7 +154,9 @@ namespace Madera_MMB.View_Crtl
 
             checkImage();
         }
+        #endregion
 
+        #region Méthodes privées
         private void placeComponent(ButtonM but)
         {
             /*Grid.SetColumn(but, but.x);
@@ -214,17 +220,24 @@ namespace Madera_MMB.View_Crtl
                     removeWall(but);
                 }
             }
-            else if (but.letype == ButtonM.type.SlotPorte)
+            else if (but.letype == ButtonM.type.SlotPorte || but.letype == ButtonM.type.SlotFen)
             {
-
-            }
-            else if (but.letype == ButtonM.type.SlotFen)
-            {
-
+                loadChoiceButton(but);
             }
             else if (but.letype == ButtonM.type.Slot)
             {
-                loadChoiceButton(but);
+                if (mode == "retirer")
+                {
+                    removeWall(but);
+                }
+                else if (mode == "tracer")
+                {
+
+                }
+                else
+                {
+                    loadChoiceButton(but);
+                }
             }
         }
 
@@ -238,17 +251,23 @@ namespace Madera_MMB.View_Crtl
             }*/
             stackP.Children.Clear();
 
-            Button butFen = new Button();
-            butFen.Height = 50;
-            butFen.Content = "Fenêtres";
-            butFen.Click += new RoutedEventHandler(loadFiltre);
-            Button butPor = new Button();
-            butPor.Height = 50;
-            butPor.Content = "Portes";
-            butPor.Click += new RoutedEventHandler(loadFiltre);
+            if (but.letype == ButtonM.type.Slot || but.letype == ButtonM.type.SlotFen)
+            {
+                Button butFen = new Button();
+                butFen.Height = 50;
+                butFen.Content = "Fenêtres";
+                butFen.Click += new RoutedEventHandler(loadFiltre);
+                stackP.Children.Add(butFen);
+            }
 
-            stackP.Children.Add(butFen);
-            stackP.Children.Add(butPor);
+            if (but.letype == ButtonM.type.Slot || but.letype == ButtonM.type.SlotPorte)
+            {
+                Button butPor = new Button();
+                butPor.Height = 50;
+                butPor.Content = "Portes";
+                butPor.Click += new RoutedEventHandler(loadFiltre);
+                stackP.Children.Add(butPor);
+            }
 
             MainGrid.Children.Add(stackP);
         }
@@ -288,11 +307,13 @@ namespace Madera_MMB.View_Crtl
             if (mode == "tracer")
             {
                 retirer.IsChecked = false;
+                MainGrid.Children.Remove(stackP);
                 loadListMur();
             }
             else if (mode == "retirer" || mode == "default") {
                 tracer.IsChecked = false;
                 MainGrid.Children.Remove(listBox);
+                MainGrid.Children.Remove(stackP);
             }
         }
 
@@ -300,7 +321,17 @@ namespace Madera_MMB.View_Crtl
         {
             MainGrid.Children.Remove(listBox);
             listBox.Items.Clear();
-            //Recupérer la liste des possiblités sur la BDD
+
+            foreach (MetaModule meta in listMeta)
+            {
+                // La taille sera de 1 pour des modules de mur à placer
+                // Changer le mode d'affichage
+                if (meta.taille == 12 && meta.label.Contains("Mur"))
+                {
+                    listBox.Items.Add(meta);
+                }
+            }
+            /*
             ListBoxItem item1 = new ListBoxItem();
             item1.Content = "Yop1 !";
             ListBoxItem item2 = new ListBoxItem();
@@ -311,7 +342,7 @@ namespace Madera_MMB.View_Crtl
             listBox.Items.Add(item1);
             listBox.Items.Add(item2);
             listBox.Items.Add(item3);
-
+            */
             MainGrid.Children.Add(listBox);
         }
 
@@ -331,7 +362,9 @@ namespace Madera_MMB.View_Crtl
             if (isInside(but))
             {
                 but.letype = ButtonM.type.Rien;
+                but.texture = null;
                 checkImage();
+                placeSlot();
             }
         }
 
@@ -572,5 +605,6 @@ namespace Madera_MMB.View_Crtl
                 checkImage();
             }
         }
+        #endregion
     }
 }

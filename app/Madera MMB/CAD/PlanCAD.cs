@@ -231,23 +231,27 @@ namespace Madera_MMB.CAD
                             reader.GetValue(1).GetType() + " || " +
                             reader.GetValue(2).GetType() + " || " +
                             reader.GetValue(3).GetType() + " || " +
-                            reader.GetValue(4).ToString().GetType() + " || " +
-                            reader.GetValue(5).ToString().GetType() + " || " +
-                            reader.GetValue(6).GetType());
+                            reader.GetValue(4).GetType() + " || " +
+                            reader.GetValue(5).GetType() + " || " +
+                            reader.GetValue(6).GetType() + " || " +
+                            reader.GetValue(7).GetType() + " || " +
+                            reader.GetValue(8).GetType());
 
                             Byte[] data = (Byte[])reader.GetValue(3);
-                            /*MetaModule metamodule = new MetaModule
+                            MetaModule metaModule = new MetaModule
                             (
                                 reader.GetString(0),
-                                Int32.Parse(reader.GetString(0)),
+                                reader.GetString(1),
                                 reader.GetInt32(2),
-                                reader.GetInt32(3),
-                                getGammebyNom(reader.GetString(4)),
-                                this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
-                                reader.GetBoolean(6),
-                                ToImage(data)
+                                ToImage(data),
+                                reader.GetBoolean(4),
+                                reader.GetString(5),
+                                getGammebyNom(reader.GetString(6)),
+                                reader.GetInt32(7),
+                                reader.GetInt32(8)
+
                             );
-                            listMetaModule.Add(metamodule);*/
+                            listMetaModule.Add(metaModule);
                         }
                     }
                     catch (SQLiteException ex)
@@ -345,7 +349,9 @@ namespace Madera_MMB.CAD
                             reader.GetValue(3).GetType() + " || " +
                             reader.GetValue(4).GetType() + " || " +
                             reader.GetValue(5).GetType() + " || " +
-                            reader.GetValue(6).GetType());
+                            reader.GetValue(6).GetType() + " || " +
+                            reader.GetValue(7).GetType() + " || " +
+                            reader.GetValue(8).GetType());
 
                             Byte[] data = (Byte[])reader.GetValue(4);
                             metaModule = new MetaModule
@@ -353,11 +359,13 @@ namespace Madera_MMB.CAD
                                 reader.GetString(0),
                                 reader.GetString(1),
                                 reader.GetInt32(2),
-                                reader.GetInt32(3),
-                                getGammebyNom(reader.GetString(7)),
-                                this.metaslotCAD.getMetaslotByMetaModule(reader.GetString(0)),
-                                reader.GetBoolean(5),
-                                ToImage(data)
+                                ToImage(data),
+                                reader.GetBoolean(4),
+                                reader.GetString(5),
+                                getGammebyNom(reader.GetString(6)),
+                                Int32.Parse(reader.GetString(7)),
+                                Int32.Parse(reader.GetString(8))
+                                
                             );
                         }
                     }

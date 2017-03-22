@@ -48,7 +48,8 @@ namespace Madera_MMB.Model
         }
         public int getNbSlot()
         {
-            return this.metaModule.nbSlot;
+            //return this.metaModule.nbSlot;
+            return 0;
         }
         public string getRefMetaModule()
         {
