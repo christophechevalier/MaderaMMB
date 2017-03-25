@@ -15,20 +15,15 @@ namespace Madera_MMB.CAD
         private List<Devis> listeAllDevisParPlan { get; set; }
         public Connexion conn { get; set; }
         public Plan plan { get; set; }
-        public Projet projet { get; set; }
         public string SQLQuery { get; set; }
-        public ClientCAD clientCAD { get; set; }
-        public CommercialCAD commercialCAD { get; set; }
         #endregion
 
         #region Ctor
-        public DevisCAD(Connexion laConnexion, Projet unprojet, ClientCAD clientCAD, CommercialCAD commercialCAD)
+        public DevisCAD(Connexion laConnexion, Plan plan)
         {
-            this.projet = unprojet;
-            Connexion conn = laConnexion;
+            this.plan = plan;
+            conn = laConnexion;
             listeAllDevisParPlan = new List<Devis>();
-            this.clientCAD = clientCAD;
-            this.commercialCAD = commercialCAD;
         }
         #endregion
 

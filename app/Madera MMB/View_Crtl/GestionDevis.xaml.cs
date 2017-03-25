@@ -1,4 +1,7 @@
-﻿using Madera_MMB.Lib.Tools;
+﻿using Madera_MMB.CAD;
+using Madera_MMB.Lib;
+using Madera_MMB.Lib.Tools;
+using Madera_MMB.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,13 +35,23 @@ namespace Madera_MMB.View_Crtl
     public partial class GestionDevis : Page
     {
         #region Properties
-
+        private Plan plan { get; set; }
+        private DevisCAD devisCAD { get; set; }
+        private Client client { get; set; }
+        private string nomCommerc { get; set; }
+        private Connexion connexion { get; set; }
         #endregion
 
         #region Constructeur
-        public GestionDevis()
+        public GestionDevis(Connexion conn, Plan plan, string nomComm, Client client)
         {
             InitializeComponent();
+            this.plan = plan;
+            nomCommerc = nomComm;
+            this.client = client;
+            connexion = conn;
+
+            devisCAD = new DevisCAD(connexion, plan);
             Initialize_Labels();
             Initialize_Devis();
         }

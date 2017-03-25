@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Madera_MMB.Model
 {
-    class Plan
+    public class Plan
     {
         #region properties
         public string reference { get; set; }
