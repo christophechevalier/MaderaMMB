@@ -9,7 +9,6 @@ CREATE TABLE commercial (
   motDePasse TEXT NOT NULL
 );
 
-
 -- Table Client OK
 
 CREATE TABLE client (
@@ -45,7 +44,7 @@ CREATE TABLE couverture (
   prixHT INT NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj TEXT NOT NULL
 );
 
 -- Table CoupePrincipe OK
@@ -58,7 +57,7 @@ CREATE TABLE coupePrincipe (
   prixHT INTEGER NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj TEXT NOT NULL
 );
 
 -- Table Plancher OK
@@ -68,7 +67,7 @@ CREATE TABLE plancher (
   prixHT INTEGER NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj TEXT NOT NULL
 );
 
 
@@ -82,7 +81,7 @@ CREATE TABLE gamme (
   qualiteHuisserie TEXT NOT NULL,
   image LONG BLOB NOT NULL,
   statut INTEGER NOT NULL,
-  dateModification datetime NOT NULL
+  dateMaj TEXT NOT NULL
 );
 
 -- Table Plan OK
@@ -93,14 +92,14 @@ CREATE TABLE plan (
   dateCreation datetime NOT NULL,
   dateModification datetime NOT NULL,
   refProjet TEXT NOT NULL,
-  typeCouverture TEXT NOT NULL,
-  idCoupe int NOT NULL,
   typePlancher TEXT NOT NULL,
+  typeCouverture TEXT NOT NULL,
+  idCoupe INT NOT NULL,
   nomGamme TEXT NOT NULL,
   FOREIGN KEY (refProjet) REFERENCES projet,
+  FOREIGN KEY (typePlancher) REFERENCES plancher,
   FOREIGN KEY (typeCouverture) REFERENCES couverture,
   FOREIGN KEY (idCoupe) REFERENCES coupePrincipe,
-  FOREIGN KEY (typePlancher) REFERENCES plancher,
   FOREIGN KEY (nomGamme) REFERENCES gamme
 );
 
@@ -138,7 +137,7 @@ CREATE TABLE metamodule (
   nbSlot INT NOT NULL,
   image BLOB NULL,
   statut BOOLEAN NOT NULL,
-  dateModification datetime NOT NULL,
+  dateMaj TEXT NOT NULL,
   nomGamme TEXT NOT NULL,
   FOREIGN KEY (nomGamme)REFERENCES gamme
 ); 
@@ -192,15 +191,37 @@ CREATE TABLE MetaModul_has_MetaSlot (
   FOREIGN KEY (idMetaSlot) REFERENCES MetaSlot
 ); 
 
+  
+--
+-- Catalogue
+--
+/*
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('3562989509476444', 'Porte simple battant', 97, 3, 'Bois ancien', 1, '2017-03-03 16:54:30.30');
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('30264985106539', 'Porte double battant', 32, 3, 'Dorré chic', 1, 2017-03-03 16:54:30);
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('3553909364809977', 'Fenêtre carreaux simple', 24, 1, 'Ebene obscur', 1, 2017-03-03 16:54:30);
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('201455480736282', 'Fenêtre carreaux incurvés', 95, 2, 'Dorré chic', 1, 2017-03-03 16:54:30);
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('4913679059729102', 'Mur solide 1m', 16, 0, 'Bois ancien', 1, 2017-03-03 16:54:30);
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('670645194056361597', 'Mur solide long ', 26, 5, 'Dorré chic', 1, 2017-03-03 16:54:30);
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('4175002133436136', 'Mur léger 1m', 30, 0, 'Bois ancien', 1, 2017-03-03 16:54:30);
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('201443874685331', 'Mur léger long', 55, 5, 'Dorré chic', 1, 2017-03-03 16:54:30);
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('5485794656214823', 'Fenêtre mono-vitre simple', 35, 4, 'Bois ancien', 1, 2017-03-03 16:54:30);
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('30344920947781', 'Fenêtre mono-vitre incurvée', 54, 1, 'Bois ancien', 1, 2017-03-03 16:54:30);
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('4844260374691931', 'Porte ancienne double battant', 79, 3, 'Ebene obscur', 1, 2017-03-03 16:54:30);
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('3559747487224406', 'Porte amovible', 39, 5, 'Bois ancien', 1, 2017-03-03 16:54:30);
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('3559747487225506', 'Double porte simple', 39, 0, 'Bois ancien', 1, 2017-03-03 16:54:30);
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('3559747487225666', 'Baie vitrée 1m', 39, 0, 'Bois ancien', 1, 2017-03-03 16:54:30);
+insert into metamodule (refMetaModule, label, prixHT, nbSlot, nomGamme, statut, dateModification) values ('3559747488225406', 'Porte amovible double', 39, 5, 'Bois ancien', 1, 2017-03-03 16:54:30);
+ */ 
+ 
 --
 -- Contenu de la table `commercial`
 --
-
+/*
 INSERT INTO commercial (refCommercial, nom, prenom, email, motDePasse) VALUES
 ('COM001', 'Schwarze', 'Alexandre', 'alex@gmail.com', 'titi'),
 ('COM002', 'Crocco', 'David', 'david@gmail.com', 'toto'),
 ('COM003', 'Chevalier', 'Christophe', 'monemail@gmail.com', 'mdp');
-
+*/
 
 --
 -- Contenu de la table `client`
@@ -225,14 +246,6 @@ INSERT INTO projet (refProjet, nom, dateCreation, dateModification, refClient, r
 ('CCJP000005', 'Maison Secondaire', '14-10-2016', '14-10-2016', 'AT000001', 'COM003');
 
 --
--- Contenu de la table `gamme`
---
-
-INSERT INTO gamme (nomGamme, offrePromo, typeIsolant, typeFinition, qualiteHuisserie, image, statut, dateModification) VALUES
-("Aluminium", 2, "Metal", "Argent", "Haut de gamme", "", "Actif", "01-01-2017"),
-("Eco", 5, "Bois", "Chêne massif", "", "Inactif", "05-09-2016");
-
---
 -- Contenu de la table `plan`
 --
 
@@ -240,63 +253,50 @@ INSERT INTO plan (refPlan, label, dateCreation, dateModification, refProjet, typ
 ('CCAT000001-P01', 'Test 1', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCAT000001', 'Bois', 'Ardoise pourpre', 2, 'Aluminium'),
 ('CCAT000001-P02', 'Test 2', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCAT000001', 'Bois', 'Ardoise pourpre', 3, 'Aluminium'),
 ('CCAT000001-P03', 'Test 3', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCAT000001', 'Bois', 'Ardoise pourpre', 4, 'Aluminium'),
-('CCAT000002-P01', 'Test 1', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCMP000002', 'Bois', 'Ardoise pourpre', 2, 'Aluminium'),
-('CCAT000002-P02', 'Test 2', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCMP000002', 'Bois', 'Ardoise pourpre', 3, 'Aluminium'),
-('CCAT000002-P03', 'Test 3', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCMP000002', 'Bois', 'Ardoise pourpre', 4, 'Aluminium');
+('CCAT000002-P01', 'Test 4', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCMP000002', 'Bois', 'Ardoise pourpre', 2, 'Aluminium'),
+('CCAT000002-P02', 'Test 5', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCMP000002', 'Bois', 'Ardoise pourpre', 3, 'Aluminium'),
+('CCAT000002-P03', 'Test 6', '2017-03-03 16:54:30.30', '2017-03-03 16:54:30.30', 'CCMP000002', 'Bois', 'Ardoise pourpre', 4, 'Aluminium');
 
 --
 -- Contenu de la table `module`
 --
 
 INSERT INTO module (coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, refPlan) VALUES
-(25, 35, 5, 0, '201443874685331', "CCAT000001-P01"),
-(44, 44, 4, 0, '201443874685596', "CCAT000001-P01"),
-(33, 33, 0, 3, '201443874698634', "CCAT000001-P01");
+(25, 35, 5, 0, '201443874685331', 'CCAT000001-P01'),
+(44, 44, 4, 0, '201443874685331', 'CCAT000001-P01'),
+(33, 33, 0, 3, '201443874685331', 'CCAT000001-P01');
+
+
+
 
 --
 -- Contenu de la table `couverture`
 --
-
+/*
 INSERT INTO couverture (typeCouverture, prixHT, image) VALUES
 ('Ardoise', '20', ''),
 ('Tuiles', '15', ''),
 ('Chaume', '5', ''),
 ('Bois', '10', ''),
 ('Pierre', '30', '');
-
+*/
 --
 -- Contenu de la table `coupeprincipe`
 --
-
+/*
 INSERT INTO coupeprincipe (label, longueur, largeur, prixHT, image) VALUES
 ('L', 50, 50, 45000, ''),
 ('T', 50, 50, 50000, ''),
 ('carré', 50, 50, 35000, ''),
 ('rectangle', 50, 50, 35000, '');
+*/
+
 
 --
 -- Contenu de la table `plancher`
 --
-
+/*
 INSERT INTO plancher (typePlancher, prixHT, image) VALUES
 ('Bois', 50, ''),
 ('Carrelage', 90, '');
-
---
--- Contenu de la table `devis`
---
-
-INSERT INTO devis (refDevis, nom, etat, quantite, unite, dateCreation, margeCommercial, margeEntreprise, prixTotalHT, prixTotalTTC, refPlan, refProjet, refClient, refCommercial) VALUES
-("Ref001", "Devis 1", "Brouillon", "1", "1", "01-03-2017", 5, 10, 250000, 325000, "CCAT000001-P01", "CCAT000001", "AT000001","COM003"),
-("Ref002", "Devis 2", "Facturé", "1", "2", "01-01-2017", 4, 12, 150000, 175000, "CCAT000002-P03", "CCMP000002", "AT000001", "COM003");
-
---
--- Contenu de la table `MetaModule`
---
-
-INSERT INTO MetaModule (refMetaModule, label, prixHT, nbSlot, nomGamme) VALUES 
-('201443874685331', 'Porte simple battant', 97, 3, 'Aluminium'),
-('201443874685596', 'Porte double battant', 32, 3, 'Aluminium'),
-('201443874698634', 'Porte ancienne double battant', 79, 3, 'Aluminium');
-
-
+*/

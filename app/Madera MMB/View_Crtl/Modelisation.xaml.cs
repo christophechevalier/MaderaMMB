@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Madera_MMB.Lib.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -12,7 +14,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Drawing;
+using Madera_MMB.Lib;
+using Madera_MMB.CAD;
+using System.Diagnostics;
+using System.IO;
+using Madera_MMB.Model;
+using System.ComponentModel;
 
 namespace Madera_MMB.View_Crtl
 {
@@ -21,7 +28,6 @@ namespace Madera_MMB.View_Crtl
     /// </summary>
     public partial class Modelisation : Page
     {
-
         //private Grid grid = new Grid();
         //private System.Drawing.Image croix = new Image();
         //private System.Drawing.Image murh = new Image();
@@ -31,11 +37,12 @@ namespace Madera_MMB.View_Crtl
         //private System.Drawing.Image anglebg = new Image();
         //private System.Drawing.Image anglehg = new Image();
 
-        public Modelisation()
+        public Modelisation(Connexion co, PlanCAD plancad, Plan unplan)
         {
             InitializeComponent();
-            //initialize();
+            Trace.WriteLine(unplan.label);
 
+            //initialize();
         }
 
     //    private void initialize()

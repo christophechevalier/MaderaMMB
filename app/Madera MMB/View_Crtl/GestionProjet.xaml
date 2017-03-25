@@ -173,12 +173,19 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Image Name="Logo" 
-                   Grid.Column="0" 
-                   Source="{StaticResource Logo}" 
-                   Grid.Row="0" 
-                   Width="auto" 
-                   Margin="10" />
+            <Image x:Name="logo" DataContext="{Binding conn}">
+                <Image.Style>
+                    <Style TargetType="Image">
+
+                        <Setter Property="Source" Value="{StaticResource LogoOff}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding MySQLconnected}" Value="True">
+                                <Setter Property="Source" Value="{StaticResource Logo}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
         </Grid>
         <!-- Fin Déclaration Logo Madera -->
 
@@ -328,28 +335,29 @@
                       Grid.RowSpan="2" 
                       Grid.ColumnSpan="1"
                       >
-                <StackPanel Width="auto">
-
-                    <ItemsControl x:Name="WrapProjets" ItemsSource="{Binding Projets}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel  Orientation="Horizontal">
-                                </WrapPanel>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <!--DataContext="{Binding Projets}"-->
-                                <ToggleButton Background="White" Width="120" Height="120" Margin="20,20,20,20" Click="Btn_Select_Projet_Client_Click">
-                                    <StackPanel>
-                                        <Image Width="70" Height="70" VerticalAlignment="Top" Source="../Lib/Images/folder.png"/>
-                                        <TextBlock Text="{Binding nom}" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-                                    </StackPanel>
-                                </ToggleButton>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
+                <ScrollViewer Width="auto" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Width="auto" Cursor="Hand">
+                        <ItemsControl x:Name="WrapProjets" ItemsSource="{Binding Projets}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel  Orientation="Horizontal">
+                                    </WrapPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <!--DataContext="{Binding Projets}"-->
+                                    <ToggleButton Background="White" Width="120" Height="120" Margin="20,20,20,20" Click="Btn_Select_Projet_Client_Click">
+                                        <StackPanel>
+                                            <Image Width="70" Height="70" VerticalAlignment="Top" Source="../Lib/Images/folder.png"/>
+                                            <TextBlock Text="{Binding nom}" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </ToggleButton>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ScrollViewer>
             </GroupBox>
         </Grid>
         <!-- Fin Déclaration Liste Sélection Gestion Projet -->

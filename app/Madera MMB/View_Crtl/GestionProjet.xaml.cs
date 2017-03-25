@@ -24,6 +24,7 @@ namespace Madera_MMB.View_Crtl
         private ProjetCAD projetCAD { get; set; }
         private GestionPlan gestionPlan { get; set; }
         public ClientCAD clientCAD { get; set; }
+        public Projet proj { get; set; }
         #endregion
 
         #region Constructeur
@@ -41,17 +42,10 @@ namespace Madera_MMB.View_Crtl
             clientCAD = new ClientCAD(this.connexion);
             projetCAD = new ProjetCAD(this.connexion, this.commercial, clientCAD.Clients);
             DataContext = projetCAD;
-            // Appel des méthodes dans le ctor
-            Initialize_Menu_Wrapper();
         }
         #endregion
 
         #region Initialisation Container
-        private void Initialize_Menu_Wrapper()
-        {
-            // TODO : Faire en sorte que les boutons du menu soit activé lorsqu'on clic dessus
-        }
-
         private void Initialize_Dialog_Creation_Projet()
         {
             if (projetCAD.Projets != null)
@@ -108,8 +102,8 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Listeners
-    // Afficher la liste des clients existants
-    private void Btn_List_Client_Click(object sender, RoutedEventArgs e)
+        // Afficher la liste des clients existants
+        private void Btn_List_Client_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
         }
@@ -142,10 +136,6 @@ namespace Madera_MMB.View_Crtl
         private void Btn_Retour_Click(object sender, RoutedEventArgs e)
         {
         }
-        // Sélectionner un client pour créer un projet
-        private void Select_Nom_Client_Click(object sender, RoutedEventArgs e)
-        {
-        }
         // Editer un client
         private void Btn_Editer_Client_Click(object sender, RoutedEventArgs e)
         {
@@ -154,7 +144,7 @@ namespace Madera_MMB.View_Crtl
         private void Btn_Select_Projet_Client_Click(object sender, RoutedEventArgs e)
         {
             ToggleButton btn = sender as ToggleButton;
-            Projet proj = (Projet)btn.DataContext;
+            proj = (Projet)btn.DataContext;
 
             foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(WrapProjets))
             {

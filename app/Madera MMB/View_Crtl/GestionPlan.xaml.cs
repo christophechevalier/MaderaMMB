@@ -38,7 +38,9 @@ namespace Madera_MMB.View_Crtl
         #region Properties
         private Connexion connexion { get; set; }
         private Projet projet { get; set; }
-        private PlanCAD planCAD { get; set; }
+        public PlanCAD planCAD { get; set; }
+        private ProjetCAD projetCAD { get; set; }
+        public Plan plan { get; set; }
         #endregion
 
         #region Constructeur
@@ -53,120 +55,82 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             connexion = co;
             projet = unprojet;
-            DataContext = connexion;
-
             planCAD = new PlanCAD(this.connexion, this.projet);
-
-            // Appel des méthodes dans le ctor
-            InitializeComponent();
-            Initialize_Plan_Wrapper();
-            planCAD.ListAllPlansByProject();
-        }
-        #endregion
-
-        #region Initialisation Container
-        /// <summary>
-        /// Méthode pour parcourir la liste des plans d'un projet existant en bdd
-        /// Pour chaque plan sélectionné, on aura la date de création/modification et sa base plan, 
-        /// </summary>
-        private void Initialize_Plan_Wrapper()
-        {
-            if (planCAD.plans != null)
-            {
-                foreach (var plan in planCAD.plans)
-                {
-                    ToggleButton UnPlan = new ToggleButton();
-                    UnPlan.Background = Brushes.White;
-                    UnPlan.Width = 120;
-                    UnPlan.Height = 120;
-                    Thickness margin = UnPlan.Margin;
-                    margin.Left = 20;
-                    margin.Right = 20;
-                    margin.Bottom = 20;
-                    margin.Top = 20;
-                    UnPlan.Margin = margin;
-
-                    Image img = new Image();
-                    img.Width = 70;
-                    img.Height = 70;
-                    img.VerticalAlignment = VerticalAlignment.Top;
-                    string source = "../Lib/Images/house_black.png";
-                    Uri imageUri = new Uri(source, UriKind.Relative);
-                    BitmapImage imageBitmap = new BitmapImage(imageUri);
-                    img.Source = imageBitmap;
-
-                    TextBlock tb = new TextBlock();
-                    tb.Text = plan.label;
-                    tb.VerticalAlignment = VerticalAlignment.Bottom;
-                    tb.HorizontalAlignment = HorizontalAlignment.Center;
-                    tb.Height = 50;
-
-                    StackPanel sp = new StackPanel();
-                    sp.Children.Add(img);
-                    sp.Children.Add(tb);
-
-                    UnPlan.Content = sp;
-
-                    // Active un plan lors de la sélection
-                    UnPlan.Click += delegate(object sender, RoutedEventArgs e)
-                    {
-                        ToggleButton active = sender as ToggleButton;
-                        foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(WrapPlans))
-                        {
-                            tgbt.IsChecked = false;
-                        }
-                        active.IsChecked = true;
-
-                        // Value Date création
-                        lblDateCreation.Content = "";
-                        lblDateCreation.Content = plan.creation;
-
-                        // TODO : Value Statut Dernier Devis
-                        lblStatut.Content = "?";
-
-                        // Value Date modification
-                        lblDateModification.Content = "";
-                        lblDateModification.Content = plan.modification;
-
-                        // Value Base Plan
-                        lblBasePlan.Content = "";
-                        lblBasePlan.Content = "?";
-                    };
-                    WrapPlans.Children.Add(UnPlan);
-                }
-            }
-
+            DataContext = planCAD;
         }
         #endregion
 
         #region Listeners
         private void BtnCréerPlan_Click(object sender, RoutedEventArgs e)
         {
-
+            Button btn = sender as Button;
         }
 
         private void BtnOuvrirPlan_Click(object sender, RoutedEventArgs e)
         {
-
+            Button btn = sender as Button;
         }
 
         private void BtnConsulterDevis_Click(object sender, RoutedEventArgs e)
         {
-
+            Button btn = sender as Button;
         }
 
         private void BtnRetour_Click(object sender, RoutedEventArgs e)
         {
-
+            Button btn = sender as Button;
         }
 
         private void BtnCopierPlan_Click(object sender, RoutedEventArgs e)
         {
+            Button btn = sender as Button;
+            Plan plan2 = plan;
+            plan2.label += "(copy)";
+            plan2.reference = generateKey(projet, 1);
+            Trace.WriteLine("plan2 Reference : " + plan2.reference);
 
+            planCAD.InsertPlan(plan2);
+        }
+
+        private void Btn_Select_Plan_Projet_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleButton btn = sender as ToggleButton;
+            plan = (Plan)btn.DataContext;
+
+            foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(WrapPlans))
+            {
+                tgbt.IsChecked = false;
+            }
+            btn.IsChecked = true;
+
+            // Value Date création
+            lblDateCreation.Content = "";
+            lblDateCreation.Content = plan.creation;
+
+            // TODO : Value Statut Dernier Devis
+            lblStatut.Content = "?";
+
+            // Value Date modification
+            lblDateModification.Content = "";
+            lblDateModification.Content = plan.modification;
+
+            // Value Base Plan
+            lblBasePlan.Content = "";
+            lblBasePlan.Content = "?";
         }
         #endregion
 
         #region Tools
+        public string generateKey(Projet projet, int x)
+        {
+            int count = 0;
+            for (int i = 0; i < planCAD.Plans.Count; i++)
+            {
+                count++;
+            }
+
+            return projet.reference + "-P" + (count + x);
+        }
         private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
         {
             if (depObj != null)

@@ -8,45 +8,16 @@
 	Title="ParametresPlan">
 
     <Page.Resources>
-
-        <!-- Image Logo -->
-        <ImageSource x:Key="Logo">../Lib/logo_madera.png</ImageSource>
-        <ImageSource x:Key="LogoOff">../Lib/logo_offline.png</ImageSource>
-
-        <Style TargetType="{x:Type GridViewColumnHeader}">
-            <!-- Header List style -->
-            <Setter Property="HorizontalContentAlignment" Value="Left" />
-        </Style>
-
-       
-
-        <Style TargetType="{x:Type Label}">
-            <Setter Property="FontSize" Value="12" />
-        </Style>
-
-        <Style TargetType="{x:Type Button}">
-            <!-- Bouton style -->
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="bdr" BorderBrush="Black" BorderThickness="1 2 2 1" CornerRadius="2" Margin="3" Background="LightGray">
-                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Lib/Tools/Template_Madera2.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Page.Resources>
-
 
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.25*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
@@ -56,20 +27,16 @@
             <RowDefinition Height="0.25*" />
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="2" Margin="-15,0,-15,0"/>
+        <!-- Début Déclaration Logo Madera -->
+        <Grid x:Name="ImgContainer" Grid.Row="0">
 
-        <Grid x:Name="ImgContainer"  Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.30*" />
-                <ColumnDefinition Width="0.50*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            
-            <!--<Image Name="Logo" Grid.Column="0" Source="{DynamicResource Logo}" Grid.Row="0" Width="Auto" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10"/>-->
-            <!-- Image Logo -->
             <Image x:Name="logo" Grid.Column="0" Grid.Row="0" Width="Auto" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10">
                 <Image.Style>
                     <Style TargetType="Image">
@@ -83,76 +50,218 @@
                     </Style>
                 </Image.Style>
             </Image>
-
-
-            <Viewbox Grid.Column="1" HorizontalAlignment="Left" Height="40" VerticalAlignment="Center" Width="Auto" Margin="10,10,10,10">
-                <Label Content="Paramètres du plan : " FontWeight="ExtraBold" FontSize="10"/>
-            </Viewbox>
         </Grid>
+        <!-- Fin Déclaration Logo Madera -->
 
-        <Grid Grid.Row="2" Grid.Column="0" >
+        <!-- Début Déclaration Menu Gestion Liste Client-->
+        <Grid x:Name="MenuGestionClient"
+              Margin="5 5 5 5"
+              Grid.Row="2"
+              Grid.Column="0" 
+              Grid.RowSpan="2">
+
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.25*"/>
-                <ColumnDefinition Width="0.25*"/>
-                <ColumnDefinition Width="0.25*"/>
-                <ColumnDefinition Width="0.25*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.25*" />
             </Grid.ColumnDefinitions>
 
-            <Border  BorderBrush="Black" BorderThickness="2" Grid.Column="0" Grid.RowSpan="2" Margin="-5,0,0,0"/>
+            <!-- Début Déclaration Menu Gestion Liste Client -->
+            <Grid x:Name="Menu"
+                  Background="DimGray"
+                  Grid.Column="1"
+                  Grid.Row="0"
+                  VerticalAlignment="Stretch"
+                  HorizontalAlignment="Stretch"
+                  Grid.RowSpan="2"
+                  Grid.ColumnSpan="1">
 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.1*" />
+                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="0.1*" />
+                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="0.1*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.1*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="0.1*" />
+                </Grid.ColumnDefinitions>
 
-            <Button x:Name="BtnConfirmerParamPlan"
-                    HorizontalAlignment="Stretch" 
-                    Grid.Row="0" 
-                    VerticalAlignment="Stretch" 
-                    Margin="10,10,10,10" 
-                    Content="Confirmer"
-                    Click="BtnConfirmerParamPlan_Click"/>
-            <Button x:Name="BtnRetour" 
-                    Content="Retour"
-                    HorizontalAlignment="Stretch" 
-                    Grid.Row="1" 
-                    VerticalAlignment="Stretch" 
-                    Margin="10,10,10,10"
-                    Click="BtnRetour_Click"/>
-
-            <Viewbox  Grid.Row="0" Grid.Column="1"  Width="Auto" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Label Content=" Nom du client : " FontWeight="Bold" FontSize="5"/>
-            </Viewbox>
-
-            <Viewbox  Grid.Row="1" Grid.Column="1"  Width="Auto" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Label Content=" Statut actuel : " FontWeight="Bold" FontSize="5"/>
-            </Viewbox>
-
-            <Viewbox Grid.Row="0" Grid.Column="3"  Width="Auto" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Label  Content=" Date de création : " FontWeight="Bold" FontSize="5"/>
-            </Viewbox>
-
-            <Viewbox Grid.Row="1" Grid.Column="3"  Width="Auto" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Label Content=" Nom du Commercial : " FontWeight="Bold" FontSize="5"/>
-            </Viewbox>
+                <Viewbox Grid.Row="1"
+                         Grid.Column="1"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button x:Name="BtnConfirmerParamPlan"
+                            FontSize="20"
+                            Width="400"
+                            Height="60"
+                            Content="Confirmer">
+                    </Button>
+                </Viewbox>
+                <Viewbox Grid.Row="3"
+                         Grid.Column="1"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button x:Name="BtnRetour"
+                            FontSize="20"
+                            Width="400"
+                            Height="60"
+                            Content="Retour">
+                    </Button>
+                </Viewbox>
+            </Grid>
+            <!-- Fin Déclaration Menu Gestion Liste Client -->
+            <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1 2 2 1" />
 
         </Grid>
+        <!-- Fin Déclaration Menu Gestion Liste Client -->
+
+        <!-- Début du Footer -->
+        <Grid Grid.Row="2"
+              Margin="0 5 5 5"
+              Grid.Column="2"
+              Grid.RowSpan="1">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="29*" />
+                <RowDefinition Height="11*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Background="DimGray"
+                  Grid.Column="0" 
+                  VerticalAlignment="Stretch" 
+                  HorizontalAlignment="Stretch" 
+                  Grid.RowSpan="2">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.05*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.3*" />
+                    <ColumnDefinition Width="0.4*" />
+                    <ColumnDefinition Width="0.3*" />
+                    <ColumnDefinition Width="0.4*" />
+                    <ColumnDefinition Width="0.05*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Nom du client -->
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="1"
+                         Grid.Column="1" 
+                         HorizontalAlignment="Right" 
+                         VerticalAlignment="Center">
+                    <Label Content="Nom du client :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="1"
+                         Grid.Column="2" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblNomClient" FontSize="6"/>
+                </Viewbox>
+                <!-- Date de création -->
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="1" 
+                         HorizontalAlignment="Right" 
+                         VerticalAlignment="Center">
+                    <Label Content="Date de création :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="2" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblDateCreation" FontSize="6" />
+                </Viewbox>
+                <!-- Statut actuel -->
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="5"
+                         Grid.Column="1" 
+                         HorizontalAlignment="Right" 
+                         VerticalAlignment="Center">
+                    <Label Content="Statut actuel :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="5"
+                         Grid.Column="2" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblStatut" FontSize="6"/>
+                </Viewbox>
+                <!-- Date de dernière mise à jour -->
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="3" 
+                         HorizontalAlignment="Right" 
+                         VerticalAlignment="Center">
+                    <Label Content="Dernière mise à jour :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="3"
+                         Grid.Column="4" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblDateModification" FontSize="6" />
+                </Viewbox>
+                <!-- Nom du commercial -->
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="5"
+                         Grid.Column="3" 
+                         HorizontalAlignment="Right" 
+                         VerticalAlignment="Center">
+                    <Label Content="Nom du commercial :" FontSize="6" />
+                </Viewbox>
+                <Viewbox Margin="15,0,0,0"
+                         Grid.Row="5"
+                         Grid.Column="4" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center">
+                    <Label x:Name="lblNomCommercial" FontSize="6" />
+                </Viewbox>
+
+            </Grid>
+
+            <Border BorderBrush="Black" BorderThickness="1 2 2 1" Grid.RowSpan="2" />
+
+        </Grid>
+        <!-- Fin du Footer -->
 
         <!-- Début Déclaration Vue-->
-        <Grid x:Name="Params" Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.RowSpan="2" Grid.ColumnSpan="1">
+        <Grid x:Name="Params" 
+
+              Grid.RowSpan="2"
+              Grid.ColumnSpan="2"
+              VerticalAlignment="Stretch" 
+              HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="0.6*"/>
+                <RowDefinition Height="0.02*"/>
+                <RowDefinition Height="0.6*"/>
+                <RowDefinition Height="0.02*"/>
+                <RowDefinition Height="0.6*"/>
+                <RowDefinition Height="0.02*"/>
+                <RowDefinition Height="0.6*"/>
+                <RowDefinition Height="0.02*"/>
+                <RowDefinition Height="0.6*"/>
                 <RowDefinition Height="0.30*"/>
-                <RowDefinition Height="0.30*"/>
-                <RowDefinition Height="0.30*"/>
-                <RowDefinition Height="0.30*"/>
-                <RowDefinition Height="0.30*"/>
-                <RowDefinition Height="0.30*"/>
-                <RowDefinition Height="0.30*"/>
-                <RowDefinition Height="0.30*"/>
-                <RowDefinition Height="0.30*"/>
-                <RowDefinition Height="0.30*"/>
-                <RowDefinition Height="0.30*"/>
+                <RowDefinition Height="0.6*" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.25*"/>
@@ -160,84 +269,163 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Viewbox Margin="15,0,0,0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Label  Content="* Nom du plan : " FontWeight="Bold" FontSize="5" />
+            <!-- Label nom plan -->
+            <Viewbox Grid.Row="2" 
+                     Grid.Column="0" 
+                     HorizontalAlignment="Right"
+                     VerticalAlignment="Center">
+                <Label x:Name="lblNomPlan" 
+                       Content="* Nom du plan : " 
+                       FontSize="5" />
+            </Viewbox>
+            <Viewbox Grid.Row="2" 
+                     Grid.Column="1" 
+                     HorizontalAlignment="Right" 
+                     VerticalAlignment="Center">
+                <TextBox x:Name="PlanNom"
+                         Text="Plan 5 Base Carré " 
+                         Height="26" 
+                         HorizontalAlignment="Stretch" 
+                         TextWrapping="WrapWithOverflow" 
+                         VerticalAlignment="Center" 
+                         Width="200" 
+                         FontSize="18" />
+            </Viewbox>
+            <!-- Label coupe principe -->
+            <Viewbox Grid.Row="4" 
+                     Grid.Column="0" 
+                     HorizontalAlignment="Right" 
+                     VerticalAlignment="Center">
+                <Label Content="* Coupe de principe : " 
+                       FontSize="5" />
+            </Viewbox>
+            <!-- Bouton choix coupe -->
+            <Viewbox Grid.Row="4"
+                     Grid.Column="1"
+                     VerticalAlignment="Stretch" 
+                     HorizontalAlignment="Stretch">
+                <ToggleButton x:Name="BoutonChoixCoupe" 
+                              HorizontalAlignment="Stretch" 
+                              FontSize="26"
+                              Width="400"
+                              Height="60"
+                              Content=" Choisir une coupe " 
+                              VerticalAlignment="Center" 
+                              Click="cp_Button_Click" />
+            </Viewbox>
+            <!-- Label couverture -->
+            <Viewbox Grid.Row="6" 
+                     Grid.Column="0" 
+                     HorizontalAlignment="Right" 
+                     VerticalAlignment="Center">
+                <Label Content="* Type de couverture : " 
+                       FontSize="5" />
+            </Viewbox>
+            <!-- Bouton choix couverture -->
+            <Viewbox Grid.Row="6"
+                     Grid.Column="1"
+                     VerticalAlignment="Stretch" 
+                     HorizontalAlignment="Stretch">
+                <ToggleButton x:Name="BoutonChoixCouverture" 
+                              HorizontalAlignment="Stretch"  
+                              FontSize="26"
+                              Width="400"
+                              Height="60"
+                              Content=" Choisir une couverture " 
+                              VerticalAlignment="Center"  
+                              Click="couv_Button_Click" />
+            </Viewbox>
+            <!-- Label type plancher -->
+            <Viewbox Grid.Row="8" 
+                     Grid.Column="0" 
+                     HorizontalAlignment="Right" 
+                     VerticalAlignment="Center">
+                <Label Content="* Type de plancher  : " 
+                       FontSize="5" />
+            </Viewbox>
+            <!-- Bouton choix plancher -->
+            <Viewbox Grid.Row="8"
+                     Grid.Column="1"
+                     VerticalAlignment="Stretch" 
+                     HorizontalAlignment="Stretch">
+                <ToggleButton x:Name="BoutonChoixPlancher" 
+                              FontSize="26"
+                              Width="400"
+                              Height="60"
+                              Content=" Choisir un plancher " 
+                              HorizontalAlignment="Stretch" 
+                              VerticalAlignment="Center" 
+                              Click="planc_Button_Click" />
+            </Viewbox>
+            <!-- Label type gamme -->
+            <Viewbox Grid.Row="10" 
+                     Grid.Column="0" 
+                     HorizontalAlignment="Right" 
+                     VerticalAlignment="Center">
+                <Label Content="Choix d'une gamme  : "
+                       FontSize="5" />
+            </Viewbox>
+            <!-- Bouton choix gamme -->
+            <Viewbox Grid.Row="10"
+                     Grid.Column="1"
+                     VerticalAlignment="Stretch" 
+                     HorizontalAlignment="Stretch">
+                <ToggleButton x:Name="BoutonChoixGamme"
+                              FontSize="26"
+                              Width="400"
+                              Height="60"
+                              Content=" Choisir une gamme " 
+                              HorizontalAlignment="Stretch"  
+                              VerticalAlignment="Center" 
+                              Click="gamme_Button_Click" />
             </Viewbox>
 
-            <Viewbox Margin="15,0,0,0" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Label  Content="* Coupe de principe : " FontWeight="Bold" FontSize="5" />
+            <!-- Champs obligatoires -->
+            <Viewbox Grid.Row="12" 
+                     Grid.Column="0" 
+                     HorizontalAlignment="Right" 
+                     VerticalAlignment="Center">
+                <Label Content="* Champs obligatoires " 
+                       FontWeight="Bold" 
+                       FontSize="5" />
             </Viewbox>
-
-            <Viewbox Margin="15,0,0,0" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Label  Content="* Type de couverture : " FontWeight="Bold" FontSize="5" />
-            </Viewbox>
-
-            <Viewbox Margin="15,0,0,0" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Label  Content="* Type de plancher  : " FontWeight="Bold" FontSize="5" />
-            </Viewbox>
-
-            <Viewbox Margin="15,0,0,0" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Label  Content="* Choix d'une gamme  : " FontWeight="Bold" FontSize="5" />
-            </Viewbox>
-
-            <Viewbox Grid.Row="10" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-                <Label Content="* Champs obligatoires " FontWeight="Bold" FontSize="4"/>
-            </Viewbox>
-
-
-            <TextBox Text="Plan 5 Base Carré " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="2"  TextWrapping="WrapWithOverflow" VerticalAlignment="Center" Width="200"/>
-
-            <ToggleButton x:Name="BoutonChoixCoupe" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="3" Content=" Choisir une coupe " Height="30"   VerticalAlignment="Center" Click="cp_Button_Click" />
-            <ToggleButton x:Name="BoutonChoixCouverture" Content=" Choisir une couverture " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="4"   VerticalAlignment="Center"  Click="couv_Button_Click"/>
-            <ToggleButton x:Name="BoutonChoixPlancher" Content=" Choisir un plancher " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="5"   VerticalAlignment="Center" Click="planc_Button_Click" />
-            <ToggleButton x:Name="BoutonChoixGamme" Content=" Choisir une gamme " Height="30" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="6"   VerticalAlignment="Center" Click="gamme_Button_Click" />
 
             <GroupBox x:Name="forme" Visibility="Hidden" Header="Sélection d'une forme"  Grid.Column="2" Grid.Row="0" Grid.RowSpan="5"
-                      Height="Auto"
                       Margin="25,0,25,0">
-                <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
-                        VerticalScrollBarVisibility="Auto">
+                <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapformes" Cursor="Hand"/>
                 </ScrollViewer>
             </GroupBox>
 
-            <GroupBox Grid.Column="2" Grid.Row="5" Grid.RowSpan="5"
+            <GroupBox Grid.Column="2" Grid.Row="5" Grid.RowSpan="6"
                     Margin="25,0,25,0" x:Name="taille" Visibility="Hidden" Header="Sélection d'une taille" >
-                <!--<StackPanel Height="Auto">-->
-                    <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
-                        VerticalScrollBarVisibility="Auto">
+                <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wraptailles" Cursor="Hand"/>
-                    </ScrollViewer>
-                <!--</StackPanel>-->
+                </ScrollViewer>
             </GroupBox>
 
-            <GroupBox x:Name="couv" Visibility="Hidden" Header="Sélection d'une couverture"  Grid.Column="2" Grid.Row="1" Grid.RowSpan="5"
-                      Height="Auto"
+            <GroupBox x:Name="couv" Visibility="Hidden" Header="Sélection d'une couverture"  Grid.Column="2" Grid.Row="2" Grid.RowSpan="5"
+                      
                       Margin="25,0,25,0">
-                <StackPanel  Width="Auto">
-                    <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
-                        VerticalScrollBarVisibility="Auto">
-                        <WrapPanel x:Name="wrapcouv" Cursor="Hand"/>
-                    </ScrollViewer>
-                </StackPanel>
+                <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
+                    <WrapPanel x:Name="wrapcouv" Cursor="Hand"/>
+                </ScrollViewer>
             </GroupBox>
 
-            <GroupBox x:Name="planch" Visibility="Hidden" Header="Sélection d'un plancher"  Grid.Column="2" Grid.Row="1" Grid.RowSpan="5"
-                      Height="Auto"
+            <GroupBox x:Name="planch" Visibility="Hidden" Header="Sélection d'un plancher"  Grid.Column="2" Grid.Row="2"
+                      Grid.RowSpan="5"                      
                       Margin="25,0,25,0">
-                <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
-                        VerticalScrollBarVisibility="Auto">
+                <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapplanch" Cursor="Hand"/>
                 </ScrollViewer>
             </GroupBox>
 
-            <GroupBox x:Name="gam" Visibility="Hidden" Header="Sélection d'une gamme"  Grid.Column="2" Grid.Row="1" Grid.RowSpan="5"
-                      Height="Auto"
+            <GroupBox x:Name="gam" Visibility="Hidden" Header="Sélection d'une gamme"  Grid.Column="2" Grid.Row="2"
+                      Grid.RowSpan="5"
                       Margin="25,0,25,0">
-                <ScrollViewer Height="Auto" HorizontalScrollBarVisibility="Auto"
-                        VerticalScrollBarVisibility="Auto">
+                <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapgamme"/>
-                 </ScrollViewer>
+                </ScrollViewer>
             </GroupBox>
         </Grid>
         <!-- Fin Déclaration Vue -->
