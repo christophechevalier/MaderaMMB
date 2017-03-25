@@ -10,7 +10,6 @@ namespace Madera_MMB.Model
     {
         #region properties
         public string nomFamille { get; set; }
-
         #endregion
 
         #region Ctor
@@ -19,6 +18,5 @@ namespace Madera_MMB.Model
             this.nomFamille = nom;
         }
         #endregion
-
     }
 }

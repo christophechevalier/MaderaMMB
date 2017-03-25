@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Madera_MMB.Model
 {
-    class MetaSlot
+    public class MetaSlot
     {
         #region properties
         public int id {get;set;}
@@ -23,10 +23,6 @@ namespace Madera_MMB.Model
             this.numMetaSlot = nb;
             this.refMetaModule = refMetamodule;
         }
-        #endregion
-
-        #region privates methods
-
         #endregion
     }
 }

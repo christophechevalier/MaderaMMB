@@ -8,52 +8,18 @@
       d:DesignHeight="1661.667" d:DesignWidth="2650.333"
 	Title="Authentification">
 
-
-    <!-- Début Déclaration Template-->
     <Page.Resources>
-        <!-- Image Logo -->
-        <BitmapImage x:Key="Logo" UriSource="../Lib/logo_madera.png"/>
-        <!-- Label style -->
-        <Style TargetType="{x:Type Label}">
-            <Setter Property="FontSize" Value="12" />
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
 
-        <Style TargetType="{x:Type Button}">
-            <!-- Bouton style -->
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="bdr" BorderBrush="Black" BorderThickness="1 2 2 1" CornerRadius="2" Margin="3" Background="LightGray">
-                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
 
-        <Style TargetType="{x:Type ToggleButton}">
-            <!-- Toggle Bouton style -->
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border x:Name="bdr" CornerRadius="90" Margin="3" Background="LightGray">
-                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="bdr" Property="Background" Value="YellowGreen" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+                <ResourceDictionary Source="../Lib/Tools/Template_Madera.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Page.Resources>
+
+
 
     <Grid x:Name="MainGrid" Background="White">
         <Grid.ColumnDefinitions>
@@ -113,8 +79,20 @@
                 <ColumnDefinition Width="0.20*"/>
             </Grid.ColumnDefinitions>
 
-            <Image Name="Logo" Grid.Column="1" Source="{StaticResource Logo}" Grid.Row="0" Width="{Binding ActualHeight, ElementName=rowDefinition0}" RenderTransformOrigin="0.706,0.609" Margin="10,10,10,10"/>
+            <!--<Image x:Name="logo">
+                <Image.Style>
+                    <Style TargetType="Image">
 
+                        <Setter Property="Source" Value="{StaticResource LogoOff}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                                <Setter Property="Source" Value="{StaticResource Logo}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>-->
+            
             <Viewbox Margin="20,0,20,0" 
                      Grid.Row="1"
                      Grid.Column="1"
