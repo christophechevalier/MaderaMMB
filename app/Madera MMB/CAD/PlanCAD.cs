@@ -25,6 +25,9 @@ namespace Madera_MMB.CAD
         public Projet projet { get; set; }
         public string SQLQuery { get; set; }
         public MetaSlotCAD metaslotCAD { get; set; }
+        private List<MetaModule> _ListMetaModule { get; set; }
+        public List<MetaModule> ListMetaModule { get { return _ListMetaModule; } set { _ListMetaModule = value; RaisePropertyChanged("ListMetaModule"); } }
+        
         private ObservableCollection<Plan> _plans;
         public ObservableCollection<Plan> Plans
         {
@@ -37,6 +40,12 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region Events
+        private void RaisePropertyChanged(String property)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+        }
+
         private void Plans_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
             if (PropertyChanged != null)
@@ -62,6 +71,7 @@ namespace Madera_MMB.CAD
             Plans = new ObservableCollection<Plan>();
             _plans.CollectionChanged += Plans_CollectionChanged;
             metaslotCAD = new MetaSlotCAD(conn);
+            ListMetaModule = new List<MetaModule>();
 
             // Appel des méthodes dans le ctor
             ListAllPlansByProject();
@@ -215,7 +225,7 @@ namespace Madera_MMB.CAD
         public List<MetaModule> listAllMetaModules()
         {
             conn.LiteCo.Open();
-            List<MetaModule> listMetaModule = new List<MetaModule>();
+            ListMetaModule = new List<MetaModule>();
             SQLQuery = "SELECT * FROM metamodule WHERE statut = 0";
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
@@ -251,7 +261,7 @@ namespace Madera_MMB.CAD
                                 reader.GetInt32(8)
 
                             );
-                            listMetaModule.Add(metaModule);
+                            ListMetaModule.Add(metaModule);
                         }
                     }
                     catch (SQLiteException ex)
@@ -260,7 +270,7 @@ namespace Madera_MMB.CAD
                         Trace.WriteLine(ex.ToString());
                     }
                     conn.LiteCo.Close();
-                    return listMetaModule;
+                    return ListMetaModule;
                 }
             }
         }

@@ -30,9 +30,11 @@ namespace Madera_MMB.View_Crtl
         private ButtonM[,] listB = new ButtonM[40, 30];
         private ListBox listBox = new ListBox();
         private StackPanel stackP = new StackPanel();
+        private StackPanel stackList = new StackPanel();
         private string mode = "default";
         private string modeAffich = "tracage";
         List<MetaModule> listMeta;
+        private MetaModule metaChoose;
 
 
         private Plan plan { get; set; }
@@ -81,7 +83,7 @@ namespace Madera_MMB.View_Crtl
             this.plan = plan;
             this.planCad = planCad;
             InitializeComponent();
-            this.DataContext = this.con;
+            this.DataContext = this.planCad;
             initialize();
         }
         #endregion
@@ -92,15 +94,20 @@ namespace Madera_MMB.View_Crtl
             grid.Margin = new Thickness(7);
             
             planCad = new PlanCAD(new Connexion(), new Projet(new Client(), new Commercial()));
-            listMeta = planCad.listAllMetaModules();
+            listMeta = planCad.ListMetaModule;
 
             //slot.Click += new RoutedEventHandler(checkType);
             //slot2.Click += new RoutedEventHandler(checkType);
             tracer.Click += new RoutedEventHandler(changeMode);
             retirer.Click += new RoutedEventHandler(changeMode);
+
             Grid.SetColumn(listBox, 0);
             Grid.SetRow(listBox, 2);
             listBox.Margin = new Thickness(7,7,7,7);
+
+            Grid.SetColumn(stackList, 0);
+            Grid.SetRow(stackList, 2);
+            stackList.Margin = new Thickness(20, 20, 20, 20);
 
             Grid.SetColumn(stackP, 0);
             Grid.SetRow(stackP, 2);
@@ -319,31 +326,60 @@ namespace Madera_MMB.View_Crtl
 
         private void loadListMur()
         {
-            MainGrid.Children.Remove(listBox);
-            listBox.Items.Clear();
-
+            MainGrid.Children.Remove(stackP);
+            stackP.Children.Clear();
+            
             foreach (MetaModule meta in listMeta)
             {
                 // La taille sera de 1 pour des modules de mur à placer
                 // Changer le mode d'affichage
-                if (meta.taille == 12 && meta.label.Contains("Mur"))
-                {
-                    listBox.Items.Add(meta);
-                }
-            }
-            /*
-            ListBoxItem item1 = new ListBoxItem();
-            item1.Content = "Yop1 !";
-            ListBoxItem item2 = new ListBoxItem();
-            item2.Content = "Yop2 !";
-            ListBoxItem item3 = new ListBoxItem();
-            item3.Content = "Yop3 !";
+                //if (meta.taille == 12 && meta.label.Contains("Mur"))
+                //{
+                    ToggleButton toggle = new ToggleButton();
+                    toggle.Background = Brushes.White;
+                    toggle.Width = 150;
+                    toggle.Height = 170;
 
-            listBox.Items.Add(item1);
-            listBox.Items.Add(item2);
-            listBox.Items.Add(item3);
-            */
-            MainGrid.Children.Add(listBox);
+                    Thickness margin = toggle.Margin;
+                    margin.Left = 30;
+                    margin.Right = 30;
+                    margin.Bottom = 10;
+                    margin.Top = 10;
+                    toggle.Margin = margin;
+
+                    Image img = new Image();
+                    img.Source = meta.image;
+                    img.Width = 150;
+                    img.Height = 130;
+                    img.VerticalAlignment = VerticalAlignment.Top;
+
+                    TextBlock tb = new TextBlock();
+                    tb.Text = meta.label;
+                    tb.VerticalAlignment = VerticalAlignment.Bottom;
+                    tb.HorizontalAlignment = HorizontalAlignment.Center;
+                    tb.Height = 40;
+
+                    StackPanel sp = new StackPanel();
+                    sp.Children.Add(img);
+                    sp.Children.Add(tb);
+
+                    toggle.Content = sp;
+
+                    toggle.Click += delegate (object sender, RoutedEventArgs e)
+                    {
+                        ToggleButton active = sender as ToggleButton;
+                        foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(stackList))
+                        {
+                            tgbt.IsChecked = false;
+                        }
+                        metaChoose = meta;
+                        active.IsChecked = true;
+                    };
+
+                    stackList.Children.Add(toggle);
+                //}
+            }
+            MainGrid.Children.Add(stackP);
         }
 
         private void placeWall(ButtonM but)
@@ -603,6 +639,26 @@ namespace Madera_MMB.View_Crtl
             {
                 modeAffich = "tracage";
                 checkImage();
+            }
+        }
+
+        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T)
+                    {
+                        yield return (T)child;
+                    }
+
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        yield return childOfChild;
+                    }
+                }
             }
         }
         #endregion
