@@ -38,6 +38,7 @@ namespace Madera_MMB.View_Crtl
         private Plan plan { get; set; }
         private DevisCAD devisCAD { get; set; }
         private Client client { get; set; }
+        private Devis devis { get; set; }
         private string nomCommerc { get; set; }
         private Connexion connexion { get; set; }
         #endregion
@@ -46,12 +47,18 @@ namespace Madera_MMB.View_Crtl
         public GestionDevis(Connexion conn, Plan plan, string nomComm, Client client)
         {
             InitializeComponent();
+
             this.plan = plan;
             nomCommerc = nomComm;
             this.client = client;
             connexion = conn;
-
             devisCAD = new DevisCAD(connexion, plan);
+
+            this.DataContext = devisCAD;
+
+            if(devisCAD.getDevisByPlan(plan) == null)
+                this.devis = new Devis(plan);
+
             Initialize_Labels();
             Initialize_Devis();
         }
@@ -71,7 +78,6 @@ namespace Madera_MMB.View_Crtl
             dateCreation.Content += "01/01/2016"; //RETURN REQUEST
             lastUpdate.Content += "20/05/2016"; //RETURN REQUEST
             currentStatus.Content += "Accepté"; //RETURN REQUEST
-
 
         }
         private void Initialize_Devis()
