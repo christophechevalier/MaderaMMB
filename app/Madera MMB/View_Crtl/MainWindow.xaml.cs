@@ -35,6 +35,10 @@ namespace Madera_MMB.View_Crtl
         private View_Crtl.ParametresPlan parametresPlan { get; set; }
         //private View_Crtl.GestionDevis gestionDevis { get; set; }
         private View_Crtl.Modelisation modelisation { get; set; }
+
+        private CommercialCAD commCAD { get; set; }
+
+
         #endregion
 
         #region Ctor
@@ -55,7 +59,7 @@ namespace Madera_MMB.View_Crtl
             connexion.SyncAssocMetaModuleMetaslot();
 
             /// Test CAD avec nouvelles données ///
-            CommercialCAD commCAD = new CommercialCAD(connexion);
+            commCAD = new CommercialCAD(connexion);
             ClientCAD clientCAD = new ClientCAD(connexion);
             CoupePrincipeCAD coupeCAD = new CoupePrincipeCAD(connexion);
             CouvertureCAD couvCAD = new CouvertureCAD(connexion);
@@ -80,7 +84,7 @@ namespace Madera_MMB.View_Crtl
 
             //this.parametresPlan = new ParametresPlan(connexion, gestionPlan.planCAD);
 
-            Mainframe.Content = gestionProjet;
+            Mainframe.Content = authentification;
 
 
             /// Test SYNCHRO export ///
@@ -92,6 +96,8 @@ namespace Madera_MMB.View_Crtl
 
             Initialize_Listeners();
         }
+
+
         #endregion
 
         #region Process Synchro
@@ -137,10 +143,30 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Listeners_Auth()
         {
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
-            authentification.BtnValiderAuth.Click += delegate(object sender, RoutedEventArgs e)
+            authentification.BtnValiderAuth.Click += delegate (object sender, RoutedEventArgs e)
             {
-                Initialize_Listeners_GestionProjet();
-                Mainframe.Content = gestionProjet;
+                string id = authentification.username.Text;
+                string mdp = authentification.password.Password;
+                Trace.WriteLine(id + "  " + mdp);
+                bool authentifié = false;
+                Commercial comm_authentifié;
+                foreach (var comm in commCAD.commerciaux)
+                {
+                    if (comm.reference == id && comm.motDePasse == mdp)
+                    {
+                        gestionProjet.commercial_authentifié = comm;
+                        authentifié = true;   
+                    }
+                }
+                if(authentifié && gestionProjet.commercial_authentifié != null)
+                {
+                    Mainframe.Content = gestionProjet;
+                }
+                else
+                {
+                    MessageBox.Show("Mauvais couple identifiant/mot de passe ! ");
+                }
+
             };
         }
         #endregion

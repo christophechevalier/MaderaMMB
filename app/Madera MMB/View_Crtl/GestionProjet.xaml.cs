@@ -25,6 +25,7 @@ namespace Madera_MMB.View_Crtl
         private GestionPlan gestionPlan { get; set; }
         public ClientCAD clientCAD { get; set; }
         public Projet proj { get; set; }
+        public Commercial commercial_authentifié { get; set; }
         #endregion
 
         #region Constructeur
