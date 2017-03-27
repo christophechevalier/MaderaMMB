@@ -21,9 +21,8 @@ namespace Madera_MMB.View_Crtl
     {
         #region Properties
         private Connexion connexion { get; set; }
-        private ClientCAD clientCAD { get; set; }
+        public ClientCAD clientCAD { get; set; }
         private Client cli { get; set; }
-        ListView selectedClientsListView = new ListView();
         #endregion
 
         #region Constructeur
@@ -33,7 +32,6 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             connexion = co;
             this.clientCAD = CADclient;
-            clientCAD.ListAllClients();
             DataContext = connexion;
             ListeClients.ItemsSource = clientCAD.Clients;
         }
@@ -42,12 +40,11 @@ namespace Madera_MMB.View_Crtl
         #region Listeners
         private void BtnEditerClient_Click(object sender, RoutedEventArgs e)
         {
-
+            Client client = (Client)ListeClients.SelectedItem;
         }
 
         private void BtnCreerClient_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void BtnRetourListeProjet_Click(object sender, RoutedEventArgs e)
@@ -62,11 +59,11 @@ namespace Madera_MMB.View_Crtl
                 Client client = (Client)ListeClients.SelectedItem;
                 ClientNom.Text = client.nom;
                 ClientPrenom.Text = client.prenom;
-                ClientTelephone.Text = client.telephone;
                 ClientEmail.Text = client.email;
                 ClientAdresse.Text = client.adresse;
                 ClientCodePostal.Text = client.codePostal;
                 ClientVille.Text = client.ville;
+                ClientTelephone.Text = client.telephone;
             }
         }
         #endregion
