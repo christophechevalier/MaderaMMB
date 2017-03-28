@@ -33,8 +33,10 @@ namespace Madera_MMB.View_Crtl
         private StackPanel stackList = new StackPanel();
         private string mode = "default";
         private string modeAffich = "tracage";
-        List<MetaModule> listMeta;
         private MetaModule metaChoose;
+        private ButtonM butChoose;
+        private string type;
+        List<MetaModule> listMeta;
 
 
         private Plan plan { get; set; }
@@ -190,6 +192,7 @@ namespace Madera_MMB.View_Crtl
         private void checkType(object sender, RoutedEventArgs e)
         {
             ButtonM but = sender as ButtonM;
+            butChoose = but;
             checkMode();
             if (but.letype == ButtonM.type.Rien)
             {
@@ -315,26 +318,29 @@ namespace Madera_MMB.View_Crtl
                 Trace.WriteLine((string)but.Content);
                 if ((string)but.Content == "Fenêtres")
                 {
-                    Trace.WriteLine("INIT CHARGEMENT GAMMES Fen");
                     listGammes = planCad.listAllGammes("Fen");
+                    type = "Fen";
                 }
                 else if ((string)but.Content == "Portes")
                 {
-                    Trace.WriteLine("INIT CHARGEMENT GAMMES Por");
                     listGammes = planCad.listAllGammes("Por");
+                    type = "Por";
                 }
+                Button butG1 = new Button();
+                butG1.Height = 50;
+                butG1.Content = "Aucun filtre";
+                butG1.Click += new RoutedEventHandler(loadListMeta);
+                stackP.Children.Add(butG1);
 
                 foreach (string gamme in listGammes)
                 {
-                    Trace.WriteLine("EN COURS CHARGEMENT GAMMES");
                     Button butG = new Button();
                     butG.Height = 50;
                     butG.Content = gamme;
                     butG.Click += new RoutedEventHandler(loadListMeta);
                     stackP.Children.Add(butG);
                 }
-
-                Trace.WriteLine("FIN CHARGEMENT GAMMES");
+                
                 MainGrid.Children.Add(stackP);
             }
         }
@@ -435,55 +441,86 @@ namespace Madera_MMB.View_Crtl
             Button butSender = sender as Button;
             string gamme = (string)butSender.Content;
 
+            MainGrid.Children.Remove(stackP);
+            stackP.Children.Clear();
             MainGrid.Children.Remove(scrollView);
             stackList.Children.Clear();
 
+
+            Button vider = new Button();
+            vider.Background = Brushes.White;
+            vider.Width = 150;
+            vider.Height = 170;
+            vider.Margin = new Thickness(30, 10, 30, 10);
+            vider.Content = "Vider le slot";
+            vider.Click += delegate (object sender3, RoutedEventArgs e2)
+            {
+                foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(stackList))
+                {
+                    tgbt.IsChecked = false;
+                }
+                butChoose.meta = null;
+                //butChoose.letype = ButtonM.type.Slot;
+            };
+            stackList.Children.Add(vider);
+
             foreach (MetaModule meta in listMeta)
             {
-                // La taille sera de 1 pour des modules de mur à placer
-                // Changer le mode d'affichage
-                if (meta.taille == 12 && meta.gamme.ToString() == gamme)
+                if (meta.label.Contains(type))
                 {
-                    ToggleButton toggle = new ToggleButton();
-                    toggle.Background = Brushes.White;
-                    toggle.Width = 150;
-                    toggle.Height = 170;
-                    toggle.Margin = new Thickness(30, 10, 30, 10);
-
-                    Image img = new Image();
-                    img.Source = meta.image;
-                    img.Width = 150;
-                    img.Height = 130;
-                    img.VerticalAlignment = VerticalAlignment.Top;
-
-                    TextBlock tb = new TextBlock();
-                    tb.Text = meta.label;
-                    tb.VerticalAlignment = VerticalAlignment.Bottom;
-                    tb.HorizontalAlignment = HorizontalAlignment.Center;
-                    tb.Height = 40;
-
-                    StackPanel sp = new StackPanel();
-                    sp.Children.Add(img);
-                    sp.Children.Add(tb);
-
-                    toggle.Content = sp;
-
-                    /*toggle.Click += delegate (object sender, RoutedEventArgs e)
+                    if (meta.taille == 1 && meta.gamme.nom == gamme)
                     {
-                        ToggleButton active = sender as ToggleButton;
-                        foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(stackList))
+                        ToggleButton toggle = new ToggleButton();
+                        toggle.Background = Brushes.White;
+                        toggle.Width = 150;
+                        toggle.Height = 170;
+                        toggle.Margin = new Thickness(30, 10, 30, 10);
+
+                        Image img = new Image();
+                        img.Source = meta.image;
+                        img.Width = 150;
+                        img.Height = 130;
+                        img.VerticalAlignment = VerticalAlignment.Top;
+
+                        TextBlock tb = new TextBlock();
+                        tb.Text = meta.label;
+                        tb.VerticalAlignment = VerticalAlignment.Bottom;
+                        tb.HorizontalAlignment = HorizontalAlignment.Center;
+                        tb.Height = 40;
+
+                        StackPanel sp = new StackPanel();
+                        sp.Children.Add(img);
+                        sp.Children.Add(tb);
+
+                        toggle.Content = sp;
+
+                        toggle.Click += delegate (object sender2, RoutedEventArgs e2)
                         {
-                            tgbt.IsChecked = false;
-                        }
-                        metaChoose = meta;
-                        active.IsChecked = true;
-                    };*/
+                            ToggleButton active = sender2 as ToggleButton;
+                            foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(stackList))
+                            {
+                                tgbt.IsChecked = false;
+                            }
+                            butChoose.meta = meta;
+                            Brush fond = new ImageBrush(butChoose.meta.image);
+                            butChoose.texture = fond;
+                            if (type == "Fen")
+                            {
+                                //butChoose.letype = ButtonM.type.Fenetre;
+                            }
+                            else if (type == "Por")
+                            {
+                                //butChoose.letype = ButtonM.type.Porte;
+                            }
+                            active.IsChecked = true;
+                        };
 
-                    if (meta == metaChoose)
-                    {
-                        toggle.IsChecked = true;
+                        if (meta == butChoose.meta)
+                        {
+                            toggle.IsChecked = true;
+                        }
+                        stackList.Children.Add(toggle);
                     }
-                    stackList.Children.Add(toggle);
                 }
             }
 
