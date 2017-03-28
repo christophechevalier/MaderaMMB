@@ -59,7 +59,6 @@ namespace Madera_MMB.View_Crtl
         private Brush slotH = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/slot_horizontal.png", UriKind.RelativeOrAbsolute)));
         private Brush slotV = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/slot_vertical.png", UriKind.RelativeOrAbsolute)));
 
-        private Brush mur_beton = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/mur_beton.jpg", UriKind.RelativeOrAbsolute)));
 
         private ButtonM slot = new ButtonM(ButtonM.type.SlotPorte, 15, 5, 1, 1, null);
         private ButtonM slot2 = new ButtonM(ButtonM.type.SlotFen, 15, 25, 1, 1, null);
@@ -94,10 +93,8 @@ namespace Madera_MMB.View_Crtl
             grid.Margin = new Thickness(7);
             
             planCad = new PlanCAD(new Connexion(), new Projet(new Client(), new Commercial()));
-            listMeta = planCad.ListMetaModule;
-
-            //slot.Click += new RoutedEventHandler(checkType);
-            //slot2.Click += new RoutedEventHandler(checkType);
+            listMeta = planCad.listAllMetaModules();
+            
             tracer.Click += new RoutedEventHandler(changeMode);
             retirer.Click += new RoutedEventHandler(changeMode);
 
@@ -229,7 +226,10 @@ namespace Madera_MMB.View_Crtl
             }
             else if (but.letype == ButtonM.type.SlotPorte || but.letype == ButtonM.type.SlotFen)
             {
-                loadChoiceButton(but);
+                if (mode != "retirer" && mode != "tracer")
+                {
+                    loadChoiceButton(but);
+                }
             }
             else if (but.letype == ButtonM.type.Slot)
             {
@@ -251,12 +251,34 @@ namespace Madera_MMB.View_Crtl
         private void loadChoiceButton (ButtonM but)
         {
             MainGrid.Children.Remove(stackP);
-
-            /*if (but.meta )
-            {
-                Charger les informations du module pour les afficher
-            }*/
             stackP.Children.Clear();
+
+            if (but.meta != null)
+            {
+                ToggleButton toggle = new ToggleButton();
+                toggle.Background = Brushes.White;
+                toggle.Width = 150;
+                toggle.Height = 170;
+                toggle.Margin = new Thickness(30, 10, 30, 10);
+
+                Image img = new Image();
+                img.Source = but.meta.image;
+                img.Width = 150;
+                img.Height = 130;
+                img.VerticalAlignment = VerticalAlignment.Top;
+
+                TextBlock tb = new TextBlock();
+                tb.Text = but.meta.label;
+                tb.VerticalAlignment = VerticalAlignment.Bottom;
+                tb.HorizontalAlignment = HorizontalAlignment.Center;
+                tb.Height = 40;
+
+                StackPanel sp = new StackPanel();
+                sp.Children.Add(img);
+                sp.Children.Add(tb);
+
+                stackP.Children.Add(sp);
+            }
 
             if (but.letype == ButtonM.type.Slot || but.letype == ButtonM.type.SlotFen)
             {
@@ -282,15 +304,38 @@ namespace Madera_MMB.View_Crtl
         private void loadFiltre(object sender, RoutedEventArgs e)
         {
             Button but = sender as Button;
-            if ((string)but.Content == "Fenêtres")
+            if (mode == "default")
             {
-                // Charger la liste des gammes possibiles pour les fenetres sous forme de liste de boutons dans le stack panel
-                // en utilisant le planCAD
-            }
-            else if ((string)but.Content == "Portes")
-            {
-                // Charger la liste des gammes possibiles pour les portes sous forme de liste de boutons dans le stack panel
-                // en utilisant le planCAD
+                MainGrid.Children.Remove(scrollView);
+                MainGrid.Children.Remove(stackP);
+                stackP.Children.Clear();
+
+                List<string> listGammes = new List<string>();
+
+                Trace.WriteLine((string)but.Content);
+                if ((string)but.Content == "Fenêtres")
+                {
+                    Trace.WriteLine("INIT CHARGEMENT GAMMES Fen");
+                    listGammes = planCad.listAllGammes("Fen");
+                }
+                else if ((string)but.Content == "Portes")
+                {
+                    Trace.WriteLine("INIT CHARGEMENT GAMMES Por");
+                    listGammes = planCad.listAllGammes("Por");
+                }
+
+                foreach (string gamme in listGammes)
+                {
+                    Trace.WriteLine("EN COURS CHARGEMENT GAMMES");
+                    Button butG = new Button();
+                    butG.Height = 50;
+                    butG.Content = gamme;
+                    butG.Click += new RoutedEventHandler(loadListMeta);
+                    stackP.Children.Add(butG);
+                }
+
+                Trace.WriteLine("FIN CHARGEMENT GAMMES");
+                MainGrid.Children.Add(stackP);
             }
         }
 
@@ -321,13 +366,15 @@ namespace Madera_MMB.View_Crtl
                 tracer.IsChecked = false;
                 MainGrid.Children.Remove(listBox);
                 MainGrid.Children.Remove(stackP);
+                MainGrid.Children.Remove(scrollView);
             }
         }
 
         private void loadListMur()
         {
-            MainGrid.Children.Remove(stackP);
-            stackP.Children.Clear();
+            MainGrid.Children.Remove(scrollView);
+            stackList.Children.Clear();
+            
             
             foreach (MetaModule meta in listMeta)
             {
@@ -339,13 +386,7 @@ namespace Madera_MMB.View_Crtl
                     toggle.Background = Brushes.White;
                     toggle.Width = 150;
                     toggle.Height = 170;
-
-                    Thickness margin = toggle.Margin;
-                    margin.Left = 30;
-                    margin.Right = 30;
-                    margin.Bottom = 10;
-                    margin.Top = 10;
-                    toggle.Margin = margin;
+                    toggle.Margin = new Thickness(30, 10, 30, 10);
 
                     Image img = new Image();
                     img.Source = meta.image;
@@ -376,18 +417,88 @@ namespace Madera_MMB.View_Crtl
                         active.IsChecked = true;
                     };
 
+                    if (meta == metaChoose)
+                    {
+                        toggle.IsChecked = true;
+                    }
+
                     stackList.Children.Add(toggle);
                 //}
             }
-            MainGrid.Children.Add(stackP);
+            
+            scrollView.Content = stackList;
+            MainGrid.Children.Add(scrollView);
+        }
+
+        private void loadListMeta(object sender, RoutedEventArgs e)
+        {
+            Button butSender = sender as Button;
+            string gamme = (string)butSender.Content;
+
+            MainGrid.Children.Remove(scrollView);
+            stackList.Children.Clear();
+
+            foreach (MetaModule meta in listMeta)
+            {
+                // La taille sera de 1 pour des modules de mur à placer
+                // Changer le mode d'affichage
+                if (meta.taille == 12 && meta.gamme.ToString() == gamme)
+                {
+                    ToggleButton toggle = new ToggleButton();
+                    toggle.Background = Brushes.White;
+                    toggle.Width = 150;
+                    toggle.Height = 170;
+                    toggle.Margin = new Thickness(30, 10, 30, 10);
+
+                    Image img = new Image();
+                    img.Source = meta.image;
+                    img.Width = 150;
+                    img.Height = 130;
+                    img.VerticalAlignment = VerticalAlignment.Top;
+
+                    TextBlock tb = new TextBlock();
+                    tb.Text = meta.label;
+                    tb.VerticalAlignment = VerticalAlignment.Bottom;
+                    tb.HorizontalAlignment = HorizontalAlignment.Center;
+                    tb.Height = 40;
+
+                    StackPanel sp = new StackPanel();
+                    sp.Children.Add(img);
+                    sp.Children.Add(tb);
+
+                    toggle.Content = sp;
+
+                    /*toggle.Click += delegate (object sender, RoutedEventArgs e)
+                    {
+                        ToggleButton active = sender as ToggleButton;
+                        foreach (ToggleButton tgbt in FindVisualChildren<ToggleButton>(stackList))
+                        {
+                            tgbt.IsChecked = false;
+                        }
+                        metaChoose = meta;
+                        active.IsChecked = true;
+                    };*/
+
+                    if (meta == metaChoose)
+                    {
+                        toggle.IsChecked = true;
+                    }
+                    stackList.Children.Add(toggle);
+                }
+            }
+
+            scrollView.Content = stackList;
+            MainGrid.Children.Add(scrollView);
         }
 
         private void placeWall(ButtonM but)
         {
-            if (checkAround(but) && isInside(but))
+            if (isInside(but) && checkAround(but) && metaChoose != null)
             {
                 but.letype = ButtonM.type.MurInt;
-                but.texture = mur_beton;
+                Brush fond = new ImageBrush(metaChoose.image);
+                but.texture = fond;
+                but.meta = metaChoose;
                 checkImage();
                 placeSlot();
             }
@@ -399,6 +510,7 @@ namespace Madera_MMB.View_Crtl
             {
                 but.letype = ButtonM.type.Rien;
                 but.texture = null;
+                but.meta = null;
                 checkImage();
                 placeSlot();
             }

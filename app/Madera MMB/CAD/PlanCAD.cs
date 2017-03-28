@@ -275,6 +275,47 @@ namespace Madera_MMB.CAD
             }
         }
 
+        /// <summary>
+        /// Méthode qui permet de récupérer les gammes de metamodules
+        /// </summary>
+        public List<String> listAllGammes(string type)
+        {
+            conn.LiteCo.Open();
+            List<String> listGammes = new List<String>();
+            if (type != "0")
+            {
+                SQLQuery = "SELECT distinct(nomGamme) FROM metamodule WHERE statut = 0 AND label LIKE \"%" + type + "%\"";
+            }
+            else
+            {
+                SQLQuery = "SELECT distinct(nomGamme) FROM metamodule WHERE statut = 0";
+            }
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    try
+                    {
+                        while (reader.Read())
+                        {
+                            Trace.WriteLine(
+                            "Gamme : " +
+                            reader.GetValue(0).GetType());
+
+                            listGammes.Add(reader.GetString(0));
+                        }
+                    }
+                    catch (SQLiteException ex)
+                    {
+                        Trace.WriteLine(SQLQuery);
+                        Trace.WriteLine(ex.ToString());
+                    }
+                    conn.LiteCo.Close();
+                    return listGammes;
+                }
+            }
+        }
+
         #endregion
 
         #region Privates methods
