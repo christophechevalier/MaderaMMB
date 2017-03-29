@@ -74,6 +74,7 @@ namespace Madera_MMB.CAD
         /// </summary>
         public void ListAllProjects()
         {
+            Projets.Clear();
             // Nom du/des champs mis directement dans la requête pour éviter d'avoir à passer par QSqlRecord 
             SQLQuery = "SELECT refProjet, nom, dateCreation, dateModification, refClient, refCommercial FROM projet WHERE refCommercial = '" + commercial.reference + "'";
             //SQLQuery = "SELECT * FROM projet WHERE refCommercial = " + commercial.reference;

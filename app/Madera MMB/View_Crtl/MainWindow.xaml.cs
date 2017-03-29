@@ -204,9 +204,12 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton éditer un client pour aller dans la Vue Paramètre Client
             gestionClient.BtnEditerClient.Click += delegate(object sender, RoutedEventArgs e)
             {
-                this.parametresClient = new ParametresClient(connexion, gestionClient.clientCAD);
-                Initialize_Listeners_ParametresClient();
-                Mainframe.Content = parametresClient;
+                if (gestionClient.cli != null)
+                {
+                    this.parametresClient = new ParametresClient(connexion, gestionClient.clientCAD, gestionClient.cli);
+                    Initialize_Listeners_ParametresClient();
+                    Mainframe.Content = parametresClient;
+                }
             };
             // Click sur le bouton créer un nouveau client pour aller dans la Vue Paramètre Client
             gestionClient.BtnCreerClient.Click += delegate(object sender, RoutedEventArgs e)
@@ -232,16 +235,13 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton valider paramètres client pour aller dans la Vue Gestion Client
             parametresClient.BtnConfirmerClient.Click += delegate(object sender, RoutedEventArgs e)
             {
-                //this.parametresClient = new ParametresClient(connexion, gestionClient.clientCAD);
-                //Initialize_Listeners_ParametresClient();
-                //Mainframe.Content = gestionClient;
-                //Client cli = new Client();
                 if (parametresClient.SetClient(parametresClient.Client))
                 {
-                    MessageBox.Show("Le client est bien édité !");
+                    MessageBox.Show("L'édition s'est bien effectué !");
                     parametresClient.clientCAD.InsertClient(parametresClient.Client);
-                    //parametresClient.Client = null;
+                    gestionClient = new GestionClient(connexion, parametresClient.clientCAD);
                     Mainframe.Content = gestionClient;
+                    Initialize_Listeners_GestionClient();
                     connexion.SelectSQLiteQuery("SELECT nom from client");
                 }
                 else
@@ -252,7 +252,9 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton retour pour aller dans la Vue Gestion Client
             parametresClient.BtnRetourListeProjet.Click += delegate(object sender, RoutedEventArgs e)
             {
+                gestionClient = new GestionClient(connexion, parametresClient.clientCAD);
                 Mainframe.Content = gestionClient;
+                Initialize_Listeners_GestionClient();
             };
         }
         #endregion

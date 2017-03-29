@@ -41,43 +41,31 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             Conn = co;
             this.clientCAD = CADclient;
-            //clientCAD = new ClientCAD(this.connexion);
-            // Les bindings exécutés dans le XAML ont pour DataContext une connexion
-            //DataContext = connexion;
+        }
+
+        public ParametresClient(Connexion co, ClientCAD CADclient, Client cli)
+        {
+            // Instanciations
+            InitializeComponent();
+            Conn = co;
+            this.clientCAD = CADclient;
+
+            ClientNom.Text = cli.nom;
+            ClientPrenom.Text = cli.prenom;
+            ClientEmail.Text = cli.email;
+            ClientAdresse.Text = cli.adresse;
+            ClientCodePostal.Text = cli.codePostal;
+            ClientVille.Text = cli.ville;
+            ClientTelephone.Text = cli.telephone;
+
+            this.Client = cli;
         }
         #endregion
 
         #region Listeners
         private void BtnConfirmerClient_Click(object sender, RoutedEventArgs e)
         {
-            //Button btn = sender as Button;
-            //Client cli = new Client();
-            //cli.nom = ClientNom.Text;
-            //cli.prenom = ClientPrenom.Text;
-            //cli.email = ClientEmail.Text;
-            //cli.adresse = ClientAdresse.Text;
-            //cli.codePostal = ClientCodePostal.Text;
-            //cli.ville = ClientVille.Text;
-            //cli.telephone = ClientTelephone.Text;
 
-            // On génére une nouvelle référence en commençant par les 2 premières lettres du nouveau client
-            //cli.reference = generateKeyClient(cli);
-            //clientCAD.Clients.Add(cli);
-            //clientCAD.InsertClient(cli);
-            //MessageBox.Show("Création du nouveau client SUCCESS !");
-
-            //if (cli != null)
-            //{
-            //    // On génére une nouvelle référence en commençant par les 2 premières lettres du nouveau client
-            //    cli.reference = generateKeyClient(cli);
-            //    clientCAD.Clients.Add(cli);
-            //    clientCAD.InsertClient(cli);
-            //    MessageBox.Show("Création du nouveau client SUCCESS !");
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Vous devez remplir les champs obligatoires !");
-            //}
         }
         private void BtnRetourListeClient_Click(object sender, RoutedEventArgs e)
         {
@@ -85,40 +73,39 @@ namespace Madera_MMB.View_Crtl
         }
         #endregion
 
-            #region public methods
+        #region public methods
+        /// <summary>
+        /// Méthode pour set un client
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public bool SetClient(Client client)
         {
-            Client cli = new Client();
             if 
             (
                 ClientNom.Text != "" && 
                 ClientPrenom.Text != "" && 
-                ClientEmail.Text != "" && 
                 ClientAdresse.Text != "" &&
                 ClientCodePostal.Text != "" &&
                 ClientVille.Text != "" &&
                 ClientTelephone.Text != ""
             )
             {
-                if (cli != null)
+                if (this.Client != null)
                 {
-                    clientCAD.Clients.Add(cli);
-                    // On génére une nouvelle référence en commençant par les 2 premières lettres du nouveau client
-                    cli.reference = generateKeyClient(cli);
-
-                    cli.nom = this.ClientNom.Text;
-                    cli.prenom = this.ClientPrenom.Text;
-                    cli.email = this.ClientEmail.Text;
-                    cli.adresse = this.ClientAdresse.Text;
-                    cli.codePostal = this.ClientCodePostal.Text;
-                    cli.ville = this.ClientVille.Text;
-                    cli.telephone = this.ClientTelephone.Text;
+                    Client.nom = this.ClientNom.Text;
+                    Client.prenom = this.ClientPrenom.Text;
+                    Client.email = this.ClientEmail.Text;
+                    Client.adresse = this.ClientAdresse.Text;
+                    Client.codePostal = this.ClientCodePostal.Text;
+                    Client.ville = this.ClientVille.Text;
+                    Client.telephone = this.ClientTelephone.Text;
                 }
                 else
                 {
                     this.Client = new Client
                         (
-                            generateKeyClient(cli),
+                            "",
                             this.ClientNom.Text,
                             this.ClientPrenom.Text,
                             this.ClientAdresse.Text,
@@ -129,6 +116,7 @@ namespace Madera_MMB.View_Crtl
                             DateTime.Now,
                             DateTime.Today
                         );
+                        this.Client.reference = generateKeyClient(this.Client);
                 }
                 return true;
             }

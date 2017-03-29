@@ -46,7 +46,6 @@ namespace Madera_MMB.CAD
         public ClientCAD(Connexion laConnexion)
         {
             // Instanciations
-            //conn = new Connexion();
             Conn = laConnexion;
             Clients = new ObservableCollection<Client>();
             _clients.CollectionChanged += Clients_CollectionChanged;
@@ -62,6 +61,8 @@ namespace Madera_MMB.CAD
         /// </summary>
         public void ListAllClients()
         {
+            Clients.Clear();
+
             // Nom du/des champs mis directement dans la requête pour éviter d'avoir à passer par QSqlRecord 
             SQLQuery = "SELECT refClient, nom, prenom, adresse, codePostal, ville, email, telephone, dateCreation, dateModification FROM client";
             //SQLQuery = "SELECT * FROM client;

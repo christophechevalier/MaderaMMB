@@ -22,7 +22,7 @@ namespace Madera_MMB.View_Crtl
         #region Properties
         private Connexion connexion { get; set; }
         public ClientCAD clientCAD { get; set; }
-        private Client cli { get; set; }
+        public Client cli { get; set; }
         #endregion
 
         #region Constructeur
@@ -40,7 +40,7 @@ namespace Madera_MMB.View_Crtl
         #region Listeners
         private void BtnEditerClient_Click(object sender, RoutedEventArgs e)
         {
-            Client client = (Client)ListeClients.SelectedItem;
+
         }
 
         private void BtnCreerClient_Click(object sender, RoutedEventArgs e)
@@ -64,6 +64,8 @@ namespace Madera_MMB.View_Crtl
                 ClientCodePostal.Text = client.codePostal;
                 ClientVille.Text = client.ville;
                 ClientTelephone.Text = client.telephone;
+
+                this.cli = client;
             }
         }
         #endregion

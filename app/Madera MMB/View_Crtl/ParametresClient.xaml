@@ -334,7 +334,7 @@
                                  Grid.Column="1" 
                                  HorizontalAlignment="Right"
                                  VerticalAlignment="Center">
-                            <Label x:Name="AdresseEmail" Content="* Adresse e-mail : " FontSize="4"/>
+                            <Label x:Name="AdresseEmail" Content="Adresse e-mail : " FontSize="4"/>
                         </Viewbox>
                         <Viewbox Grid.Row="7" 
                                  Grid.Column="2" 
