@@ -20,8 +20,8 @@ CREATE TABLE client (
   ville TEXT NOT NULL,
   email TEXT NOT NULL,
   telephone TEXT NOT NULL,
-  dateCreation TEXT NOT NULL,
-  dateModification TEXT NOT NULL
+  dateCreation datetime NOT NULL,
+  dateModification datetime NOT NULL
 );
 
 -- Table Projet OK
@@ -29,8 +29,8 @@ CREATE TABLE client (
 CREATE TABLE projet (
   refProjet TEXT PRIMARY KEY NOT NULL,
   nom TEXT NOT NULL,
-  dateCreation TEXT NOT NULL,
-  dateModification TEXT NOT NULL,
+  dateCreation datetime NOT NULL,
+  dateModification datetime NOT NULL,
   refClient TEXT NOT NULL,
   refCommercial TEXT NOT NULL,
   FOREIGN KEY (refClient) REFERENCES client,
@@ -228,10 +228,11 @@ INSERT INTO commercial (refCommercial, nom, prenom, email, motDePasse) VALUES
 --
 
 INSERT INTO client (refClient, nom, prenom, adresse, codePostal, ville, email, telephone, dateCreation, dateModification) VALUES
-('AT000001', 'Arthur', 'Tv', '10 chemin des Albios', '31130', 'Balma', 'arthur@gmail.com', '06-06-06-06-06', '10-10-2016', '10-10-2016'),
-('BT000002', 'Beatrice', 'Tijuana', '9 chemin des iles', '31000', 'Toulouse', 'beatrice@gmail.com', '06-06-06-06-07', '11-10-2016', '11-10-2016'),
-('MP000003', 'Marco', 'Polo', '2 rue de la paume', '75000', 'Paris', 'marco@gmail.com', '06-06-06-06-08', '12-11-2016', '12-11-2016'),
-('JP000004', 'Jessica', 'Palmer', '69 rue de lalimapo', '33000', 'Bordeaux', 'jess@gmail.com', '06-06-06-06-08', '13-11-2016', '13-11-2016');
+('AT000001', 'Arthur', 'Tv', '10 chemin des Albios', '31130', 'Balma', 'arthur@gmail.com', '06-06-06-06-06', '2017-03-03', '2017-03-03'),
+('BT000002', 'Beatrice', 'Tijuana', '9 chemin des iles', '31000', 'Toulouse', 'beatrice@gmail.com', '06-06-06-06-07', '2017-03-03', '2017-03-03'),
+('MP000003', 'Marco', 'Polo', '2 rue de la paume', '75000', 'Paris', 'marco@gmail.com', '06-06-06-06-08', '2017-03-03', '2017-03-03'),
+('JP000004', 'Jessica', 'Palmer', '69 rue de lalimapo', '33000', 'Bordeaux', 'jess@gmail.com', '06-06-06-06-08', '2017-03-03', '2017-03-05'),
+('JW000005', 'Johny', 'Walker', '40 rue de la soif', '24000', 'Dordogne', 'johny@gmail.com', '06-06-06-06-09', '2017-03-06', '2017-03-06');
 
 
 --
@@ -239,11 +240,11 @@ INSERT INTO client (refClient, nom, prenom, adresse, codePostal, ville, email, t
 --
 
 INSERT INTO projet (refProjet, nom, dateCreation, dateModification, refClient, refCommercial) VALUES
-('CCAT000001', 'Maison Familiale', '10-10-2016', '10-10-2016', 'AT000001', 'COM003'),
-('CCMP000002', 'Maison Vacance', '11-10-2016', '11-10-2016', 'AT000001', 'COM003'),
-('CCMP000003', 'Maison Montagne', '12-10-2016', '12-10-2016', 'MP000003', 'COM003'),
-('CCJP000004', 'Maison Mer', '13-10-2016', '13-10-2016', 'AT000001', 'COM003'),
-('CCJP000005', 'Maison Secondaire', '14-10-2016', '14-10-2016', 'AT000001', 'COM003');
+('CCAT000001', 'Arthur Tv', '2017-03-04', '2017-03-04', 'AT000001', 'COM003'),
+('CCMP000002', 'Marco Polo', '2017-03-05', '2017-03-05', 'MP000003', 'COM003'),
+('CCJW000003', 'Johny Walker', '2017-03-06', '2017-03-06', 'JW000005', 'COM003'),
+('CCJP000004', 'Jessica Palmer', '2017-03-07', '2017-03-07', 'JP000004', 'COM003'),
+('CCBT000005', 'Beatrice Tijuana', '2017-03-08', '2017-03-08', 'BT000002', 'COM003');
 
 --
 -- Contenu de la table `plan`
