@@ -17,11 +17,9 @@ namespace Madera_MMB.View_Crtl
     /// <summary>
     /// Controle de la vue Modelisation
     /// Features Restantes :
-    ///     Selection type du mur à placer
-    ///     Selection module à placer dans un slot
     ///     Generation auto plan
     ///     Sauvegarde plan
-    ///     Modelisation initiale
+    ///     Gestion mur ext
     /// </summary>
     public partial class Modelisation : Page
     {
@@ -29,6 +27,7 @@ namespace Madera_MMB.View_Crtl
         private Grid grid = new Grid();
         private ButtonM[,] listB = new ButtonM[40, 30];
         private ListBox listBox = new ListBox();
+        private Viewbox viewB = new Viewbox();
         private StackPanel stackP = new StackPanel();
         private StackPanel stackList = new StackPanel();
         private string mode = "default";
@@ -105,13 +104,10 @@ namespace Madera_MMB.View_Crtl
             Grid.SetRow(listBox, 2);
             listBox.Margin = new Thickness(7,7,7,7);
 
-            Grid.SetColumn(stackList, 0);
-            Grid.SetRow(stackList, 2);
-            stackList.Margin = new Thickness(20, 20, 20, 20);
-
-            Grid.SetColumn(stackP, 0);
-            Grid.SetRow(stackP, 2);
-            stackP.Margin = new Thickness(20, 20, 20, 20);
+            Grid.SetColumn(viewB, 0);
+            Grid.SetRow(viewB, 2);
+            viewB.Margin = new Thickness(20, 20, 20, 20);
+            MainGrid.Children.Add(viewB);
 
             ColumnDefinition col;
             RowDefinition row;
@@ -253,7 +249,18 @@ namespace Madera_MMB.View_Crtl
             }
             else if (but.letype == ButtonM.type.Porte || but.letype == ButtonM.type.Fenetre)
             {
-                loadChoiceButton(but);
+                if (mode == "retirer")
+                {
+                    removeWall(but);
+                }
+                else if (mode == "tracer")
+                {
+
+                }
+                else
+                {
+                    loadChoiceButton(but);
+                }
             }
         }
 
@@ -343,7 +350,8 @@ namespace Madera_MMB.View_Crtl
                 stackP.Children.Add(vider);
             }
 
-            MainGrid.Children.Add(stackP);
+            viewB.Child = stackP;
+            //MainGrid.Children.Add(viewB);
         }
 
         private void loadFiltre(object sender, RoutedEventArgs e)
@@ -383,7 +391,8 @@ namespace Madera_MMB.View_Crtl
                     stackP.Children.Add(butG);
                 }
                 
-                MainGrid.Children.Add(stackP);
+                viewB.Child = stackP;
+                //MainGrid.Children.Add(viewB);
             }
         }
 
@@ -407,14 +416,12 @@ namespace Madera_MMB.View_Crtl
             if (mode == "tracer")
             {
                 retirer.IsChecked = false;
-                MainGrid.Children.Remove(stackP);
+                viewB.Child = null;
                 loadListMur();
             }
             else if (mode == "retirer" || mode == "default") {
                 tracer.IsChecked = false;
-                MainGrid.Children.Remove(listBox);
-                MainGrid.Children.Remove(stackP);
-                MainGrid.Children.Remove(scrollView);
+                viewB.Child = null;
             }
         }
 
@@ -473,7 +480,8 @@ namespace Madera_MMB.View_Crtl
             }
             
             scrollView.Content = stackList;
-            MainGrid.Children.Add(scrollView);
+            viewB.Child = scrollView;
+            //MainGrid.Children.Add(scrollView);
         }
 
         private void loadListMeta(object sender, RoutedEventArgs e)
@@ -481,17 +489,16 @@ namespace Madera_MMB.View_Crtl
             Button butSender = sender as Button;
             string gamme = (string)butSender.Content;
 
-            MainGrid.Children.Remove(stackP);
+            //MainGrid.Children.Remove(stackP);
             stackP.Children.Clear();
-            MainGrid.Children.Remove(scrollView);
+            //MainGrid.Children.Remove(scrollView);
             stackList.Children.Clear();
-
 
             foreach (MetaModule meta in listMeta)
             {
                 if (meta.label.Contains(type))
                 {
-                    if (meta.taille == 1 && meta.gamme.nom == gamme)
+                    if (meta.taille == 1)
                     {
                         ToggleButton toggle = new ToggleButton();
                         toggle.Background = Brushes.White;
@@ -543,13 +550,22 @@ namespace Madera_MMB.View_Crtl
                         {
                             toggle.IsChecked = true;
                         }
-                        stackList.Children.Add(toggle);
+
+                        if (gamme != "Aucun filtre" && meta.gamme.nom == gamme)
+                        {
+                            stackList.Children.Add(toggle);
+                        } 
+                        else if (gamme == "Aucun filtre")
+                        {
+                            stackList.Children.Add(toggle);
+                        }
                     }
                 }
             }
-
+            
             scrollView.Content = stackList;
-            MainGrid.Children.Add(scrollView);
+            viewB.Child = scrollView;
+            //MainGrid.Children.Add(scrollView);
         }
 
         private void placeWall(ButtonM but)
