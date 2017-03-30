@@ -254,6 +254,8 @@
     <Resource Include="Lib\Images\porte_simple.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Lib\Images\slot_Hplein.png" />
+    <Resource Include="Lib\Images\slot_Vplein.png" />
     <Resource Include="Lib\Images\slot_horizontal.png" />
     <Resource Include="Lib\Images\slot_vertical.png" />
     <Resource Include="Lib\Images\slotF_horizontal.png" />
