@@ -151,7 +151,7 @@ namespace Madera_MMB.CAD
                     {
                         command.Parameters.AddWithValue("@refPlan", plan.reference);
                         command.Parameters.AddWithValue("@label", plan.label);
-                        command.Parameters.AddWithValue("@dateCreation", DateTime.Today);
+                        command.Parameters.AddWithValue("@dateCreation", DateTime.Now);
                         command.Parameters.AddWithValue("@dateModification", DateTime.Today);
                         command.Parameters.AddWithValue("@refProjet", plan.projet.reference);
                         command.Parameters.AddWithValue("@typePlancher", plan.plancher.type);

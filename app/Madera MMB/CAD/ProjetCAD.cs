@@ -74,6 +74,7 @@ namespace Madera_MMB.CAD
         /// </summary>
         public void ListAllProjects()
         {
+            Projets.Clear();
             // Nom du/des champs mis directement dans la requête pour éviter d'avoir à passer par QSqlRecord 
             SQLQuery = "SELECT refProjet, nom, dateCreation, dateModification, refClient, refCommercial FROM projet WHERE refCommercial = '" + commercial.reference + "'";
             //SQLQuery = "SELECT * FROM projet WHERE refCommercial = " + commercial.reference;
@@ -102,8 +103,8 @@ namespace Madera_MMB.CAD
                                 (
                                     reader.GetString(0),
                                     reader.GetString(1),
-                                    reader.GetString(2),
-                                    reader.GetString(3),
+                                    reader.GetDateTime(2),
+                                    reader.GetDateTime(3),
                                     getClient(reader.GetString(4)),
                                     commercial
                                 );
@@ -158,7 +159,7 @@ namespace Madera_MMB.CAD
                 {
                     command.Parameters.AddWithValue("@refProjet", projet.reference);
                     command.Parameters.AddWithValue("@nom", projet.nom);
-                    command.Parameters.AddWithValue("@dateCreation", DateTime.Today);
+                    command.Parameters.AddWithValue("@dateCreation", DateTime.Now);
                     command.Parameters.AddWithValue("@dateModification", DateTime.Today);
                     command.Parameters.AddWithValue("@refClient", projet.client.reference);
                     command.Parameters.AddWithValue("@refCommercial", projet.commercial.reference);

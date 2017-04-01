@@ -22,7 +22,6 @@ namespace Madera_MMB.View_Crtl
         private Connexion connexion { get; set; }
         private Commercial commercial { get; set; }
         private ProjetCAD projetCAD { get; set; }
-        private GestionPlan gestionPlan { get; set; }
         public ClientCAD clientCAD { get; set; }
         public Projet proj { get; set; }
         public Commercial commercial_authentifié { get; set; }
@@ -86,7 +85,7 @@ namespace Madera_MMB.View_Crtl
                         }
 
                         Projet NewProjet = new Projet(getClient, commercial);
-                        NewProjet.reference = generateKey(getClient, commercial);
+                        NewProjet.reference = generateKeyProjet(getClient, commercial);
                         NewProjet.nom = NewProjet.client.nomprenom + " (" + i + ") ";
                         projetCAD.Projets.Add(NewProjet);
                         projetCAD.InsertProjet(NewProjet);
@@ -159,7 +158,7 @@ namespace Madera_MMB.View_Crtl
 
             // Value Date création
             lblDateCreation.Content = "";
-            lblDateCreation.Content = proj.creation;
+            lblDateCreation.Content = proj.creation.Date;
 
             // TODO : Value Statut Dernier Devis
             lblStatut.Content = "?";
@@ -170,7 +169,7 @@ namespace Madera_MMB.View_Crtl
 
             // Value Date modification
             lblDateModification.Content = "";
-            lblDateModification.Content = proj.modification;
+            lblDateModification.Content = proj.modification.Date;
 
             // Value Nom Commercial
             lblNomCommercial.Content = "";
@@ -179,7 +178,7 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Tools
-        private string generateKey(Client client, Commercial comm)
+        private string generateKeyProjet(Client client, Commercial comm)
         {
             string key = comm.nom.Substring(0, 1) + comm.prenom.Substring(0, 1) + client.nom.Substring(0, 1) + client.prenom.Substring(0, 1);
             Random rand = new Random();
