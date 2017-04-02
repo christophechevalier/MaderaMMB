@@ -33,7 +33,7 @@ namespace Madera_MMB.View_Crtl
         private View_Crtl.GestionClient gestionClient { get; set; }
         private View_Crtl.ParametresClient parametresClient { get; set; }
         private View_Crtl.ParametresPlan parametresPlan { get; set; }
-        //private View_Crtl.GestionDevis gestionDevis { get; set; }
+        private View_Crtl.GestionDevis gestionDevis { get; set; }
         private View_Crtl.Modelisation modelisation { get; set; }
         #endregion
 
@@ -47,12 +47,15 @@ namespace Madera_MMB.View_Crtl
             initSynchro();
 
             /// Test SYNCHRO import ///
-            connexion.SyncCommMySQL();
-            connexion.SyncParamPlan();
-            connexion.SyncClient();
-            connexion.SyncMetamodules();
-            connexion.SyncMetaslot();
-            connexion.SyncAssocMetaModuleMetaslot();
+            //if(connexion.MySQLconnected == true)
+            //{
+            //    connexion.SyncCommMySQL();
+            //    connexion.SyncParamPlan();
+            //    connexion.SyncClient();
+            //    connexion.SyncMetamodules();
+            //    connexion.SyncMetaslot();
+            //}
+
 
             /// Test CAD avec nouvelles données ///
             CommercialCAD commCAD = new CommercialCAD(connexion);
@@ -61,6 +64,7 @@ namespace Madera_MMB.View_Crtl
             CouvertureCAD couvCAD = new CouvertureCAD(connexion);
             GammeCAD gamCAD = new GammeCAD(connexion);
             PlancherCAD plancherCAD = new PlancherCAD(connexion);
+            
 
             connexion = new Connexion();
 
@@ -75,12 +79,33 @@ namespace Madera_MMB.View_Crtl
                     "mdp"
                 );
 
-            this.authentification = new Authentification(connexion);
-            this.gestionProjet = new GestionProjet(connexion, commercialTest);
+            Client clienttest = new Client
+                (
+                    "COM003",
+                    "Chevalier",
+                    "Christophe",
+                    "adresseclientest",
+                    "CPtest",
+                    "villetest",
+                    "monemail@gmail.com",
+                    "0626278620",
+                    "07/05/2017",
+                    "08/05/2017"
+                );
 
-            //this.parametresPlan = new ParametresPlan(connexion, gestionPlan.planCAD);
+            Projet projettest = new Projet
+                (
+                    clienttest,
+                    commercialTest
+                );
+            projettest.reference = "CCAT000001";
+            PlanCAD planCAD = new PlanCAD(connexion, projettest);
 
-            Mainframe.Content = gestionProjet;
+            Plan plantest = planCAD.Plans[0];
+
+            this.gestionDevis = new GestionDevis(connexion, plantest, commercialTest, clienttest);
+
+            Mainframe.Content = gestionDevis;
 
 
             /// Test SYNCHRO export ///
@@ -120,8 +145,8 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void Initialize_Listeners()
         {
-            Initialize_Listeners_Auth();
-            Initialize_Listeners_GestionProjet();
+            //Initialize_Listeners_Auth();
+            //Initialize_Listeners_GestionProjet();
             //Initialize_Listeners_GestionClient();
             //Initialize_Listeners_ParametresClient();
             //Initialize_Listeners_ParametresPlan();
@@ -159,15 +184,6 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton ouvrir un projet client pour aller dans la Vue Gestion Plan
             gestionProjet.BtnOuvrirProjet.Click += delegate(object sender, RoutedEventArgs e)
             {
-                Commercial commercialTest = new Commercial
-                    (
-                        "COM003",
-                        "Chevalier",
-                        "Christophe",
-                        "monemail@gmail.com",
-                        "mdp"
-                    );
-
                 if (gestionProjet.proj != null)
                 {
                     this.gestionPlan = new GestionPlan(connexion, gestionProjet.proj);

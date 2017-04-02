@@ -166,6 +166,8 @@ namespace Madera_MMB.Lib
                     Reader.GetValue(7).ToString() + "','" +
                     Reader.GetValue(8).ToString() + "')";
 
+                    SyncDevis(Reader.GetString(0));
+
                     SQLiteCommand command = new SQLiteCommand(query, LiteCo);
                     try
                     {
@@ -417,6 +419,56 @@ namespace Madera_MMB.Lib
             LiteCo.Close();
         }
 
+        /// <summary>
+        ///  Méthode de synchronisation des données des devis depuis la base distante MYSQL vers la base locale SQLite
+        /// </summary>
+        public void SyncDevis(string refPlan)
+        {
+            MySqlDataReader Reader;
+            string query;
+            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM devis WHERE refPlan = '"+refPlan+"'", MySQLCo);
+            try
+            {
+                MySQLCo.Open();
+                Reader = selectComms.ExecuteReader();
+                int i = 0;
+                LiteCo.Open();
+                while (Reader.Read())
+                {
+                    query = "replace into devis(refDevis,etat,dateCreation,prixTotalHT,prixTotalTTC,refPlan) values(@refDevis,@etat,@dateCreation,@prixTotalHT,@prixTotalTTC,@refPlan)";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
+                    {
+                        command.Parameters.AddWithValue("@refDevis", Reader.GetString(0));
+                        command.Parameters.AddWithValue("@etat", Reader.GetString(1));
+                        command.Parameters.AddWithValue("@dateCreation", Reader.GetString(2));
+                        command.Parameters.AddWithValue("@prixTotalHT", Reader.GetFloat(3));
+                        command.Parameters.AddWithValue("@prixTotalTTC", Reader.GetFloat(4));
+                        command.Parameters.AddWithValue("@refPlan", Reader.GetString(5));
+                        try
+                        {
+                            i = i + command.ExecuteNonQuery();
+                        }
+                        catch (System.Data.SQLite.SQLiteException e)
+                        {
+                            Trace.WriteLine(e.ToString());
+                            LiteCo.Close();
+                            MySQLCo.Close();
+                        }
+                    }
+                }
+                LiteCo.Close();
+                MySQLCo.Close();
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine(e.ToString());
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC CLIENT FAIL ############# \n");
+            }
+        }
+
+
         #endregion
 
         #region Synchro Export
@@ -554,6 +606,56 @@ namespace Madera_MMB.Lib
                                 expPlans.Parameters.AddWithValue("@typeCouverture", reader.GetString(6));
                                 expPlans.Parameters.AddWithValue("@idCoupe", reader.GetInt32(7));
                                 expPlans.Parameters.AddWithValue("@nomGamme", reader.GetString(8));
+                                try
+                                {
+                                    expPlans.ExecuteNonQuery();
+                                }
+                                catch (MySqlException e)
+                                {
+                                    Trace.WriteLine(" \n ################################################# EXPORT PLANS FAIL ################################################# \n" + e.ToString() + "\n");
+                                }
+                            }
+                        }
+                    }
+                    Trace.WriteLine("#### EXPORT PLANS SUCCESS ####");
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# EXPORT PLANS FAIL ################################################# \n" + ex.ToString() + "\n");
+                }
+                MySQLCo.Close();
+            }
+            LiteCo.Close();
+        }
+
+        /// <summary>
+        /// Méthode exportant les données des devis en base SQLite vers la base MySQL
+        /// </summary>
+        public void ExpDevis()
+        {
+            LiteCo.Open();
+            Trace.WriteLine(" ############# TEST EXPORT DEVIS ############# \n");
+            string query = "SELECT refDevis, etat, dateCreation, prixTotalHT, prixTotalTTC, refPlan FROM devis";
+            using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
+            {
+                MySQLCo.Open();
+                try
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string mySQLquery = "INSERT into devis(refDevis, etat, dateCreation, prixTotalHT, prixTotalTTC, refPlan)" +
+                                "VALUES(@refDevis, @etat, @dateCreation, @margeCommercial,  @prixTotalHT, @prixTotalTTC, @refPlan)" +
+                                "ON DUPLICATE KEY UPDATE etat= @etat, dateCreation= @dateCreation, prixTotalHT= @prixTotalHT,prixTotalTTC= @prixTotalTTC,refPlan= @refPlan";
+                            using (MySqlCommand expPlans = new MySqlCommand(mySQLquery, MySQLCo))
+                            {
+                                expPlans.Parameters.AddWithValue("@refDevis", reader.GetString(0));
+                                expPlans.Parameters.AddWithValue("@etat", reader.GetString(1));
+                                expPlans.Parameters.AddWithValue("@dateCreation", reader.GetString(2));
+                                expPlans.Parameters.AddWithValue("@prixTotalHT", reader.GetFloat(3));
+                                expPlans.Parameters.AddWithValue("@prixTotalTTC", reader.GetFloat(4));
+                                expPlans.Parameters.AddWithValue("@refPlan", reader.GetString(5));
                                 try
                                 {
                                     expPlans.ExecuteNonQuery();
@@ -1037,9 +1139,9 @@ namespace Madera_MMB.Lib
             try
             {
                 MySQLCo = new MySqlConnection(connectionString);
+                MySQLCo.Open();
                 MySQLCo.Close();
                 Trace.WriteLine(" \n ################################################# MYSQL DATABASE REACHED,  BEGIN SYNCHRONISATION ... ################################################# \n");
-                MySQLCo.Close();
                 return true;
             }
             catch (MySqlException ex)

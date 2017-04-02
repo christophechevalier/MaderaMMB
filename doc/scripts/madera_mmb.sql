@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Client :  127.0.0.1
--- Généré le :  Lun 20 Mars 2017 à 12:56
+-- Généré le :  Dim 02 Avril 2017 à 16:49
 -- Version du serveur :  5.7.14
 -- Version de PHP :  5.6.25
 
@@ -168,19 +168,11 @@ INSERT INTO `couverture` (`typeCouverture`, `prixHT`, `image`) VALUES
 
 CREATE TABLE `devis` (
   `refDevis` varchar(20) NOT NULL,
-  `nom` varchar(45) NOT NULL,
   `etat` varchar(45) NOT NULL,
-  `quantite` int(11) NOT NULL,
-  `unite` varchar(45) NOT NULL,
-  `dateCreation` date NOT NULL,
-  `margeCommercial` int(11) NOT NULL,
-  `margeEntreprise` int(11) NOT NULL,
-  `prixTotalHT` int(11) NOT NULL,
-  `prixTotalTTC` int(11) NOT NULL,
-  `refPlan` varchar(20) NOT NULL,
-  `refProjet` varchar(20) NOT NULL,
-  `refClient` varchar(20) NOT NULL,
-  `refCommercial` varchar(20) NOT NULL
+  `dateCreation` varchar(20) NOT NULL,
+  `prixTotalHT` float NOT NULL,
+  `prixTotalTTC` float NOT NULL,
+  `refPlan` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -442,10 +434,7 @@ ALTER TABLE `couverture`
 ALTER TABLE `devis`
   ADD PRIMARY KEY (`refDevis`),
   ADD UNIQUE KEY `refDevis` (`refDevis`),
-  ADD KEY `devis_ibfk_1` (`refPlan`),
-  ADD KEY `devis_ibfk_2` (`refProjet`),
-  ADD KEY `devis_ibfk_3` (`refClient`),
-  ADD KEY `devis_ibfk_4` (`refCommercial`);
+  ADD KEY `devis_ibfk_1` (`refPlan`);
 
 --
 -- Index pour la table `famillecomposant`
@@ -563,8 +552,7 @@ ALTER TABLE `composant`
 -- Contraintes pour la table `devis`
 --
 ALTER TABLE `devis`
-  ADD CONSTRAINT `devis_ibfk_1` FOREIGN KEY (`refPlan`) REFERENCES `plan` (`refPlan`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `devis_ibfk_2` FOREIGN KEY (`refProjet`) REFERENCES `plan` (`refProjet`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `devis_ibfk_1` FOREIGN KEY (`refPlan`) REFERENCES `plan` (`refPlan`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `metamodule`

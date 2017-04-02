@@ -22,11 +22,7 @@ namespace Madera_MMB.Model
         #region properties
         public string reference { get; set; }
         public string etat { get; set; }
-        public string quantite { get; set; }
-        public string unite { get; set; }
         public string creation { get; set; }
-        public float margeCommercial { get; set; }
-        public float margeEntreprise { get;set;}
         public float prixTotalHT { get; set; }
         public float prixTotalTTC { get; set; }
         public Plan plan { get; set; }
@@ -35,27 +31,105 @@ namespace Madera_MMB.Model
         #endregion
 
         #region Ctor
+        /// <summary>
+        /// Constructeur de la classe à la création d'un nouveau devis depuis l'application
+        /// </summary>
+        /// <param name="unplan">Prend un plan à partir du quel créer le devis</param>
         public Devis(Plan unplan)
         {
             this.plan = unplan;
+            this.creation = DateTime.Now.ToString();
         }
-        public Devis() { }
+
+        /// <summary>
+        /// Constructeur de la classe à la récupération un devis existant depuis la base de données
+        /// </summary>
+        /// <param name="unplan">Prend un plan à partir du quel créer le devis</param>
+        public Devis(string reference, string etat, string creation, float prixHT, float prixTTC, Plan plan)
+        {
+            this.reference = reference;
+            this.etat = etat;
+            this.creation = creation;
+            this.prixTotalHT = prixHT;
+            this.prixTotalTTC = prixTTC;
+            this.plan = plan;
+        }
         #endregion
 
         #region privates methods
 
-        private void calculerPrixHT()
+        /// <summary>
+        /// Méthode calculant le prix total Taxes Comprises du plan
+        /// </summary>
+        /// <returns>prix TTC</returns>
+        private float calculerPrixTTC()
         {
-            this.prixTotalHT = 0;
-            foreach(Module mod in plan.modules)
-            {
-                prixTotalHT += mod.metaModule.prixHT;
-            }
+            float prixHT = calculerPrixHT();
+            prixHT += (prixHT * 20) / 100;
+            this.prixTotalTTC = prixHT;
+            return prixTotalTTC;          
         }
-        private void calculerPrixTTC()
-        {
 
+        /// <summary>
+        /// Méthode calculant le prixc Total Hors Taxes des éléments du plan
+        /// </summary>
+        /// <returns>prix HT</returns>
+        private float calculerPrixHT()
+        {
+            int prixHT = 0;
+            foreach (Module mod in plan.modules)
+            {
+                prixHT += mod.metaModule.prixHT;
+            }
+            int prixcouv = calculCouverture();
+            int prixplanch = calculPlancher();
+            int prixcoupe = this.plan.coupePrincipe.prixHT;
+            this.prixTotalHT = prixHT + prixcouv + prixplanch + prixcoupe;
+            return prixTotalHT;
         }
+
+        /// <summary>
+        /// Méthode calculant le prix HT de la couverture de ce plan selon la coupe de principe
+        /// </summary>
+        /// <returns>Prix total HT de la couverture</returns>
+        private int calculCouverture()
+        {
+            int prixcouv = this.plan.couverture.prixHT;
+            int quotient1 = this.plan.coupePrincipe.largeur;
+            int quotient2 = this.plan.coupePrincipe.longueur;
+
+            return prixcouv * quotient1 * quotient2;
+        }
+
+        /// <summary>
+        /// Méthode calculant le prix HT du plancher de ce plan selon la coupe de principe
+        /// </summary>
+        /// <returns>Prix total HT du plancher</returns>
+        private int calculPlancher()
+        {
+            int prixplanch = this.plan.plancher.prixHT;
+            int quotient1 = this.plan.coupePrincipe.largeur;
+            int quotient2 = this.plan.coupePrincipe.longueur;
+
+            return prixplanch * quotient1 * quotient2;
+        }
+
+        /// <summary>
+        /// Méthode déterminant si la gamme du plan a bien été respectée pour tous les modules du plan
+        /// </summary>
+        /// <returns></returns>
+        private bool checkGamme()
+        {
+            bool isgamme = true;
+            foreach (Module mod in plan.modules)
+            {
+                if (mod.metaModule.gamme != plan.gamme)
+                    isgamme = false;
+            }
+            return isgamme;
+        }
+
+
         //private void verifierExpiration();
         //private void changerEtat();
         //private void verifierOffrePromo();

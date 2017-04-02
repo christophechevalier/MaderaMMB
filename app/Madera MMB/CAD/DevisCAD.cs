@@ -56,7 +56,7 @@ namespace Madera_MMB.CAD
         public Devis getDevisByPlan(Plan plan)
         {
             //MODIFICATION A EFFECTUER Transformer LIST => objet Devis
-            SQLQuery = "SELECT refDevis, nom, etat, quantite, unite, dateCreation, margeCommercial, margeEntreprise, prixTotalHT, prixTotalTTC, refPlan, refProjet, refClient, refCommercial FROM Devis WHERE refPlan = " + plan.reference;
+            SQLQuery = "SELECT refDevis, etat ,dateCreation, prixTotalHT, prixTotalTTC FROM Devis WHERE refPlan = '" + plan.reference +"'";
 
             //CONNEXION BDD
             connexion.LiteCo.Open();
@@ -71,33 +71,18 @@ namespace Madera_MMB.CAD
                         Trace.WriteLine("#### GET DEVIS DATA ####");
                         while (reader.Read())
                         {
-                            Trace.WriteLine(
-                                reader.GetString(0) +
-                                reader.GetString(1) +
-                                reader.GetString(2) +
-                                reader.GetString(3) +
-                                reader.GetString(4) +
-                                reader.GetDateTime(5) +
-                                reader.GetInt32(6) +
-                                reader.GetInt32(7) +
-                                reader.GetInt32(8) +
-                                reader.GetInt32(9));
 
                             this.dev = new Devis
                             (
                                     reader.GetString(0),
                                     reader.GetString(1),
                                     reader.GetString(2),
-                                    reader.GetString(3),
-                                    reader.GetString(4),
-                                    reader.GetDateTime(5),
-                                    reader.GetInt32(6),
-                                    reader.GetInt32(7),
-                                    reader.GetInt32(8),
-                                    reader.GetInt32(9),
-                                    new Plan("Ref001", "Plan X 50x50", "2017-01-01", "2017-28-02", projet, plancher, couverture, coupe, gamme, modules),
+                                    reader.GetFloat(3),
+                                    reader.GetFloat(4),
+                                    plan
                                     );
-                    }
+
+                        }
                     }
                     Trace.WriteLine("#### GET DEVIS DATA SUCCESS ####");
                 }
@@ -118,8 +103,9 @@ namespace Madera_MMB.CAD
         /// <param name="refPlan"></param>
         private void insertDevis(Devis devis, string refPlan)
         {
-            SQLQuery = "INSERT INTO devis (refDevis, nom, etat, quantite, unite, dateCreation, margeCommercial, margeEntreprise, prixTotalHT, prixTotalTTC, refPlan, refProjet, refClient, refCommercial)" +
-            "VALUES (" + devis.reference + "," + devis.nom + "," + devis.etat + "," + devis.quantite + "," + devis.unite + "," + devis.creation + "," + devis.margeCommercial + "," + devis.margeEntreprise + "," + devis.prixTotalHT + "," + devis.prixTotalTTC + "," + devis.plan.reference + "," + devis.projet.reference + "," + refClient + "," + refCommercial + ";";
+            SQLQuery = "INSERT INTO devis (refDevis, nom, etat, dateCreation, prixTotalHT, prixTotalTTC, refPlan)" +
+            "VALUES ('" + devis.reference + "','" + devis.etat + "','" + devis.creation + "',"  + devis.prixTotalHT + "," + devis.prixTotalTTC + ",'" + devis.plan.reference+"'"+
+            "ON DUPLICATE KEY UPDATE etat='"+ devis.etat + "', prixTotalHT="+ devis.prixTotalHT + ", prixTotalHT="+ devis.prixTotalTTC ;
             connexion.InsertSQliteQuery(SQLQuery);
         }
 

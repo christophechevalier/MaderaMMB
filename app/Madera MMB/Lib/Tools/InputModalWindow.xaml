@@ -1,6 +1,7 @@
 ﻿<Window x:Class="Madera_MMB.Lib.Tools.InputModalWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         Height="300" Width="450"
         WindowStartupLocation="CenterScreen"
         >
@@ -41,8 +42,8 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Label Background="Gray" Name="lblQuestion" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" >Appliquer une remise:</Label>
-            <TextBox Name="txtAnswer" Grid.Column="2" MinWidth="30" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBox>
+            <Label Background="Gray" Name="lblQuestion" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" >Appliquer une remise:</Label>
+            <Controls:NumericUpDown DataContext="{Binding this.remise}" Name="txtAnswer" Minimum = "0" Maximum = "40" HideUpDownButtons = "False" Interval ="1" Grid.Column="1" MinWidth="100" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="126,90,5,91" Width="117"></Controls:NumericUpDown>
             <Label Background="Gray" Name="lblPourcentage" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" >%</Label>
         </Grid>
     </Grid>

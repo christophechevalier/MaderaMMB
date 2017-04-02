@@ -490,7 +490,7 @@ namespace Madera_MMB.View_Crtl
                 }
                 else
                 {
-                    this.Plan = new Plan(key, this.PlanNom.Text, DateTime.Now, this.projet, this.planchChoisi, this.couvChoisie, this.coupeChoisie, this.gammChoisie);
+                    this.Plan = new Plan(key, this.PlanNom.Text, DateTime.Now.ToString(), this.projet, this.planchChoisi, this.couvChoisie, this.coupeChoisie, this.gammChoisie);
                 }
                 return true;
             }

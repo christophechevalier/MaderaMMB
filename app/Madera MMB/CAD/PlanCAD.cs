@@ -108,8 +108,8 @@ namespace Madera_MMB.CAD
                                 (
                                     reader.GetString(0),
                                     reader.GetString(1),
-                                    reader.GetDateTime(2),
-                                    reader.GetDateTime(3),
+                                    reader.GetString(2),
+                                    reader.GetString(3),
                                     projet,
                                     getPlancherByType(reader.GetString(5)),
                                     getCouvByType(reader.GetString(6)),
@@ -401,9 +401,9 @@ namespace Madera_MMB.CAD
                             (
                                 reader.GetInt16(0),
                                 reader.GetString(1),
-                                reader.GetInt16(2),
-                                reader.GetInt16(3),
-                                reader.GetInt16(4),
+                                reader.GetInt32(2),
+                                reader.GetInt32(3),
+                                reader.GetInt32(4),
                                 reader.GetBoolean(6),
                                 ToImage(data)
                             );
