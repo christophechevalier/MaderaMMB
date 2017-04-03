@@ -275,18 +275,19 @@ namespace Madera_MMB.Lib
                 int i = 0;
                 while (Reader.Read())
                 {
-                    Byte[] data = (Byte[])Reader.GetValue(4);
-                    query = "replace into metamodule(refMetaModule,label,prixHT,nbSlot,dateMaj,nomGamme,statut,image) values(@refMetaModule,@label,@prixHT,@nbSlot,@dateMaj,@nomGamme,@statut,@image)";
+                    Byte[] data = (Byte[])Reader.GetValue(3);
+                    query = "replace into metamodule(refMetaModule,label,prixHT,image,statut,dateMaj,nomGamme,taille,ecart) values(@refMetaModule,@label,@prixHT,@image,@statut,@dateMaj,@nomGamme,@taille,@ecart)";
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
                         command.Parameters.AddWithValue("@refMetaModule", Reader.GetString(0));
                         command.Parameters.AddWithValue("@label", Reader.GetString(1));
                         command.Parameters.AddWithValue("@prixHT", Reader.GetInt32(2));
-                        command.Parameters.AddWithValue("@nbSlot", Reader.GetInt32(3));                 
-                        command.Parameters.AddWithValue("@dateMaj", dateSQLite);
-                        command.Parameters.AddWithValue("@nomGamme", Reader.GetString(5));
-                        command.Parameters.AddWithValue("@statut", sqlitebool);
                         command.Parameters.AddWithValue("@image", data);
+                        command.Parameters.AddWithValue("@statut", sqlitebool);
+                        command.Parameters.AddWithValue("@dateMaj", dateSQLite);
+                        command.Parameters.AddWithValue("@nomGamme", Reader.GetString(4));
+                        command.Parameters.AddWithValue("@taille", Reader.GetString(5));
+                        command.Parameters.AddWithValue("@ecart", Reader.GetString(6));
                         try
                         {
                             i = i + command.ExecuteNonQuery();
@@ -341,12 +342,12 @@ namespace Madera_MMB.Lib
                 int i = 0;
                 while (Reader.Read())
                 {
-                    query = "replace into metaslot(idMetaSlot,label,numSlotPosition,refMetaModule) values(@idMetaSlot,@label,@numSlotPosition,@refMetaModule)";
+                    query = "replace into metaslot(idMetaSlot,numSlotPosition,type,refMetaModule) values(@idMetaSlot,@numSlotPosition,@type,@refMetaModule)";
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
                         command.Parameters.AddWithValue("@idMetaSlot", Reader.GetInt32(0));
-                        command.Parameters.AddWithValue("@label", Reader.GetString(1));
-                        command.Parameters.AddWithValue("@numSlotPosition", Reader.GetInt32(2));
+                        command.Parameters.AddWithValue("@numSlotPosition", Reader.GetString(1));
+                        command.Parameters.AddWithValue("@type", Reader.GetString(2));
                         command.Parameters.AddWithValue("@refMetaModule", Reader.GetString(3));
                         try
                         {
@@ -370,53 +371,7 @@ namespace Madera_MMB.Lib
             }
             LiteCo.Close();
         }
-
-        /// <summary>
-        ///  Méthode de synchronisation des données d'association des métamodules et métaslots depuis la base distante MYSQL vers la base locale SQLite
-        /// </summary>
-        public void SyncAssocMetaModuleMetaslot()
-        {
-            MySqlDataReader Reader;
-            string query;
-            LiteCo.Open();
-            Trace.WriteLine(" ############# TEST SYNC ASSOCIATION METAMODULES/METASLOTS ############# \n");
-            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM metamodul_has_metaslot", MySQLCo);
-            try
-            {
-                MySQLCo.Open();
-                Reader = selectComms.ExecuteReader();
-                int i = 0;
-                while (Reader.Read())
-                {
-                    query = "replace into Composant_has_MetaModule(idComposition,refMetaModule,idMetaSlot) values(@idComposition,@refMetaModule,@idMetaSlot)";
-                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
-                    {
-                        command.Parameters.AddWithValue("@idComposition", Reader.GetInt32(0));
-                        command.Parameters.AddWithValue("@refMetaModule", Reader.GetString(1));
-                        command.Parameters.AddWithValue("@idMetaSlot", Reader.GetInt32(2));
-                        try
-                        {
-                            i = i + command.ExecuteNonQuery();
-                        }
-                        catch (SQLiteException e)
-                        {
-                            Trace.WriteLine(e.ToString());
-                            MySQLCo.Close();
-                        }
-                    }
-                }
-                MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC ASSOCIATION METAMODULES/METASLOTS SUCCESS ############# \n");
-            }
-            catch (MySqlException e)
-            {
-                Trace.WriteLine(e.ToString());
-                MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC ASSOCIATION METAMODULES/METASLOTS FAIL ############# \n");
-            }
-            LiteCo.Close();
-        }
-
+        
         #endregion
 
         #region Synchro Export

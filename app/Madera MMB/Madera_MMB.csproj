@@ -90,6 +90,7 @@
     <Compile Include="CAD\ProjetCAD.cs" />
     <Compile Include="CAD\SlotCAD.cs" />
     <Compile Include="Lib\Connexion.cs" />
+    <Compile Include="Lib\Tools\Module.cs" />
     <Compile Include="Lib\Tools\InputModalWindow.xaml.cs">
       <DependentUpon>InputModalWindow.xaml</DependentUpon>
     </Compile>
@@ -105,7 +106,6 @@
     <Compile Include="Model\Gamme.cs" />
     <Compile Include="Model\MetaModule.cs" />
     <Compile Include="Model\MetaSlot.cs" />
-    <Compile Include="Model\Module.cs" />
     <Compile Include="Model\Plan.cs" />
     <Compile Include="Model\Plancher.cs" />
     <Compile Include="Model\Projet.cs" />
@@ -125,6 +125,10 @@
     <Compile Include="View_Crtl\ParametresPlan.xaml.cs">
       <DependentUpon>ParametresPlan.xaml</DependentUpon>
     </Compile>
+    <Page Include="Lib\Tools\Template_Modelisation.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Lib\Tools\Template_Madera.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -249,11 +253,23 @@
     <Resource Include="Lib\Images\porte_simple.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Lib\Images\slot_Hplein.png" />
+    <Resource Include="Lib\Images\slot_Vplein.png" />
+    <Resource Include="Lib\Images\slot_horizontal.png" />
+    <Resource Include="Lib\Images\slot_vertical.png" />
+    <Resource Include="Lib\Images\slotF_horizontal.png" />
+    <Resource Include="Lib\Images\slotF_vertical.png" />
+    <Resource Include="Lib\Images\slotP_horizontal.png" />
+    <Resource Include="Lib\Images\slotP_vertical.png" />
+    <Resource Include="Lib\Images\tBas.png" />
+    <Resource Include="Lib\Images\tDroite.png" />
+    <Resource Include="Lib\Images\tGauche.png" />
+    <Resource Include="Lib\Images\tHaut.png" />
     <Resource Include="Lib\Images\angle_bd.png" />
     <Resource Include="Lib\Images\angle_bg.png" />
     <Resource Include="Lib\Images\angle_hd.png" />
     <Resource Include="Lib\Images\angle_hg.png" />
-    <Resource Include="Lib\Images\croix.png" />
+    <Content Include="Lib\Images\croix.png" />
     <Resource Include="Lib\Images\mur_horizontal.png" />
     <Resource Include="Lib\Images\mur_vertical.png" />
   </ItemGroup>
