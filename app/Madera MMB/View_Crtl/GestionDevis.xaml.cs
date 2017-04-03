@@ -293,6 +293,10 @@ namespace Madera_MMB.View_Crtl
         {
             var coupe = sender as TreeView;
 
+            TreeViewItem coupeItem = new TreeViewItem();
+            coupeItem.Header = "Base " + plan.coupePrincipe.label + " " + plan.coupePrincipe.longueur + "x" + plan.coupePrincipe.largeur;
+            coupeItem.IsExpanded = true;
+
             TreeViewItem couvItem = new TreeViewItem();
             couvItem.Header = "Couverture " + this.plan.couverture.type;
             couvItem.IsExpanded = true;
@@ -301,10 +305,8 @@ namespace Madera_MMB.View_Crtl
             planchItem.Header = "Plancher " + this.plan.plancher.type;
             planchItem.IsExpanded = true;
 
-
-            TreeViewItem coupeItem = new TreeViewItem();
-            coupeItem.Header = "Base " + plan.coupePrincipe.label + " " + plan.coupePrincipe.longueur + "x" + plan.coupePrincipe.largeur;
-            coupeItem.IsExpanded = true;
+            coupeItem.Items.Add(couvItem);
+            coupeItem.Items.Add(planchItem);
 
             for (int i = 0; i <= plan.modules.Count - 1; i++)
             {
@@ -312,20 +314,11 @@ namespace Madera_MMB.View_Crtl
                 {
                     if(plan.modules[i].metaModule.label.Contains("Mur"))
                     {
-                        plan.modules[i].
+                        //if(plan.modules[i].)
                     }
-                    TreeViewItem moditem = new TreeViewItem();
-                    moditem.Header = mod.metaModule.label;
-                    moditem.IsExpanded = true;
-                    coupeItem.Items.Add(moditem);
                 }
             }
 
-            // ... Get TreeView reference and add both items.
-            
-
-            coupe.Items.Add(couvItem);
-            coupe.Items.Add(planchItem);
             coupe.Items.Add(coupeItem);
 
         }
