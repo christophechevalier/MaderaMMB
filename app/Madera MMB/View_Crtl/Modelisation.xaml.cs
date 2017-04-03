@@ -17,7 +17,7 @@ namespace Madera_MMB.View_Crtl
     /// <summary>
     /// Controle de la vue Modelisation
     /// Features Restantes :
-    ///     Generation auto plan
+    ///     Chargement auto plan
     ///     Sauvegarde plan
     ///     Gestion mur ext
     /// </summary>
@@ -25,7 +25,7 @@ namespace Madera_MMB.View_Crtl
     {
         #region Attributs
         private Grid grid = new Grid();
-        private ButtonM[,] listB = new ButtonM[40, 30];
+        public Module[,] listB = new Module[40, 30];
         private ListBox listBox = new ListBox();
         private Viewbox viewB = new Viewbox();
         private StackPanel stackP = new StackPanel();
@@ -33,14 +33,15 @@ namespace Madera_MMB.View_Crtl
         private string mode = "default";
         private string modeAffich = "tracage";
         private MetaModule metaChoose;
-        private ButtonM butChoose;
+        private Module butChoose;
         private string type;
         List<MetaModule> listMeta;
 
-        private Plan plan { get; set; }
-        private PlanCAD planCad { get; set; }
+        public Plan plan { get; set; }
+        public PlanCAD planCad { get; set; }
         private Connexion con { get; set; }
 
+        #region Images
         private Brush croix = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/croix.png", UriKind.RelativeOrAbsolute)));
         private Brush murh = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/mur_horizontal.png", UriKind.RelativeOrAbsolute)));
         private Brush murv = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/mur_vertical.png", UriKind.RelativeOrAbsolute)));
@@ -60,15 +61,15 @@ namespace Madera_MMB.View_Crtl
         private Brush slotV = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/slot_vertical.png", UriKind.RelativeOrAbsolute)));
         private Brush slotPlH = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/slot_Hplein.png", UriKind.RelativeOrAbsolute)));
         private Brush slotPlV = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/slot_Vplein.png", UriKind.RelativeOrAbsolute)));
+        #endregion
 
+        private Module slot = new Module(Module.type.SlotPorte, 15, 5, 1, 1, null);
+        private Module slot2 = new Module(Module.type.SlotFen, 15, 25, 1, 1, null);
 
-        private ButtonM slot = new ButtonM(ButtonM.type.SlotPorte, 15, 5, 1, 1, null);
-        private ButtonM slot2 = new ButtonM(ButtonM.type.SlotFen, 15, 25, 1, 1, null);
-
-        private ButtonM murdroit = new ButtonM(ButtonM.type.Mur, 25, 5, 1, 20, null);
-        private ButtonM murgauche = new ButtonM(ButtonM.type.Mur, 5, 6, 1, 20, null);
-        private ButtonM murbas = new ButtonM(ButtonM.type.Mur, 6, 25, 20, 1, null);
-        private ButtonM murhaut = new ButtonM(ButtonM.type.Mur, 5, 5, 20, 1, null);
+        private Module murdroit = new Module(Module.type.Mur, 25, 5, 1, 20, null);
+        private Module murgauche = new Module(Module.type.Mur, 5, 6, 1, 20, null);
+        private Module murbas = new Module(Module.type.Mur, 6, 25, 20, 1, null);
+        private Module murhaut = new Module(Module.type.Mur, 5, 5, 20, 1, null);
         #endregion
 
         #region Constructeurs
@@ -136,7 +137,7 @@ namespace Madera_MMB.View_Crtl
             {
                 for (int x = 0; x < 40; x++)
                 {
-                    ButtonM but = new ButtonM(ButtonM.type.Rien, x, y, 1, 1, null);
+                    Module but = new Module(Module.type.Rien, x, y, 1, 1, null);
                     but.BorderBrush = Brushes.Silver;
                     but.Background = Brushes.LightGray;
                     but.meta = null;
@@ -161,7 +162,7 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Méthodes privées
-        private void placeComponent(ButtonM but)
+        private void placeComponent(Module but)
         {
             /*Grid.SetColumn(but, but.x);
             Grid.SetColumnSpan(but, but.colspan);
@@ -189,10 +190,10 @@ namespace Madera_MMB.View_Crtl
 
         private void checkType(object sender, RoutedEventArgs e)
         {
-            ButtonM but = sender as ButtonM;
+            Module but = sender as Module;
             butChoose = but;
             checkMode();
-            if (but.letype == ButtonM.type.Rien)
+            if (but.letype == Module.type.Rien)
             {
                 if (mode == "tracer")
                 {
@@ -208,7 +209,7 @@ namespace Madera_MMB.View_Crtl
                     mode = "default";
                 }
             }
-            else if (but.letype == ButtonM.type.SlotMur)
+            else if (but.letype == Module.type.SlotMur)
             {
                 mode = "default";
                 MainGrid.Children.Remove(listBox);
@@ -218,21 +219,21 @@ namespace Madera_MMB.View_Crtl
                 item1.Content = "Yop !";
                 listBox.Items.Add(item1);
             }
-            else if (but.letype == ButtonM.type.MurInt)
+            else if (but.letype == Module.type.MurInt)
             {
                 if (mode == "retirer")
                 {
                     removeWall(but);
                 }
             }
-            else if (but.letype == ButtonM.type.SlotPorte || but.letype == ButtonM.type.SlotFen)
+            else if (but.letype == Module.type.SlotPorte || but.letype == Module.type.SlotFen)
             {
                 if (mode != "retirer" && mode != "tracer")
                 {
                     loadChoiceButton(but);
                 }
             }
-            else if (but.letype == ButtonM.type.Slot)
+            else if (but.letype == Module.type.Slot)
             {
                 if (mode == "retirer")
                 {
@@ -247,7 +248,7 @@ namespace Madera_MMB.View_Crtl
                     loadChoiceButton(but);
                 }
             }
-            else if (but.letype == ButtonM.type.Porte || but.letype == ButtonM.type.Fenetre)
+            else if (but.letype == Module.type.Porte || but.letype == Module.type.Fenetre)
             {
                 if (mode == "retirer")
                 {
@@ -264,7 +265,7 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
-        private void loadChoiceButton (ButtonM but)
+        private void loadChoiceButton (Module but)
         {
             MainGrid.Children.Remove(stackP);
             stackP.Children.Clear();
@@ -296,7 +297,7 @@ namespace Madera_MMB.View_Crtl
                 stackP.Children.Add(sp);
             }
 
-            if (but.letype == ButtonM.type.Slot || but.letype == ButtonM.type.SlotFen || but.letype == ButtonM.type.Fenetre || but.letype == ButtonM.type.Porte)
+            if (but.letype == Module.type.Slot || but.letype == Module.type.SlotFen || but.letype == Module.type.Fenetre || but.letype == Module.type.Porte)
             {
                 Button butFen = new Button();
                 butFen.Height = 50;
@@ -305,7 +306,7 @@ namespace Madera_MMB.View_Crtl
                 stackP.Children.Add(butFen);
             }
 
-            if (but.letype == ButtonM.type.Slot || but.letype == ButtonM.type.SlotPorte || but.letype == ButtonM.type.Fenetre || but.letype == ButtonM.type.Porte)
+            if (but.letype == Module.type.Slot || but.letype == Module.type.SlotPorte || but.letype == Module.type.Fenetre || but.letype == Module.type.Porte)
             {
                 Button butPor = new Button();
                 butPor.Height = 50;
@@ -328,20 +329,20 @@ namespace Madera_MMB.View_Crtl
                         tgbt.IsChecked = false;
                     }
                     butChoose.meta = null;
-                    butChoose.letype = ButtonM.type.Slot;
-                    if (listB[butChoose.x + 1, butChoose.y].letype == ButtonM.type.MurInt)
+                    butChoose.letype = Module.type.Slot;
+                    if (listB[butChoose.x + 1, butChoose.y].letype == Module.type.MurInt)
                     {
                         butChoose.texture = listB[butChoose.x + 1, butChoose.y].texture;
                     }
-                    else if (listB[butChoose.x - 1, butChoose.y].letype == ButtonM.type.MurInt)
+                    else if (listB[butChoose.x - 1, butChoose.y].letype == Module.type.MurInt)
                     {
                         butChoose.texture = listB[butChoose.x - 1, butChoose.y].texture;
                     }
-                    else if (listB[butChoose.x, butChoose.y + 1].letype == ButtonM.type.MurInt)
+                    else if (listB[butChoose.x, butChoose.y + 1].letype == Module.type.MurInt)
                     {
                         butChoose.texture = listB[butChoose.x, butChoose.y + 1].texture;
                     }
-                    else if (listB[butChoose.x, butChoose.y - 1].letype == ButtonM.type.MurInt)
+                    else if (listB[butChoose.x, butChoose.y - 1].letype ==  Module.type.MurInt)
                     {
                         butChoose.texture = listB[butChoose.x, butChoose.y - 1].texture;
                     }
@@ -392,7 +393,6 @@ namespace Madera_MMB.View_Crtl
                 }
                 
                 viewB.Child = stackP;
-                //MainGrid.Children.Add(viewB);
             }
         }
 
@@ -488,10 +488,8 @@ namespace Madera_MMB.View_Crtl
         {
             Button butSender = sender as Button;
             string gamme = (string)butSender.Content;
-
-            //MainGrid.Children.Remove(stackP);
+            
             stackP.Children.Clear();
-            //MainGrid.Children.Remove(scrollView);
             stackList.Children.Clear();
 
             foreach (MetaModule meta in listMeta)
@@ -531,16 +529,17 @@ namespace Madera_MMB.View_Crtl
                             {
                                 tgbt.IsChecked = false;
                             }
+                            butChoose.parent = butChoose.meta;
                             butChoose.meta = meta;
                             Brush fond = new ImageBrush(butChoose.meta.image);
                             butChoose.texture = fond;
                             if (type == "Fen")
                             {
-                                butChoose.letype = ButtonM.type.Fenetre;
+                                butChoose.letype =  Module.type.Fenetre;
                             }
                             else if (type == "Por")
                             {
-                                butChoose.letype = ButtonM.type.Porte;
+                                butChoose.letype =  Module.type.Porte;
                             }
                             active.IsChecked = true;
                             checkImage();
@@ -568,11 +567,11 @@ namespace Madera_MMB.View_Crtl
             //MainGrid.Children.Add(scrollView);
         }
 
-        private void placeWall(ButtonM but)
+        private void placeWall( Module but)
         {
             if (isInside(but) && checkAround(but) && metaChoose != null)
             {
-                but.letype = ButtonM.type.MurInt;
+                but.letype =  Module.type.MurInt;
                 Brush fond = new ImageBrush(metaChoose.image);
                 but.texture = fond;
                 but.meta = metaChoose;
@@ -581,11 +580,11 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
-        private void removeWall(ButtonM but)
+        private void removeWall( Module but)
         {
             if (isInside(but))
             {
-                but.letype = ButtonM.type.Rien;
+                but.letype =  Module.type.Rien;
                 but.texture = null;
                 but.meta = null;
                 checkImage();
@@ -599,35 +598,35 @@ namespace Madera_MMB.View_Crtl
             {
                 for (int y = 1; y < listB.GetLength(1) - 1; y++)
                 {
-                    ButtonM but = listB[i, y];
-                    if (but.letype == ButtonM.type.MurInt || but.letype == ButtonM.type.Slot)
+                     Module but = listB[i, y];
+                    if (but.letype ==  Module.type.MurInt || but.letype ==  Module.type.Slot)
                     {
-                        ButtonM butN = listB[but.x, but.y - 1];
-                        ButtonM butN2 = listB[but.x, but.y - 2];
-                        ButtonM butS = listB[but.x, but.y + 1];
-                        ButtonM butS2 = listB[but.x, but.y + 2];
-                        ButtonM butO = listB[but.x - 1, but.y];
-                        ButtonM butO2 = listB[but.x - 2, but.y];
-                        ButtonM butE = listB[but.x + 1, but.y];
-                        ButtonM butE2 = listB[but.x + 2, but.y];
+                         Module butN = listB[but.x, but.y - 1];
+                         Module butN2 = listB[but.x, but.y - 2];
+                         Module butS = listB[but.x, but.y + 1];
+                         Module butS2 = listB[but.x, but.y + 2];
+                         Module butO = listB[but.x - 1, but.y];
+                         Module butO2 = listB[but.x - 2, but.y];
+                         Module butE = listB[but.x + 1, but.y];
+                         Module butE2 = listB[but.x + 2, but.y];
 
-                        if ((butN.Background == murv && butS.Background == murv) && (butO.letype == ButtonM.type.Rien && butE.letype == ButtonM.type.Rien))
+                        if ((butN.Background == murv && butS.Background == murv) && (butO.letype ==  Module.type.Rien && butE.letype ==  Module.type.Rien))
                         {
-                            if (butN2.letype == ButtonM.type.MurInt && butS2.letype == ButtonM.type.MurInt)
+                            if (butN2.letype ==  Module.type.MurInt && butS2.letype ==  Module.type.MurInt)
                             {
-                                but.letype = ButtonM.type.Slot;
+                                but.letype =  Module.type.Slot;
                             }
                         }
-                        else if ((butO.Background == murh && butE.Background == murh) && (butN.letype == ButtonM.type.Rien && butS.letype == ButtonM.type.Rien))
+                        else if ((butO.Background == murh && butE.Background == murh) && (butN.letype ==  Module.type.Rien && butS.letype ==  Module.type.Rien))
                         {
-                            if (butO2.letype == ButtonM.type.MurInt && butE2.letype == ButtonM.type.MurInt)
+                            if (butO2.letype ==  Module.type.MurInt && butE2.letype ==  Module.type.MurInt)
                             {
-                                but.letype = ButtonM.type.Slot;
+                                but.letype =  Module.type.Slot;
                             }
                         }
                         else
                         {
-                            but.letype = ButtonM.type.MurInt;
+                            but.letype =  Module.type.MurInt;
                         }
 
                         checkImage();
@@ -636,18 +635,18 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
-        private bool checkAround(ButtonM but)
+        private bool checkAround( Module but)
         {
             bool around = false;
 
-            ButtonM butN = listB[but.x, but.y - 1];
-            ButtonM butS = listB[but.x, but.y + 1];
-            ButtonM butO = listB[but.x - 1, but.y];
-            ButtonM butE = listB[but.x + 1, but.y];
+             Module butN = listB[but.x, but.y - 1];
+             Module butS = listB[but.x, but.y + 1];
+             Module butO = listB[but.x - 1, but.y];
+             Module butE = listB[but.x + 1, but.y];
 
-            if (butN.letype != ButtonM.type.Rien || butS.letype != ButtonM.type.Rien || butO.letype != ButtonM.type.Rien || butE.letype != ButtonM.type.Rien)
+            if (butN.letype !=  Module.type.Rien || butS.letype !=  Module.type.Rien || butO.letype !=  Module.type.Rien || butE.letype !=  Module.type.Rien)
             {
-                if (butN.letype != ButtonM.type.SlotPorte && butN.letype != ButtonM.type.SlotFen && butS.letype != ButtonM.type.SlotPorte && butS.letype != ButtonM.type.SlotFen && butE.letype != ButtonM.type.SlotPorte && butE.letype != ButtonM.type.SlotFen && butO.letype != ButtonM.type.SlotPorte && butO.letype != ButtonM.type.SlotFen)
+                if (butN.letype !=  Module.type.SlotPorte && butN.letype !=  Module.type.SlotFen && butS.letype !=  Module.type.SlotPorte && butS.letype !=  Module.type.SlotFen && butE.letype !=  Module.type.SlotPorte && butE.letype !=  Module.type.SlotFen && butO.letype !=  Module.type.SlotPorte && butO.letype !=  Module.type.SlotFen)
                 {
                     around = true;
                 }
@@ -662,63 +661,63 @@ namespace Madera_MMB.View_Crtl
             {
                 for (int y = 1; y < listB.GetLength(1) - 1; y++)
                 {
-                    ButtonM but = listB[i, y];
-                    ButtonM butN = listB[but.x, but.y - 1];
-                    ButtonM butS = listB[but.x, but.y + 1];
-                    ButtonM butO = listB[but.x - 1, but.y];
-                    ButtonM butE = listB[but.x + 1, but.y];
-                    if (but.letype == ButtonM.type.MurInt || but.letype == ButtonM.type.Mur)
+                     Module but = listB[i, y];
+                     Module butN = listB[but.x, but.y - 1];
+                     Module butS = listB[but.x, but.y + 1];
+                     Module butO = listB[but.x - 1, but.y];
+                     Module butE = listB[but.x + 1, but.y];
+                    if (but.letype ==  Module.type.MurInt || but.letype ==  Module.type.Mur)
                     {
 
-                        if (butN.letype != ButtonM.type.Rien && butS.letype != ButtonM.type.Rien && butO.letype != ButtonM.type.Rien && butE.letype != ButtonM.type.Rien)
+                        if (butN.letype !=  Module.type.Rien && butS.letype !=  Module.type.Rien && butO.letype !=  Module.type.Rien && butE.letype !=  Module.type.Rien)
                         {
                             but.Background = croix;
                         }
-                        else if (butN.letype != ButtonM.type.Rien && butS.letype != ButtonM.type.Rien && butO.letype != ButtonM.type.Rien)
+                        else if (butN.letype !=  Module.type.Rien && butS.letype !=  Module.type.Rien && butO.letype !=  Module.type.Rien)
                         {
                             but.Background = tGauche;
                         }
-                        else if (butN.letype != ButtonM.type.Rien && butS.letype != ButtonM.type.Rien && butE.letype != ButtonM.type.Rien)
+                        else if (butN.letype !=  Module.type.Rien && butS.letype !=  Module.type.Rien && butE.letype !=  Module.type.Rien)
                         {
                             but.Background = tDroite;
                         }
-                        else if (butO.letype != ButtonM.type.Rien && butE.letype != ButtonM.type.Rien && butS.letype != ButtonM.type.Rien)
+                        else if (butO.letype !=  Module.type.Rien && butE.letype !=  Module.type.Rien && butS.letype !=  Module.type.Rien)
                         {
                             but.Background = tBas;
                         }
-                        else if (butO.letype != ButtonM.type.Rien && butE.letype != ButtonM.type.Rien && butN.letype != ButtonM.type.Rien)
+                        else if (butO.letype !=  Module.type.Rien && butE.letype !=  Module.type.Rien && butN.letype !=  Module.type.Rien)
                         {
                             but.Background = tHaut;
                         }
-                        else if (butN.letype != ButtonM.type.Rien && butS.letype != ButtonM.type.Rien)
+                        else if (butN.letype !=  Module.type.Rien && butS.letype !=  Module.type.Rien)
                         {
                             but.Background = murv;
                         }
-                        else if (butO.letype != ButtonM.type.Rien && butE.letype != ButtonM.type.Rien)
+                        else if (butO.letype !=  Module.type.Rien && butE.letype !=  Module.type.Rien)
                         {
                             but.Background = murh;
                         }
-                        else if (butS.letype != ButtonM.type.Rien && butO.letype != ButtonM.type.Rien)
+                        else if (butS.letype !=  Module.type.Rien && butO.letype !=  Module.type.Rien)
                         {
                             but.Background = anglehd;
                         }
-                        else if (butS.letype != ButtonM.type.Rien && butE.letype != ButtonM.type.Rien)
+                        else if (butS.letype !=  Module.type.Rien && butE.letype != Module.type.Rien)
                         {
                             but.Background = anglehg;
                         }
-                        else if (butN.letype != ButtonM.type.Rien && butO.letype != ButtonM.type.Rien)
+                        else if (butN.letype != Module.type.Rien && butO.letype != Module.type.Rien)
                         {
                             but.Background = anglebd;
                         }
-                        else if (butN.letype != ButtonM.type.Rien && butE.letype != ButtonM.type.Rien)
+                        else if (butN.letype != Module.type.Rien && butE.letype != Module.type.Rien)
                         {
                             but.Background = anglebg;
                         }
-                        else if (butO.letype != ButtonM.type.Rien || butE.letype != ButtonM.type.Rien)
+                        else if (butO.letype != Module.type.Rien || butE.letype != Module.type.Rien)
                         {
                             but.Background = murh;
                         }
-                        else if (butN.letype != ButtonM.type.Rien || butS.letype != ButtonM.type.Rien)
+                        else if (butN.letype != Module.type.Rien || butS.letype != Module.type.Rien)
                         {
                             but.Background = murv;
                         }
@@ -727,9 +726,9 @@ namespace Madera_MMB.View_Crtl
                             but.Background = croix;
                         }
                     }
-                    else if (but.letype == ButtonM.type.SlotFen)
+                    else if (but.letype == Module.type.SlotFen)
                     {
-                        if ((butN.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur) || (butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt))
+                        if ((butN.letype == Module.type.Mur && butS.letype == Module.type.Mur) || (butN.letype == Module.type.MurInt && butS.letype == Module.type.MurInt))
                         {
                             but.Background = slotFV;
                         } else
@@ -737,9 +736,9 @@ namespace Madera_MMB.View_Crtl
                             but.Background = slotFH;
                         }
                     }
-                    else if (but.letype == ButtonM.type.SlotPorte)
+                    else if (but.letype == Module.type.SlotPorte)
                     {
-                        if ((butN.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur) || (butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt))
+                        if ((butN.letype == Module.type.Mur && butS.letype == Module.type.Mur) || (butN.letype == Module.type.MurInt && butS.letype == Module.type.MurInt))
                         {
                             but.Background = slotPV;
                         }
@@ -748,9 +747,9 @@ namespace Madera_MMB.View_Crtl
                             but.Background = slotPH;
                         }
                     }
-                    else if (but.letype == ButtonM.type.Slot )
+                    else if (but.letype == Module.type.Slot )
                     {
-                        if ((butN.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur) || (butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt))
+                        if ((butN.letype == Module.type.Mur && butS.letype == Module.type.Mur) || (butN.letype == Module.type.MurInt && butS.letype == Module.type.MurInt))
                         {
                             but.Background = slotV;
                         }
@@ -759,9 +758,9 @@ namespace Madera_MMB.View_Crtl
                             but.Background = slotH;
                         }
                     }
-                    else if (but.letype == ButtonM.type.Porte || but.letype == ButtonM.type.Fenetre)
+                    else if (but.letype == Module.type.Porte || but.letype == Module.type.Fenetre)
                     {
-                        if ((butN.letype == ButtonM.type.Mur && butS.letype == ButtonM.type.Mur) || (butN.letype == ButtonM.type.MurInt && butS.letype == ButtonM.type.MurInt))
+                        if ((butN.letype == Module.type.Mur && butS.letype == Module.type.Mur) || (butN.letype == Module.type.MurInt && butS.letype == Module.type.MurInt))
                         {
                             but.Background = slotPlV;
                         }
@@ -770,7 +769,7 @@ namespace Madera_MMB.View_Crtl
                             but.Background = slotPlH;
                         }
                     }
-                    else if (but.letype == ButtonM.type.Rien)
+                    else if (but.letype == Module.type.Rien)
                     {
                         but.Background = Brushes.LightGray;
                     }
@@ -778,7 +777,7 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
-        private bool isInside (ButtonM but)
+        private bool isInside (Module but)
         {
             bool inside = false;
             bool gauche = false;
@@ -788,22 +787,22 @@ namespace Madera_MMB.View_Crtl
 
             for (int i = 0; i < listB.GetLength(0); i++)
             {
-                if (listB[i,but.y].x < but.x && listB[i, but.y].letype != ButtonM.type.Rien)
+                if (listB[i, but.y].x < but.x && listB[i, but.y].letype != Module.type.Rien)
                 {
                     gauche = true;
                 }
-                if (listB[i, but.y].x > but.x && listB[i, but.y].letype != ButtonM.type.Rien)
+                if (listB[i, but.y].x > but.x && listB[i, but.y].letype != Module.type.Rien)
                 {
                     droite = true;
                 }
             }
             for (int i = 0; i < listB.GetLength(1); i++)
             {
-                if (listB[but.x, i].y < but.x && listB[but.x, i].letype != ButtonM.type.Rien)
+                if (listB[but.x, i].y < but.x && listB[but.x, i].letype != Module.type.Rien)
                 {
                     haut = true;
                 }
-                if (listB[but.x, i].y > but.x && listB[but.x, i].letype != ButtonM.type.Rien)
+                if (listB[but.x, i].y > but.x && listB[but.x, i].letype != Module.type.Rien)
                 {
                     bas = true;
                 }

@@ -15,6 +15,7 @@ using MySql.Data.MySqlClient;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Madera_MMB.Lib.Tools;
 
 namespace Madera_MMB.CAD
 {
@@ -316,6 +317,29 @@ namespace Madera_MMB.CAD
             }
         }
 
+        public void savePlan(Plan plan, Module[,] listB)
+        {
+            conn.LiteCo.Open();
+            //SQLQuery = "DELETE FROM module WHERE refPlan = " + plan.reference;
+            SQLQuery = "DELETE FROM module WHERE refPlan = \"plan01\" ";
+            
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            {
+                try
+                {
+                    command.ExecuteNonQuery();
+                    Trace.WriteLine(" ############# VIDAGE PLAN REUSSI ############# \n");
+                }
+                catch (SQLiteException e)
+                {
+                    Trace.WriteLine(e.ToString());
+                    Trace.WriteLine(" ############# VIDAGE PLAN FAIL ############# \n");
+                }
+            }
+
+
+
+        }
         #endregion
 
         #region Privates methods
@@ -368,8 +392,8 @@ namespace Madera_MMB.CAD
         /// <param name="refPlan"></param>
         private void insertModule(Module module, string refPlan)
         {
-            SQLQuery = "INSERT INTO module (idModule, prixHT, nbSlot, coordonneeDebutX , coordonneeDebutY, coordonneeFinX, coordonneeFinY, refMetaModule, refPlan)" +
-            "VALUES (" + module.id + "," + module.getPrixHT() + "," + module.getNbSlot() + "," + module.debutPositionX + "," + module.debutPositionY + "," + module.finPositionX + "," + module.finPositionY + "," + module.getRefMetaModule() + "," + refPlan + ";";
+            SQLQuery = "INSERT INTO module (coordonneeDebutX , coordonneeDebutY, colspan, rowspan, refMetaModule, refPlan)" +
+            "VALUES ("+ module.x + "," + module.y + "," + module.colspan + "," + module.rowspan + "," + module.meta.reference + "," + refPlan + ";";
             conn.InsertSQliteQuery(SQLQuery);
         }
 

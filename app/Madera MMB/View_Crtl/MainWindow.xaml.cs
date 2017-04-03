@@ -321,7 +321,8 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton quitter modélisation pour aller dans la Vue Gestion Plan
             modelisation.BtnQuitterModelisation.Click += delegate (object sender, RoutedEventArgs e)
             {
-                Mainframe.Content = gestionPlan;
+                modelisation.planCad.savePlan(modelisation.plan, modelisation.listB);
+                //Mainframe.Content = gestionPlan;
             };
         }
         #endregion

@@ -90,7 +90,7 @@
     <Compile Include="CAD\ProjetCAD.cs" />
     <Compile Include="CAD\SlotCAD.cs" />
     <Compile Include="Lib\Connexion.cs" />
-    <Compile Include="Lib\Tools\ButtonM.cs" />
+    <Compile Include="Lib\Tools\Module.cs" />
     <Compile Include="Lib\Tools\InputModalWindow.xaml.cs">
       <DependentUpon>InputModalWindow.xaml</DependentUpon>
     </Compile>
@@ -106,7 +106,6 @@
     <Compile Include="Model\Gamme.cs" />
     <Compile Include="Model\MetaModule.cs" />
     <Compile Include="Model\MetaSlot.cs" />
-    <Compile Include="Model\Module.cs" />
     <Compile Include="Model\Plan.cs" />
     <Compile Include="Model\Plancher.cs" />
     <Compile Include="Model\Projet.cs" />
