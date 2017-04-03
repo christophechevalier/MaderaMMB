@@ -166,8 +166,6 @@ namespace Madera_MMB.Lib
                     Reader.GetValue(7).ToString() + "','" +
                     Reader.GetValue(8).ToString() + "')";
 
-                    SyncDevis(Reader.GetString(0));
-
                     SQLiteCommand command = new SQLiteCommand(query, LiteCo);
                     try
                     {
@@ -277,18 +275,19 @@ namespace Madera_MMB.Lib
                 int i = 0;
                 while (Reader.Read())
                 {
-                    Byte[] data = (Byte[])Reader.GetValue(4);
-                    query = "replace into metamodule(refMetaModule,label,prixHT,nbSlot,dateMaj,nomGamme,statut,image) values(@refMetaModule,@label,@prixHT,@nbSlot,@dateMaj,@nomGamme,@statut,@image)";
+                    Byte[] data = (Byte[])Reader.GetValue(3);
+                    query = "replace into metamodule(refMetaModule,label,prixHT,image,statut,dateMaj,nomGamme,taille,ecart) values(@refMetaModule,@label,@prixHT,@image,@statut,@dateMaj,@nomGamme,@taille,@ecart)";
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
                         command.Parameters.AddWithValue("@refMetaModule", Reader.GetString(0));
                         command.Parameters.AddWithValue("@label", Reader.GetString(1));
                         command.Parameters.AddWithValue("@prixHT", Reader.GetInt32(2));
-                        command.Parameters.AddWithValue("@nbSlot", Reader.GetInt32(3));                 
-                        command.Parameters.AddWithValue("@dateMaj", dateSQLite);
-                        command.Parameters.AddWithValue("@nomGamme", Reader.GetString(5));
-                        command.Parameters.AddWithValue("@statut", sqlitebool);
                         command.Parameters.AddWithValue("@image", data);
+                        command.Parameters.AddWithValue("@statut", sqlitebool);
+                        command.Parameters.AddWithValue("@dateMaj", dateSQLite);
+                        command.Parameters.AddWithValue("@nomGamme", Reader.GetString(4));
+                        command.Parameters.AddWithValue("@taille", Reader.GetString(5));
+                        command.Parameters.AddWithValue("@ecart", Reader.GetString(6));
                         try
                         {
                             i = i + command.ExecuteNonQuery();
@@ -343,12 +342,12 @@ namespace Madera_MMB.Lib
                 int i = 0;
                 while (Reader.Read())
                 {
-                    query = "replace into metaslot(idMetaSlot,label,numSlotPosition,refMetaModule) values(@idMetaSlot,@label,@numSlotPosition,@refMetaModule)";
+                    query = "replace into metaslot(idMetaSlot,numSlotPosition,type,refMetaModule) values(@idMetaSlot,@numSlotPosition,@type,@refMetaModule)";
                     using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                     {
                         command.Parameters.AddWithValue("@idMetaSlot", Reader.GetInt32(0));
-                        command.Parameters.AddWithValue("@label", Reader.GetString(1));
-                        command.Parameters.AddWithValue("@numSlotPosition", Reader.GetInt32(2));
+                        command.Parameters.AddWithValue("@numSlotPosition", Reader.GetString(1));
+                        command.Parameters.AddWithValue("@type", Reader.GetString(2));
                         command.Parameters.AddWithValue("@refMetaModule", Reader.GetString(3));
                         try
                         {
@@ -372,103 +371,7 @@ namespace Madera_MMB.Lib
             }
             LiteCo.Close();
         }
-
-        /// <summary>
-        ///  Méthode de synchronisation des données d'association des métamodules et métaslots depuis la base distante MYSQL vers la base locale SQLite
-        /// </summary>
-        public void SyncAssocMetaModuleMetaslot()
-        {
-            MySqlDataReader Reader;
-            string query;
-            LiteCo.Open();
-            Trace.WriteLine(" ############# TEST SYNC ASSOCIATION METAMODULES/METASLOTS ############# \n");
-            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM metamodul_has_metaslot", MySQLCo);
-            try
-            {
-                MySQLCo.Open();
-                Reader = selectComms.ExecuteReader();
-                int i = 0;
-                while (Reader.Read())
-                {
-                    query = "replace into Composant_has_MetaModule(idComposition,refMetaModule,idMetaSlot) values(@idComposition,@refMetaModule,@idMetaSlot)";
-                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
-                    {
-                        command.Parameters.AddWithValue("@idComposition", Reader.GetInt32(0));
-                        command.Parameters.AddWithValue("@refMetaModule", Reader.GetString(1));
-                        command.Parameters.AddWithValue("@idMetaSlot", Reader.GetInt32(2));
-                        try
-                        {
-                            i = i + command.ExecuteNonQuery();
-                        }
-                        catch (SQLiteException e)
-                        {
-                            Trace.WriteLine(e.ToString());
-                            MySQLCo.Close();
-                        }
-                    }
-                }
-                MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC ASSOCIATION METAMODULES/METASLOTS SUCCESS ############# \n");
-            }
-            catch (MySqlException e)
-            {
-                Trace.WriteLine(e.ToString());
-                MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC ASSOCIATION METAMODULES/METASLOTS FAIL ############# \n");
-            }
-            LiteCo.Close();
-        }
-
-        /// <summary>
-        ///  Méthode de synchronisation des données des devis depuis la base distante MYSQL vers la base locale SQLite
-        /// </summary>
-        public void SyncDevis(string refPlan)
-        {
-            MySqlDataReader Reader;
-            string query;
-            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM devis WHERE refPlan = '"+refPlan+"'", MySQLCo);
-            try
-            {
-                MySQLCo.Open();
-                Reader = selectComms.ExecuteReader();
-                int i = 0;
-                LiteCo.Open();
-                while (Reader.Read())
-                {
-                    query = "replace into devis(refDevis,etat,dateCreation,prixTotalHT,prixTotalTTC,refPlan) values(@refDevis,@etat,@dateCreation,@prixTotalHT,@prixTotalTTC,@refPlan)";
-
-                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
-                    {
-                        command.Parameters.AddWithValue("@refDevis", Reader.GetString(0));
-                        command.Parameters.AddWithValue("@etat", Reader.GetString(1));
-                        command.Parameters.AddWithValue("@dateCreation", Reader.GetString(2));
-                        command.Parameters.AddWithValue("@prixTotalHT", Reader.GetFloat(3));
-                        command.Parameters.AddWithValue("@prixTotalTTC", Reader.GetFloat(4));
-                        command.Parameters.AddWithValue("@refPlan", Reader.GetString(5));
-                        try
-                        {
-                            i = i + command.ExecuteNonQuery();
-                        }
-                        catch (System.Data.SQLite.SQLiteException e)
-                        {
-                            Trace.WriteLine(e.ToString());
-                            LiteCo.Close();
-                            MySQLCo.Close();
-                        }
-                    }
-                }
-                LiteCo.Close();
-                MySQLCo.Close();
-            }
-            catch (MySqlException e)
-            {
-                Trace.WriteLine(e.ToString());
-                MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC CLIENT FAIL ############# \n");
-            }
-        }
-
-
+        
         #endregion
 
         #region Synchro Export
@@ -629,56 +532,6 @@ namespace Madera_MMB.Lib
         }
 
         /// <summary>
-        /// Méthode exportant les données des devis en base SQLite vers la base MySQL
-        /// </summary>
-        public void ExpDevis()
-        {
-            LiteCo.Open();
-            Trace.WriteLine(" ############# TEST EXPORT DEVIS ############# \n");
-            string query = "SELECT refDevis, etat, dateCreation, prixTotalHT, prixTotalTTC, refPlan FROM devis";
-            using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
-            {
-                MySQLCo.Open();
-                try
-                {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string mySQLquery = "INSERT into devis(refDevis, etat, dateCreation, prixTotalHT, prixTotalTTC, refPlan)" +
-                                "VALUES(@refDevis, @etat, @dateCreation, @margeCommercial,  @prixTotalHT, @prixTotalTTC, @refPlan)" +
-                                "ON DUPLICATE KEY UPDATE etat= @etat, dateCreation= @dateCreation, prixTotalHT= @prixTotalHT,prixTotalTTC= @prixTotalTTC,refPlan= @refPlan";
-                            using (MySqlCommand expPlans = new MySqlCommand(mySQLquery, MySQLCo))
-                            {
-                                expPlans.Parameters.AddWithValue("@refDevis", reader.GetString(0));
-                                expPlans.Parameters.AddWithValue("@etat", reader.GetString(1));
-                                expPlans.Parameters.AddWithValue("@dateCreation", reader.GetString(2));
-                                expPlans.Parameters.AddWithValue("@prixTotalHT", reader.GetFloat(3));
-                                expPlans.Parameters.AddWithValue("@prixTotalTTC", reader.GetFloat(4));
-                                expPlans.Parameters.AddWithValue("@refPlan", reader.GetString(5));
-                                try
-                                {
-                                    expPlans.ExecuteNonQuery();
-                                }
-                                catch (MySqlException e)
-                                {
-                                    Trace.WriteLine(" \n ################################################# EXPORT PLANS FAIL ################################################# \n" + e.ToString() + "\n");
-                                }
-                            }
-                        }
-                    }
-                    Trace.WriteLine("#### EXPORT PLANS SUCCESS ####");
-                }
-                catch (SQLiteException ex)
-                {
-                    Trace.WriteLine(" \n ################################################# EXPORT PLANS FAIL ################################################# \n" + ex.ToString() + "\n");
-                }
-                MySQLCo.Close();
-            }
-            LiteCo.Close();
-        }
-
-        /// <summary>
         /// Méthode exportant les données des plans en base SQLite vers la base MySQL
         /// </summary>
         public void ExpModules()
@@ -814,7 +667,7 @@ namespace Madera_MMB.Lib
         /// </summary>
         private void SyncCoupePrincipe()
         {
-            string dateSQLite = "'" + DateTime.Now.ToString() + "'";
+            string dateSQLite = DateTime.Now.ToString();
             MySqlDataReader Reader;
             string query;
             int sqlitebool = 1;
@@ -862,7 +715,7 @@ namespace Madera_MMB.Lib
                 Trace.WriteLine(" ############# SYNC COUPE PRINCIPE FAIL ############# \n");
             }
 
-            query = "UPDATE coupeprincipe SET statut = 0 WHERE dateMaj !=" + dateSQLite + ";";
+            query = "UPDATE coupeprincipe SET statut = 0 WHERE dateMaj !='" + dateSQLite + "';";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try
@@ -884,7 +737,7 @@ namespace Madera_MMB.Lib
         /// </summary>
         private void SyncCouverture()
         {
-            string dateSQLite = "'" + DateTime.Now.ToString() + "'";
+            string dateSQLite = DateTime.Now.ToString();
             MySqlDataReader Reader;
             string query;
             int sqlitebool = 1;
@@ -929,7 +782,7 @@ namespace Madera_MMB.Lib
                 Trace.WriteLine(" ############# SYNC COUVERTURE FAIL ############# \n");
             }
 
-            query = "UPDATE couverture SET statut = 0 WHERE dateMaj != " + dateSQLite + ";";
+            query = "UPDATE couverture SET statut = 0 WHERE dateMaj != '" + dateSQLite + "';";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try
@@ -951,7 +804,7 @@ namespace Madera_MMB.Lib
         /// </summary>
         private void SyncPlancher()
         {
-            string dateSQLite = "'" + DateTime.Now.ToString() + "'"; ;
+            string dateSQLite = DateTime.Now.ToString();
             MySqlDataReader Reader;
             string query;
             int sqlitebool = 1;
@@ -995,7 +848,7 @@ namespace Madera_MMB.Lib
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC PLANCHER FAIL ############# \n");
             }
-            query = "UPDATE plancher SET statut = 0 WHERE dateMaj <>" + dateSQLite + ";";
+            query = "UPDATE plancher SET statut = 0 WHERE dateMaj !='" + dateSQLite + "';";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try
@@ -1017,7 +870,7 @@ namespace Madera_MMB.Lib
         /// </summary>
         private void SyncGamme()
         {
-            string dateSQLite = "'"+DateTime.Now.ToString()+"'";
+            string dateSQLite = DateTime.Now.ToString();
             MySqlDataReader Reader;
             string query;
             int sqlitebool = 1;
@@ -1065,7 +918,7 @@ namespace Madera_MMB.Lib
                 MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC GAMME FAIL ############# \n");
             }
-            query = "UPDATE gamme SET statut = 0 WHERE dateMaj <>" + dateSQLite + ";";
+            query = "UPDATE gamme SET statut = 0 WHERE dateMaj != '" + dateSQLite + "';";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
                 try
@@ -1139,9 +992,9 @@ namespace Madera_MMB.Lib
             try
             {
                 MySQLCo = new MySqlConnection(connectionString);
-                MySQLCo.Open();
                 MySQLCo.Close();
                 Trace.WriteLine(" \n ################################################# MYSQL DATABASE REACHED,  BEGIN SYNCHRONISATION ... ################################################# \n");
+                MySQLCo.Close();
                 return true;
             }
             catch (MySqlException ex)

@@ -74,6 +74,7 @@ namespace Madera_MMB.CAD
         /// </summary>
         public void ListAllProjects()
         {
+            Projets.Clear();
             // Nom du/des champs mis directement dans la requête pour éviter d'avoir à passer par QSqlRecord 
             SQLQuery = "SELECT refProjet, nom, dateCreation, dateModification, refClient, refCommercial FROM projet WHERE refCommercial = '" + commercial.reference + "'";
             //SQLQuery = "SELECT * FROM projet WHERE refCommercial = " + commercial.reference;
@@ -82,7 +83,6 @@ namespace Madera_MMB.CAD
             conn.LiteCo.Open();
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                Trace.WriteLine(SQLQuery);
                 try
                 {
                     // Execute le lecteur de donnée
@@ -91,13 +91,6 @@ namespace Madera_MMB.CAD
                         Trace.WriteLine("#### GET PROJETS DATA ####");
                         while (reader.Read())
                         {
-                            Trace.WriteLine(
-                                reader.GetString(0) +
-                                reader.GetString(1) +
-                                reader.GetString(2) +
-                                reader.GetString(3) +
-                                client +
-                                commercial);
                             Projet proj = new Projet
                                 (
                                     reader.GetString(0),
@@ -127,10 +120,8 @@ namespace Madera_MMB.CAD
         /// <returns></returns>
         public Client getClient(string id)
         {
-            Trace.WriteLine(id);
             foreach (Client cli in Clients)
             {
-                Trace.WriteLine(cli.reference);
                 if (cli.reference == id)
                 {
                     return cli;
@@ -153,12 +144,11 @@ namespace Madera_MMB.CAD
             conn.LiteCo.Open();
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                Trace.WriteLine(SQLQuery);
                 try
                 {
                     command.Parameters.AddWithValue("@refProjet", projet.reference);
                     command.Parameters.AddWithValue("@nom", projet.nom);
-                    command.Parameters.AddWithValue("@dateCreation", DateTime.Today);
+                    command.Parameters.AddWithValue("@dateCreation", DateTime.Now);
                     command.Parameters.AddWithValue("@dateModification", DateTime.Today);
                     command.Parameters.AddWithValue("@refClient", projet.client.reference);
                     command.Parameters.AddWithValue("@refCommercial", projet.commercial.reference);
@@ -189,7 +179,6 @@ namespace Madera_MMB.CAD
             int nbPlans = 0;
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
-                Trace.WriteLine(SQLQuery);
                 try
                 {
                     // Execute le lecteur de donnée
@@ -198,7 +187,6 @@ namespace Madera_MMB.CAD
                         Trace.WriteLine("#### COUNT PLANS PROJET ####");
                         while (reader.Read())
                         {
-                            Trace.WriteLine(reader.GetInt32(0));
                             nbPlans = reader.GetInt32(0);
                         }
                     }

@@ -19,7 +19,7 @@ namespace Madera_MMB.CAD
         #endregion
 
         #region Ctor
-        public MetaSlotCAD (Connexion co)
+        public MetaSlotCAD(Connexion co)
         {
             this.conn = co;
             listemetaslot = new List<MetaSlot>();
@@ -33,7 +33,7 @@ namespace Madera_MMB.CAD
             SQLiteCommand command = (SQLiteCommand)conn.LiteCo.CreateCommand();
             command.CommandText = SQLQuery;
 
-            using(var reader = command.ExecuteReader())
+            using (var reader = command.ExecuteReader())
             {
                 MetaSlot metaslot = new MetaSlot(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetString(3));
                 reader.Close();

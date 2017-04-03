@@ -10,7 +10,7 @@ namespace Madera_MMB.Model
     public class Couverture
     {
         #region properties
-        public string type { get;set; }
+        public string type { get; set; }
         public int prixHT { get; set; }
         public bool statut { get; set; }
         public BitmapImage image { get; set; }

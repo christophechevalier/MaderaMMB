@@ -71,6 +71,11 @@ namespace Madera_MMB.View_Crtl
             Button btn = sender as Button;
         }
 
+        private void BtnEditerPlan_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void BtnConsulterDevis_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
@@ -116,7 +121,7 @@ namespace Madera_MMB.View_Crtl
 
             // Value Base Plan
             lblBasePlan.Content = "";
-            lblBasePlan.Content = "?";
+            lblBasePlan.Content = plan.coupePrincipe.label+" "+plan.coupePrincipe.longueur+"x"+plan.coupePrincipe.largeur;
         }
         #endregion
 
@@ -151,5 +156,7 @@ namespace Madera_MMB.View_Crtl
             }
         }
         #endregion
+
+
     }
 }
