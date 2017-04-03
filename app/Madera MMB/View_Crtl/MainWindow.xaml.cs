@@ -35,6 +35,10 @@ namespace Madera_MMB.View_Crtl
         private View_Crtl.ParametresPlan parametresPlan { get; set; }
         //private View_Crtl.GestionDevis gestionDevis { get; set; }
         private View_Crtl.Modelisation modelisation { get; set; }
+
+        private CommercialCAD commCAD { get; set; }
+
+
         #endregion
 
         #region Ctor
@@ -54,8 +58,8 @@ namespace Madera_MMB.View_Crtl
             connexion.SyncMetaslot();
 
             /// Test CAD avec nouvelles données ///
-            //CommercialCAD commCAD = new CommercialCAD(connexion);
-            //ClientCAD clientCAD = new ClientCAD(connexion);
+            commCAD = new CommercialCAD(connexion);
+            ClientCAD clientCAD = new ClientCAD(connexion);
             CoupePrincipeCAD coupeCAD = new CoupePrincipeCAD(connexion);
             CouvertureCAD couvCAD = new CouvertureCAD(connexion);
             GammeCAD gamCAD = new GammeCAD(connexion);
@@ -64,9 +68,7 @@ namespace Madera_MMB.View_Crtl
 
             connexion = new Connexion();
 
-            //this.gestionClient = new GestionClient(connexion);
-            //this.parametresClient = new ParametresClient();;
-            /*Commercial commercialTest = new Commercial
+            Commercial commercialTest = new Commercial
                 (
                     "COM003",
                     "Chevalier",
@@ -76,11 +78,12 @@ namespace Madera_MMB.View_Crtl
                 );
 
             this.authentification = new Authentification(connexion);
-            this.gestionProjet = new GestionProjet(connexion, commercialTest);*/
+            this.gestionProjet = new GestionProjet(connexion, commercialTest);
+            this.gestionClient = new GestionClient(connexion, clientCAD);
 
             //this.parametresPlan = new ParametresPlan(connexion, gestionPlan.planCAD);
 
-            Mainframe.Content = modelisation;
+            Mainframe.Content = authentification;
 
 
             /// Test SYNCHRO export ///
@@ -92,6 +95,8 @@ namespace Madera_MMB.View_Crtl
 
             Initialize_Listeners();
         }
+
+
         #endregion
 
         #region Process Synchro
@@ -137,10 +142,30 @@ namespace Madera_MMB.View_Crtl
         private void Initialize_Listeners_Auth()
         {
             // Click sur le bouton valider authentification pour aller dans la Vue Gestion Projet
-            authentification.BtnValiderAuth.Click += delegate(object sender, RoutedEventArgs e)
+            authentification.BtnValiderAuth.Click += delegate (object sender, RoutedEventArgs e)
             {
-                Initialize_Listeners_GestionProjet();
-                Mainframe.Content = gestionProjet;
+                string id = authentification.username.Text;
+                string mdp = authentification.password.Password;
+                Trace.WriteLine(id + "  " + mdp);
+                bool authentifié = false;
+                Commercial comm_authentifié;
+                foreach (var comm in commCAD.commerciaux)
+                {
+                    if (comm.reference == id && comm.motDePasse == mdp)
+                    {
+                        gestionProjet.commercial_authentifié = comm;
+                        authentifié = true;   
+                    }
+                }
+                if(authentifié && gestionProjet.commercial_authentifié != null)
+                {
+                    Mainframe.Content = gestionProjet;
+                }
+                else
+                {
+                    MessageBox.Show("Mauvais couple identifiant/mot de passe ! ");
+                }
+
             };
         }
         #endregion
@@ -154,6 +179,8 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton listes des clients pour aller dans la Vue Gestion Client
             gestionProjet.BtnListeClient.Click += delegate(object sender, RoutedEventArgs e)
             {
+                this.gestionClient = new GestionClient(connexion, gestionClient.clientCAD);
+                Initialize_Listeners_GestionClient();
                 Mainframe.Content = gestionClient;
             };
             // Click sur le bouton ouvrir un projet client pour aller dans la Vue Gestion Plan
@@ -182,6 +209,8 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton créer un nouveau client pour aller dans la Vue Paramètre Client
             gestionProjet.BtnCreerClient.Click += delegate(object sender, RoutedEventArgs e)
             {
+                this.parametresClient = new ParametresClient(connexion, gestionClient.clientCAD);
+                Initialize_Listeners_ParametresClient();
                 Mainframe.Content = parametresClient;
             };
             // Click sur le bouton se déconnecter de l'application pour aller dans la Vue Auth
@@ -201,11 +230,18 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton éditer un client pour aller dans la Vue Paramètre Client
             gestionClient.BtnEditerClient.Click += delegate(object sender, RoutedEventArgs e)
             {
-                Mainframe.Content = parametresClient;
+                if (gestionClient.cli != null)
+                {
+                    this.parametresClient = new ParametresClient(connexion, gestionClient.clientCAD, gestionClient.cli);
+                    Initialize_Listeners_ParametresClient();
+                    Mainframe.Content = parametresClient;
+                }
             };
             // Click sur le bouton créer un nouveau client pour aller dans la Vue Paramètre Client
             gestionClient.BtnCreerClient.Click += delegate(object sender, RoutedEventArgs e)
             {
+                this.parametresClient = new ParametresClient(connexion, gestionClient.clientCAD);
+                Initialize_Listeners_ParametresClient();
                 Mainframe.Content = parametresClient;
             };
             // Click sur le bouton retour pour aller dans la Vue Gestion Projet
@@ -225,12 +261,26 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton valider paramètres client pour aller dans la Vue Gestion Client
             parametresClient.BtnConfirmerClient.Click += delegate(object sender, RoutedEventArgs e)
             {
-                Mainframe.Content = gestionClient;
+                if (parametresClient.SetClient(parametresClient.Client))
+                {
+                    MessageBox.Show("L'édition s'est bien effectué !");
+                    parametresClient.clientCAD.InsertClient(parametresClient.Client);
+                    gestionClient = new GestionClient(connexion, parametresClient.clientCAD);
+                    Mainframe.Content = gestionClient;
+                    Initialize_Listeners_GestionClient();
+                    connexion.SelectSQLiteQuery("SELECT nom from client");
+                }
+                else
+                {
+                    MessageBox.Show("Un des champs obligatoires n'est pas renseigné");
+                }
             };
             // Click sur le bouton retour pour aller dans la Vue Gestion Client
             parametresClient.BtnRetourListeProjet.Click += delegate(object sender, RoutedEventArgs e)
             {
+                gestionClient = new GestionClient(connexion, parametresClient.clientCAD);
                 Mainframe.Content = gestionClient;
+                Initialize_Listeners_GestionClient();
             };
         }
         #endregion
@@ -268,11 +318,6 @@ namespace Madera_MMB.View_Crtl
             //{
             //    Mainframe.Content = gestionDevis;
             //};
-            // Click sur le bouton copier plan pour aller dans la Vue ???
-            gestionPlan.BtnCopierPlan.Click += delegate(object sender, RoutedEventArgs e)
-            {
-
-            };
             // Click sur le bouton retour liste de projets pour aller dans la Vue Gestion Projet
             gestionPlan.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
             {
@@ -303,7 +348,6 @@ namespace Madera_MMB.View_Crtl
                     MessageBox.Show("Un des champs obligatoires n'est pas renseigné");
                 }
             };
-
             // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan
             parametresPlan.BtnRetour.Click += delegate (object sender, RoutedEventArgs e)
             {
