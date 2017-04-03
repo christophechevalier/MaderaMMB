@@ -17,8 +17,8 @@ namespace Madera_MMB.Model
         public string ville { get; set; }
         public string email { get; set; }
         public string telephone { get; set; }
-        public DateTime creation { get; set; }
-        public DateTime modification { get; set; }
+        public string creation { get; set; }
+        public string modification { get; set; }
         public string nomprenom
         {
             get { return prenom + " " + nom; }
@@ -39,7 +39,7 @@ namespace Madera_MMB.Model
         /// <param name="email"></param>
         /// <param name="telephone"></param>
         /// <param name="creation"></param>
-        public Client(string reference, string nom, string prenom, string adresse, string codePostal, string ville, string email, string telephone, DateTime creation)
+        public Client(string reference, string nom, string prenom, string adresse, string codePostal, string ville, string email, string telephone, string creation)
         {
             this.reference = reference;
             this.nom = nom;
@@ -65,7 +65,7 @@ namespace Madera_MMB.Model
         /// <param name="telephone"></param>
         /// <param name="creation"></param>
         /// <param name="modification"></param>
-        public Client(string reference, string nom, string prenom, string adresse, string codePostal, string ville, string email, string telephone, DateTime creation, DateTime modification)
+        public Client(string reference, string nom, string prenom, string adresse, string codePostal, string ville, string email, string telephone, string creation, string modification)
         {
             this.reference = reference;
             this.nom = nom;

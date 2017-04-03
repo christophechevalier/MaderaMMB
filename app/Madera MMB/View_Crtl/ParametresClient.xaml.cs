@@ -113,8 +113,8 @@ namespace Madera_MMB.View_Crtl
                             this.ClientCodePostal.Text,
                             this.ClientVille.Text,
                             this.ClientTelephone.Text,
-                            DateTime.Now,
-                            DateTime.Today
+                            DateTime.Now.ToString(),
+                            DateTime.Now.ToString()
                         );
                         this.Client.reference = generateKeyClient(this.Client);
                 }

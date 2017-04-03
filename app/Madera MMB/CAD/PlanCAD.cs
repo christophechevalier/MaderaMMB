@@ -95,7 +95,6 @@ namespace Madera_MMB.CAD
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
                 command.Parameters.AddWithValue("@refProjet", projet.reference);
-                Trace.WriteLine(SQLQuery);
                 try
                 {
                     // Execute le lecteur de donnée
@@ -105,22 +104,12 @@ namespace Madera_MMB.CAD
                         Trace.WriteLine("#### GET PLANS DATA ####");
                         while (reader.Read())
                         {
-                            Trace.WriteLine(
-                                reader.GetValue(0).GetType() + " || " +
-                                reader.GetValue(1).GetType() + " || " +
-                                reader.GetValue(2).GetType() + " || " +
-                                reader.GetValue(3).GetType() + " || " +
-                                reader.GetValue(4).GetType() + " || " +
-                                reader.GetValue(5).GetType() + " || " +
-                                reader.GetValue(6).GetType() + " || " +
-                                reader.GetValue(7).GetType() + " || " +
-                                reader.GetValue(8).GetType());
                             Plan plan = new Plan
                                 (
                                     reader.GetString(0),
                                     reader.GetString(1),
-                                    reader.GetDateTime(2),
-                                    reader.GetDateTime(3),
+                                    reader.GetString(2),
+                                    reader.GetString(3),
                                     projet,
                                     getPlancherByType(reader.GetString(5)),
                                     getCouvByType(reader.GetString(6)),
@@ -135,7 +124,6 @@ namespace Madera_MMB.CAD
                 }
                 catch (SQLiteException ex)
                 {
-                    Trace.WriteLine(SQLQuery);
                     Trace.WriteLine(" \n ################################################# ERREUR RECUPERATION PLANS ################################################# \n" + ex.ToString() + "\n");
                 }
             }
@@ -157,13 +145,12 @@ namespace Madera_MMB.CAD
                 conn.LiteCo.Open();
                 using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
                 {
-                    Trace.WriteLine(SQLQuery);
                     try
                     {
                         command.Parameters.AddWithValue("@refPlan", plan.reference);
                         command.Parameters.AddWithValue("@label", plan.label);
-                        command.Parameters.AddWithValue("@dateCreation", DateTime.Now);
-                        command.Parameters.AddWithValue("@dateModification", DateTime.Today);
+                        command.Parameters.AddWithValue("@dateCreation", DateTime.Now.ToString());
+                        command.Parameters.AddWithValue("@dateModification", DateTime.Today.ToString());
                         command.Parameters.AddWithValue("@refProjet", plan.projet.reference);
                         command.Parameters.AddWithValue("@typePlancher", plan.plancher.type);
                         command.Parameters.AddWithValue("@typeCouverture", plan.couverture.type);
@@ -189,13 +176,12 @@ namespace Madera_MMB.CAD
                 conn.LiteCo.Open();
                 using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
                 {
-                    Trace.WriteLine(SQLQuery);
                     try
                     {
                         command.Parameters.AddWithValue("@refPlan", plan.reference);
                         command.Parameters.AddWithValue("@label", plan.label);
-                        command.Parameters.AddWithValue("@dateCreation", DateTime.Today);
-                        command.Parameters.AddWithValue("@dateModification", DateTime.Today);
+                        command.Parameters.AddWithValue("@dateCreation", DateTime.Today.ToString());
+                        command.Parameters.AddWithValue("@dateModification", DateTime.Today.ToString());
                         command.Parameters.AddWithValue("@refProjet", plan.projet.reference);
                         command.Parameters.AddWithValue("@typePlancher", plan.plancher.type);
                         command.Parameters.AddWithValue("@typeCouverture", plan.couverture.type);
@@ -235,19 +221,7 @@ namespace Madera_MMB.CAD
                     try
                     {
                         while (reader.Read())
-                        {
-                            Trace.WriteLine(
-                            "META MODULE : " +
-                            reader.GetValue(0).GetType() + " || " +
-                            reader.GetValue(1).GetType() + " || " +
-                            reader.GetValue(2).GetType() + " || " +
-                            reader.GetValue(3).GetType() + " || " +
-                            reader.GetValue(4).GetType() + " || " +
-                            reader.GetValue(5).GetType() + " || " +
-                            reader.GetValue(6).GetType() + " || " +
-                            reader.GetValue(7).GetType() + " || " +
-                            reader.GetValue(8).GetType());
-
+                        {                       
                             Byte[] data = (Byte[])reader.GetValue(3);
                             MetaModule metaModule = new MetaModule
                             (
@@ -267,7 +241,6 @@ namespace Madera_MMB.CAD
                     }
                     catch (SQLiteException ex)
                     {
-                        Trace.WriteLine(SQLQuery);
                         Trace.WriteLine(ex.ToString());
                     }
                     conn.LiteCo.Close();
@@ -299,16 +272,11 @@ namespace Madera_MMB.CAD
                     {
                         while (reader.Read())
                         {
-                            Trace.WriteLine(
-                            "Gamme : " +
-                            reader.GetValue(0).GetType());
-
                             listGammes.Add(reader.GetString(0));
                         }
                     }
                     catch (SQLiteException ex)
                     {
-                        Trace.WriteLine(SQLQuery);
                         Trace.WriteLine(ex.ToString());
                     }
                     conn.LiteCo.Close();
@@ -377,7 +345,6 @@ namespace Madera_MMB.CAD
                     }
                     catch (SQLiteException ex)
                     {
-                        Trace.WriteLine(SQLQuery);
                         Trace.WriteLine(ex.ToString());
                     }
                     return modules;
@@ -416,18 +383,6 @@ namespace Madera_MMB.CAD
                     {
                         while (reader.Read())
                         {
-                            Trace.WriteLine(
-                            "META MODULE : " +
-                            reader.GetValue(0).GetType() + " || " +
-                            reader.GetValue(1).GetType() + " || " +
-                            reader.GetValue(2).GetType() + " || " +
-                            reader.GetValue(3).GetType() + " || " +
-                            reader.GetValue(4).GetType() + " || " +
-                            reader.GetValue(5).GetType() + " || " +
-                            reader.GetValue(6).GetType() + " || " +
-                            reader.GetValue(7).GetType() + " || " +
-                            reader.GetValue(8).GetType());
-
                             Byte[] data = (Byte[])reader.GetValue(4);
                             metaModule = new MetaModule
                             (
@@ -446,7 +401,6 @@ namespace Madera_MMB.CAD
                     }
                     catch (SQLiteException ex)
                     {
-                        Trace.WriteLine(SQLQuery);
                         Trace.WriteLine(ex.ToString());
                     }
                     return metaModule;
@@ -473,16 +427,6 @@ namespace Madera_MMB.CAD
                     {
                         while (reader.Read())
                         {
-                            Trace.WriteLine(
-                            "COUPE PRINCIPE : " +
-                            reader.GetValue(0).GetType() + " || " +
-                            reader.GetValue(1).GetType() + " || " +
-                            reader.GetValue(2).GetType() + " || " +
-                            reader.GetValue(3).GetType() + " || " +
-                            reader.GetValue(4).GetType() + " || " +
-                            reader.GetValue(5).GetType() + " || " +
-                            reader.GetValue(6).GetType());
-
                             Byte[] data = (Byte[])reader.GetValue(5);
                             coupe = new CoupePrincipe
                             (
@@ -498,7 +442,6 @@ namespace Madera_MMB.CAD
                     }
                     catch (SQLiteException ex)
                     {
-                        Trace.WriteLine(SQLQuery);
                         Trace.WriteLine(ex.ToString());
                     }
                     return coupe;
@@ -525,13 +468,6 @@ namespace Madera_MMB.CAD
                     {
                         while (reader.Read())
                         {
-                            Trace.WriteLine(
-                            "COUVERTURE : " +
-                            reader.GetValue(0).GetType() + " || " +
-                            reader.GetValue(1).GetType() + " || " +
-                            reader.GetValue(2).GetType() + " || " +
-                            reader.GetValue(3).GetType());
-
                             Byte[] data = (Byte[])reader.GetValue(2);
                             couv = new Couverture
                             (
@@ -544,7 +480,6 @@ namespace Madera_MMB.CAD
                     }
                     catch (SQLiteException ex)
                     {
-                        Trace.WriteLine(SQLQuery);
                         Trace.WriteLine(ex.ToString());
                     }
                     return couv;
@@ -571,16 +506,6 @@ namespace Madera_MMB.CAD
                     {
                         while (reader.Read())
                         {
-                            Trace.WriteLine(
-                            "GAMME : " +
-                            reader.GetValue(0).GetType() + " || " +
-                            reader.GetValue(1).GetType() + " || " +
-                            reader.GetValue(2).GetType() + " || " +
-                            reader.GetValue(3).GetType() + " || " +
-                            reader.GetValue(4).GetType() + " || " +
-                            reader.GetValue(5).GetType() + " || " +
-                            reader.GetValue(6).GetType());
-
                             Byte[] data = (Byte[])reader.GetValue(5);
                             gamme = new Gamme
                             (
@@ -595,7 +520,6 @@ namespace Madera_MMB.CAD
                     }
                     catch (SQLiteException ex)
                     {
-                        Trace.WriteLine(SQLQuery);
                         Trace.WriteLine(ex.ToString());
                     }
                     return gamme;
@@ -622,13 +546,6 @@ namespace Madera_MMB.CAD
                     {
                         while (reader.Read())
                         {
-                            Trace.WriteLine(
-                            "PLANCHER : " +
-                            reader.GetValue(0).GetType() + " || " +
-                            reader.GetValue(1).GetType() + " || " +
-                            reader.GetValue(2).GetType() + " || " +
-                            reader.GetValue(3).GetType());
-
                             Byte[] data = (Byte[])reader.GetValue(2);
                             plancher = new Plancher
                             (
@@ -641,7 +558,6 @@ namespace Madera_MMB.CAD
                     }
                     catch (SQLiteException ex)
                     {
-                        Trace.WriteLine(SQLQuery);
                         Trace.WriteLine(ex.ToString());
                     }
                     return plancher;

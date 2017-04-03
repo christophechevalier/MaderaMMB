@@ -158,7 +158,7 @@ namespace Madera_MMB.View_Crtl
 
             // Value Date création
             lblDateCreation.Content = "";
-            lblDateCreation.Content = proj.creation.Date;
+            lblDateCreation.Content = proj.creation;
 
             // TODO : Value Statut Dernier Devis
             lblStatut.Content = "?";
@@ -169,7 +169,7 @@ namespace Madera_MMB.View_Crtl
 
             // Value Date modification
             lblDateModification.Content = "";
-            lblDateModification.Content = proj.modification.Date;
+            lblDateModification.Content = proj.modification;
 
             // Value Nom Commercial
             lblNomCommercial.Content = "";

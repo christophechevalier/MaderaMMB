@@ -51,11 +51,12 @@ namespace Madera_MMB.View_Crtl
             initSynchro();
 
             /// Test SYNCHRO import ///
-            //connexion.SyncCommMySQL();
+
+            connexion.SyncCommMySQL();
             connexion.SyncParamPlan();
-            //connexion.SyncClient();
-            connexion.SyncMetamodules();
-            connexion.SyncMetaslot();
+            ////connexion.SyncClient();
+            //connexion.SyncMetamodules();
+            //connexion.SyncMetaslot();
 
             /// Test CAD avec nouvelles données ///
             commCAD = new CommercialCAD(connexion);
@@ -64,9 +65,6 @@ namespace Madera_MMB.View_Crtl
             CouvertureCAD couvCAD = new CouvertureCAD(connexion);
             GammeCAD gamCAD = new GammeCAD(connexion);
             PlancherCAD plancherCAD = new PlancherCAD(connexion);
-            this.modelisation = new Modelisation();
-
-            connexion = new Connexion();
 
             Commercial commercialTest = new Commercial
                 (
@@ -81,17 +79,13 @@ namespace Madera_MMB.View_Crtl
             this.gestionProjet = new GestionProjet(connexion, commercialTest);
             this.gestionClient = new GestionClient(connexion, clientCAD);
 
-            //this.parametresPlan = new ParametresPlan(connexion, gestionPlan.planCAD);
-
             Mainframe.Content = authentification;
-
 
             /// Test SYNCHRO export ///
             //connexion.ExpClients();
             //connexion.ExpProjets();
             //connexion.ExpPlans();
             //connexion.ExpModules();
-
 
             Initialize_Listeners();
         }
@@ -125,11 +119,10 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void Initialize_Listeners()
         {
-            //Initialize_Listeners_Auth();
-            //Initialize_Listeners_GestionProjet();
-            //Initialize_Listeners_GestionClient();
+            Initialize_Listeners_Auth();
+            Initialize_Listeners_GestionProjet();
+            Initialize_Listeners_GestionClient();
             //Initialize_Listeners_ParametresClient();
-            //Initialize_Listeners_ParametresPlan();
             //Initialize_Listeners_Modelisation();
             //Initialize_Listeners_Devis();
         }
@@ -313,6 +306,20 @@ namespace Madera_MMB.View_Crtl
                     MessageBox.Show("Vous devez sélectionner un plan avant de l'ouvrir !");
                 }
             };
+            gestionPlan.BtnEditerPlan.Click += delegate (object sender, RoutedEventArgs e)
+            {
+                if (gestionPlan.plan != null)
+                {
+                    this.parametresPlan = new ParametresPlan(connexion, gestionPlan.planCAD);
+                    this.parametresPlan.Plan = gestionPlan.plan;
+                    Initialize_Listeners_ParametresPlan();
+                    Mainframe.Content = parametresPlan;
+                }
+                else
+                {
+                    MessageBox.Show("Vous devez sélectionner un plan avant de l'éditer !");
+                }
+            };
             // Click sur le bouton consulter le devis pour aller dans la Vue Gestion Devis
             //gestionPlan.BtnConsulterDevis.Click += delegate(object sender, RoutedEventArgs e)
             //{
@@ -340,8 +347,9 @@ namespace Madera_MMB.View_Crtl
                     MessageBox.Show("Plan créé/modifié");
                     parametresPlan.planCAD.InsertPlan(parametresPlan.Plan);
                     parametresPlan.Plan = null;
+                    gestionPlan.planCAD.ListAllPlansByProject();
                     Mainframe.Content = gestionPlan;
-                    connexion.SelectSQLiteQuery("SELECT label from plan");
+                    connexion.SelectSQLiteQuery("SELECT label FROM plan");
                 }
                 else
                 {

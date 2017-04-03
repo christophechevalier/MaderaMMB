@@ -258,6 +258,18 @@
                             Click="BtnCopierPlan_Click">
                     </Button>
                 </Viewbox>
+                <Viewbox Grid.Row="9"
+                         Grid.Column="1"
+                         VerticalAlignment="Stretch" 
+                         HorizontalAlignment="Stretch">
+                    <Button x:Name="BtnEditerPlan"
+                            FontSize="20"
+                            Width="400"
+                            Height="60"
+                            Content="Editer plan"
+                            Click="BtnEditerPlan_Click">
+                    </Button>
+                </Viewbox>
                 <Viewbox Grid.Row="17"
                          Grid.Column="1"
                          VerticalAlignment="Stretch" 

@@ -364,24 +364,22 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void setbuttonslabels()
         {
-            coupeChoisie = this.Plan.coupePrincipe;
-            couvChoisie = this.Plan.couverture;
-            planchChoisi = this.Plan.plancher;
-            gammChoisie = this.Plan.gamme;
+            if(this.Plan != null)
+            {
+                coupeChoisie = this.Plan.coupePrincipe;
+                couvChoisie = this.Plan.couverture;
+                planchChoisi = this.Plan.plancher;
+                gammChoisie = this.Plan.gamme;
 
-            this.PlanNom.Text = this.Plan.label;
-            this.BoutonChoixCoupe.Content = this.Plan.coupePrincipe.label;
-            this.BoutonChoixCouverture.Content = this.Plan.couverture.type;
-            this.BoutonChoixPlancher.Content = this.Plan.plancher.type;
-            this.BoutonChoixGamme.Content = this.Plan.gamme.nom;
+                this.PlanNom.Text = this.Plan.label;
+                this.BoutonChoixCoupe.Content = this.Plan.coupePrincipe.label;
+                this.BoutonChoixCouverture.Content = this.Plan.couverture.type;
+                this.BoutonChoixPlancher.Content = this.Plan.plancher.type;
+                this.BoutonChoixGamme.Content = this.Plan.gamme.nom;
+            }
         }
         #endregion
 
-        /// <summary>
-        /// Méthodes d'écoute des différents boutons de choix des paramètres du Plan, permettant d'afficher le formulaire correspondant au paramètre désigné
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         #region listeners
         private void cp_Button_Click(object sender, RoutedEventArgs e)
         {
@@ -482,6 +480,7 @@ namespace Madera_MMB.View_Crtl
 
                 if (Plan != null)
                 {
+                    Plan.label = PlanNom.Text;
                     Plan.coupePrincipe = this.coupeChoisie;
                     Plan.couverture = this.couvChoisie;
                     Plan.plancher = this.planchChoisi;
@@ -490,7 +489,7 @@ namespace Madera_MMB.View_Crtl
                 }
                 else
                 {
-                    this.Plan = new Plan(key, this.PlanNom.Text, DateTime.Now, this.projet, this.planchChoisi, this.couvChoisie, this.coupeChoisie, this.gammChoisie);
+                    this.Plan = new Plan(key, this.PlanNom.Text, DateTime.Now.ToString(), this.projet, this.planchChoisi, this.couvChoisie, this.coupeChoisie, this.gammChoisie);
                 }
                 return true;
             }

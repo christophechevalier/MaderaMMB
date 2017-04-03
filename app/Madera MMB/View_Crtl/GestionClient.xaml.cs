@@ -66,6 +66,12 @@ namespace Madera_MMB.View_Crtl
                 ClientTelephone.Text = client.telephone;
 
                 this.cli = client;
+
+                lblDateCreation.Content = "";
+                lblDateCreation.Content = cli.creation;
+
+                lblDateModification.Content = "";
+                lblDateModification.Content = cli.modification;
             }
         }
         #endregion

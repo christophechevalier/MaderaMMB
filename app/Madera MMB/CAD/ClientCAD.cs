@@ -80,17 +80,6 @@ namespace Madera_MMB.CAD
                         Trace.WriteLine("#### GET CLIENTS DATA ####");
                         while (reader.Read())
                         {
-                            Trace.WriteLine(
-                                reader.GetString(0) +
-                                reader.GetString(1) +
-                                reader.GetString(2) +
-                                reader.GetString(3) +
-                                reader.GetString(4) +
-                                reader.GetString(5) +
-                                reader.GetString(6) +
-                                reader.GetString(7) +
-                                reader.GetDateTime(8) +
-                                reader.GetDateTime(9));
                             Client cli = new Client
                                 (
                                     reader.GetString(0),
@@ -101,8 +90,8 @@ namespace Madera_MMB.CAD
                                     reader.GetString(5),
                                     reader.GetString(6),
                                     reader.GetString(7),
-                                    reader.GetDateTime(8),
-                                    reader.GetDateTime(9)
+                                    reader.GetString(8),
+                                    reader.GetString(9)
                                 );
                             Clients.Add(cli);
                         }
@@ -141,8 +130,8 @@ namespace Madera_MMB.CAD
                     command.Parameters.AddWithValue("@ville", client.ville);
                     command.Parameters.AddWithValue("@email", client.email);
                     command.Parameters.AddWithValue("@telephone", client.telephone);
-                    command.Parameters.AddWithValue("@dateCreation", DateTime.Now);
-                    command.Parameters.AddWithValue("@dateModification", DateTime.Today);
+                    command.Parameters.AddWithValue("@dateCreation", DateTime.Now.ToString());
+                    command.Parameters.AddWithValue("@dateModification", DateTime.Now.ToString());
 
                     command.ExecuteNonQuery();
                     Trace.WriteLine("#### INSERT NOUVEAU CLIENT DATA SUCCESS ####");

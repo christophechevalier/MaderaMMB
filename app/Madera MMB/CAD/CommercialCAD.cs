@@ -53,12 +53,6 @@ namespace Madera_MMB.CAD
                         Trace.WriteLine("#### GET COMMERCIAUX DATA ####");
                         while (reader.Read())
                         {
-                            Trace.WriteLine(
-                                reader.GetString(0) +
-                                reader.GetString(1) +
-                                reader.GetString(2) +
-                                reader.GetString(3) +
-                                reader.GetString(4));
                             Commercial com = new Commercial
                                 (
                                     reader.GetString(0),

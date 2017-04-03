@@ -20,8 +20,8 @@ CREATE TABLE client (
   ville TEXT NOT NULL,
   email TEXT NOT NULL,
   telephone TEXT NOT NULL,
-  dateCreation datetime NOT NULL,
-  dateModification datetime NOT NULL
+  dateCreation TEXT NOT NULL,
+  dateModification TEXT NOT NULL
 );
 
 -- Table Projet OK
@@ -29,8 +29,8 @@ CREATE TABLE client (
 CREATE TABLE projet (
   refProjet TEXT PRIMARY KEY NOT NULL,
   nom TEXT NOT NULL,
-  dateCreation datetime NOT NULL,
-  dateModification datetime NOT NULL,
+  dateCreation TEXT NOT NULL,
+  dateModification TEXT NOT NULL,
   refClient TEXT NOT NULL,
   refCommercial TEXT NOT NULL,
   FOREIGN KEY (refClient) REFERENCES client,
@@ -89,8 +89,8 @@ CREATE TABLE gamme (
 CREATE TABLE plan (
   refPlan TEXT PRIMARY KEY NOT NULL,
   label TEXT NOT NULL,
-  dateCreation datetime NOT NULL,
-  dateModification datetime NOT NULL,
+  dateCreation TEXT NOT NULL,
+  dateModification TEXT NOT NULL,
   refProjet TEXT NOT NULL,
   typePlancher TEXT NOT NULL,
   typeCouverture TEXT NOT NULL,
