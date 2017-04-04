@@ -337,8 +337,7 @@ namespace Madera_MMB.CAD
                                 reader.GetInt32(1),
                                 reader.GetInt32(2),
                                 reader.GetInt32(3),
-                                reader.GetInt32(4),
-                                getMetaModuleByRef(reader.GetString(5))
+                                getMetaModuleByRef(reader.GetString(4))
                             );
                             modules.Add(module);
                         }

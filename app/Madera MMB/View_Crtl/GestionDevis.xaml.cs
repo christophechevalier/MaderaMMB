@@ -158,14 +158,14 @@ namespace Madera_MMB.View_Crtl
             {
                 if(i != plan.modules.Count-1)
                 {
-                    if (plan.modules[i].metaModule.label == plan.modules[i + 1].metaModule.label)
+                    if (plan.modules[i].meta.label == plan.modules[i + 1].meta.label)
                     {
                         cpt++;
-                        aggregatHT += plan.modules[i].metaModule.prixHT + plan.modules[i + 1].metaModule.prixHT;
+                        aggregatHT += plan.modules[i].meta.prixHT + plan.modules[i + 1].meta.prixHT;
                     }
                     else
                     {
-                        this.ListeComposants.Content += plan.modules[i].metaModule.label + "\n";
+                        this.ListeComposants.Content += plan.modules[i].meta.label + "\n";
                         this.Quantité.Content += cpt + "\n";
                         if(aggregatHT!= 0)
                         {
@@ -177,23 +177,23 @@ namespace Madera_MMB.View_Crtl
                             }
                         else
                         {
-                            totalHT += plan.modules[i].metaModule.prixHT;
-                            this.PrixHT.Content += plan.modules[i].metaModule.prixHT + "\n";
-                            totalTTC += plan.modules[i].metaModule.prixHT + ((plan.modules[i].metaModule.prixHT * 20) / 100);
-                            this.PrixTTC.Content += plan.modules[i].metaModule.prixHT + ((plan.modules[i].metaModule.prixHT*20)/100)+ "\n";
-                            }
+                            totalHT += plan.modules[i].meta.prixHT;
+                            this.PrixHT.Content += plan.modules[i].meta.prixHT + "\n";
+                            totalTTC += plan.modules[i].meta.prixHT + ((plan.modules[i].meta.prixHT * 20) / 100);
+                            this.PrixTTC.Content += plan.modules[i].meta.prixHT + ((plan.modules[i].meta.prixHT*20)/100)+ "\n";
+                        }
                         aggregatHT = 0;
                         cpt = 0;
                     }
                 }
                 else
                 {
-                    if (plan.modules[i].metaModule.label == plan.modules[i - 1].metaModule.label)
+                    if (plan.modules[i].meta.label == plan.modules[i - 1].meta.label)
                     {
                         cpt++;
-                        aggregatHT += plan.modules[i].metaModule.prixHT + plan.modules[i - 1].metaModule.prixHT;
+                        aggregatHT += plan.modules[i].meta.prixHT + plan.modules[i - 1].meta.prixHT;
                     }
-                    this.ListeComposants.Content += plan.modules[i].metaModule.label + "\n";
+                    this.ListeComposants.Content += plan.modules[i].meta.label + "\n";
                     this.Quantité.Content += cpt + "\n";
                     if (aggregatHT != 0)
                     {
@@ -205,10 +205,10 @@ namespace Madera_MMB.View_Crtl
                     }
                     else
                     {
-                        totalHT += plan.modules[i].metaModule.prixHT;
-                        this.PrixHT.Content += plan.modules[i].metaModule.prixHT + "\n";
-                        totalTTC += plan.modules[i].metaModule.prixHT + ((plan.modules[i].metaModule.prixHT * 20) / 100);
-                        this.PrixTTC.Content += plan.modules[i].metaModule.prixHT + ((plan.modules[i].metaModule.prixHT * 20) / 100) + "\n";
+                        totalHT += plan.modules[i].meta.prixHT;
+                        this.PrixHT.Content += plan.modules[i].meta.prixHT + "\n";
+                        totalTTC += plan.modules[i].meta.prixHT + ((plan.modules[i].meta.prixHT * 20) / 100);
+                        this.PrixTTC.Content += plan.modules[i].meta.prixHT + ((plan.modules[i].meta.prixHT * 20) / 100) + "\n";
                     }
                 }
             }
@@ -308,19 +308,40 @@ namespace Madera_MMB.View_Crtl
             coupeItem.Items.Add(couvItem);
             coupeItem.Items.Add(planchItem);
 
-            for (int i = 0; i <= plan.modules.Count - 1; i++)
+            List<Module> firstlist = plan.modules;
+            List<Module> secondlist = new List<Module>();
+            int i;
+            foreach (Module mod in firstlist)
             {
-                if (i != plan.modules.Count - 1)
+                i = 0;
+                foreach(Module mod2 in firstlist)
                 {
-                    if(plan.modules[i].metaModule.label.Contains("Mur"))
+                     if(mod.meta.label == mod2.meta.label)
                     {
-                        //if(plan.modules[i].)
+                        firstlist.Remove(mod2);
+                        i++;
                     }
+                     else
+                    {
+                        if(mod2.parent.label == mod.meta.label)
+                        {
+                            secondlist.Add(mod2);
+                        }
+                    }
+                    TreeViewItem modparent = new TreeViewItem();
+                    modparent.Header = mod2.meta.label;
+                    modparent.IsExpanded = true;
+                    foreach(Module modenfant in secondlist)
+                    {
+                        TreeViewItem enfant = new TreeViewItem();
+                        enfant.Header = modenfant.meta.label;
+                        modparent.Items.Add(enfant);
+                    }
+                    secondlist.Clear();
+                    coupeItem.Items.Add(modparent);
                 }
             }
-
             coupe.Items.Add(coupeItem);
-
         }
         private void TreeView_SelectedItemChanged(object sender,
             RoutedPropertyChangedEventArgs<object> e)

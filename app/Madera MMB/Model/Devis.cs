@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Madera_MMB.Lib.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -79,7 +80,7 @@ namespace Madera_MMB.Model
             int prixHT = 0;
             foreach (Module mod in plan.modules)
             {
-                prixHT += mod.metaModule.prixHT;
+                prixHT += mod.meta.prixHT;
             }
             int prixcouv = calculCouverture();
             int prixplanch = calculPlancher();
@@ -123,7 +124,7 @@ namespace Madera_MMB.Model
             bool isgamme = true;
             foreach (Module mod in plan.modules)
             {
-                if (mod.metaModule.gamme != plan.gamme)
+                if (mod.meta.gamme != plan.gamme)
                     isgamme = false;
             }
             return isgamme;

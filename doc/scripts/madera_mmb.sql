@@ -247,14 +247,13 @@ INSERT INTO `metaslot` (`idMetaSlot`, `numSlotPosition`, `type`, `refMetaModule`
 --
 
 CREATE TABLE IF NOT EXISTS `module` (
-  `idModule` int(11) NOT NULL,
   `coordonneeDebutX` int(11) NOT NULL,
   `coordonneeDebutY` int(11) NOT NULL,
   `colspan` int(11) NOT NULL,
   `rowspan` int(11) NOT NULL,
   `refMetaModule` varchar(45) NOT NULL,
   `refPlan` varchar(20) NOT NULL,
-  PRIMARY KEY (`idModule`,`coordonneeDebutX`,`coordonneeDebutY`,`refPlan`),
+  PRIMARY KEY (`coordonneeDebutX`,`coordonneeDebutY`,`refPlan`),
   KEY `module_ibfk_1` (`refMetaModule`),
   KEY `module_ibfk_2` (`refPlan`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

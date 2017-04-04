@@ -33,7 +33,7 @@ namespace Madera_MMB.View_Crtl
         private View_Crtl.GestionClient gestionClient { get; set; }
         private View_Crtl.ParametresClient parametresClient { get; set; }
         private View_Crtl.ParametresPlan parametresPlan { get; set; }
-        //private View_Crtl.GestionDevis gestionDevis { get; set; }
+        private View_Crtl.GestionDevis gestionDevis { get; set; }
         private View_Crtl.Modelisation modelisation { get; set; }
 
         private CommercialCAD commCAD { get; set; }
@@ -66,20 +66,43 @@ namespace Madera_MMB.View_Crtl
             GammeCAD gamCAD = new GammeCAD(connexion);
             PlancherCAD plancherCAD = new PlancherCAD(connexion);
 
+
             Commercial commercialTest = new Commercial
+                     (
+                         "COM003",
+                         "Chevalier",
+                         "Christophe",
+                         "monemail@gmail.com",
+                         "mdp"
+                     );
+
+            Client clienttest = new Client
                 (
                     "COM003",
                     "Chevalier",
                     "Christophe",
+                    "adresseclientest",
+                    "CPtest",
+                    "villetest",
                     "monemail@gmail.com",
-                    "mdp"
+                    "0626278620",
+                    "07/05/2017",
+                    "08/05/2017"
                 );
 
-            this.authentification = new Authentification(connexion);
-            this.gestionProjet = new GestionProjet(connexion, commercialTest);
-            this.gestionClient = new GestionClient(connexion, clientCAD);
+            Projet projettest = new Projet
+                (
+                    clienttest,
+                    commercialTest
+                );
+            projettest.reference = "CCAT000001";
+            PlanCAD planCAD = new PlanCAD(connexion, projettest);
 
-            Mainframe.Content = authentification;
+            Plan plantest = planCAD.Plans[0];
+
+            this.gestionDevis = new GestionDevis(connexion, plantest, commercialTest, clienttest);
+
+            Mainframe.Content = gestionDevis;
 
             /// Test SYNCHRO export ///
             //connexion.ExpClients();

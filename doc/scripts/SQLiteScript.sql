@@ -147,7 +147,6 @@ CREATE TABLE metamodule (
 -- Table Module OK
 
 CREATE TABLE module (
-  idModule INTEGER PRIMARY KEY AUTOINCREMENT,
   coordonneeDebutX INT NOT NULL,
   coordonneeDebutY INT NOT NULL,
   colspan INT NULL,
