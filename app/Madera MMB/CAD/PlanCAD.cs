@@ -382,7 +382,7 @@ namespace Madera_MMB.CAD
                     {
                         while (reader.Read())
                         {
-                            Byte[] data = (Byte[])reader.GetValue(4);
+                            Byte[] data = (Byte[])reader.GetValue(3);
                             metaModule = new MetaModule
                             (
                                 reader.GetString(0),
@@ -392,9 +392,8 @@ namespace Madera_MMB.CAD
                                 reader.GetBoolean(4),
                                 reader.GetString(5),
                                 getGammebyNom(reader.GetString(6)),
-                                Int32.Parse(reader.GetString(7)),
-                                Int32.Parse(reader.GetString(8))
-                                
+                                reader.GetInt32(7),
+                                reader.GetInt32(8)
                             );
                         }
                     }

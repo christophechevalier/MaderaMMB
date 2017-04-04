@@ -327,18 +327,18 @@ namespace Madera_MMB.View_Crtl
                         {
                             secondlist.Add(mod2);
                         }
+                        TreeViewItem modparent = new TreeViewItem();
+                        modparent.Header = mod2.meta.label;
+                        modparent.IsExpanded = true;
+                        foreach (Module modenfant in secondlist)
+                        {
+                            TreeViewItem enfant = new TreeViewItem();
+                            enfant.Header = modenfant.meta.label;
+                            modparent.Items.Add(enfant);
+                        }
+                        secondlist.Clear();
+                        coupeItem.Items.Add(modparent);
                     }
-                    TreeViewItem modparent = new TreeViewItem();
-                    modparent.Header = mod2.meta.label;
-                    modparent.IsExpanded = true;
-                    foreach(Module modenfant in secondlist)
-                    {
-                        TreeViewItem enfant = new TreeViewItem();
-                        enfant.Header = modenfant.meta.label;
-                        modparent.Items.Add(enfant);
-                    }
-                    secondlist.Clear();
-                    coupeItem.Items.Add(modparent);
                 }
             }
             coupe.Items.Add(coupeItem);

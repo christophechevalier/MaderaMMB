@@ -109,23 +109,11 @@ CREATE TABLE plan (
 
 CREATE TABLE devis (
   refDevis TEXT PRIMARY KEY NOT NULL,
-  nom TEXT NOT NULL,
   etat TEXT NOT NULL,
-  quantite TEXT NOT NULL,
-  unite TEXT NOT NULL,
   dateCreation NUMERIC NOT NULL,
-  margeCommercial INTEGER NOT NULL,
-  margeEntreprise INTEGER NOT NULL,
   prixTotalHT INTEGER NOT NULL,
   prixTotalTTC INTEGER NOT NULL,
-  refPlan TEXT NOT NULL,
-  refProjet TEXT NOT NULL,
-  refClient TEXT NOT NULL,
-  refCommercial TEXT NOT NULL,
-  FOREIGN KEY (refPlan) REFERENCES plan,
-  FOREIGN KEY (refProjet) REFERENCES projet,
-  FOREIGN KEY (refClient) REFERENCES client,
-  FOREIGN KEY (refCommercial) REFERENCES commercial
+  refPlan TEXT NOT NULL
 );
 
 
@@ -184,78 +172,6 @@ CREATE TABLE slot (
 
   
 --
--- Catalogue
---
-
-
---
--- Contenu de la table `metamodule`
---
-/*
-insert into metamodule (refMetaModule, label, prixHT, nomGamme, statut, dateMaj, taille, ecart) VALUES 
-('M406587', 'Mur exterieur 2F', 390, NULL, 'Aluminium', 1, '2017-03-03 16:54:30.30', 12, 2),
-('M406588', 'Mur exterieur 2F 1P', 420, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 12, 2),
-('M406589', 'Mur exterieur 1P', 400, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 12, 2),
-('M406590', 'Mur exterieur 1F', 400, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 15, 3),
-('M406591', 'Mur exterieur 1P 2F', 450, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 15, 3),
-('M406593', 'Mur exterieur NO', 350, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 12, 2),
-('M406594', 'Mur exterieur NO', 370, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 15, 3),
-('M406598', 'Mur exterieur NO', 450, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 23, 5),
-('M406599', 'Mur exterieur 1P 1F', 420, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 19, 4),
-('M406600', 'Mur exterieur 2F 1P', 450, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 19, 4),
-('M406601', 'Mur exterieur 1P 1F', 430, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 19, 4),
-('M406602', 'Mur exterieur 1P 1F', 470, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 23, 5),
-('M406603', 'Mur exterieur 1P 2F', 480, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 23, 5),
-('M406604', 'Mur exterieur 2P 1F', 500, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 23, 5),
-('M406605', 'Mur exterieur 1F 1P', 420, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 15, 3),
-('M40696', 'Mur exterieur NO', 410, NULL, 'Aluminium', 1, '2017-03-03 16:54:30', 19, 4);
- */
- 
---
--- Contenu de la table `metaslot`
---
-/*
- INSERT INTO metaslot (idMetaSlot, numSlotPosition, type, refMetaModule) VALUES
-(1, 1, 'F', 'M406587'),
-(2, 3, 'F', 'M406587'),
-(3, 1, 'F', 'M406588'),
-(4, 2, 'P', 'M406588'),
-(5, 3, 'F', 'M406588'),
-(6, 2, 'P', 'M406589'),
-(7, 2, 'F', 'M406590'),
-(8, 1, 'P', 'M406591'),
-(9, 2, 'F', 'M406591'),
-(10, 3, 'F', 'M406591'),
-(13, 2, 'P', 'M406599'),
-(14, 3, 'F', 'M406599'),
-(15, 1, 'F', 'M406600'),
-(16, 2, 'F', 'M406600'),
-(17, 3, 'P', 'M406600'),
-(18, 1, 'F', 'M406601'),
-(19, 3, 'P', 'M406601'),
-(20, 1, 'F', 'M406602'),
-(21, 2, 'P', 'M406602'),
-(22, 1, 'F', 'M406603'),
-(23, 2, 'P', 'M406603'),
-(24, 3, 'F', 'M406603'),
-(25, 1, 'P', 'M406604'),
-(26, 2, 'F', 'M406604'),
-(27, 3, 'P', 'M406604'),
-(28, 1, 'F', 'M406605'),
-(29, 2, 'P', 'M406605');
-*/
-
---
--- Contenu de la table `commercial`
---
-/*
-INSERT INTO commercial (refCommercial, nom, prenom, email, motDePasse) VALUES
-('COM001', 'Schwarze', 'Alexandre', 'alex@gmail.com', 'titi'),
-('COM002', 'Crocco', 'David', 'david@gmail.com', 'toto'),
-('COM003', 'Chevalier', 'Christophe', 'monemail@gmail.com', 'mdp');
-*/
-
---
 -- Contenu de la table `client`
 --
 
@@ -295,10 +211,13 @@ INSERT INTO plan (refPlan, label, dateCreation, dateModification, refProjet, typ
 --
 
 INSERT INTO module (coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, refPlan) VALUES
-(25, 35, 5, 0, '201443874685331', 'CCAT000001-P01'),
-(44, 44, 4, 0, '201443874685331', 'CCAT000001-P01'),
-(33, 33, 0, 3, '201443874685331', 'CCAT000001-P01');
-
+(25, 35, 5, 0, 'M406587', 'CCAT000001-P01'),
+(44, 44, 4, 0, 'M406587', 'CCAT000001-P01'),
+(33, 33, 0, 3, 'M406587', 'CCAT000001-P01'),
+(33, 33, 0, 3, 'F5646', 'CCAT000001-P01'),
+(33, 33, 0, 3, 'F5646', 'CCAT000001-P01'),
+(33, 33, 0, 3, 'F5646', 'CCAT000001-P01'),
+(33, 33, 0, 3, 'F5646', 'CCAT000001-P01');
 
 
 

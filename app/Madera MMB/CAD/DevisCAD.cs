@@ -42,7 +42,7 @@ namespace Madera_MMB.CAD
         private void changeStatusDevis(Devis devis, string etat)
         {
             SQLQuery = "UPDATE devis SET etat =" + etat + " WHERE refDevis = " + devis.reference + ";";
-            // A TERMINER
+            connexion.InsertSQliteQuery(SQLQuery);
         }
 
         #endregion
@@ -74,14 +74,13 @@ namespace Madera_MMB.CAD
 
                             this.dev = new Devis
                             (
-                                    reader.GetString(0),
-                                    reader.GetString(1),
-                                    reader.GetString(2),
-                                    reader.GetFloat(3),
-                                    reader.GetFloat(4),
-                                    plan
-                                    );
-
+                                reader.GetString(0),
+                                reader.GetString(1),
+                                reader.GetString(2),
+                                reader.GetFloat(3),
+                                reader.GetFloat(4),
+                                plan
+                            );
                         }
                     }
                     Trace.WriteLine("#### GET DEVIS DATA SUCCESS ####");

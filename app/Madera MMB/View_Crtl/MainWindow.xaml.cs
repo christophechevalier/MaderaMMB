@@ -54,9 +54,9 @@ namespace Madera_MMB.View_Crtl
 
             connexion.SyncCommMySQL();
             connexion.SyncParamPlan();
-            ////connexion.SyncClient();
-            //connexion.SyncMetamodules();
-            //connexion.SyncMetaslot();
+            connexion.SyncClient();
+            connexion.SyncMetamodules();
+            connexion.SyncMetaslot();
 
             /// Test CAD avec nouvelles données ///
             commCAD = new CommercialCAD(connexion);
@@ -142,9 +142,9 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void Initialize_Listeners()
         {
-            Initialize_Listeners_Auth();
-            Initialize_Listeners_GestionProjet();
-            Initialize_Listeners_GestionClient();
+            //Initialize_Listeners_Auth();
+            //Initialize_Listeners_GestionProjet();
+            //Initialize_Listeners_GestionClient();
             //Initialize_Listeners_ParametresClient();
             //Initialize_Listeners_Modelisation();
             //Initialize_Listeners_Devis();
