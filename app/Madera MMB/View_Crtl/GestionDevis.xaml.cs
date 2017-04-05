@@ -46,6 +46,7 @@ namespace Madera_MMB.View_Crtl
         private float totalinitialTTC { get; set; }
         private float totalinitialHT { get; set; }
         private bool remise { get; set; }
+        private SelectModalWindow window { get; set; }
         #endregion
 
         #region Constructeur
@@ -69,6 +70,7 @@ namespace Madera_MMB.View_Crtl
             remise = false;
             Initialize_Labels();
             Initialize_Devis();
+            Initialize_Dialog_Modification_Devis();
         }
         #endregion
 
@@ -222,19 +224,8 @@ namespace Madera_MMB.View_Crtl
         }
         private void Initialize_Dialog_Modification_Devis()
         {
-            var window = new SelectModalWindow();
-            window.TitleLabel.Content = " Sélectionner l'état du devis";
-
-            window.Retour.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                window.Close();
-            };
-
-            window.Valider.Click += delegate(object sender, RoutedEventArgs e)
-            {
-                window.Close();
-            };
-
+            this.window = new SelectModalWindow();
+            window.TitleLabel.Content = "Sélectionner l'état du devis";
             window.DataSelect.Text = "-- Choisir un état --";
             window.DataSelect.Items.Add("Accepté");
             window.DataSelect.Items.Add("Refusé");
@@ -243,7 +234,24 @@ namespace Madera_MMB.View_Crtl
             window.DataSelect.Items.Add("Nouveau");
             window.DataSelect.Items.Add("Brouillon");
 
-            window.ShowDialog();
+            window.Retour.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                window.Close();
+            };
+
+            window.Valider.Click += delegate(object sender, RoutedEventArgs e)
+            {
+                if(window.DataSelect.SelectedItem != null && (string)window.DataSelect.SelectedItem != "-- Choisir un état --")
+                {
+                    this.devis.etat = window.DataSelect.SelectedItem.ToString();
+                    currentStatus.Content = "Statut actuel : ";
+                    currentStatus.Content += devis.etat;
+                    this.devisCAD.changeStatusDevis(this.devis, this.devis.etat);
+                    window.Close();
+                }
+                else
+                    MessageBox.Show("Un état doit être sélectionné");
+            };
         }
         private void Initialize_Dialog_Remise_Devis()
         {
@@ -309,38 +317,43 @@ namespace Madera_MMB.View_Crtl
             coupeItem.Items.Add(planchItem);
 
             List<Module> firstlist = plan.modules;
-            List<Module> secondlist = new List<Module>();
             int i;
             foreach (Module mod in firstlist)
             {
                 i = 0;
-                foreach(Module mod2 in firstlist)
+                List<Module> secondlist = firstlist;
+
+                for (int x=0; x <= secondlist.Count -1; x++)
                 {
-                     if(mod.meta.label == mod2.meta.label)
+                    if(secondlist[x].meta.label == mod.meta.label)
                     {
-                        firstlist.Remove(mod2);
                         i++;
+                        secondlist[x] = null;
                     }
-                     else
+                    else
                     {
-                        if(mod2.parent.label == mod.meta.label)
+                        if (secondlist[i].parent != null && secondlist[x].parent.label != mod.meta.label)
                         {
-                            secondlist.Add(mod2);
+                            secondlist[x] = null;
                         }
-                        TreeViewItem modparent = new TreeViewItem();
-                        modparent.Header = mod2.meta.label;
-                        modparent.IsExpanded = true;
-                        foreach (Module modenfant in secondlist)
-                        {
-                            TreeViewItem enfant = new TreeViewItem();
-                            enfant.Header = modenfant.meta.label;
-                            modparent.Items.Add(enfant);
-                        }
-                        secondlist.Clear();
-                        coupeItem.Items.Add(modparent);
+                    }
+                }
+                    TreeViewItem modparent = new TreeViewItem();
+                    modparent.Header = mod.meta.label;
+                    modparent.IsExpanded = true;
+
+                foreach (Module mod2 in secondlist)
+                {
+                    if(mod2 != null)
+                    {
+                        TreeViewItem modenfant = new TreeViewItem();
+                        modenfant.Header = mod2.meta.label;
+                        modenfant.IsExpanded = true;
+                        modparent.Items.Add(modenfant);
                     }
                 }
             }
+            
             coupe.Items.Add(coupeItem);
         }
         private void TreeView_SelectedItemChanged(object sender,
@@ -368,7 +381,7 @@ namespace Madera_MMB.View_Crtl
         private void BtnChangeStatusDevis_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            Initialize_Dialog_Modification_Devis();
+            this.window.ShowDialog();
         }
 
         private void BtnAppliquerRemise_Click(object sender, RoutedEventArgs e)
@@ -430,7 +443,6 @@ namespace Madera_MMB.View_Crtl
             }
         }
         #endregion
-
     }
     
 }

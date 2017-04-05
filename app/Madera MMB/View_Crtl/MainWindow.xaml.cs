@@ -51,20 +51,22 @@ namespace Madera_MMB.View_Crtl
             initSynchro();
 
             /// Test SYNCHRO import ///
-
-            connexion.SyncCommMySQL();
-            connexion.SyncParamPlan();
-            connexion.SyncClient();
+            //if(connexion.MySQLconnected)
+            //{
+            //connexion.SyncCommMySQL();
+            //connexion.SyncParamPlan();
+            //connexion.SyncClient();
             connexion.SyncMetamodules();
             connexion.SyncMetaslot();
+            //}
 
             /// Test CAD avec nouvelles données ///
-            commCAD = new CommercialCAD(connexion);
-            ClientCAD clientCAD = new ClientCAD(connexion);
-            CoupePrincipeCAD coupeCAD = new CoupePrincipeCAD(connexion);
-            CouvertureCAD couvCAD = new CouvertureCAD(connexion);
-            GammeCAD gamCAD = new GammeCAD(connexion);
-            PlancherCAD plancherCAD = new PlancherCAD(connexion);
+            //commCAD = new CommercialCAD(connexion);
+            //ClientCAD clientCAD = new ClientCAD(connexion);
+            //CoupePrincipeCAD coupeCAD = new CoupePrincipeCAD(connexion);
+            //CouvertureCAD couvCAD = new CouvertureCAD(connexion);
+            //GammeCAD gamCAD = new GammeCAD(connexion);
+            //PlancherCAD plancherCAD = new PlancherCAD(connexion);
 
 
             Commercial commercialTest = new Commercial

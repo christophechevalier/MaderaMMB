@@ -1041,7 +1041,7 @@ namespace Madera_MMB.Lib
             try
             {
                 MySQLCo = new MySqlConnection(connectionString);
-                MySQLCo.Close();
+                MySQLCo.Open();
                 Trace.WriteLine(" \n ################################################# MYSQL DATABASE REACHED,  BEGIN SYNCHRONISATION ... ################################################# \n");
                 MySQLCo.Close();
                 return true;

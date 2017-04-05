@@ -39,7 +39,7 @@ namespace Madera_MMB.CAD
 
 
         //REQUETE CHANGEMENT D'ETAT DEVIS
-        private void changeStatusDevis(Devis devis, string etat)
+        public void changeStatusDevis(Devis devis, string etat)
         {
             SQLQuery = "UPDATE devis SET etat =" + etat + " WHERE refDevis = " + devis.reference + ";";
             connexion.InsertSQliteQuery(SQLQuery);
