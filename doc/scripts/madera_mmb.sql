@@ -252,9 +252,11 @@ CREATE TABLE IF NOT EXISTS `module` (
   `colspan` int(11) NOT NULL,
   `rowspan` int(11) NOT NULL,
   `refMetaModule` varchar(45) NOT NULL,
+  `refMetaparent` varchar(45) DEFAULT NULL,
   `refPlan` varchar(20) NOT NULL,
   PRIMARY KEY (`coordonneeDebutX`,`coordonneeDebutY`,`refPlan`),
   KEY `module_ibfk_1` (`refMetaModule`),
+  KEY `module_ibfk_0` (`refMetaparent`),
   KEY `module_ibfk_2` (`refPlan`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

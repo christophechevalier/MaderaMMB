@@ -54,7 +54,7 @@ namespace Madera_MMB.View_Crtl
             //if(connexion.MySQLconnected)
             //{
             //connexion.SyncCommMySQL();
-            //connexion.SyncParamPlan();
+            connexion.SyncParamPlan();
             //connexion.SyncClient();
             connexion.SyncMetamodules();
             connexion.SyncMetaslot();

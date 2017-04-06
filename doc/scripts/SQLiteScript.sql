@@ -140,8 +140,10 @@ CREATE TABLE module (
   colspan INT NULL,
   rowspan INT NULL,
   refMetaModule TEXT NOT NULL,
+  refMetaparent TEXT,
   refPlan TEXT NOT NULL,
   FOREIGN KEY (refMetaModule) REFERENCES metamodule,
+  FOREIGN KEY (refMetaparent) REFERENCES metamodule,
   FOREIGN KEY (refPlan) REFERENCES plan
 ); 
 
@@ -210,14 +212,14 @@ INSERT INTO plan (refPlan, label, dateCreation, dateModification, refProjet, typ
 -- Contenu de la table `module`
 --
 
-INSERT INTO module (coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, refPlan) VALUES
-(25, 35, 5, 0, 'M406587', 'CCAT000001-P01'),
-(44, 44, 4, 0, 'M406587', 'CCAT000001-P01'),
-(33, 33, 0, 3, 'M406587', 'CCAT000001-P01'),
-(33, 33, 0, 3, 'F5646', 'CCAT000001-P01'),
-(33, 33, 0, 3, 'F5646', 'CCAT000001-P01'),
-(33, 33, 0, 3, 'F5646', 'CCAT000001-P01'),
-(33, 33, 0, 3, 'F5646', 'CCAT000001-P01');
+INSERT INTO module (coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, refMetaparent, refPlan) VALUES
+(25, 35, 5, 0, 'M406587', , 'CCAT000001-P01'),
+(44, 44, 4, 0, 'M406587', , 'CCAT000001-P01'),
+(33, 33, 0, 3, 'M406587', , 'CCAT000001-P01'),
+(33, 33, 0, 3, 'F5646', 'M406587', 'CCAT000001-P01'),
+(33, 33, 0, 3, 'F5646', 'M406587', 'CCAT000001-P01'),
+(33, 33, 0, 3, 'F5646', 'M406587', 'CCAT000001-P01'),
+(33, 33, 0, 3, 'F5646', 'M406587', 'CCAT000001-P01');
 
 
 

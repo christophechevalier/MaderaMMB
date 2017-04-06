@@ -49,13 +49,14 @@ namespace Madera_MMB.Lib.Tools
             this.texture = texture;
         }
         
-        public Module(int x, int y, int colspan, int rowspan, MetaModule s1)
+        public Module(int x, int y, int colspan, int rowspan, MetaModule s1, MetaModule parent = null)
         {
             this.x = x;
             this.y = y;
             this.colspan = colspan;
             this.rowspan = rowspan;
             this.meta = s1;
+            this.parent = parent;
         }
     }
 }

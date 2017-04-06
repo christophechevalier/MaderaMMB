@@ -28,7 +28,6 @@ namespace Madera_MMB.CAD
         public MetaSlotCAD metaslotCAD { get; set; }
         private List<MetaModule> _ListMetaModule { get; set; }
         public List<MetaModule> ListMetaModule { get { return _ListMetaModule; } set { _ListMetaModule = value; RaisePropertyChanged("ListMetaModule"); } }
-        
         private ObservableCollection<Plan> _plans;
         public ObservableCollection<Plan> Plans
         {
@@ -65,8 +64,6 @@ namespace Madera_MMB.CAD
         /// <param name="unprojet"></param>
         public PlanCAD(Connexion laConnexion, Projet unprojet)
         {
-            // Instanciations
-            //conn = new Connexion();
             conn = laConnexion;
             projet = unprojet;
             Plans = new ObservableCollection<Plan>();
@@ -74,7 +71,9 @@ namespace Madera_MMB.CAD
             metaslotCAD = new MetaSlotCAD(conn);
             ListMetaModule = new List<MetaModule>();
 
-            // Appel des méthodes dans le ctor
+            if (laConnexion.MySQLconnected)
+                laConnexion.SynCPlansProj(projet);
+
             ListAllPlansByProject();
         }
         #endregion
@@ -337,7 +336,8 @@ namespace Madera_MMB.CAD
                                 reader.GetInt32(1),
                                 reader.GetInt32(2),
                                 reader.GetInt32(3),
-                                getMetaModuleByRef(reader.GetString(4))
+                                getMetaModuleByRef(reader.GetString(4)),
+                                getMetaModuleByRef(reader.GetString(5))
                             );
                             modules.Add(module);
                         }

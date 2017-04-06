@@ -128,6 +128,7 @@ namespace Madera_MMB.View_Crtl
             this.Quantité.Content += "1\n";
             int coupeprixht = this.plan.coupePrincipe.prixHT;
             totalHT += coupeprixht;
+            this.PrixUnitaire.Content += coupeprixht + "\n";
             this.PrixHT.Content += coupeprixht + "\n";
             float coupeprixttc = coupeprixht + ((coupeprixht * 20) / 100);
             totalTTC += coupeprixttc;
@@ -138,6 +139,7 @@ namespace Madera_MMB.View_Crtl
             this.Quantité.Content += "1\n";
             float couvprixht = this.plan.couverture.prixHT * this.plan.coupePrincipe.longueur * this.plan.coupePrincipe.largeur;
             totalHT += couvprixht;
+            this.PrixUnitaire.Content += couvprixht + "\n";
             this.PrixHT.Content += couvprixht + "\n";
             float couvprixttc = couvprixht + ((couvprixht * 20) / 100);
             totalTTC += couvprixttc;
@@ -148,6 +150,7 @@ namespace Madera_MMB.View_Crtl
             this.Quantité.Content += "1\n";
             float planchprixht = this.plan.plancher.prixHT * this.plan.coupePrincipe.longueur * this.plan.coupePrincipe.largeur;
             totalHT += planchprixht;
+            this.PrixUnitaire.Content += planchprixht + "\n";
             this.PrixHT.Content += planchprixht + "\n";
             float planchprixttc = planchprixht + ((planchprixht * 20) / 100);
             totalTTC += planchprixttc;
@@ -159,7 +162,7 @@ namespace Madera_MMB.View_Crtl
             for(int i=0 ; i <= plan.modules.Count-1 ; i++)
             {
                 if(i != plan.modules.Count-1)
-                {
+                {                    
                     if (plan.modules[i].meta.label == plan.modules[i + 1].meta.label)
                     {
                         cpt++;
@@ -167,6 +170,7 @@ namespace Madera_MMB.View_Crtl
                     }
                     else
                     {
+                        PrixUnitaire.Content += plan.modules[i].meta.prixHT + "\n";
                         this.ListeComposants.Content += plan.modules[i].meta.label + "\n";
                         this.Quantité.Content += cpt + "\n";
                         if(aggregatHT!= 0)
@@ -176,7 +180,7 @@ namespace Madera_MMB.View_Crtl
                             float aggregatTTC = aggregatHT + ((aggregatHT * 20) / 100);
                             totalTTC += aggregatTTC;
                             this.PrixTTC.Content += aggregatTTC + "\n";
-                            }
+                        }
                         else
                         {
                             totalHT += plan.modules[i].meta.prixHT;
@@ -317,45 +321,65 @@ namespace Madera_MMB.View_Crtl
             coupeItem.Items.Add(planchItem);
 
             List<Module> firstlist = plan.modules;
+            List<Module> thirdList = new List<Module>();
             int i;
+            bool trouv = false;
+
             foreach (Module mod in firstlist)
             {
                 i = 0;
-                List<Module> secondlist = firstlist;
+                List<Module> secondlist = new List<Module>(firstlist);
 
-                for (int x=0; x <= secondlist.Count -1; x++)
+                foreach (Module mod3 in thirdList)
                 {
-                    if(secondlist[x].meta.label == mod.meta.label)
+                    if (mod.meta.label == mod3.meta.label)
                     {
-                        i++;
-                        secondlist[x] = null;
+                        trouv = true;
                     }
-                    else
+                }
+                thirdList.Add(mod);
+
+                if (!trouv && mod.parent == null)
+                {
+                    for (int x = 0; x <= secondlist.Count - 1; x++)
                     {
-                        if (secondlist[i].parent != null && secondlist[x].parent.label != mod.meta.label)
+                        if (secondlist[x].meta.label == mod.meta.label)
                         {
+                            i++;
                             secondlist[x] = null;
                         }
+                        else
+                        {
+                            if (secondlist[x].parent == null || secondlist[x].parent.label != mod.meta.label)
+                            {
+                                secondlist[x] = null;
+                            }
+                        }
                     }
-                }
+
                     TreeViewItem modparent = new TreeViewItem();
-                    modparent.Header = mod.meta.label;
+                    modparent.Header = mod.meta.label + " X" + i;
                     modparent.IsExpanded = true;
 
-                foreach (Module mod2 in secondlist)
-                {
-                    if(mod2 != null)
+                    foreach (Module mod2 in secondlist)
                     {
-                        TreeViewItem modenfant = new TreeViewItem();
-                        modenfant.Header = mod2.meta.label;
-                        modenfant.IsExpanded = true;
-                        modparent.Items.Add(modenfant);
+                        if (mod2 != null)
+                        {
+                            TreeViewItem modenfant = new TreeViewItem();
+                            modenfant.Header = mod2.meta.label;
+                            modenfant.IsExpanded = true;
+                            modparent.Items.Add(modenfant);
+                            thirdList.Add(mod2);
+                        }
                     }
+                    coupeItem.Items.Add(modparent);
                 }
+                trouv = false;
+
             }
-            
             coupe.Items.Add(coupeItem);
         }
+
         private void TreeView_SelectedItemChanged(object sender,
             RoutedPropertyChangedEventArgs<object> e)
         {
