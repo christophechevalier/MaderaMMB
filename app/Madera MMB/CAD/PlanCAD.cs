@@ -285,29 +285,26 @@ namespace Madera_MMB.CAD
             }
         }
 
-        public void savePlan(Plan plan, Module[,] listB)
+        /// <summary>
+        /// Création d'un nouveau module
+        /// </summary>
+        /// <param name="module"></param>
+        /// <param name="refPlan"></param>
+        public void insertModule(Module module, string refPlan)
         {
-            conn.LiteCo.Open();
-            //SQLQuery = "DELETE FROM module WHERE refPlan = " + plan.reference;
-            SQLQuery = "DELETE FROM module WHERE refPlan = \"plan01\" ";
-            
-            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            if (module.parent != null)
             {
-                try
-                {
-                    command.ExecuteNonQuery();
-                    Trace.WriteLine(" ############# VIDAGE PLAN REUSSI ############# \n");
-                }
-                catch (SQLiteException e)
-                {
-                    Trace.WriteLine(e.ToString());
-                    Trace.WriteLine(" ############# VIDAGE PLAN FAIL ############# \n");
-                }
+                SQLQuery = "REPLACE INTO module (coordonneeDebutX , coordonneeDebutY, colspan, rowspan, refMetaModule, refMetaparent, refPlan)" +
+                "VALUES (" + module.x + "," + module.y + "," + module.colspan + "," + module.rowspan + ",'" + module.meta.reference + "','" + module.parent.reference + "','" + refPlan + "');";
             }
-
-
-
+            else
+            {
+                SQLQuery = "REPLACE INTO module (coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, refMetaparent, refPlan)" +
+                "VALUES (" + module.x + "," + module.y + "," + module.colspan + "," + module.rowspan + ",'" + module.meta.reference + "','none','" + refPlan + "');";
+            }
+            conn.InsertSQliteQuery(SQLQuery);
         }
+
         #endregion
 
         #region Privates methods
@@ -333,13 +330,16 @@ namespace Madera_MMB.CAD
                         {
                             Module module = new Module
                             (
-                                reader.GetInt32(0),
-                                reader.GetInt32(1),
-                                reader.GetInt32(2),
-                                reader.GetInt32(3),
-                                reader.GetInt32(4),
-                                getMetaModuleByRef(reader.GetString(5))
+                                  reader.GetInt32(0),
+                                  reader.GetInt32(1),
+                                  reader.GetInt32(2),
+                                  reader.GetInt32(3),
+                                  getMetaModuleByRef(reader.GetString(4))
                             );
+                            if (reader.GetString(5) != "none")
+                            {
+                                module.parent = getMetaModuleByRef(reader.GetString(5));
+                            }
                             modules.Add(module);
                         }
                     }
@@ -350,18 +350,6 @@ namespace Madera_MMB.CAD
                     return modules;
                 }
             }
-        }
-
-        /// <summary>
-        /// Création d'un nouveau module
-        /// </summary>
-        /// <param name="module"></param>
-        /// <param name="refPlan"></param>
-        private void insertModule(Module module, string refPlan)
-        {
-            SQLQuery = "INSERT INTO module (coordonneeDebutX , coordonneeDebutY, colspan, rowspan, refMetaModule, refPlan)" +
-            "VALUES ("+ module.x + "," + module.y + "," + module.colspan + "," + module.rowspan + "," + module.meta.reference + "," + refPlan + ";";
-            conn.InsertSQliteQuery(SQLQuery);
         }
 
         /// <summary>
@@ -383,7 +371,7 @@ namespace Madera_MMB.CAD
                     {
                         while (reader.Read())
                         {
-                            Byte[] data = (Byte[])reader.GetValue(4);
+                            Byte[] data = (Byte[])reader.GetValue(3);
                             metaModule = new MetaModule
                             (
                                 reader.GetString(0),
@@ -393,8 +381,8 @@ namespace Madera_MMB.CAD
                                 reader.GetBoolean(4),
                                 reader.GetString(5),
                                 getGammebyNom(reader.GetString(6)),
-                                Int32.Parse(reader.GetString(7)),
-                                Int32.Parse(reader.GetString(8))
+                                reader.GetInt32(7),
+                                reader.GetInt32(8)
                                 
                             );
                         }

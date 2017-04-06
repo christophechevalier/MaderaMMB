@@ -17,9 +17,8 @@ namespace Madera_MMB.View_Crtl
     /// <summary>
     /// Controle de la vue Modelisation
     /// Features Restantes :
-    ///     Chargement auto plan
-    ///     Sauvegarde plan
     ///     Gestion mur ext
+    ///     Chargement auto plan
     /// </summary>
     public partial class Modelisation : Page
     {
@@ -36,10 +35,11 @@ namespace Madera_MMB.View_Crtl
         private Module butChoose;
         private string type;
         List<MetaModule> listMeta;
+        List<Module> listMurExt = new List<Module>();
 
         public Plan plan { get; set; }
         public PlanCAD planCad { get; set; }
-        private Connexion con { get; set; }
+        public Connexion con { get; set; }
 
         #region Images
         private Brush croix = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/croix.png", UriKind.RelativeOrAbsolute)));
@@ -87,6 +87,7 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             this.DataContext = this.planCad;
             initialize();
+            loadModules();
         }
         #endregion
 
@@ -150,13 +151,36 @@ namespace Madera_MMB.View_Crtl
                 }
             }
 
+            murhaut.meta = new MetaModule("M406588", "Mur exterieur 2F 1P", 420, null, true, "2017-04-06", new Gamme(), 12, 2);
+            murbas.meta = new MetaModule("M406590", "Mur exterieur 2F", 390, null, true, "2017-04-06", new Gamme(), 12, 2);
+            murgauche.meta = new MetaModule("M406587", "Mur exterieur 2F", 390, null, true, "2017-04-06", new Gamme(), 12, 2);
+            murdroit.meta = new MetaModule("M406587", "Mur exterieur 2F", 390, null, true, "2017-04-06", new Gamme(), 12, 2);
+
+            listMurExt.Add(murhaut);
+            listMurExt.Add(murbas);
+            listMurExt.Add(murgauche);
+            listMurExt.Add(murdroit);
+
             placeComponent(murhaut);
             placeComponent(murbas);
             placeComponent(murgauche);
             placeComponent(murdroit);
+
             placeComponent(slot);
             placeComponent(slot2);
 
+            checkImage();
+        }
+
+        private void loadModules()
+        {
+            Trace.WriteLine("############################### Load modules ###############################");
+            foreach (Module mod in this.plan.modules)
+            {
+                Trace.WriteLine("####### " + mod.meta.label + " ####### " + mod.letype + " #######");
+                placeComponent(mod);
+            }
+            Trace.WriteLine("############################### Fin Load modules ###############################");
             checkImage();
         }
         #endregion
@@ -164,12 +188,11 @@ namespace Madera_MMB.View_Crtl
         #region Méthodes privées
         private void placeComponent(Module but)
         {
-            /*Grid.SetColumn(but, but.x);
-            Grid.SetColumnSpan(but, but.colspan);
-            Grid.SetRow(but, but.y);
-            Grid.SetRowSpan(but, but.rowspan);*/
             listB[but.x, but.y].letype = but.letype;
-            
+            listB[but.x, but.y].meta = but.meta;
+            listB[but.x, but.y].parent = but.parent;
+            listB[but.x, but.y].texture = but.texture;
+
             if (but.rowspan > 1 )
             {
                 for (int i = 0; i < but.rowspan; i++)
@@ -184,8 +207,6 @@ namespace Madera_MMB.View_Crtl
                     listB[but.x + i, but.y].letype = but.letype;
                 }
             }
-
-            //grid.Children.Add(but);
         }
 
         private void checkType(object sender, RoutedEventArgs e)
@@ -328,23 +349,13 @@ namespace Madera_MMB.View_Crtl
                     {
                         tgbt.IsChecked = false;
                     }
-                    butChoose.meta = null;
-                    butChoose.letype = Module.type.Slot;
-                    if (listB[butChoose.x + 1, butChoose.y].letype == Module.type.MurInt)
+                    if (butChoose.parent != null)
                     {
-                        butChoose.texture = listB[butChoose.x + 1, butChoose.y].texture;
-                    }
-                    else if (listB[butChoose.x - 1, butChoose.y].letype == Module.type.MurInt)
-                    {
-                        butChoose.texture = listB[butChoose.x - 1, butChoose.y].texture;
-                    }
-                    else if (listB[butChoose.x, butChoose.y + 1].letype == Module.type.MurInt)
-                    {
-                        butChoose.texture = listB[butChoose.x, butChoose.y + 1].texture;
-                    }
-                    else if (listB[butChoose.x, butChoose.y - 1].letype ==  Module.type.MurInt)
-                    {
-                        butChoose.texture = listB[butChoose.x, butChoose.y - 1].texture;
+                        butChoose.meta = butChoose.parent;
+                        Brush fond = new ImageBrush(butChoose.meta.image);
+                        butChoose.texture = fond;
+                        butChoose.parent = null;
+                        butChoose.letype = Module.type.Slot;
                     }
                     checkImage();
                 };
@@ -567,7 +578,7 @@ namespace Madera_MMB.View_Crtl
             //MainGrid.Children.Add(scrollView);
         }
 
-        private void placeWall( Module but)
+        private void placeWall(Module but)
         {
             if (isInside(but) && checkAround(but) && metaChoose != null)
             {
@@ -580,7 +591,7 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
-        private void removeWall( Module but)
+        private void removeWall(Module but)
         {
             if (isInside(but))
             {
@@ -635,7 +646,7 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
-        private bool checkAround( Module but)
+        private bool checkAround(Module but)
         {
             bool around = false;
 
@@ -857,6 +868,32 @@ namespace Madera_MMB.View_Crtl
                 }
             }
         }
+
+        private void save_Click(object sender, RoutedEventArgs e)
+        {
+            this.plan.modules.Clear();
+            for (int x = 1; x < listB.GetLength(0) - 1; x++)
+            {
+                for (int y = 1; y < listB.GetLength(1) - 1; y++)
+                {
+                    if (listB[x, y].letype != Module.type.Rien && listB[x, y].letype != Module.type.Mur && listB[x, y].letype != Module.type.SlotPorte && listB[x, y].letype != Module.type.SlotFen)
+                    {
+                        this.plan.modules.Add(listB[x, y]);
+                    }
+                }
+            }
+
+            foreach (Module mod in listMurExt)
+            {
+                this.plan.modules.Add(mod);
+            }
+
+            foreach (Module mod in this.plan.modules)
+            {
+                planCad.insertModule(mod, this.plan.reference);
+            }
+        }
+
         #endregion
     }
 }

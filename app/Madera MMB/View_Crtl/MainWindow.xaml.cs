@@ -55,7 +55,7 @@ namespace Madera_MMB.View_Crtl
             connexion.SyncCommMySQL();
             connexion.SyncParamPlan();
             ////connexion.SyncClient();
-            //connexion.SyncMetamodules();
+            connexion.SyncMetamodules();
             //connexion.SyncMetaslot();
 
             /// Test CAD avec nouvelles données ///
@@ -78,6 +78,7 @@ namespace Madera_MMB.View_Crtl
             this.authentification = new Authentification(connexion);
             this.gestionProjet = new GestionProjet(connexion, commercialTest);
             this.gestionClient = new GestionClient(connexion, clientCAD);
+            //this.modelisation = new Modelisation();
 
             Mainframe.Content = authentification;
 
@@ -296,8 +297,8 @@ namespace Madera_MMB.View_Crtl
             {
                 if (gestionPlan.plan != null)
                 {
-                    //this.modelisation = new Modelisation(connexion, gestionPlan.planCAD, gestionPlan.plan);
-                    this.modelisation = new Modelisation();
+                    this.modelisation = new Modelisation(connexion, gestionPlan.plan, gestionPlan.planCAD);
+                    //this.modelisation = new Modelisation();
                     Initialize_Listeners_Modelisation();
                     Mainframe.Content = modelisation;
                 }
@@ -373,8 +374,9 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton quitter modélisation pour aller dans la Vue Gestion Plan
             modelisation.BtnQuitterModelisation.Click += delegate (object sender, RoutedEventArgs e)
             {
-                modelisation.planCad.savePlan(modelisation.plan, modelisation.listB);
-                //Mainframe.Content = gestionPlan;
+                modelisation.con.ExpPlans();
+                modelisation.con.ExpModules();
+                Mainframe.Content = gestionPlan;
             };
         }
         #endregion

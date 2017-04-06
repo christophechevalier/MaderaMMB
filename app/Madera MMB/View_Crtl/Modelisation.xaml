@@ -96,7 +96,7 @@
             </Grid.ColumnDefinitions>
 
             <Viewbox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Button Content="Sauvegarder" Name="save" Height="60" Width="400" FontSize="20"/>
+                <Button Content="Sauvegarder" Name="save" Height="60" Width="400" FontSize="20" Click="save_Click"/>
             </Viewbox>
             <Viewbox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch">
                 <Button Content="Quitter" Name="BtnQuitterModelisation" Height="60" Width="400" FontSize="20"/>

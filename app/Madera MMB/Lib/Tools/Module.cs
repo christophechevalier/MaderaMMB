@@ -18,7 +18,6 @@ namespace Madera_MMB.Lib.Tools
 
         public type letype { get; set; }
         public MetaModule parent { get; set; }
-        public List<Module> slots { get; set; }
         public int colspan { get; set; }
         public int rowspan { get; set; }
         public int x { get; set; }
@@ -34,7 +33,6 @@ namespace Madera_MMB.Lib.Tools
             this.y = y;
             this.colspan = colspan;
             this.rowspan = rowspan;
-            this.slots = new List<Module>();
             this.texture = texture;
         }
 
@@ -45,13 +43,41 @@ namespace Madera_MMB.Lib.Tools
             this.y = y;
             this.colspan = colspan;
             this.rowspan = rowspan;
-            this.slots = new List<Module>();
             this.texture = texture;
         }
-        
-        public Module(int i1, int i2, int i3, int i4, int i5, MetaModule s1)
-        {
 
+        public Module(int x, int y, int colspan, int rowspan, MetaModule meta, MetaModule parent = null)
+        {
+            this.x = x;
+            this.y = y;
+            this.colspan = colspan;
+            this.rowspan = rowspan;
+            this.meta = meta;
+            this.parent = parent;
+            checkType();
+        }
+
+        private void checkType()
+        {
+            if (this.meta.label.Contains("Mur exterieur"))
+            {
+                this.letype = type.Mur;
+            }
+            else if (this.meta.label.Contains("Mur int"))
+            {
+                this.letype = type.MurInt;
+            }
+            else if (this.meta.label.Contains("Porte"))
+            {
+                this.letype = type.Porte;
+            }
+            else if (this.meta.label.Contains("Fenetre"))
+            {
+                this.letype = type.Fenetre;
+            }
+
+            Brush fond = new ImageBrush(this.meta.image);
+            this.texture = fond;
         }
     }
 }
