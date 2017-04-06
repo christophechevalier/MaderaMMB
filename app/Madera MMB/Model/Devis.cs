@@ -38,6 +38,8 @@ namespace Madera_MMB.Model
         /// <param name="unplan">Prend un plan à partir du quel créer le devis</param>
         public Devis(Plan unplan)
         {
+            Random number = new Random();
+            this.reference = unplan.reference + " D:" + number.Next(0, 9999); 
             this.plan = unplan;
             this.creation = DateTime.Now.ToString();
         }

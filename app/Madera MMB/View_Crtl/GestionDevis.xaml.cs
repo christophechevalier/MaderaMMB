@@ -164,20 +164,18 @@ namespace Madera_MMB.View_Crtl
                 if(i != plan.modules.Count-1)
                 {                    
                     if (plan.modules[i].meta.label == plan.modules[i + 1].meta.label)
-                    {
                         cpt++;
-                        aggregatHT += plan.modules[i].meta.prixHT + plan.modules[i + 1].meta.prixHT;
-                    }
                     else
                     {
                         PrixUnitaire.Content += plan.modules[i].meta.prixHT + "\n";
                         this.ListeComposants.Content += plan.modules[i].meta.label + "\n";
                         this.Quantité.Content += cpt + "\n";
-                        if(aggregatHT!= 0)
+                        if(cpt!= 0)
                         {
-                            totalHT += aggregatHT;
-                            this.PrixHT.Content += aggregatHT + "\n";
-                            float aggregatTTC = aggregatHT + ((aggregatHT * 20) / 100);
+                            float prixquantiteHT = plan.modules[i].meta.prixHT * cpt;
+                            totalHT += prixquantiteHT;
+                            this.PrixHT.Content += prixquantiteHT + "\n";
+                            float aggregatTTC = prixquantiteHT + ((prixquantiteHT * 20) / 100);
                             totalTTC += aggregatTTC;
                             this.PrixTTC.Content += aggregatTTC + "\n";
                         }
@@ -204,6 +202,7 @@ namespace Madera_MMB.View_Crtl
                     if (aggregatHT != 0)
                     {
                         totalHT += aggregatHT;
+                        PrixUnitaire.Content += plan.modules[i].meta.prixHT + "\n";
                         this.PrixHT.Content += aggregatHT + "\n";
                         float aggregatTTC = aggregatHT + ((aggregatHT * 20) / 100);
                         totalTTC += aggregatTTC;
@@ -218,6 +217,9 @@ namespace Madera_MMB.View_Crtl
                     }
                 }
             }
+
+            this.devis.prixTotalHT = totalHT;
+            this.devis.prixTotalTTC = totalTTC;
 
             /// TOTAUX ///
             LabTotalHT.Content = "";
@@ -240,7 +242,7 @@ namespace Madera_MMB.View_Crtl
 
             window.Retour.Click += delegate(object sender, RoutedEventArgs e)
             {
-                window.Close();
+                window.Hide();
             };
 
             window.Valider.Click += delegate(object sender, RoutedEventArgs e)
@@ -251,7 +253,7 @@ namespace Madera_MMB.View_Crtl
                     currentStatus.Content = "Statut actuel : ";
                     currentStatus.Content += devis.etat;
                     this.devisCAD.changeStatusDevis(this.devis, this.devis.etat);
-                    window.Close();
+                    window.Hide();
                 }
                 else
                     MessageBox.Show("Un état doit être sélectionné");
@@ -375,7 +377,6 @@ namespace Madera_MMB.View_Crtl
                     coupeItem.Items.Add(modparent);
                 }
                 trouv = false;
-
             }
             coupe.Items.Add(coupeItem);
         }
@@ -405,7 +406,7 @@ namespace Madera_MMB.View_Crtl
         private void BtnChangeStatusDevis_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            this.window.ShowDialog();
+            this.window.Show();
         }
 
         private void BtnAppliquerRemise_Click(object sender, RoutedEventArgs e)
@@ -468,5 +469,4 @@ namespace Madera_MMB.View_Crtl
         }
         #endregion
     }
-    
 }

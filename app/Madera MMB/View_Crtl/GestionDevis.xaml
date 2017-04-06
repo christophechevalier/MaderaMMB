@@ -435,7 +435,7 @@
                         <ColumnDefinition Width="0.1*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="0.1*" />
-                        <ColumnDefinition Width="0.15*" />
+                        <ColumnDefinition Width="0.20*" />
                         <ColumnDefinition Width="0.15*" />
                         <ColumnDefinition Width="0.15*" />
                     </Grid.ColumnDefinitions>

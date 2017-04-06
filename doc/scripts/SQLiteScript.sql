@@ -213,9 +213,9 @@ INSERT INTO plan (refPlan, label, dateCreation, dateModification, refProjet, typ
 --
 
 INSERT INTO module (coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, refMetaparent, refPlan) VALUES
-(25, 35, 5, 0, 'M406587', , 'CCAT000001-P01'),
-(44, 44, 4, 0, 'M406587', , 'CCAT000001-P01'),
-(33, 33, 0, 3, 'M406587', , 'CCAT000001-P01'),
+(25, 35, 5, 0, 'M406587','none', 'CCAT000001-P01'),
+(44, 44, 4, 0, 'M406587','none', 'CCAT000001-P01'),
+(33, 33, 0, 3, 'M406587','none', 'CCAT000001-P01'),
 (33, 33, 0, 3, 'F5646', 'M406587', 'CCAT000001-P01'),
 (33, 33, 0, 3, 'F5646', 'M406587', 'CCAT000001-P01'),
 (33, 33, 0, 3, 'F5646', 'M406587', 'CCAT000001-P01'),

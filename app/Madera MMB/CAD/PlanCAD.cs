@@ -312,7 +312,7 @@ namespace Madera_MMB.CAD
         #region Privates methods
 
         /// <summary>
-        /// Méthode qui permet de récupérer les modules par id
+        /// Méthode qui permet de récupérer les modules appartenant à un plan
         /// </summary>
         /// <param name="refPlan"></param>
         /// <returns></returns>
@@ -332,13 +332,16 @@ namespace Madera_MMB.CAD
                         {
                             Module module = new Module
                             (
-                                reader.GetInt32(0),
-                                reader.GetInt32(1),
-                                reader.GetInt32(2),
-                                reader.GetInt32(3),
-                                getMetaModuleByRef(reader.GetString(4)),
-                                getMetaModuleByRef(reader.GetString(5))
+                                  reader.GetInt32(0),
+                                  reader.GetInt32(1),
+                                  reader.GetInt32(2),
+                                  reader.GetInt32(3),
+                                  getMetaModuleByRef(reader.GetString(4))
                             );
+                            if (reader.GetString(5) != "none")
+                            {
+                                module.parent = getMetaModuleByRef(reader.GetString(5));
+                            }
                             modules.Add(module);
                         }
                     }
