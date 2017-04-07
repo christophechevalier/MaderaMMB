@@ -78,9 +78,10 @@ namespace Madera_MMB.View_Crtl
             this.authentification = new Authentification(connexion);
             this.gestionProjet = new GestionProjet(connexion, commercialTest);
             this.gestionClient = new GestionClient(connexion, clientCAD);
-            //this.modelisation = new Modelisation();
 
-            Mainframe.Content = authentification;
+            this.modelisation = new Modelisation();
+
+            Mainframe.Content = modelisation;
 
             /// Test SYNCHRO export ///
             //connexion.ExpClients();

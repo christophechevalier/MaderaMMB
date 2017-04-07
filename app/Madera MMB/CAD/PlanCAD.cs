@@ -258,7 +258,6 @@ namespace Madera_MMB.CAD
 
             conn.LiteCo.Open();
             SQLQuery = "SELECT * FROM metaslot WHERE refMetaModule = '" + refe + "';";
-            Trace.WriteLine("######################### RECUP LIST METASLOT REF : " + refe + " #########################");
             using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
             {
                 using (SQLiteDataReader reader = command.ExecuteReader())
@@ -274,8 +273,6 @@ namespace Madera_MMB.CAD
                                 reader.GetString(2),
                                 reader.GetString(3)
                             );
-                            Trace.WriteLine("######################### ID: " + reader.GetInt32(0) + " POS: " + reader.GetInt32(1) + " TYPE: " + reader.GetString(2) + " MM: " + reader.GetString(3) + " " + " #########################");
-                            Trace.WriteLine("######################### ID: " + metaS.id + " POS: " + metaS.posMetaSlot + " TYPE: " + metaS.type + " MM: " + metaS.refMetaModule + " " + " #########################");
                             listMetaS.Add(metaS);
                         }
                     }
@@ -284,7 +281,6 @@ namespace Madera_MMB.CAD
                         Trace.WriteLine(ex.ToString());
                     }
                     conn.LiteCo.Close();
-                    Trace.WriteLine("######################### FIN RECUP LIST METASLOT REF : " + refe + " #########################");
                     return listMetaS;
                 }
             }

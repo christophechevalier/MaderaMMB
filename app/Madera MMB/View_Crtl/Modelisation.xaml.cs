@@ -27,6 +27,7 @@ namespace Madera_MMB.View_Crtl
         public Module[,] listB = new Module[40, 30];
         private ListBox listBox = new ListBox();
         private Viewbox viewB = new Viewbox();
+        private ScrollViewer scrollView = new ScrollViewer();
         private StackPanel stackP = new StackPanel();
         private StackPanel stackList = new StackPanel();
         private string mode = "default";
@@ -70,6 +71,23 @@ namespace Madera_MMB.View_Crtl
         {
             InitializeComponent();
             initialize();
+
+            Module murhaut = new Module(Module.type.Mur, 5, 5, 15, 1, null);
+            Module murdroit = new Module(Module.type.Mur, 20, 5, 1, 15, null);
+            Module murgauche = new Module(Module.type.Mur, 5, 6, 1, 15, null);
+            Module murbas = new Module(Module.type.Mur, 6, 20, 15, 1, null);
+
+            listMurExt.Add(murhaut);
+            listMurExt.Add(murdroit);
+            listMurExt.Add(murgauche);
+            listMurExt.Add(murbas);
+
+            placeComponent(murhaut);
+            placeComponent(murdroit);
+            placeComponent(murgauche);
+            placeComponent(murbas);
+
+            checkImage();
         }
 
         public Modelisation(Connexion con, Plan plan, PlanCAD planCad)
@@ -99,10 +117,11 @@ namespace Madera_MMB.View_Crtl
             Grid.SetRow(listBox, 2);
             listBox.Margin = new Thickness(7,7,7,7);
 
-            Grid.SetColumn(viewB, 0);
-            Grid.SetRow(viewB, 2);
-            viewB.Margin = new Thickness(20, 20, 20, 20);
-            MainGrid.Children.Add(viewB);
+            Grid.SetColumn(scrollView, 0);
+            Grid.SetRow(scrollView, 2);
+            scrollView.Margin = new Thickness(10, 10, 10, 10);
+            scrollView.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+            MainGrid.Children.Add(scrollView);
 
             ColumnDefinition col;
             RowDefinition row;
@@ -336,7 +355,7 @@ namespace Madera_MMB.View_Crtl
 
         private void loadChoiceButton (Module but)
         {
-            MainGrid.Children.Remove(stackP);
+            scrollView.Content = null;
             stackP.Children.Clear();
 
             if (but.meta != null)
@@ -418,8 +437,7 @@ namespace Madera_MMB.View_Crtl
                 };
                 stackP.Children.Add(vider);
             }
-
-            viewB.Child = stackP;
+            scrollView.Content = stackP;
         }
 
         private void loadFiltre(object sender, RoutedEventArgs e)
@@ -427,8 +445,7 @@ namespace Madera_MMB.View_Crtl
             Button but = sender as Button;
             if (mode == "default")
             {
-                MainGrid.Children.Remove(scrollView);
-                MainGrid.Children.Remove(stackP);
+                scrollView.Content = null;
                 stackP.Children.Clear();
 
                 List<string> listGammes = new List<string>();
@@ -463,8 +480,8 @@ namespace Madera_MMB.View_Crtl
                     butG.Click += new RoutedEventHandler(loadListMeta);
                     stackP.Children.Add(butG);
                 }
-                
-                viewB.Child = stackP;
+
+                scrollView.Content = stackP;
             }
         }
 
@@ -488,18 +505,18 @@ namespace Madera_MMB.View_Crtl
             if (mode == "tracer")
             {
                 retirer.IsChecked = false;
-                viewB.Child = null;
+                scrollView.Content = null;
                 loadListMur();
             }
             else if (mode == "retirer" || mode == "default") {
                 tracer.IsChecked = false;
-                viewB.Child = null;
+                scrollView.Content = null;
             }
         }
 
         private void loadListMur()
         {
-            MainGrid.Children.Remove(scrollView);
+            scrollView.Content = null;
             stackList.Children.Clear();
             
             
@@ -552,8 +569,6 @@ namespace Madera_MMB.View_Crtl
             }
             
             scrollView.Content = stackList;
-            viewB.Child = scrollView;
-            //MainGrid.Children.Add(scrollView);
         }
 
         private void loadListMeta(object sender, RoutedEventArgs e)
@@ -662,7 +677,6 @@ namespace Madera_MMB.View_Crtl
             }
             
             scrollView.Content = stackList;
-            viewB.Child = scrollView;
         }
 
         private Module findMurExt(Module mod)
@@ -986,26 +1000,33 @@ namespace Madera_MMB.View_Crtl
 
         private void save_Click(object sender, RoutedEventArgs e)
         {
-            this.plan.modules.Clear();
-            for (int x = 1; x < listB.GetLength(0) - 1; x++)
+            if (listMurExt.Count == 4 && listMurExt[0].meta != null && listMurExt[1].meta != null && listMurExt[2].meta != null && listMurExt[3].meta != null)
             {
-                for (int y = 1; y < listB.GetLength(1) - 1; y++)
+                this.plan.modules.Clear();
+                for (int x = 1; x < listB.GetLength(0) - 1; x++)
                 {
-                    if (listB[x, y].letype != Module.type.Rien && listB[x, y].letype != Module.type.Mur && listB[x, y].letype != Module.type.SlotPorte && listB[x, y].letype != Module.type.SlotFen)
+                    for (int y = 1; y < listB.GetLength(1) - 1; y++)
                     {
-                        this.plan.modules.Add(listB[x, y]);
+                        if (listB[x, y].letype != Module.type.Rien && listB[x, y].letype != Module.type.Mur && listB[x, y].letype != Module.type.SlotPorte && listB[x, y].letype != Module.type.SlotFen)
+                        {
+                            this.plan.modules.Add(listB[x, y]);
+                        }
                     }
                 }
-            }
 
-            foreach (Module mod in listMurExt)
-            {
-                this.plan.modules.Add(mod);
-            }
+                foreach (Module mod in listMurExt)
+                {
+                    this.plan.modules.Add(mod);
+                }
 
-            foreach (Module mod in this.plan.modules)
+                foreach (Module mod in this.plan.modules)
+                {
+                    planCad.insertModule(mod, this.plan.reference);
+                }
+            }
+            else
             {
-                planCad.insertModule(mod, this.plan.reference);
+                System.Windows.MessageBox.Show("Vous ne pouvez pas enregistrer le plan sans avoir renseigné tous les murs extérieurs.");
             }
         }
         #endregion
