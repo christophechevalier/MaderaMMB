@@ -88,7 +88,6 @@
     <Compile Include="CAD\PlanCAD.cs" />
     <Compile Include="CAD\PlancherCAD.cs" />
     <Compile Include="CAD\ProjetCAD.cs" />
-    <Compile Include="CAD\SlotCAD.cs" />
     <Compile Include="Lib\Connexion.cs" />
     <Compile Include="Lib\Tools\Module.cs" />
     <Compile Include="Lib\Tools\InputModalWindow.xaml.cs">
@@ -109,7 +108,6 @@
     <Compile Include="Model\Plan.cs" />
     <Compile Include="Model\Plancher.cs" />
     <Compile Include="Model\Projet.cs" />
-    <Compile Include="Model\Slot.cs" />
     <Compile Include="View_Crtl\Authentification.xaml.cs">
       <DependentUpon>Authentification.xaml</DependentUpon>
     </Compile>

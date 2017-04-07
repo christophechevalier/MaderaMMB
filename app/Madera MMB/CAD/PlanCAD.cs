@@ -250,6 +250,47 @@ namespace Madera_MMB.CAD
         }
 
         /// <summary>
+        /// Méthode qui permet de récupérer les metaSlot d'un metaModule
+        /// </summary>
+        public List<MetaSlot> listMetaSlot(string refe)
+        {
+            List<MetaSlot> listMetaS = new List<MetaSlot>();
+
+            conn.LiteCo.Open();
+            SQLQuery = "SELECT * FROM metaslot WHERE refMetaModule = '" + refe + "';";
+            Trace.WriteLine("######################### RECUP LIST METASLOT REF : " + refe + " #########################");
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    try
+                    {
+                        while (reader.Read())
+                        {
+                            MetaSlot metaS = new MetaSlot
+                            (
+                                reader.GetInt32(0),
+                                reader.GetInt32(1),
+                                reader.GetString(2),
+                                reader.GetString(3)
+                            );
+                            Trace.WriteLine("######################### ID: " + reader.GetInt32(0) + " POS: " + reader.GetInt32(1) + " TYPE: " + reader.GetString(2) + " MM: " + reader.GetString(3) + " " + " #########################");
+                            Trace.WriteLine("######################### ID: " + metaS.id + " POS: " + metaS.posMetaSlot + " TYPE: " + metaS.type + " MM: " + metaS.refMetaModule + " " + " #########################");
+                            listMetaS.Add(metaS);
+                        }
+                    }
+                    catch (SQLiteException ex)
+                    {
+                        Trace.WriteLine(ex.ToString());
+                    }
+                    conn.LiteCo.Close();
+                    Trace.WriteLine("######################### FIN RECUP LIST METASLOT REF : " + refe + " #########################");
+                    return listMetaS;
+                }
+            }
+        }
+
+        /// <summary>
         /// Méthode qui permet de récupérer les gammes de metamodules
         /// </summary>
         public List<String> listAllGammes(string type)

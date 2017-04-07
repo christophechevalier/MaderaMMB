@@ -10,17 +10,17 @@ namespace Madera_MMB.Model
     {
         #region properties
         public int id { get; set; }
-        public string label { get; set; }
-        public int numMetaSlot { get; set; }
+        public int posMetaSlot { get; set; }
+        public string type { get; set; }
         public string refMetaModule { get; set; }
         #endregion
 
         #region Ctor
-        public MetaSlot(int id, string label, int nb, string refMetamodule)
+        public MetaSlot(int id, int pos, string type, string refMetamodule)
         {
             this.id = id;
-            this.label = label;
-            this.numMetaSlot = nb;
+            this.posMetaSlot = pos;
+            this.type = type;
             this.refMetaModule = refMetamodule;
         }
         #endregion

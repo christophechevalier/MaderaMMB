@@ -56,7 +56,7 @@ namespace Madera_MMB.View_Crtl
             connexion.SyncParamPlan();
             ////connexion.SyncClient();
             connexion.SyncMetamodules();
-            //connexion.SyncMetaslot();
+            connexion.SyncMetaslot();
 
             /// Test CAD avec nouvelles données ///
             commCAD = new CommercialCAD(connexion);

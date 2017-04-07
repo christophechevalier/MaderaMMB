@@ -172,6 +172,12 @@ namespace Madera_MMB.View_Crtl
                 placeComponent(murgauche);
                 placeComponent(murbas);
             }
+
+            foreach (Module mod in this.plan.modules)
+            {
+                if (mod.letype != Module.type.Mur)
+                    placeComponent(mod);
+            }
             checkImage();
         }
         #endregion
@@ -184,7 +190,13 @@ namespace Madera_MMB.View_Crtl
             listB[but.x, but.y].parent = but.parent;
             listB[but.x, but.y].texture = but.texture;
 
-            if (but.rowspan > 1 )
+            List<MetaSlot> listSlot = new List<MetaSlot>(); ;
+            if (but.meta != null)
+            {
+                listSlot = planCad.listMetaSlot(but.meta.reference);
+            }
+
+            if (but.rowspan > 1 && but.letype == Module.type.Mur)
             {
                 for (int i = 0; i < but.rowspan; i++)
                 {
@@ -193,8 +205,20 @@ namespace Madera_MMB.View_Crtl
                     listB[but.x, but.y + i].rowspan = but.rowspan;
                     listB[but.x, but.y + i].meta = but.meta;
                 }
+
+                foreach (MetaSlot slot in listSlot)
+                {
+                    if (slot.type == "F")
+                    {
+                        listB[but.x, but.meta.ecart * slot.posMetaSlot + but.y + slot.posMetaSlot - 1].letype = Module.type.SlotFen;
+                    }
+                    else if (slot.type == "P")
+                    {
+                        listB[but.x, but.meta.ecart * slot.posMetaSlot + but.y + slot.posMetaSlot - 1].letype = Module.type.SlotPorte;
+                    }
+                }
             }
-            else if (but.colspan > 1)
+            else if (but.colspan > 1 && but.letype == Module.type.Mur)
             {
                 for (int i = 0; i < but.colspan; i++)
                 {
@@ -202,6 +226,18 @@ namespace Madera_MMB.View_Crtl
                     listB[but.x + i, but.y].colspan = but.colspan;
                     listB[but.x + i, but.y].rowspan = but.rowspan;
                     listB[but.x + i, but.y].meta = but.meta;
+                }
+
+                foreach (MetaSlot slot in listSlot)
+                {
+                    if (slot.type == "F")
+                    {
+                        listB[but.meta.ecart * slot.posMetaSlot + but.x + slot.posMetaSlot - 1, but.y].letype = Module.type.SlotFen;
+                    }
+                    else if (slot.type == "P")
+                    {
+                        listB[but.meta.ecart * slot.posMetaSlot + but.x + slot.posMetaSlot - 1, but.y].letype = Module.type.SlotPorte;
+                    }
                 }
             }
         }
@@ -579,18 +615,31 @@ namespace Madera_MMB.View_Crtl
                             {
                                 tgbt.IsChecked = false;
                             }
-                            butChoose.parent = butChoose.meta;
-                            butChoose.meta = meta;
-                            Brush fond = new ImageBrush(butChoose.meta.image);
-                            butChoose.texture = fond;
-                            if (type == "Fen")
+
+                            if (type == "Mur ext")
                             {
-                                butChoose.letype =  Module.type.Fenetre;
+                                Module modExt = findMurExt(butChoose);
+                                modExt.meta = meta;
+                                Brush fond = new ImageBrush(modExt.meta.image);
+                                modExt.texture = fond;
+                                placeComponent(modExt);
                             }
-                            else if (type == "Por")
+                            else
                             {
-                                butChoose.letype =  Module.type.Porte;
+                                butChoose.parent = butChoose.meta;
+                                butChoose.meta = meta;
+                                Brush fond = new ImageBrush(butChoose.meta.image);
+                                butChoose.texture = fond;
+                                if (type == "Fen")
+                                {
+                                    butChoose.letype = Module.type.Fenetre;
+                                }
+                                else if (type == "Por")
+                                {
+                                    butChoose.letype = Module.type.Porte;
+                                }
                             }
+
                             active.IsChecked = true;
                             checkImage();
                         };
@@ -614,7 +663,34 @@ namespace Madera_MMB.View_Crtl
             
             scrollView.Content = stackList;
             viewB.Child = scrollView;
-            //MainGrid.Children.Add(scrollView);
+        }
+
+        private Module findMurExt(Module mod)
+        {
+            foreach (Module modM in listMurExt)
+            {
+                if (modM.colspan > 1 )
+                {
+                    for (int i = 0; i <= modM.colspan; i++)
+                    {
+                        if (mod.y == modM.y && mod.x == modM.x + i)
+                        {
+                            return modM;
+                        }
+                    }
+                }
+                else if (modM.rowspan > 1)
+                {
+                    for (int i = 0; i <= modM.rowspan; i++)
+                    {
+                        if (mod.y == modM.y + i && mod.x == modM.x)
+                        {
+                            return modM;
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         private void placeWall(Module but)
