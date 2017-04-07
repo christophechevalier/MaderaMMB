@@ -1,5 +1,7 @@
-﻿using Madera_MMB.Lib;
+﻿using Madera_MMB.CAD;
+using Madera_MMB.Lib;
 using Madera_MMB.Lib.Tools;
+using Madera_MMB.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,92 +22,242 @@ namespace Madera_MMB.View_Crtl
 {
     /// <summary>
     /// Logique d'interaction pour GestionDevis.xaml
+    /// * Règles de gestion Devis :
+    /// - Il ne peut y avoir qu’un seul devis estimatif et dossier technique par plan
+    /// - L’état du devis ne peut être uniquement modifié par un commercial ayant les privilèges
+    /// - Un devis n’a pas obligatoirement de remise
+    /// - Un devis a un workflow spécifique :
+    /// Brouillon ➡ Valider/Accepter par le client ➡ Facturer ➡ Clôturer
+    ///           ➡ Refuser                        ➡ En Attente
+    /// - Un devis brouillon valider ou refuser peut être modifié mais retourne à un état brouillon
     /// </summary>
 
-    //DEVIS
     public partial class GestionDevis : Page
     {
         #region Properties
-        public Connexion co { get; set; }
+        private Plan plan { get; set; }
+        private DevisCAD devisCAD { get; set; }
+        private Client client { get; set; }
+        private Devis devis { get; set; }
+        private Commercial commercial { get; set; }
+        private Connexion connexion { get; set; }
+        private float totalTTC { get; set; }
+        private float totalHT { get; set; }
+        private float totalinitialTTC { get; set; }
+        private float totalinitialHT { get; set; }
+        private bool remise { get; set; }
+        private SelectModalWindow window { get; set; }
         #endregion
 
         #region Constructeur
-        public GestionDevis(Connexion conn)
+        public GestionDevis(Connexion conn, Plan plan, Commercial commercial, Client client)
         {
             InitializeComponent();
+
+            this.plan = plan;
+            this.commercial = commercial;
+            this.client = client;
+            connexion = conn;
+            devisCAD = new DevisCAD(connexion, plan);
+
+            this.DataContext = devisCAD;
+
+            if(devisCAD.getDevisByPlan(plan) == null)
+                this.devis = new Devis(plan);
+            else
+                this.devis = devisCAD.getDevisByPlan(plan);
+
+            remise = false;
             Initialize_Labels();
             Initialize_Devis();
-            this.co = conn;
-            this.DataContext = co;
+            Initialize_Dialog_Modification_Devis();
         }
         #endregion
 
         #region Initialisation Container
+        /// <summary>
+        /// Méthode (Ré)initialisant le contenu des des différents labels de la vue
+        /// </summary>
         private void Initialize_Labels()
         {
             //RETURN VALUES
             //CLIENT
-            nomClient.Content += "BOLZINGER Gabriel"; //RETURN REQUEST
+            nomClient.Content = "Nom du client : ";
+            nomClient.Content += client.nom; 
 
             //COMMERCIAL
-            nomCommercial.Content += "CROCCO David"; //RETURN REQUEST
+            nomCommercial.Content = "Nom du commercial : ";
+            nomCommercial.Content += commercial.nom; 
 
             //DEVIS
-            dateCreation.Content += "01/01/2016"; //RETURN REQUEST
-            lastUpdate.Content += "20/05/2016"; //RETURN REQUEST
-            currentStatus.Content += "Accepté"; //RETURN REQUEST
+            dateCreation.Content = "Date de création : ";
+            dateCreation.Content += plan.creation.ToString(); 
 
+            lastUpdate.Content = "Date de dernière mise à jour : ";
+            lastUpdate.Content += plan.modification.ToString();
+
+            currentStatus.Content = "Statut actuel : ";
+            currentStatus.Content += devis.etat;
+
+            nomClientDevis.Content = "";
+            nomClientDevis.Content += client.nom; 
+            referenceClientDevis.Content = "";
+            referenceClientDevis.Content += client.reference;
+            adresseClientDevis.Content = "";
+            adresseClientDevis.Content += client.adresse;
+
+            //COMMERCIAL
+            nomCommerialDevis.Content = "";
+            nomCommerialDevis.Content += commercial.nom;
+            referenceCommercialDevis.Content = "";
+            referenceCommercialDevis.Content += commercial.reference;
+
+            //PLAN
+            dateDevis.Content = "";
+            dateDevis.Content += devis.creation;
+            planDevis.Content = "";
+            planDevis.Content += devis.plan.label;
 
         }
         private void Initialize_Devis()
         {
-            //TOP INFORMATION
-            //CLIENT
-            nomClientDevis.Content += "BOLZINGER Gabriel"; //RETURN REQUEST
-            referenceClientDevis.Content += "#43654782"; //RETURN REQUEST
-            adresseClientDevis.Content += "646 Route de Paris 31000 Toulouse";
+            this.totalHT = 0;
+            this.totalTTC = 0;
+            /// COUPE PRINCIPE ///
+            this.ListeComposants.Content += "Base " + this.plan.coupePrincipe.label + " dimensions " + this.plan.coupePrincipe.longueur + "x" + this.plan.coupePrincipe.largeur + "\n";
+            this.Quantité.Content += "1\n";
+            int coupeprixht = this.plan.coupePrincipe.prixHT;
+            totalHT += coupeprixht;
+            this.PrixUnitaire.Content += coupeprixht + "\n";
+            this.PrixHT.Content += coupeprixht + "\n";
+            float coupeprixttc = coupeprixht + ((coupeprixht * 20) / 100);
+            totalTTC += coupeprixttc;
+            this.PrixTTC.Content += coupeprixttc.ToString() + "\n";
 
-            //COMMERCIAL
-            nomCommerialDevis.Content += "CROCCO David"; //RETURN REQUEST
-            referenceCommercialDevis.Content += "#54254312"; //RETURN REQUEST
+            /// COUVERTURE ///
+            this.ListeComposants.Content += "Couverture " + this.plan.couverture.type + "\n";
+            this.Quantité.Content += "1\n";
+            float couvprixht = this.plan.couverture.prixHT * this.plan.coupePrincipe.longueur * this.plan.coupePrincipe.largeur;
+            totalHT += couvprixht;
+            this.PrixUnitaire.Content += couvprixht + "\n";
+            this.PrixHT.Content += couvprixht + "\n";
+            float couvprixttc = couvprixht + ((couvprixht * 20) / 100);
+            totalTTC += couvprixttc;
+            this.PrixTTC.Content += couvprixttc.ToString() + "\n";
 
-            //PLAN
-            dateDevis.Content += "20/05/2016";
-            planDevis.Content += "Plan 1 Base Rectangle";
+            /// PLANCHER ///
+            this.ListeComposants.Content += "Plancher " + this.plan.plancher.type + "\n";
+            this.Quantité.Content += "1\n";
+            float planchprixht = this.plan.plancher.prixHT * this.plan.coupePrincipe.longueur * this.plan.coupePrincipe.largeur;
+            totalHT += planchprixht;
+            this.PrixUnitaire.Content += planchprixht + "\n";
+            this.PrixHT.Content += planchprixht + "\n";
+            float planchprixttc = planchprixht + ((planchprixht * 20) / 100);
+            totalTTC += planchprixttc;
+            this.PrixTTC.Content += planchprixttc.ToString() + "\n";
 
-            //ARRAY RETURN BY REQUEST GET ALL COMPOSANT FROM PLAN
-            string[,] listeComposants = { { "Base en L; Dimension 15x10x5", "1", "1500", "1800", "1800" }, 
-                                     { "Couverture tuiles", "1", "2500", "3000", "3000" } };
-            int nbrcomposant = 0;
-            nbrcomposant = listeComposants.Length;
-
-            for (int i = 0; i < nbrcomposant; i++)
+            /// MODULES ///
+            int cpt = 0;
+            int aggregatHT = 0;
+            for(int i=0 ; i <= plan.modules.Count-1 ; i++)
             {
-                //string liste_nom_composant = listeComposants[i,0]; //composants.nom
-                //string quantitéçcomposant = listeComposants[i,1]; //composant.quantité
-                //string prixHT = listeComposants[i,2]; //composant.prixHT
-                //string prixTTC = listeComposants[i,3]; //composant.prixTTC
-                //string prixTotal_composant = listeComposants[i,4]; //composant.prixTotalcomposant
+                if(i != plan.modules.Count-1)
+                {                    
+                    if (plan.modules[i].meta.label == plan.modules[i + 1].meta.label)
+                        cpt++;
+                    else
+                    {
+                        PrixUnitaire.Content += plan.modules[i].meta.prixHT + "\n";
+                        this.ListeComposants.Content += plan.modules[i].meta.label + "\n";
+                        this.Quantité.Content += cpt + "\n";
+                        if(cpt!= 0)
+                        {
+                            float prixquantiteHT = plan.modules[i].meta.prixHT * cpt;
+                            totalHT += prixquantiteHT;
+                            this.PrixHT.Content += prixquantiteHT + "\n";
+                            float aggregatTTC = prixquantiteHT + ((prixquantiteHT * 20) / 100);
+                            totalTTC += aggregatTTC;
+                            this.PrixTTC.Content += aggregatTTC + "\n";
+                        }
+                        else
+                        {
+                            totalHT += plan.modules[i].meta.prixHT;
+                            this.PrixHT.Content += plan.modules[i].meta.prixHT + "\n";
+                            totalTTC += plan.modules[i].meta.prixHT + ((plan.modules[i].meta.prixHT * 20) / 100);
+                            this.PrixTTC.Content += plan.modules[i].meta.prixHT + ((plan.modules[i].meta.prixHT*20)/100)+ "\n";
+                        }
+                        aggregatHT = 0;
+                        cpt = 0;
+                    }
+                }
+                else
+                {
+                    if (plan.modules[i].meta.label == plan.modules[i - 1].meta.label)
+                    {
+                        cpt++;
+                        aggregatHT += plan.modules[i].meta.prixHT + plan.modules[i - 1].meta.prixHT;
+                    }
+                    this.ListeComposants.Content += plan.modules[i].meta.label + "\n";
+                    this.Quantité.Content += cpt + "\n";
+                    if (aggregatHT != 0)
+                    {
+                        totalHT += aggregatHT;
+                        PrixUnitaire.Content += plan.modules[i].meta.prixHT + "\n";
+                        this.PrixHT.Content += aggregatHT + "\n";
+                        float aggregatTTC = aggregatHT + ((aggregatHT * 20) / 100);
+                        totalTTC += aggregatTTC;
+                        this.PrixTTC.Content += aggregatTTC + "\n";
+                    }
+                    else
+                    {
+                        totalHT += plan.modules[i].meta.prixHT;
+                        this.PrixHT.Content += plan.modules[i].meta.prixHT + "\n";
+                        totalTTC += plan.modules[i].meta.prixHT + ((plan.modules[i].meta.prixHT * 20) / 100);
+                        this.PrixTTC.Content += plan.modules[i].meta.prixHT + ((plan.modules[i].meta.prixHT * 20) / 100) + "\n";
+                    }
+                }
             }
 
+            this.devis.prixTotalHT = totalHT;
+            this.devis.prixTotalTTC = totalTTC;
+
+            /// TOTAUX ///
+            LabTotalHT.Content = "";
+            LabTotalHT.Content = totalHT + " €";
+
+            LabTotalTTC.Content = "";
+            LabTotalTTC.Content = totalTTC + " €";
         }
         private void Initialize_Dialog_Modification_Devis()
         {
-            var window = new SelectModalWindow();
-            window.TitleLabel.Content = " Sélectionner l'état du devis";
+            this.window = new SelectModalWindow();
+            window.TitleLabel.Content = "Sélectionner l'état du devis";
+            window.DataSelect.Text = "-- Choisir un état --";
+            window.DataSelect.Items.Add("Accepté");
+            window.DataSelect.Items.Add("Refusé");
+            window.DataSelect.Items.Add("Facturé");
+            window.DataSelect.Items.Add("En attente de paiement");
+            window.DataSelect.Items.Add("Nouveau");
+            window.DataSelect.Items.Add("Brouillon");
 
             window.Retour.Click += delegate(object sender, RoutedEventArgs e)
             {
-                window.Close();
+                window.Hide();
             };
 
             window.Valider.Click += delegate(object sender, RoutedEventArgs e)
             {
-                window.Close();
+                if(window.DataSelect.SelectedItem != null && (string)window.DataSelect.SelectedItem != "-- Choisir un état --")
+                {
+                    this.devis.etat = window.DataSelect.SelectedItem.ToString();
+                    currentStatus.Content = "Statut actuel : ";
+                    currentStatus.Content += devis.etat;
+                    this.devisCAD.changeStatusDevis(this.devis, this.devis.etat);
+                    window.Hide();
+                }
+                else
+                    MessageBox.Show("Un état doit être sélectionné");
             };
-
-
-            window.ShowDialog();
         }
         private void Initialize_Dialog_Remise_Devis()
         {
@@ -118,45 +270,117 @@ namespace Madera_MMB.View_Crtl
 
             window.Valider.Click += delegate(object sender, RoutedEventArgs e)
             {
-                window.Close();
+                if(window.txtAnswer.Value != null)
+                {
+                    int percentage = (int)window.txtAnswer.Value;
+                    this.Remise.Content = "";
+                    this.Remise.Content += "Remise : " + window.txtAnswer.Value + " %";
+
+                    if (remise == false)
+                    {
+                        this.totalinitialHT = totalHT;
+                        this.totalinitialTTC = totalTTC;
+                    }
+
+                    totalHT = totalinitialHT - ((totalinitialHT * percentage) / 100);
+                    totalTTC = totalHT + ((totalHT * 20) / 100);
+
+                    LabTotalHT.Content = "";
+                    LabTotalHT.Content = totalHT + " €";
+
+                    LabTotalTTC.Content = "";
+                    LabTotalTTC.Content = totalTTC + " €";
+
+                    remise = true;
+                    window.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Aucune valeur n'est renseignée");
+                }
+                
             };
 
             window.ShowDialog();
         }
         private void TreeView_Loaded(object sender, RoutedEventArgs e)
         {
-            // ... Create a TreeViewItem.
-            TreeViewItem item = new TreeViewItem();
-            item.Header = "Porte";
-            item.ItemsSource = new string[] { "Porte Bois 200x70", "Porte Metal 200x150", "Porte PVC 200x90" };
-            item.IsExpanded = true;
-
-            // ... Create a second TreeViewItem.
-            TreeViewItem item2 = new TreeViewItem();
-            item2.Header = "Mur";
-            item2.ItemsSource = new string[] { "Mur 500x250", "Mur 1500x750", "Mur 2500x1000" };
-            item2.IsExpanded = true;
-
-            // ... Create a third TreeViewItem.
-            TreeViewItem item3 = new TreeViewItem();
-            item3.Header = "Fenetre";
-            item3.ItemsSource = new string[] { "Double 75x50", "Triple 80x90", "Simple 150x90"};
-            item3.IsExpanded = true;
-
-            TreeViewItem main = new TreeViewItem();
-            main.Header = "Base en L Dimension 15x10x5";
-            main.IsExpanded = true;
-
-            // ... Get TreeView reference and add both items.
             var coupe = sender as TreeView;
-            
-            main.Items.Add(item);
-            main.Items.Add(item2);
-            main.Items.Add(item3);
 
-            coupe.Items.Add(main);
+            TreeViewItem coupeItem = new TreeViewItem();
+            coupeItem.Header = "Base " + plan.coupePrincipe.label + " " + plan.coupePrincipe.longueur + "x" + plan.coupePrincipe.largeur;
+            coupeItem.IsExpanded = true;
 
+            TreeViewItem couvItem = new TreeViewItem();
+            couvItem.Header = "Couverture " + this.plan.couverture.type;
+            couvItem.IsExpanded = true;
+
+            TreeViewItem planchItem = new TreeViewItem();
+            planchItem.Header = "Plancher " + this.plan.plancher.type;
+            planchItem.IsExpanded = true;
+
+            coupeItem.Items.Add(couvItem);
+            coupeItem.Items.Add(planchItem);
+
+            List<Module> firstlist = plan.modules;
+            List<Module> thirdList = new List<Module>();
+            int i;
+            bool trouv = false;
+
+            foreach (Module mod in firstlist)
+            {
+                i = 0;
+                List<Module> secondlist = new List<Module>(firstlist);
+
+                foreach (Module mod3 in thirdList)
+                {
+                    if (mod.meta.label == mod3.meta.label)
+                    {
+                        trouv = true;
+                    }
+                }
+                thirdList.Add(mod);
+
+                if (!trouv && mod.parent == null)
+                {
+                    for (int x = 0; x <= secondlist.Count - 1; x++)
+                    {
+                        if (secondlist[x].meta.label == mod.meta.label)
+                        {
+                            i++;
+                            secondlist[x] = null;
+                        }
+                        else
+                        {
+                            if (secondlist[x].parent == null || secondlist[x].parent.label != mod.meta.label)
+                            {
+                                secondlist[x] = null;
+                            }
+                        }
+                    }
+
+                    TreeViewItem modparent = new TreeViewItem();
+                    modparent.Header = mod.meta.label + " X" + i;
+                    modparent.IsExpanded = true;
+
+                    foreach (Module mod2 in secondlist)
+                    {
+                        if (mod2 != null)
+                        {
+                            TreeViewItem modenfant = new TreeViewItem();
+                            modenfant.Header = mod2.meta.label;
+                            modenfant.IsExpanded = true;
+                            modparent.Items.Add(modenfant);
+                            thirdList.Add(mod2);
+                        }
+                    }
+                    coupeItem.Items.Add(modparent);
+                }
+                trouv = false;
+            }
+            coupe.Items.Add(coupeItem);
         }
+
         private void TreeView_SelectedItemChanged(object sender,
             RoutedPropertyChangedEventArgs<object> e)
         {
@@ -182,7 +406,7 @@ namespace Madera_MMB.View_Crtl
         private void BtnChangeStatusDevis_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            Initialize_Dialog_Modification_Devis();
+            this.window.Show();
         }
 
         private void BtnAppliquerRemise_Click(object sender, RoutedEventArgs e)
@@ -244,7 +468,5 @@ namespace Madera_MMB.View_Crtl
             }
         }
         #endregion
-
     }
-    
 }

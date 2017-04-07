@@ -33,7 +33,7 @@ namespace Madera_MMB.View_Crtl
         private View_Crtl.GestionClient gestionClient { get; set; }
         private View_Crtl.ParametresClient parametresClient { get; set; }
         private View_Crtl.ParametresPlan parametresPlan { get; set; }
-        //private View_Crtl.GestionDevis gestionDevis { get; set; }
+        private View_Crtl.GestionDevis gestionDevis { get; set; }
         private View_Crtl.Modelisation modelisation { get; set; }
 
         private CommercialCAD commCAD { get; set; }
@@ -51,37 +51,25 @@ namespace Madera_MMB.View_Crtl
             initSynchro();
 
             /// Test SYNCHRO import ///
-
-            connexion.SyncCommMySQL();
+            //if(connexion.MySQLconnected)
+            //{
+            //connexion.SyncCommMySQL();
             connexion.SyncParamPlan();
-            ////connexion.SyncClient();
+            //connexion.SyncClient();
             connexion.SyncMetamodules();
             connexion.SyncMetaslot();
+            //}
 
             /// Test CAD avec nouvelles données ///
-            commCAD = new CommercialCAD(connexion);
-            ClientCAD clientCAD = new ClientCAD(connexion);
-            CoupePrincipeCAD coupeCAD = new CoupePrincipeCAD(connexion);
-            CouvertureCAD couvCAD = new CouvertureCAD(connexion);
-            GammeCAD gamCAD = new GammeCAD(connexion);
-            PlancherCAD plancherCAD = new PlancherCAD(connexion);
+            //commCAD = new CommercialCAD(connexion);
+            //ClientCAD clientCAD = new ClientCAD(connexion);
+            //CoupePrincipeCAD coupeCAD = new CoupePrincipeCAD(connexion);
+            //CouvertureCAD couvCAD = new CouvertureCAD(connexion);
+            //GammeCAD gamCAD = new GammeCAD(connexion);
+            //PlancherCAD plancherCAD = new PlancherCAD(connexion);
 
-            Commercial commercialTest = new Commercial
-                (
-                    "COM003",
-                    "Chevalier",
-                    "Christophe",
-                    "monemail@gmail.com",
-                    "mdp"
-                );
 
-            this.authentification = new Authentification(connexion);
-            this.gestionProjet = new GestionProjet(connexion, commercialTest);
-            this.gestionClient = new GestionClient(connexion, clientCAD);
-
-            this.modelisation = new Modelisation();
-
-            Mainframe.Content = modelisation;
+            Mainframe.Content = authentification;
 
             /// Test SYNCHRO export ///
             //connexion.ExpClients();
@@ -121,9 +109,9 @@ namespace Madera_MMB.View_Crtl
         /// </summary>
         private void Initialize_Listeners()
         {
-            Initialize_Listeners_Auth();
-            Initialize_Listeners_GestionProjet();
-            Initialize_Listeners_GestionClient();
+            //Initialize_Listeners_Auth();
+            //Initialize_Listeners_GestionProjet();
+            //Initialize_Listeners_GestionClient();
             //Initialize_Listeners_ParametresClient();
             //Initialize_Listeners_Modelisation();
             //Initialize_Listeners_Devis();
