@@ -650,19 +650,27 @@ namespace Madera_MMB.Lib
                     {
                         while (reader.Read())
                         {
-                            string mySQLquery = "INSERT into module(idModule, coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, refPlan)" +
-                                "VALUES(@idModule, @coordonneeDebutX,  @coordonneeDebutY, @colspan, @rowspan, @refMetaModule, @refPlan)" +
-                                "ON DUPLICATE KEY UPDATE colspan= @colspan,rowspan= @rowspan,refMetaModule= @refMetaModule";
+                            string mySQLquery = "INSERT into module(coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, refMetaparent, refPlan)" +
+                                "VALUES(@coordonneeDebutX,  @coordonneeDebutY, @colspan, @rowspan, @refMetaModule, @refMetaparent, @refPlan)" +
+                                "ON DUPLICATE KEY UPDATE colspan= @colspan,rowspan= @rowspan,refMetaModule= @refMetaModule,refMetaparent= @refMetaparent";
                             using (MySqlCommand expModules = new MySqlCommand(mySQLquery, MySQLCo))
                             {
                                 //Trace.WriteLine(mySQLquery);
-                                expModules.Parameters.AddWithValue("@idModule", reader.GetInt32(0));
-                                expModules.Parameters.AddWithValue("@coordonneeDebutX", reader.GetInt32(1));
-                                expModules.Parameters.AddWithValue("@coordonneeDebutY", reader.GetInt32(2));
-                                expModules.Parameters.AddWithValue("@colspan", reader.GetInt32(3));
-                                expModules.Parameters.AddWithValue("@rowspan", reader.GetInt32(4));
-                                expModules.Parameters.AddWithValue("@refMetaModule", reader.GetString(5));
+                                expModules.Parameters.AddWithValue("@coordonneeDebutX", reader.GetInt32(0));
+                                expModules.Parameters.AddWithValue("@coordonneeDebutY", reader.GetInt32(1));
+                                expModules.Parameters.AddWithValue("@colspan", reader.GetInt32(2));
+                                expModules.Parameters.AddWithValue("@rowspan", reader.GetInt32(3));
+                                expModules.Parameters.AddWithValue("@refMetaModule", reader.GetString(4));
+                                try
+                                {
+                                    expModules.Parameters.AddWithValue("@refMetaparent", reader.GetString(5));
+                                }
+                                catch (Exception)
+                                {
+                                    expModules.Parameters.AddWithValue("@refMetaparent", "null");
+                                }
                                 expModules.Parameters.AddWithValue("@refPlan", reader.GetString(6));
+
                                 try
                                 {
                                     expModules.ExecuteNonQuery();
@@ -703,6 +711,7 @@ namespace Madera_MMB.Lib
                 }
                 catch (System.Data.SQLite.SQLiteException e)
                 {
+                    Trace.WriteLine(query);
                     Trace.WriteLine(e.ToString());
                     LiteCo.Close();
                 }

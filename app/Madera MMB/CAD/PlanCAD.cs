@@ -249,6 +249,43 @@ namespace Madera_MMB.CAD
         }
 
         /// <summary>
+        /// Méthode qui permet de récupérer les metaSlot d'un metaModule
+        /// </summary>
+        public List<MetaSlot> listMetaSlot(string refe)
+        {
+            List<MetaSlot> listMetaS = new List<MetaSlot>();
+
+            conn.LiteCo.Open();
+            SQLQuery = "SELECT * FROM metaslot WHERE refMetaModule = '" + refe + "';";
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    try
+                    {
+                        while (reader.Read())
+                        {
+                            MetaSlot metaS = new MetaSlot
+                            (
+                                reader.GetInt32(0),
+                                reader.GetInt32(1),
+                                reader.GetString(2),
+                                reader.GetString(3)
+                            );
+                            listMetaS.Add(metaS);
+                        }
+                    }
+                    catch (SQLiteException ex)
+                    {
+                        Trace.WriteLine(ex.ToString());
+                    }
+                    conn.LiteCo.Close();
+                    return listMetaS;
+                }
+            }
+        }
+
+        /// <summary>
         /// Méthode qui permet de récupérer les gammes de metamodules
         /// </summary>
         public List<String> listAllGammes(string type)
@@ -284,29 +321,26 @@ namespace Madera_MMB.CAD
             }
         }
 
-        public void savePlan(Plan plan, Module[,] listB)
+        /// <summary>
+        /// Création d'un nouveau module
+        /// </summary>
+        /// <param name="module"></param>
+        /// <param name="refPlan"></param>
+        public void insertModule(Module module, string refPlan)
         {
-            conn.LiteCo.Open();
-            //SQLQuery = "DELETE FROM module WHERE refPlan = " + plan.reference;
-            SQLQuery = "DELETE FROM module WHERE refPlan = \"plan01\" ";
-            
-            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            if (module.parent != null)
             {
-                try
-                {
-                    command.ExecuteNonQuery();
-                    Trace.WriteLine(" ############# VIDAGE PLAN REUSSI ############# \n");
-                }
-                catch (SQLiteException e)
-                {
-                    Trace.WriteLine(e.ToString());
-                    Trace.WriteLine(" ############# VIDAGE PLAN FAIL ############# \n");
-                }
+                SQLQuery = "REPLACE INTO module (coordonneeDebutX , coordonneeDebutY, colspan, rowspan, refMetaModule, refMetaparent, refPlan)" +
+                "VALUES (" + module.x + "," + module.y + "," + module.colspan + "," + module.rowspan + ",'" + module.meta.reference + "','" + module.parent.reference + "','" + refPlan + "');";
             }
-
-
-
+            else
+            {
+                SQLQuery = "REPLACE INTO module (coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, refMetaparent, refPlan)" +
+                "VALUES (" + module.x + "," + module.y + "," + module.colspan + "," + module.rowspan + ",'" + module.meta.reference + "','none','" + refPlan + "');";
+            }
+            conn.InsertSQliteQuery(SQLQuery);
         }
+
         #endregion
 
         #region Privates methods
@@ -352,18 +386,6 @@ namespace Madera_MMB.CAD
                     return modules;
                 }
             }
-        }
-
-        /// <summary>
-        /// Création d'un nouveau module
-        /// </summary>
-        /// <param name="module"></param>
-        /// <param name="refPlan"></param>
-        private void insertModule(Module module, string refPlan)
-        {
-            SQLQuery = "INSERT INTO module (coordonneeDebutX , coordonneeDebutY, colspan, rowspan, refMetaModule, refPlan)" +
-            "VALUES ("+ module.x + "," + module.y + "," + module.colspan + "," + module.rowspan + "," + module.meta.reference + "," + refPlan + ";";
-            conn.InsertSQliteQuery(SQLQuery);
         }
 
         /// <summary>
