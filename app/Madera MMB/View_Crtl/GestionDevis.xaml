@@ -73,7 +73,7 @@
                          Grid.Column="1" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label x:Name="nomClient" Content="Nom du client : " FontSize="6" />
+                    <Label x:Name="nomClient" FontSize="6" />
                 </Viewbox>
                 <!-- Creation Date -->
                 <Viewbox Margin="15,0,0,0"
@@ -81,7 +81,7 @@
                          Grid.Column="1" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label x:Name="dateCreation" Content="Date de création : " FontSize="6" />
+                    <Label x:Name="dateCreation" FontSize="6" />
                 </Viewbox>
                 <!-- Current Status -->
                 <Viewbox Margin="15,0,0,0"
@@ -89,7 +89,7 @@
                          Grid.Column="1" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label x:Name="currentStatus" Content="Statut actuel : " FontSize="6" />
+                    <Label x:Name="currentStatus" FontSize="6" />
                 </Viewbox>
 
                 <!-- Partie de droite -->
@@ -107,7 +107,7 @@
                          Grid.Column="3" 
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center">
-                    <Label x:Name="nomCommercial" Content="Nom du commercial : " FontSize="6" />
+                    <Label x:Name="nomCommercial" FontSize="6" />
                 </Viewbox>
 
             </Grid>
@@ -132,7 +132,7 @@
                     <Style TargetType="Image">
                         <Setter Property="Source" Value="{StaticResource LogoOff}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding MySQLconnected}" Value="True">
+                            <DataTrigger Binding="{Binding connexion.MySQLconnected}" Value="True">
                                 <Setter Property="Source" Value="{StaticResource Logo}" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -261,7 +261,7 @@
         <!-- Début Déclaration Affichage Devis -->
 
         <Grid x:Name="AffichageDevis"
-              Visibility="Hidden"
+              Visibility="Visible"
               Grid.Column="1"
               Grid.Row="0" 
               VerticalAlignment="Stretch" 
@@ -331,7 +331,7 @@
                              Grid.Column="2" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                        <Label x:Name="nomClientDevis" Content="" FontSize="6" />
+                        <Label x:Name="nomClientDevis" FontSize="6" />
                     </Viewbox>
                     <!-- REFERENCE CLIENT DEVIS -->
                     <Viewbox 
@@ -346,7 +346,7 @@
                              Grid.Column="2" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Stretch">
-                        <Label x:Name="referenceClientDevis" Content="" FontSize="6" />
+                        <Label x:Name="referenceClientDevis" FontSize="6" />
                     </Viewbox>
                     <!-- ADRESSE CLIENT DEVIS -->
                     <Viewbox 
@@ -376,7 +376,7 @@
                              Grid.Column="5" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                        <Label x:Name="nomCommerialDevis" Content="" FontSize="6" />
+                        <Label x:Name="nomCommerialDevis" FontSize="6" />
                     </Viewbox>
                     <!-- REFERENCE COMMERCIAL DEVIS -->
                     <Viewbox 
@@ -391,7 +391,7 @@
                              Grid.Column="5" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                        <Label x:Name="referenceCommercialDevis" Content="" FontSize="6" />
+                        <Label x:Name="referenceCommercialDevis" FontSize="6" />
                     </Viewbox>
                     <!-- DATE DEVIS -->
                     <Viewbox 
@@ -406,7 +406,7 @@
                              Grid.Column="5" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                        <Label x:Name="dateDevis" Content="" FontSize="6" />
+                        <Label x:Name="dateDevis" FontSize="6" />
                     </Viewbox>
                     <!-- PLAN DEVIS -->
                     <Viewbox 
@@ -421,7 +421,7 @@
                              Grid.Column="5" 
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center">
-                        <Label x:Name="planDevis" Content="" FontSize="6" />
+                        <Label x:Name="planDevis" FontSize="6" />
                     </Viewbox>
                 </Grid>
 
@@ -435,12 +435,16 @@
                         <ColumnDefinition Width="0.1*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="0.1*" />
-                        <ColumnDefinition Width="0.12*" />
+                        <ColumnDefinition Width="0.20*" />
                         <ColumnDefinition Width="0.15*" />
-                        <ColumnDefinition Width="0.2*" />
-                        <ColumnDefinition Width="0.1*" />
+                        <ColumnDefinition Width="0.15*" />
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.9*"/>
+                        <RowDefinition Height="0.1*"/>
+                    </Grid.RowDefinitions>
 
+                    <Border Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="3" BorderThickness="2" BorderBrush="Black" />
                     <!-- Liste composant devis -->
                     <GroupBox x:Name="ListeComposants"
                                 Header="Liste des composants"
@@ -460,11 +464,21 @@
                                 HorizontalAlignment="Stretch" 
                                 >
                     </GroupBox>
+                    <!-- Prix HT devis -->
+                    <GroupBox x:Name="PrixUnitaire"
+                                Header="Prix Unitaire"
+                                Grid.Column="3"
+                                Grid.Row="0" 
+                                VerticalAlignment="Stretch" 
+                                HorizontalAlignment="Stretch" 
+                                >
+                    </GroupBox>
+                    
 
                     <!-- Prix HT devis -->
                     <GroupBox x:Name="PrixHT"
                                 Header="Prix HT"
-                                Grid.Column="3"
+                                Grid.Column="4"
                                 Grid.Row="0" 
                                 VerticalAlignment="Stretch" 
                                 HorizontalAlignment="Stretch" 
@@ -474,22 +488,30 @@
                     <!-- Prix TTC devis -->
                     <GroupBox x:Name="PrixTTC"
                                 Header="Prix TTC"
-                                Grid.Column="4"
-                                Grid.Row="0" 
-                                VerticalAlignment="Stretch" 
-                                HorizontalAlignment="Stretch" 
-                                >
-                    </GroupBox>
-
-                    <!-- Prix Total devis -->
-                    <GroupBox x:Name="PrixTotal"
-                                Header="Prix Total"
                                 Grid.Column="5"
                                 Grid.Row="0" 
                                 VerticalAlignment="Stretch" 
                                 HorizontalAlignment="Stretch" 
                                 >
                     </GroupBox>
+
+                    <Label x:Name="Remise"
+                           Grid.Column="1"
+                           Grid.Row="1"
+                           FontWeight="Bold" FontSize="14"/>
+
+                    <Label x:Name="LabelTotaux"
+                           Grid.Column="3"
+                           Grid.Row="1"
+                           Content="Total :" FontWeight="Bold" FontSize="14"/>
+                    <Label x:Name="LabTotalHT"
+                           Grid.Column="4"
+                           Grid.Row="1"
+                           FontWeight="Bold" FontSize="14"/>
+                    <Label x:Name="LabTotalTTC"
+                           Grid.Column="5"
+                           Grid.Row="1"
+                           FontWeight="Bold" FontSize="14"/>
                 </Grid>
             </Grid>
 
@@ -498,7 +520,7 @@
         <!-- Début Déclaration Affichage Dossier Technique -->
 
         <Grid x:Name="AfficherDevisTechnique"
-              Visibility="Visible"
+              Visibility="Hidden"
               Grid.Column="1"
               Grid.Row="0" 
               VerticalAlignment="Stretch" 

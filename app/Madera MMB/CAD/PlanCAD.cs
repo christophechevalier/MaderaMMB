@@ -28,7 +28,6 @@ namespace Madera_MMB.CAD
         public MetaSlotCAD metaslotCAD { get; set; }
         private List<MetaModule> _ListMetaModule { get; set; }
         public List<MetaModule> ListMetaModule { get { return _ListMetaModule; } set { _ListMetaModule = value; RaisePropertyChanged("ListMetaModule"); } }
-        
         private ObservableCollection<Plan> _plans;
         public ObservableCollection<Plan> Plans
         {
@@ -65,8 +64,6 @@ namespace Madera_MMB.CAD
         /// <param name="unprojet"></param>
         public PlanCAD(Connexion laConnexion, Projet unprojet)
         {
-            // Instanciations
-            //conn = new Connexion();
             conn = laConnexion;
             projet = unprojet;
             Plans = new ObservableCollection<Plan>();
@@ -74,7 +71,9 @@ namespace Madera_MMB.CAD
             metaslotCAD = new MetaSlotCAD(conn);
             ListMetaModule = new List<MetaModule>();
 
-            // Appel des méthodes dans le ctor
+            if (laConnexion.MySQLconnected)
+                laConnexion.SynCPlansProj(projet);
+
             ListAllPlansByProject();
         }
         #endregion
@@ -313,7 +312,7 @@ namespace Madera_MMB.CAD
         #region Privates methods
 
         /// <summary>
-        /// Méthode qui permet de récupérer les modules par id
+        /// Méthode qui permet de récupérer les modules appartenant à un plan
         /// </summary>
         /// <param name="refPlan"></param>
         /// <returns></returns>
@@ -333,13 +332,16 @@ namespace Madera_MMB.CAD
                         {
                             Module module = new Module
                             (
-                                reader.GetInt32(0),
-                                reader.GetInt32(1),
-                                reader.GetInt32(2),
-                                reader.GetInt32(3),
-                                reader.GetInt32(4),
-                                getMetaModuleByRef(reader.GetString(5))
+                                  reader.GetInt32(0),
+                                  reader.GetInt32(1),
+                                  reader.GetInt32(2),
+                                  reader.GetInt32(3),
+                                  getMetaModuleByRef(reader.GetString(4))
                             );
+                            if (reader.GetString(5) != "none")
+                            {
+                                module.parent = getMetaModuleByRef(reader.GetString(5));
+                            }
                             modules.Add(module);
                         }
                     }
@@ -383,7 +385,7 @@ namespace Madera_MMB.CAD
                     {
                         while (reader.Read())
                         {
-                            Byte[] data = (Byte[])reader.GetValue(4);
+                            Byte[] data = (Byte[])reader.GetValue(3);
                             metaModule = new MetaModule
                             (
                                 reader.GetString(0),
@@ -393,9 +395,8 @@ namespace Madera_MMB.CAD
                                 reader.GetBoolean(4),
                                 reader.GetString(5),
                                 getGammebyNom(reader.GetString(6)),
-                                Int32.Parse(reader.GetString(7)),
-                                Int32.Parse(reader.GetString(8))
-                                
+                                reader.GetInt32(7),
+                                reader.GetInt32(8)
                             );
                         }
                     }
@@ -432,9 +433,9 @@ namespace Madera_MMB.CAD
                             (
                                 reader.GetInt16(0),
                                 reader.GetString(1),
-                                reader.GetInt16(2),
-                                reader.GetInt16(3),
-                                reader.GetInt16(4),
+                                reader.GetInt32(2),
+                                reader.GetInt32(3),
+                                reader.GetInt32(4),
                                 reader.GetBoolean(6),
                                 ToImage(data)
                             );

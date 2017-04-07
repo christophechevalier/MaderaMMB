@@ -166,6 +166,9 @@ namespace Madera_MMB.Lib
                     Reader.GetValue(7).ToString() + "','" +
                     Reader.GetValue(8).ToString() + "')";
 
+                    SyncDevis(Reader.GetString(0));
+                    SyncModules(Reader.GetString(0));
+
                     SQLiteCommand command = new SQLiteCommand(query, LiteCo);
                     try
                     {
@@ -179,13 +182,13 @@ namespace Madera_MMB.Lib
                 }
                 LiteCo.Close();
                 MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC PLANS FROM PROJET SUCCESS ############# \n");
+                Trace.WriteLine(" ############# SYNC PLANS/DEVIS/MODULES FROM PROJET SUCCESS ############# \n");
             }
             catch (MySqlException e)
             {
                 Trace.WriteLine(e.ToString());
                 MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC PLANS FROM PROJET FAIL ############# \n");
+                Trace.WriteLine(" ############# SYNC PLANS/DEVIS/MODULES FROM PROJET FAIL ############# \n");
             }
         }
 
@@ -371,7 +374,106 @@ namespace Madera_MMB.Lib
             }
             LiteCo.Close();
         }
-        
+
+        /// <summary>
+        ///  Méthode de synchronisation des données des devis depuis la base distante MYSQL vers la base locale SQLite
+        /// </summary>
+        public void SyncDevis(string refPlan)
+        {
+            MySqlDataReader Reader;
+            string query;
+            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM devis WHERE refPlan = '" + refPlan + "'", MySQLCo);
+            try
+            {
+                MySQLCo.Open();
+                Reader = selectComms.ExecuteReader();
+                int i = 0;
+                LiteCo.Open();
+                while (Reader.Read())
+                {
+                    query = "replace into devis(refDevis,etat,dateCreation,prixTotalHT,prixTotalTTC,refPlan) values(@refDevis,@etat,@dateCreation,@prixTotalHT,@prixTotalTTC,@refPlan)";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
+                    {
+                        command.Parameters.AddWithValue("@refDevis", Reader.GetString(0));
+                        command.Parameters.AddWithValue("@etat", Reader.GetString(1));
+                        command.Parameters.AddWithValue("@dateCreation", Reader.GetString(2));
+                        command.Parameters.AddWithValue("@prixTotalHT", Reader.GetFloat(3));
+                        command.Parameters.AddWithValue("@prixTotalTTC", Reader.GetFloat(4));
+                        command.Parameters.AddWithValue("@refPlan", Reader.GetString(5));
+                        try
+                        {
+                            i = i + command.ExecuteNonQuery();
+                        }
+                        catch (System.Data.SQLite.SQLiteException e)
+                        {
+                            Trace.WriteLine(e.ToString());
+                            LiteCo.Close();
+                            MySQLCo.Close();
+                        }
+                    }
+                }
+                LiteCo.Close();
+                MySQLCo.Close();
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine(e.ToString());
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC CLIENT FAIL ############# \n");
+            }
+        }
+
+        /// <summary>
+        ///  Méthode de synchronisation des données des modules d'un plan depuis la base distante MYSQL vers la base locale SQLite
+        /// </summary>
+        public void SyncModules(string refPlan)
+        {
+            MySqlDataReader Reader;
+            string query;
+            MySqlCommand selectComms = new MySqlCommand("SELECT * FROM module WHERE refPlan = '" + refPlan + "'", MySQLCo);
+            try
+            {
+                MySQLCo.Open();
+                Reader = selectComms.ExecuteReader();
+                int i = 0;
+                LiteCo.Open();
+                while (Reader.Read())
+                {
+                    query = "replace into module(coordonneeDebutX,coordonneeDebutY,colspan,rowspan,refMetaModule,refMetaparent,refPlan) values(@coordonneeDebutX,@coordonneeDebutY,@colspan,@rowspan,@refMetaModule,@refMetaparent,@refPlan)";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
+                    {
+                        command.Parameters.AddWithValue("@coordonneeDebutX", Reader.GetInt32(0));
+                        command.Parameters.AddWithValue("@coordonneeDebutY", Reader.GetInt32(1));
+                        command.Parameters.AddWithValue("@colspan", Reader.GetInt32(2));
+                        command.Parameters.AddWithValue("@rowspan", Reader.GetInt32(3));
+                        command.Parameters.AddWithValue("@refMetaModule", Reader.GetString(4));
+                        command.Parameters.AddWithValue("@refMetaparent", Reader.GetString(5));
+                        command.Parameters.AddWithValue("@refPlan", Reader.GetString(6));
+                        try
+                        {
+                            i = i + command.ExecuteNonQuery();
+                        }
+                        catch (System.Data.SQLite.SQLiteException e)
+                        {
+                            Trace.WriteLine(e.ToString());
+                            LiteCo.Close();
+                            MySQLCo.Close();
+                        }
+                    }
+                }
+                LiteCo.Close();
+                MySQLCo.Close();
+            }
+            catch (MySqlException e)
+            {
+                Trace.WriteLine(e.ToString());
+                MySQLCo.Close();
+                Trace.WriteLine(" ############# SYNC MODULE FAIL ############# \n");
+            }
+        }
+
         #endregion
 
         #region Synchro Export
@@ -992,7 +1094,7 @@ namespace Madera_MMB.Lib
             try
             {
                 MySQLCo = new MySqlConnection(connectionString);
-                MySQLCo.Close();
+                MySQLCo.Open();
                 Trace.WriteLine(" \n ################################################# MYSQL DATABASE REACHED,  BEGIN SYNCHRONISATION ... ################################################# \n");
                 MySQLCo.Close();
                 return true;
