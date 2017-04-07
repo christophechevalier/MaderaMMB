@@ -51,14 +51,10 @@ namespace Madera_MMB.View_Crtl
             initSynchro();
 
             /// Test SYNCHRO import ///
-            //if(connexion.MySQLconnected)
-            //{
-            //connexion.SyncCommMySQL();
-            connexion.SyncParamPlan();
-            //connexion.SyncClient();
-            connexion.SyncMetamodules();
-            connexion.SyncMetaslot();
-            //}
+            if(connexion.MySQLconnected)
+            {
+                connexion.SyncCommMySQL();
+            }
 
             /// Test CAD avec nouvelles données ///
             //commCAD = new CommercialCAD(connexion);
@@ -68,6 +64,7 @@ namespace Madera_MMB.View_Crtl
             //GammeCAD gamCAD = new GammeCAD(connexion);
             //PlancherCAD plancherCAD = new PlancherCAD(connexion);
 
+            this.authentification = new Authentification(this.connexion);
 
             Mainframe.Content = authentification;
 
