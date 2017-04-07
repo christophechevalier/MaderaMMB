@@ -63,13 +63,6 @@ namespace Madera_MMB.View_Crtl
         private Brush slotPlV = new ImageBrush(new BitmapImage(new Uri("../../Lib/Images/slot_Vplein.png", UriKind.RelativeOrAbsolute)));
         #endregion
 
-        private Module slot = new Module(Module.type.SlotPorte, 15, 5, 1, 1, null);
-        private Module slot2 = new Module(Module.type.SlotFen, 15, 25, 1, 1, null);
-
-        private Module murdroit = new Module(Module.type.Mur, 25, 5, 1, 20, null);
-        private Module murgauche = new Module(Module.type.Mur, 5, 6, 1, 20, null);
-        private Module murbas = new Module(Module.type.Mur, 6, 25, 20, 1, null);
-        private Module murhaut = new Module(Module.type.Mur, 5, 5, 20, 1, null);
         #endregion
 
         #region Constructeurs
@@ -150,37 +143,35 @@ namespace Madera_MMB.View_Crtl
                     grid.Children.Add(but);
                 }
             }
-
-            murhaut.meta = new MetaModule("M406588", "Mur exterieur 2F 1P", 420, null, true, "2017-04-06", new Gamme(), 12, 2);
-            murbas.meta = new MetaModule("M406590", "Mur exterieur 2F", 390, null, true, "2017-04-06", new Gamme(), 12, 2);
-            murgauche.meta = new MetaModule("M406587", "Mur exterieur 2F", 390, null, true, "2017-04-06", new Gamme(), 12, 2);
-            murdroit.meta = new MetaModule("M406587", "Mur exterieur 2F", 390, null, true, "2017-04-06", new Gamme(), 12, 2);
-
-            listMurExt.Add(murhaut);
-            listMurExt.Add(murbas);
-            listMurExt.Add(murgauche);
-            listMurExt.Add(murdroit);
-
-            placeComponent(murhaut);
-            placeComponent(murbas);
-            placeComponent(murgauche);
-            placeComponent(murdroit);
-
-            placeComponent(slot);
-            placeComponent(slot2);
-
-            checkImage();
         }
 
         private void loadModules()
         {
-            Trace.WriteLine("############################### Load modules ###############################");
             foreach (Module mod in this.plan.modules)
             {
-                Trace.WriteLine("####### " + mod.meta.label + " ####### " + mod.letype + " #######");
                 placeComponent(mod);
+                if (mod.colspan > 1 || mod.rowspan > 1)
+                {
+                    listMurExt.Add(mod);
+                }
             }
-            Trace.WriteLine("############################### Fin Load modules ###############################");
+            if (this.plan.modules.Count == 0 || listMurExt.Count == 0)
+            {
+                Module murhaut = new Module(Module.type.Mur, 5, 5, this.plan.coupePrincipe.longueur, 1, null);
+                Module murdroit = new Module(Module.type.Mur, this.plan.coupePrincipe.longueur + 5, 5, 1, this.plan.coupePrincipe.largeur, null);
+                Module murgauche = new Module(Module.type.Mur, 5, 6, 1, this.plan.coupePrincipe.largeur, null);
+                Module murbas = new Module(Module.type.Mur, 6, this.plan.coupePrincipe.largeur + 5, this.plan.coupePrincipe.longueur, 1, null);
+
+                listMurExt.Add(murhaut);
+                listMurExt.Add(murdroit);
+                listMurExt.Add(murgauche);
+                listMurExt.Add(murbas);
+
+                placeComponent(murhaut);
+                placeComponent(murdroit);
+                placeComponent(murgauche);
+                placeComponent(murbas);
+            }
             checkImage();
         }
         #endregion
@@ -198,6 +189,9 @@ namespace Madera_MMB.View_Crtl
                 for (int i = 0; i < but.rowspan; i++)
                 {
                     listB[but.x, but.y + i].letype = but.letype;
+                    listB[but.x, but.y + i].colspan = but.colspan;
+                    listB[but.x, but.y + i].rowspan = but.rowspan;
+                    listB[but.x, but.y + i].meta = but.meta;
                 }
             }
             else if (but.colspan > 1)
@@ -205,6 +199,9 @@ namespace Madera_MMB.View_Crtl
                 for (int i = 0; i < but.colspan; i++)
                 {
                     listB[but.x + i, but.y].letype = but.letype;
+                    listB[but.x + i, but.y].colspan = but.colspan;
+                    listB[but.x + i, but.y].rowspan = but.rowspan;
+                    listB[but.x + i, but.y].meta = but.meta;
                 }
             }
         }
@@ -284,6 +281,21 @@ namespace Madera_MMB.View_Crtl
                     loadChoiceButton(but);
                 }
             }
+            else if (but.letype == Module.type.Mur)
+            {
+                if (mode == "retirer")
+                {
+
+                }
+                else if (mode == "tracer")
+                {
+
+                }
+                else
+                {
+                    loadChoiceButton(but);
+                }
+            }
         }
 
         private void loadChoiceButton (Module but)
@@ -336,7 +348,16 @@ namespace Madera_MMB.View_Crtl
                 stackP.Children.Add(butPor);
             }
 
-            if (but.meta != null)
+            if (but.letype == Module.type.Mur)
+            {
+                Button butMur = new Button();
+                butMur.Height = 50;
+                butMur.Content = "Mur extérieurs";
+                butMur.Click += new RoutedEventHandler(loadFiltre);
+                stackP.Children.Add(butMur);
+            }
+
+            if (but.meta != null && but.letype != Module.type.Mur)
             {
 
                 Button vider = new Button();
@@ -363,7 +384,6 @@ namespace Madera_MMB.View_Crtl
             }
 
             viewB.Child = stackP;
-            //MainGrid.Children.Add(viewB);
         }
 
         private void loadFiltre(object sender, RoutedEventArgs e)
@@ -387,6 +407,11 @@ namespace Madera_MMB.View_Crtl
                 {
                     listGammes = planCad.listAllGammes("Por");
                     type = "Por";
+                }
+                else if ((string)but.Content == "Mur extérieurs")
+                {
+                    listGammes = planCad.listAllGammes("Mur ext");
+                    type = "Mur ext";
                 }
                 Button butG1 = new Button();
                 butG1.Height = 50;
@@ -503,11 +528,25 @@ namespace Madera_MMB.View_Crtl
             stackP.Children.Clear();
             stackList.Children.Clear();
 
+            int tailleM = 1;
+
+            if (type == "Mur ext")
+            {
+                if (butChoose.rowspan > 1)
+                {
+                    tailleM = butChoose.rowspan;
+                }
+                else if (butChoose.colspan > 1)
+                {
+                    tailleM = butChoose.colspan;
+                }
+            }
+
             foreach (MetaModule meta in listMeta)
             {
                 if (meta.label.Contains(type))
                 {
-                    if (meta.taille == 1)
+                    if (meta.taille == tailleM)
                     {
                         ToggleButton toggle = new ToggleButton();
                         toggle.Background = Brushes.White;
@@ -893,7 +932,6 @@ namespace Madera_MMB.View_Crtl
                 planCad.insertModule(mod, this.plan.reference);
             }
         }
-
         #endregion
     }
 }
