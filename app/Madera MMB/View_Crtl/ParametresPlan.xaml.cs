@@ -362,7 +362,7 @@ namespace Madera_MMB.View_Crtl
         /// <summary>
         /// Change les valeurs des boutons selon les informations du plan reçu
         /// </summary>
-        private void setbuttonslabels()
+         private void setbuttonslabels()
         {
             if(this.Plan != null)
             {
@@ -375,10 +375,11 @@ namespace Madera_MMB.View_Crtl
                 this.BoutonChoixCoupe.Content = this.Plan.coupePrincipe.label;
                 this.BoutonChoixCouverture.Content = this.Plan.couverture.type;
                 this.BoutonChoixPlancher.Content = this.Plan.plancher.type;
-                this.BoutonChoixGamme.Content = this.Plan.gamme.nom;
+                if(this.Plan.gamme != null)
+                    this.BoutonChoixGamme.Content = this.Plan.gamme.nom;
             }
         }
-        #endregion
+       #endregion
 
         #region listeners
         private void cp_Button_Click(object sender, RoutedEventArgs e)

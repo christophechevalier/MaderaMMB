@@ -404,8 +404,8 @@
                 </ScrollViewer>
             </GroupBox>
 
-            <GroupBox x:Name="couv" Visibility="Hidden" Header="Sélection d'une couverture"  Grid.Column="2" Grid.Row="2" Grid.RowSpan="5"
-                      
+            <GroupBox x:Name="couv" Visibility="Hidden" Header="Sélection d'une couverture"  Grid.Column="2" Grid.Row="2"
+                      Grid.RowSpan="8"
                       Margin="25,0,25,0">
                 <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapcouv" Cursor="Hand"/>
@@ -413,7 +413,7 @@
             </GroupBox>
 
             <GroupBox x:Name="planch" Visibility="Hidden" Header="Sélection d'un plancher"  Grid.Column="2" Grid.Row="2"
-                      Grid.RowSpan="5"                      
+                      Grid.RowSpan="8"                      
                       Margin="25,0,25,0">
                 <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapplanch" Cursor="Hand"/>
@@ -421,7 +421,7 @@
             </GroupBox>
 
             <GroupBox x:Name="gam" Visibility="Hidden" Header="Sélection d'une gamme"  Grid.Column="2" Grid.Row="2"
-                      Grid.RowSpan="5"
+                      Grid.RowSpan="8"
                       Margin="25,0,25,0">
                 <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto">
                     <WrapPanel x:Name="wrapgamme"/>
