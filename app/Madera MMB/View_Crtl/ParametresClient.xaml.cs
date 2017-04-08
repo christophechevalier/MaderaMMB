@@ -111,9 +111,9 @@ namespace Madera_MMB.View_Crtl
                             this.ClientNom.Text,
                             this.ClientPrenom.Text,
                             this.ClientAdresse.Text,
-                            this.ClientEmail.Text,
                             this.ClientCodePostal.Text,
                             this.ClientVille.Text,
+                            this.ClientEmail.Text,
                             this.ClientTelephone.Text,
                             DateTime.Now.ToString(),
                             DateTime.Now.ToString()
