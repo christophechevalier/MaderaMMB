@@ -487,6 +487,7 @@ namespace Madera_MMB.Lib
             string query = "SELECT * FROM client";
             using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
             {
+                MySQLCo.Open();
                 try
                 {
                     using (SQLiteDataReader reader = command.ExecuteReader())
@@ -687,6 +688,55 @@ namespace Madera_MMB.Lib
                 catch (SQLiteException ex)
                 {
                     Trace.WriteLine(" \n ################################################# EXPORT MODULES FAIL ################################################# \n" + ex.ToString() + "\n");
+                }
+                MySQLCo.Close();
+            }
+            LiteCo.Close();
+        }
+
+        /// <summary>
+        /// Méthode exportant les données des devis en base SQLite vers la base MySQL
+        /// </summary>
+        public void ExpDevis()
+        {
+            LiteCo.Open();
+            Trace.WriteLine(" ############# TEST EXPORT DEVIS ############# \n");
+            string query = "SELECT * FROM devis";
+            using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
+            {
+                try
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string mySQLquery = "INSERT into devis (refDevis, etat, dateCreation, prixTotalHT, prixTotalTTC, refPlan)" +
+                                "VALUES(@refDevis, @etat, @dateCreation, @prixTotalHT, @prixTotalTTC, @refPlan)" +
+                                "ON DUPLICATE KEY UPDATE etat= @etat, prixTotalHT= @prixTotalHT, prixTotalTTC= @prixTotalTTC, refPlan= @refPlan";
+                            using (MySqlCommand expClients = new MySqlCommand(mySQLquery, MySQLCo))
+                            {
+                                expClients.Parameters.AddWithValue("@refDevis", reader.GetString(0));
+                                expClients.Parameters.AddWithValue("@etat", reader.GetString(1));
+                                expClients.Parameters.AddWithValue("@dateCreation", reader.GetString(2));
+                                expClients.Parameters.AddWithValue("@prixTotalHT", reader.GetInt32(3));
+                                expClients.Parameters.AddWithValue("@prixTotalTTC", reader.GetInt32(4));
+                                expClients.Parameters.AddWithValue("@refPlan", reader.GetString(5));
+                                try
+                                {
+                                    expClients.ExecuteNonQuery();
+                                }
+                                catch (MySqlException e)
+                                {
+                                    Trace.WriteLine(" \n ################################################# EXPORT DEVIS FAIL ################################################# \n" + e.ToString() + "\n");
+                                }
+                            }
+                        }
+                    }
+                    Trace.WriteLine("#### EXPORT CLIENTS SUCCESS ####");
+                }
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# EXPORT DEVIS FAIL ################################################# \n" + ex.ToString() + "\n");
                 }
                 MySQLCo.Close();
             }

@@ -38,6 +38,8 @@ namespace Madera_MMB.View_Crtl
             // Instanciations
             InitializeComponent();
             connexion = co;
+            if (connexion.MySQLconnected)
+                connexion.SynCProjetsComm(com);
             commercial = com;
             clientCAD = new ClientCAD(this.connexion);
             projetCAD = new ProjetCAD(this.connexion, this.commercial, clientCAD.Clients);
@@ -159,9 +161,6 @@ namespace Madera_MMB.View_Crtl
             // Value Date création
             lblDateCreation.Content = "";
             lblDateCreation.Content = proj.creation;
-
-            // TODO : Value Statut Dernier Devis
-            lblStatut.Content = "?";
 
             // Value Nombre de plans
             lblNbPlans.Content = "";

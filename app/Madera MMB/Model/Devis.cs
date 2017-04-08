@@ -18,7 +18,7 @@ namespace Madera_MMB.Model
     //    - verifierOffrePromo X
     //    - genererDocTech X
     //
-    class Devis
+    public class Devis
     {
         #region properties
         public string reference { get; set; }

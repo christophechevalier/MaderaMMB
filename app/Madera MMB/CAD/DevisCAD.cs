@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace Madera_MMB.CAD
 {
-    class DevisCAD
+    public class DevisCAD
     {
         #region properties
         public Devis dev { get; set; }
@@ -100,7 +100,7 @@ namespace Madera_MMB.CAD
         /// </summary>
         /// <param name="devis"></param>
         /// <param name="refPlan"></param>
-        private void insertDevis(Devis devis, string refPlan)
+        public void insertDevis(Devis devis)
         {
             SQLQuery = "INSERT INTO devis (refDevis, nom, etat, dateCreation, prixTotalHT, prixTotalTTC, refPlan)" +
             "VALUES ('" + devis.reference + "','" + devis.etat + "','" + devis.creation + "',"  + devis.prixTotalHT + "," + devis.prixTotalTTC + ",'" + devis.plan.reference+"'"+

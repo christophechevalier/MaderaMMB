@@ -110,7 +110,7 @@ CREATE TABLE plan (
 CREATE TABLE devis (
   refDevis TEXT PRIMARY KEY NOT NULL,
   etat TEXT NOT NULL,
-  dateCreation NUMERIC NOT NULL,
+  dateCreation TEXT NOT NULL,
   prixTotalHT INTEGER NOT NULL,
   prixTotalTTC INTEGER NOT NULL,
   refPlan TEXT NOT NULL

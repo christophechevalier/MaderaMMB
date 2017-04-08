@@ -95,21 +95,6 @@
                          VerticalAlignment="Center">
                     <Label x:Name="lblDateCreation" FontSize="6"/>
                 </Viewbox>
-                <!-- Statut -->
-                <Viewbox Margin="15,0,0,0"
-                         Grid.Row="5"
-                         Grid.Column="1" 
-                         HorizontalAlignment="Right" 
-                         VerticalAlignment="Center">
-                    <Label Content="Statut actuel :" FontSize="6" />
-                </Viewbox>
-                <Viewbox Margin="15,0,0,0"
-                         Grid.Row="5"
-                         Grid.Column="2" 
-                         HorizontalAlignment="Left" 
-                         VerticalAlignment="Center">
-                    <Label x:Name="lblStatut" FontSize="6"/>
-                </Viewbox>
                 <!-- Nombre de plans -->
                 <Viewbox Margin="15,0,0,0"
                          Grid.Row="1"

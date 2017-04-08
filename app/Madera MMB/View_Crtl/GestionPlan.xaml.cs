@@ -37,7 +37,7 @@ namespace Madera_MMB.View_Crtl
     {
         #region Properties
         private Connexion connexion { get; set; }
-        private Projet projet { get; set; }
+        public Projet projet { get; set; }
         public PlanCAD planCAD { get; set; }
         private ProjetCAD projetCAD { get; set; }
         public Plan plan { get; set; }

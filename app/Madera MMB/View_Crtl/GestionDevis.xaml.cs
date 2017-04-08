@@ -35,10 +35,9 @@ namespace Madera_MMB.View_Crtl
     public partial class GestionDevis : Page
     {
         #region Properties
-        private Plan plan { get; set; }
-        private DevisCAD devisCAD { get; set; }
+        public DevisCAD devisCAD { get; set; }
+        public Devis devis { get; set; }  private Plan plan { get; set; }
         private Client client { get; set; }
-        private Devis devis { get; set; }
         private Commercial commercial { get; set; }
         private Connexion connexion { get; set; }
         private float totalTTC { get; set; }
