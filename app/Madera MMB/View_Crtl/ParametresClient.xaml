@@ -113,7 +113,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Image x:Name="logo">
+            <Image  x:Name="logo" DataContext="{Binding Conn}">
                 <Image.Style>
                     <Style TargetType="Image">
 

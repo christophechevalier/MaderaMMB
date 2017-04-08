@@ -41,6 +41,7 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             Conn = co;
             this.clientCAD = CADclient;
+            this.DataContext = clientCAD;
         }
 
         public ParametresClient(Connexion co, ClientCAD CADclient, Client cli)
@@ -49,6 +50,7 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             Conn = co;
             this.clientCAD = CADclient;
+            this.DataContext = clientCAD;
 
             ClientNom.Text = cli.nom;
             ClientPrenom.Text = cli.prenom;

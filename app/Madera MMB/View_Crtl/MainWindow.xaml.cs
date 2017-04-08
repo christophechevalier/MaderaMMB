@@ -157,7 +157,10 @@ namespace Madera_MMB.View_Crtl
             gestionProjet.BtnOuvrirProjet.Click += delegate(object sender, RoutedEventArgs e)
             {
                 if (connexion.MySQLconnected)
+                {
+                    connexion.ExpClients();
                     connexion.ExpProjets();
+                }
                 if (gestionProjet.proj != null)
                 {
                     this.gestionPlan = new GestionPlan(connexion, gestionProjet.proj);
@@ -173,7 +176,10 @@ namespace Madera_MMB.View_Crtl
             gestionProjet.BtnCreerClient.Click += delegate(object sender, RoutedEventArgs e)
             {
                 if (connexion.MySQLconnected)
+                {
+                    connexion.ExpClients();
                     connexion.ExpProjets();
+                }
                 this.parametresClient = new ParametresClient(connexion, clientCAD);
                 Initialize_Listeners_ParametresClient();
                 Mainframe.Content = parametresClient;
