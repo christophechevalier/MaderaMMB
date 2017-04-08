@@ -73,7 +73,7 @@ namespace Madera_MMB.View_Crtl
                 {
                     Client getClient = new Client();
 
-                    if (window.DataSelect.SelectedIndex > 0)
+                    if (window.DataSelect.Text != "Sélectionnez un client")
                     {
                         getClient = (Client)window.DataSelect.SelectedItem;
 
