@@ -283,7 +283,7 @@
                      HorizontalAlignment="Right" 
                      VerticalAlignment="Center">
                 <TextBox x:Name="PlanNom"
-                         Text="Plan 5 Base Carré " 
+                         Text="" 
                          Height="26" 
                          HorizontalAlignment="Stretch" 
                          TextWrapping="WrapWithOverflow" 

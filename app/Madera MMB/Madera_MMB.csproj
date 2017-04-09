@@ -39,6 +39,9 @@
   <PropertyGroup>
     <StartupObject>Madera_MMB.View_Crtl.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Logo Madera.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
@@ -257,6 +260,7 @@
     <Resource Include="Lib\Images\porte_simple.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Logo Madera.ico" />
     <Resource Include="Lib\Images\slot_Hplein.png" />
     <Resource Include="Lib\Images\slot_Vplein.png" />
     <Resource Include="Lib\Images\slot_horizontal.png" />
