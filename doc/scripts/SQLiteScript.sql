@@ -100,8 +100,7 @@ CREATE TABLE plan (
   FOREIGN KEY (refProjet) REFERENCES projet,
   FOREIGN KEY (typePlancher) REFERENCES plancher,
   FOREIGN KEY (typeCouverture) REFERENCES couverture,
-  FOREIGN KEY (idCoupe) REFERENCES coupePrincipe,
-  FOREIGN KEY (nomGamme) REFERENCES gamme
+  FOREIGN KEY (idCoupe) REFERENCES coupePrincipe
 );
 
 

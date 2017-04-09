@@ -113,9 +113,12 @@ namespace Madera_MMB.CAD
                                     getPlancherByType(reader.GetString(5)),
                                     getCouvByType(reader.GetString(6)),
                                     getCoupeById(reader.GetInt16(7)),
-                                    getModulesByRefPlan(reader.GetString(0)),                           
-                                    getGammebyNom(reader.GetString(8))
+                                    getModulesByRefPlan(reader.GetString(0))
                                 );
+                            if (reader.GetString(8) != "none")
+                            {
+                                plan.gamme = getGammebyNom(reader.GetString(8));
+                            }
                             Plans.Add(plan);
                         }
                     }
@@ -168,8 +171,8 @@ namespace Madera_MMB.CAD
             }
             else
             {
-                string SQLQuery = "REPLACE INTO plan(refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe)" +
-"VALUES (@refPlan, @label, @dateCreation, @dateModification, @refProjet, @typePlancher, @typeCouverture, @idCoupe)";
+                string SQLQuery = "REPLACE INTO plan(refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme)" +
+"VALUES (@refPlan, @label, @dateCreation, @dateModification, @refProjet, @typePlancher, @typeCouverture, @idCoupe, @nomGamme)";
 
                 // Ouverture de la connexion
                 conn.LiteCo.Open();
@@ -185,6 +188,7 @@ namespace Madera_MMB.CAD
                         command.Parameters.AddWithValue("@typePlancher", plan.plancher.type);
                         command.Parameters.AddWithValue("@typeCouverture", plan.couverture.type);
                         command.Parameters.AddWithValue("@idCoupe", plan.coupePrincipe.id);
+                        command.Parameters.AddWithValue("@nomGamme", "none");
 
                         command.ExecuteNonQuery();
                         Trace.WriteLine("#### INSERT NOUVEAU PLAN DATA SUCCESS ####");
