@@ -385,10 +385,8 @@ namespace Madera_MMB.Lib
             MySqlCommand selectComms = new MySqlCommand("SELECT * FROM devis WHERE refPlan = '" + refPlan + "'", MySQLCo);
             try
             {
-                MySQLCo.Open();
                 Reader = selectComms.ExecuteReader();
                 int i = 0;
-                LiteCo.Open();
                 while (Reader.Read())
                 {
                     query = "replace into devis(refDevis,etat,dateCreation,prixTotalHT,prixTotalTTC,refPlan) values(@refDevis,@etat,@dateCreation,@prixTotalHT,@prixTotalTTC,@refPlan)";
@@ -408,19 +406,14 @@ namespace Madera_MMB.Lib
                         catch (System.Data.SQLite.SQLiteException e)
                         {
                             Trace.WriteLine(e.ToString());
-                            LiteCo.Close();
-                            MySQLCo.Close();
                         }
                     }
                 }
-                LiteCo.Close();
-                MySQLCo.Close();
             }
             catch (MySqlException e)
             {
                 Trace.WriteLine(e.ToString());
-                MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC CLIENT FAIL ############# \n");
+                Trace.WriteLine(" ############# SYNC DEVIS FAIL ############# \n");
             }
         }
 
@@ -434,7 +427,6 @@ namespace Madera_MMB.Lib
             MySqlCommand selectComms = new MySqlCommand("SELECT * FROM module WHERE refPlan = '" + refPlan + "'", MySQLCo);
             try
             {
-                MySQLCo.Open();
                 Reader = selectComms.ExecuteReader();
                 int i = 0;
                 LiteCo.Open();
@@ -458,18 +450,13 @@ namespace Madera_MMB.Lib
                         catch (System.Data.SQLite.SQLiteException e)
                         {
                             Trace.WriteLine(e.ToString());
-                            LiteCo.Close();
-                            MySQLCo.Close();
                         }
                     }
                 }
-                LiteCo.Close();
-                MySQLCo.Close();
             }
             catch (MySqlException e)
             {
                 Trace.WriteLine(e.ToString());
-                MySQLCo.Close();
                 Trace.WriteLine(" ############# SYNC MODULE FAIL ############# \n");
             }
         }
@@ -575,9 +562,9 @@ namespace Madera_MMB.Lib
                 catch (SQLiteException ex)
                 {
                     Trace.WriteLine(" \n ################################################# EXPORT PROJETS FAIL ################################################# \n" + ex.ToString() + "\n");
-                }
-                MySQLCo.Close();
+                }    
             }
+            MySQLCo.Close();
             LiteCo.Close();
         }
 
