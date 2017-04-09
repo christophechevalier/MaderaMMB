@@ -96,7 +96,7 @@ CREATE TABLE plan (
   typePlancher TEXT NOT NULL,
   typeCouverture TEXT NOT NULL,
   idCoupe INT NOT NULL,
-  nomGamme TEXT NOT NULL,
+  nomGamme TEXT,
   FOREIGN KEY (refProjet) REFERENCES projet,
   FOREIGN KEY (typePlancher) REFERENCES plancher,
   FOREIGN KEY (typeCouverture) REFERENCES couverture,
