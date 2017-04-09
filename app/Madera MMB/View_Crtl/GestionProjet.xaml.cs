@@ -39,7 +39,10 @@ namespace Madera_MMB.View_Crtl
             InitializeComponent();
             connexion = co;
             if (connexion.MySQLconnected)
+            {
                 connexion.SynCProjetsComm(com);
+                connexion.SyncClient();
+            }
             commercial = com;
             clientCAD = new ClientCAD(this.connexion);
             projetCAD = new ProjetCAD(this.connexion, this.commercial, clientCAD.Clients);

@@ -54,6 +54,13 @@ namespace Madera_MMB.View_Crtl
             // Instanciations
             InitializeComponent();
             connexion = co;
+            if (connexion.MySQLconnected)
+            {
+                connexion.SyncMetamodules();
+                connexion.SyncMetaslot();
+                connexion.SynCPlansProj(unprojet);
+
+            }
             projet = unprojet;
             planCAD = new PlanCAD(this.connexion, this.projet);
             DataContext = planCAD;

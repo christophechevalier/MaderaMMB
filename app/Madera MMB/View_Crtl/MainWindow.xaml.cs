@@ -41,9 +41,6 @@ namespace Madera_MMB.View_Crtl
         private CouvertureCAD couvCAD { get; set; }
         private GammeCAD gamCAD { get; set; }
         private PlancherCAD plancherCAD { get; set; }
-
-
-
         #endregion
 
         #region Ctor

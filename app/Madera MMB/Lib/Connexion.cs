@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 using System.Data.SQLite;
 using System.IO;
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace Madera_MMB.Lib
 {
@@ -143,6 +144,7 @@ namespace Madera_MMB.Lib
         /// <param name="commercial">le commercial dont les projets vont être chargés</param>
         public void SynCPlansProj(Model.Projet projet)
         {
+            List<string> refs = new List<string>();
             MySqlDataReader Reader;
             string query;
             Trace.WriteLine(" ############# TEST SYNC PLANS FROM PROJET ############# \n");
@@ -166,8 +168,8 @@ namespace Madera_MMB.Lib
                     Reader.GetValue(7).ToString() + "','" +
                     Reader.GetValue(8).ToString() + "')";
 
-                    SyncDevis(Reader.GetString(0));
-                    SyncModules(Reader.GetString(0));
+                    refs.Add(Reader.GetValue(0).ToString());
+
 
                     SQLiteCommand command = new SQLiteCommand(query, LiteCo);
                     try
@@ -182,14 +184,17 @@ namespace Madera_MMB.Lib
                 }
                 LiteCo.Close();
                 MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC PLANS/DEVIS/MODULES FROM PROJET SUCCESS ############# \n");
+                Trace.WriteLine(" ############# SYNC PLANS FROM PROJET SUCCESS ############# \n");
             }
             catch (MySqlException e)
             {
                 Trace.WriteLine(e.ToString());
                 MySQLCo.Close();
-                Trace.WriteLine(" ############# SYNC PLANS/DEVIS/MODULES FROM PROJET FAIL ############# \n");
+                Trace.WriteLine(" ############# SYNC PLANS FROM PROJET FAIL ############# \n");
             }
+
+            foreach (string reference in refs)
+                SyncModules(reference);
         }
 
         /// <summary>
@@ -380,38 +385,49 @@ namespace Madera_MMB.Lib
         /// </summary>
         public void SyncDevis(string refPlan)
         {
-            MySqlDataReader Reader;
+            MySQLCo.Close();
+            LiteCo.Close();
             string query;
             MySqlCommand selectComms = new MySqlCommand("SELECT * FROM devis WHERE refPlan = '" + refPlan + "'", MySQLCo);
             try
             {
-                Reader = selectComms.ExecuteReader();
-                int i = 0;
-                while (Reader.Read())
+                MySQLCo.Open();
+                LiteCo.Open();
+                using (MySqlDataReader Reader = selectComms.ExecuteReader())
                 {
-                    query = "replace into devis(refDevis,etat,dateCreation,prixTotalHT,prixTotalTTC,refPlan) values(@refDevis,@etat,@dateCreation,@prixTotalHT,@prixTotalTTC,@refPlan)";
-
-                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
+                    int i = 0;
+                    while (Reader.Read())
                     {
-                        command.Parameters.AddWithValue("@refDevis", Reader.GetString(0));
-                        command.Parameters.AddWithValue("@etat", Reader.GetString(1));
-                        command.Parameters.AddWithValue("@dateCreation", Reader.GetString(2));
-                        command.Parameters.AddWithValue("@prixTotalHT", Reader.GetFloat(3));
-                        command.Parameters.AddWithValue("@prixTotalTTC", Reader.GetFloat(4));
-                        command.Parameters.AddWithValue("@refPlan", Reader.GetString(5));
-                        try
+                        query = "replace into devis(refDevis,etat,dateCreation,prixTotalHT,prixTotalTTC,refPlan) values(@refDevis,@etat,@dateCreation,@prixTotalHT,@prixTotalTTC,@refPlan)";
+
+                        using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                         {
-                            i = i + command.ExecuteNonQuery();
-                        }
-                        catch (System.Data.SQLite.SQLiteException e)
-                        {
-                            Trace.WriteLine(e.ToString());
+                            command.Parameters.AddWithValue("@refDevis", Reader.GetString(0));
+                            command.Parameters.AddWithValue("@etat", Reader.GetString(1));
+                            command.Parameters.AddWithValue("@dateCreation", Reader.GetString(2));
+                            command.Parameters.AddWithValue("@prixTotalHT", Reader.GetFloat(3));
+                            command.Parameters.AddWithValue("@prixTotalTTC", Reader.GetFloat(4));
+                            command.Parameters.AddWithValue("@refPlan", Reader.GetString(5));
+                            try
+                            {
+                                i = i + command.ExecuteNonQuery();
+                            }
+                            catch (System.Data.SQLite.SQLiteException e)
+                            {
+                                MySQLCo.Close();
+                                LiteCo.Close();
+                                Trace.WriteLine(e.ToString());
+                            }
                         }
                     }
-                }
+                };
+                MySQLCo.Close();
+                LiteCo.Close();
             }
             catch (MySqlException e)
             {
+                MySQLCo.Close();
+                LiteCo.Close();
                 Trace.WriteLine(e.ToString());
                 Trace.WriteLine(" ############# SYNC DEVIS FAIL ############# \n");
             }
@@ -422,43 +438,55 @@ namespace Madera_MMB.Lib
         /// </summary>
         public void SyncModules(string refPlan)
         {
-            MySqlDataReader Reader;
+            MySQLCo.Close();
+            LiteCo.Close();
             string query;
+            Trace.WriteLine(" ############# TEST SYNC MODULES FROM PLAN ############# \n");
             MySqlCommand selectComms = new MySqlCommand("SELECT * FROM module WHERE refPlan = '" + refPlan + "'", MySQLCo);
             try
             {
-                Reader = selectComms.ExecuteReader();
                 int i = 0;
+                MySQLCo.Open();
                 LiteCo.Open();
-                while (Reader.Read())
+                using (MySqlDataReader Reader = selectComms.ExecuteReader())
                 {
-                    query = "replace into module(coordonneeDebutX,coordonneeDebutY,colspan,rowspan,refMetaModule,refMetaparent,refPlan) values(@coordonneeDebutX,@coordonneeDebutY,@colspan,@rowspan,@refMetaModule,@refMetaparent,@refPlan)";
-
-                    using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
+                    while (Reader.Read())
                     {
-                        command.Parameters.AddWithValue("@coordonneeDebutX", Reader.GetInt32(0));
-                        command.Parameters.AddWithValue("@coordonneeDebutY", Reader.GetInt32(1));
-                        command.Parameters.AddWithValue("@colspan", Reader.GetInt32(2));
-                        command.Parameters.AddWithValue("@rowspan", Reader.GetInt32(3));
-                        command.Parameters.AddWithValue("@refMetaModule", Reader.GetString(4));
-                        command.Parameters.AddWithValue("@refMetaparent", Reader.GetString(5));
-                        command.Parameters.AddWithValue("@refPlan", Reader.GetString(6));
-                        try
+                        query = "replace into module(coordonneeDebutX,coordonneeDebutY,colspan,rowspan,refMetaModule,refMetaparent,refPlan) values(@coordonneeDebutX,@coordonneeDebutY,@colspan,@rowspan,@refMetaModule,@refMetaparent,@refPlan)";
+
+                        using (SQLiteCommand command = new SQLiteCommand(query, LiteCo))
                         {
-                            i = i + command.ExecuteNonQuery();
-                        }
-                        catch (System.Data.SQLite.SQLiteException e)
-                        {
-                            Trace.WriteLine(e.ToString());
+                            command.Parameters.AddWithValue("@coordonneeDebutX", Reader.GetInt32(0));
+                            command.Parameters.AddWithValue("@coordonneeDebutY", Reader.GetInt32(1));
+                            command.Parameters.AddWithValue("@colspan", Reader.GetInt32(2));
+                            command.Parameters.AddWithValue("@rowspan", Reader.GetInt32(3));
+                            command.Parameters.AddWithValue("@refMetaModule", Reader.GetString(4));
+                            command.Parameters.AddWithValue("@refMetaparent", Reader.GetString(5));
+                            command.Parameters.AddWithValue("@refPlan", Reader.GetString(6));
+                            try
+                            {
+                                i = i + command.ExecuteNonQuery();
+                            }
+                            catch (System.Data.SQLite.SQLiteException e)
+                            {
+                                Trace.WriteLine(e.ToString());
+                                Trace.WriteLine(" ############# SYNC MODULES FAIL ############# \n");
+                            }
                         }
                     }
                 }
+                MySQLCo.Close();
+                LiteCo.Close();
             }
             catch (MySqlException e)
             {
+                MySQLCo.Close();
+                LiteCo.Close();
                 Trace.WriteLine(e.ToString());
-                Trace.WriteLine(" ############# SYNC MODULE FAIL ############# \n");
+                Trace.WriteLine(" ############# SYNC MODULES FAIL ############# \n");
             }
+            MySQLCo.Close();
+            LiteCo.Close();
         }
 
         #endregion

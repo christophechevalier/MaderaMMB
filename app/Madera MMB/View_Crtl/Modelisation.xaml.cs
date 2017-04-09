@@ -71,7 +71,7 @@ namespace Madera_MMB.View_Crtl
         {
             InitializeComponent();
             initialize();
-
+            planCad = new PlanCAD(new Connexion(), new Projet(new Client(), new Commercial()));
             Module murhaut = new Module(Module.type.Mur, 5, 5, 15, 1, null);
             Module murdroit = new Module(Module.type.Mur, 20, 5, 1, 15, null);
             Module murgauche = new Module(Module.type.Mur, 5, 6, 1, 15, null);
@@ -111,8 +111,7 @@ namespace Madera_MMB.View_Crtl
         private void initialize()
         {
             grid.Margin = new Thickness(7);
-            
-            planCad = new PlanCAD(new Connexion(), new Projet(new Client(), new Commercial()));
+           
             listMeta = planCad.listAllMetaModules();
             
             tracer.Click += new RoutedEventHandler(changeMode);

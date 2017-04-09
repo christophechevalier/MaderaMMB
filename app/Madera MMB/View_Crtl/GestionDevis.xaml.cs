@@ -57,6 +57,10 @@ namespace Madera_MMB.View_Crtl
             this.commercial = commercial;
             this.client = client;
             connexion = conn;
+
+            if(connexion.MySQLconnected)
+                connexion.SyncDevis(plan.reference);
+
             devisCAD = new DevisCAD(connexion, plan);
 
             this.DataContext = devisCAD;

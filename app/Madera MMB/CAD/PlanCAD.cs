@@ -71,9 +71,6 @@ namespace Madera_MMB.CAD
             metaslotCAD = new MetaSlotCAD(conn);
             ListMetaModule = new List<MetaModule>();
 
-            if (laConnexion.MySQLconnected)
-                laConnexion.SynCPlansProj(projet);
-
             ListAllPlansByProject();
         }
         #endregion
@@ -103,6 +100,17 @@ namespace Madera_MMB.CAD
                         Trace.WriteLine("#### GET PLANS DATA ####");
                         while (reader.Read())
                         {
+                            Trace.WriteLine(
+                                reader.GetValue(0).ToString() + "  " +
+                                reader.GetValue(1).ToString() + "  " +
+                                reader.GetValue(2).ToString() + "  " +
+                                reader.GetValue(3).ToString() + "  " +
+                                reader.GetValue(4).ToString() + "  " +
+                                reader.GetValue(5).ToString() + "  " +
+                                reader.GetValue(6).ToString() + "  " +
+                                reader.GetValue(7).ToString() + "  " +
+                                reader.GetValue(8).ToString());
+
                             Plan plan = new Plan
                                 (
                                     reader.GetString(0),
@@ -112,7 +120,7 @@ namespace Madera_MMB.CAD
                                     projet,
                                     getPlancherByType(reader.GetString(5)),
                                     getCouvByType(reader.GetString(6)),
-                                    getCoupeById(reader.GetInt16(7)),
+                                    getCoupeById(reader.GetInt32(7)),
                                     getModulesByRefPlan(reader.GetString(0))
                                 );
                             if (reader.GetString(8) != "none")
