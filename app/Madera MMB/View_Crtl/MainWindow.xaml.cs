@@ -57,7 +57,10 @@ namespace Madera_MMB.View_Crtl
 
             /// Test SYNCHRO import ///
             if(connexion.MySQLconnected)
+            {
                 connexion.SyncCommMySQL();
+                connexion.SyncParamPlan();
+            }
 
             /// Test CAD avec nouvelles données ///
             commCAD = new CommercialCAD(connexion);
