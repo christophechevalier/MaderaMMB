@@ -157,7 +157,7 @@ namespace Madera_MMB.Lib
                 LiteCo.Open();
                 while (Reader.Read())
                 {
-                    query = "replace into plan(refPlan, label, dateCreation, dateModification, refProjet, typePlancher, typeCouverture, idCoupe, nomGamme) values('" +
+                    query = "replace into plan(refPlan, label, dateCreation, dateModification, refProjet, typeCouverture, idCoupe, typePlancher, nomGamme) values('" +
                     Reader.GetValue(0).ToString() + "','" +
                     Reader.GetValue(1).ToString() + "','" +
                     Reader.GetValue(2).ToString() + "','" +

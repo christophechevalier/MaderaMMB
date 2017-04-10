@@ -112,10 +112,10 @@ namespace Madera_MMB.CAD
                                 reader.GetValue(8).ToString());
 
                             Trace.WriteLine(
-                            " Valeur Couv " + reader.GetValue(5).ToString() + "  " +
-                            " Valeur Coupe " + reader.GetValue(6).ToString() + "  " +
-                            " Valeur Planch " + reader.GetValue(7).ToString() + "  " +
-                            " Valeur Gamme " + reader.GetValue(8).ToString());
+                            "Valeur Couv : " + reader.GetValue(5).ToString() + " / " +
+                            "Valeur Coupe : " + reader.GetValue(6).ToString() + " / " +
+                            "Valeur Planch : " + reader.GetValue(7).ToString() + " / " +
+                            "Valeur Gamme : " + reader.GetValue(8).ToString());
 
                             Plan plan = new Plan
                                 (
