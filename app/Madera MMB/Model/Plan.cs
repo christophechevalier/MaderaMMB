@@ -57,7 +57,7 @@ namespace Madera_MMB.Model
         /// <param name="unecoupe"></param>
         /// <param name="modules"></param>
         /// <param name="unegamme"></param>
-        public Plan(string reference, string label, string creation, string modification, Projet unprojet, Plancher unplancher, Couverture unecouverture, CoupePrincipe unecoupe, List<Module> modules, Gamme unegamme = null)
+        public Plan(string reference, string label, string creation, string modification, Projet unprojet, Couverture unecouverture, CoupePrincipe unecoupe, List<Module> modules, Plancher unplancher, Gamme unegamme = null)
         {
             this.reference = reference;
             this.label = label;
