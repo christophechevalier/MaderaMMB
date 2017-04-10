@@ -160,22 +160,24 @@ namespace Madera_MMB.View_Crtl
             this.PrixTTC.Content += planchprixttc.ToString() + "\n";
 
             /// MODULES ///
+            /// 
+            List<Module> modulestri = plan.modules.OrderBy(o => o.meta.label).ToList();
             int cpt = 0;
             int aggregatHT = 0;
-            for(int i=0 ; i <= plan.modules.Count-1 ; i++)
+            for(int i=0 ; i <= modulestri.Count-1 ; i++)
             {
-                if(i != plan.modules.Count-1)
+                if(i != modulestri.Count-1)
                 {                    
-                    if (plan.modules[i].meta.label == plan.modules[i + 1].meta.label)
+                    if (modulestri[i].meta.label == modulestri[i + 1].meta.label)
                         cpt++;
                     else
                     {
-                        PrixUnitaire.Content += plan.modules[i].meta.prixHT + "\n";
-                        this.ListeComposants.Content += plan.modules[i].meta.label + "\n";
+                        PrixUnitaire.Content += modulestri[i].meta.prixHT + "\n";
+                        this.ListeComposants.Content += modulestri[i].meta.label + "\n";
                         this.Quantité.Content += cpt + "\n";
                         if(cpt!= 0)
                         {
-                            float prixquantiteHT = plan.modules[i].meta.prixHT * cpt;
+                            float prixquantiteHT = modulestri[i].meta.prixHT * cpt;
                             totalHT += prixquantiteHT;
                             this.PrixHT.Content += prixquantiteHT + "\n";
                             float aggregatTTC = prixquantiteHT + ((prixquantiteHT * 20) / 100);
@@ -184,10 +186,10 @@ namespace Madera_MMB.View_Crtl
                         }
                         else
                         {
-                            totalHT += plan.modules[i].meta.prixHT;
-                            this.PrixHT.Content += plan.modules[i].meta.prixHT + "\n";
-                            totalTTC += plan.modules[i].meta.prixHT + ((plan.modules[i].meta.prixHT * 20) / 100);
-                            this.PrixTTC.Content += plan.modules[i].meta.prixHT + ((plan.modules[i].meta.prixHT*20)/100)+ "\n";
+                            totalHT += modulestri[i].meta.prixHT;
+                            this.PrixHT.Content += modulestri[i].meta.prixHT + "\n";
+                            totalTTC += modulestri[i].meta.prixHT + ((modulestri[i].meta.prixHT * 20) / 100);
+                            this.PrixTTC.Content += modulestri[i].meta.prixHT + ((modulestri[i].meta.prixHT*20)/100)+ "\n";
                         }
                         aggregatHT = 0;
                         cpt = 0;
@@ -195,17 +197,17 @@ namespace Madera_MMB.View_Crtl
                 }
                 else
                 {
-                    if (plan.modules[i].meta.label == plan.modules[i - 1].meta.label)
+                    if (modulestri[i].meta.label == modulestri[i - 1].meta.label)
                     {
                         cpt++;
-                        aggregatHT += plan.modules[i].meta.prixHT + plan.modules[i - 1].meta.prixHT;
+                        aggregatHT += modulestri[i].meta.prixHT + modulestri[i - 1].meta.prixHT;
                     }
-                    this.ListeComposants.Content += plan.modules[i].meta.label + "\n";
+                    this.ListeComposants.Content += modulestri[i].meta.label + "\n";
                     this.Quantité.Content += cpt + "\n";
                     if (aggregatHT != 0)
                     {
                         totalHT += aggregatHT;
-                        PrixUnitaire.Content += plan.modules[i].meta.prixHT + "\n";
+                        PrixUnitaire.Content += modulestri[i].meta.prixHT + "\n";
                         this.PrixHT.Content += aggregatHT + "\n";
                         float aggregatTTC = aggregatHT + ((aggregatHT * 20) / 100);
                         totalTTC += aggregatTTC;
@@ -213,10 +215,10 @@ namespace Madera_MMB.View_Crtl
                     }
                     else
                     {
-                        totalHT += plan.modules[i].meta.prixHT;
-                        this.PrixHT.Content += plan.modules[i].meta.prixHT + "\n";
-                        totalTTC += plan.modules[i].meta.prixHT + ((plan.modules[i].meta.prixHT * 20) / 100);
-                        this.PrixTTC.Content += plan.modules[i].meta.prixHT + ((plan.modules[i].meta.prixHT * 20) / 100) + "\n";
+                        totalHT += modulestri[i].meta.prixHT;
+                        this.PrixHT.Content += modulestri[i].meta.prixHT + "\n";
+                        totalTTC += modulestri[i].meta.prixHT + ((modulestri[i].meta.prixHT * 20) / 100);
+                        this.PrixTTC.Content += modulestri[i].meta.prixHT + ((modulestri[i].meta.prixHT * 20) / 100) + "\n";
                     }
                 }
             }
