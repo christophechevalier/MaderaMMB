@@ -202,6 +202,7 @@ namespace Madera_MMB.View_Crtl
                     placeComponent(mod);
             }
             checkImage();
+            placeSlot();
         }
         #endregion
 
