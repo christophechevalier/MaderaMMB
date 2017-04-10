@@ -93,11 +93,6 @@ namespace Madera_MMB.View_Crtl
         public Modelisation(Connexion con, Plan plan, PlanCAD planCad)
         {
             this.con = con;
-            if (this.con.MySQLconnected)
-            {
-                this.con.SyncMetamodules();
-                this.con.SyncMetaslot();
-            }
             this.plan = plan;
             this.planCad = planCad;
             InitializeComponent();

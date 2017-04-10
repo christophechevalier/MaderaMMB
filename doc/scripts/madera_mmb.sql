@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.14
--- http://www.phpmyadmin.net
+-- version 4.6.4
+-- https://www.phpmyadmin.net/
 --
 -- Client :  127.0.0.1
--- Généré le :  Lun 10 Avril 2017 à 11:00
--- Version du serveur :  5.6.17
--- Version de PHP :  5.5.12
+-- Généré le :  Lun 10 Avril 2017 à 09:27
+-- Version du serveur :  5.7.14
+-- Version de PHP :  5.6.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Base de données :  `madera_mmb`
@@ -26,7 +26,7 @@ SET time_zone = "+00:00";
 -- Structure de la table `client`
 --
 
-CREATE TABLE IF NOT EXISTS `client` (
+CREATE TABLE `client` (
   `refClient` varchar(20) NOT NULL,
   `nom` varchar(45) NOT NULL,
   `prenom` varchar(45) NOT NULL,
@@ -36,9 +36,7 @@ CREATE TABLE IF NOT EXISTS `client` (
   `email` varchar(50) NOT NULL,
   `telephone` varchar(20) NOT NULL,
   `dateCreation` varchar(25) NOT NULL,
-  `dateModification` varchar(25) NOT NULL,
-  PRIMARY KEY (`refClient`),
-  UNIQUE KEY `refClient` (`refClient`)
+  `dateModification` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -58,14 +56,12 @@ INSERT INTO `client` (`refClient`, `nom`, `prenom`, `adresse`, `codePostal`, `vi
 -- Structure de la table `commercial`
 --
 
-CREATE TABLE IF NOT EXISTS `commercial` (
+CREATE TABLE `commercial` (
   `refCommercial` varchar(20) NOT NULL,
   `nom` varchar(45) NOT NULL,
   `prenom` varchar(45) NOT NULL,
   `email` varchar(40) NOT NULL,
-  `motDePasse` varchar(45) NOT NULL,
-  PRIMARY KEY (`refCommercial`),
-  UNIQUE KEY `refCommercial` (`refCommercial`)
+  `motDePasse` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -82,15 +78,14 @@ INSERT INTO `commercial` (`refCommercial`, `nom`, `prenom`, `email`, `motDePasse
 -- Structure de la table `coupeprincipe`
 --
 
-CREATE TABLE IF NOT EXISTS `coupeprincipe` (
-  `idCoupe` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `coupeprincipe` (
+  `idCoupe` int(11) NOT NULL,
   `label` varchar(45) NOT NULL,
   `longueur` int(11) NOT NULL,
   `largeur` int(11) NOT NULL,
   `prixHT` int(11) NOT NULL,
-  `image` blob NOT NULL,
-  PRIMARY KEY (`idCoupe`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+  `image` blob NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Contenu de la table `coupeprincipe`
@@ -109,12 +104,10 @@ INSERT INTO `coupeprincipe` (`idCoupe`, `label`, `longueur`, `largeur`, `prixHT`
 -- Structure de la table `couverture`
 --
 
-CREATE TABLE IF NOT EXISTS `couverture` (
+CREATE TABLE `couverture` (
   `typeCouverture` varchar(45) NOT NULL,
   `prixHT` int(11) NOT NULL,
-  `image` blob NOT NULL,
-  PRIMARY KEY (`typeCouverture`),
-  UNIQUE KEY `typeCouverture` (`typeCouverture`)
+  `image` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -132,16 +125,13 @@ INSERT INTO `couverture` (`typeCouverture`, `prixHT`, `image`) VALUES
 -- Structure de la table `devis`
 --
 
-CREATE TABLE IF NOT EXISTS `devis` (
+CREATE TABLE `devis` (
   `refDevis` varchar(20) NOT NULL,
   `etat` varchar(45) NOT NULL,
   `dateCreation` varchar(20) NOT NULL,
   `prixTotalHT` int(11) NOT NULL,
   `prixTotalTTC` int(11) NOT NULL,
-  `refPlan` varchar(20) NOT NULL,
-  PRIMARY KEY (`refDevis`),
-  UNIQUE KEY `refDevis` (`refDevis`),
-  KEY `devis_ibfk_1` (`refPlan`)
+  `refPlan` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -150,15 +140,13 @@ CREATE TABLE IF NOT EXISTS `devis` (
 -- Structure de la table `gamme`
 --
 
-CREATE TABLE IF NOT EXISTS `gamme` (
+CREATE TABLE `gamme` (
   `nom` varchar(45) NOT NULL,
   `offrePromo` int(11) NOT NULL,
   `typeIsolant` varchar(45) NOT NULL,
   `typeFinition` varchar(45) NOT NULL,
   `qualiteHuisserie` varchar(45) NOT NULL,
-  `image` blob NOT NULL,
-  PRIMARY KEY (`nom`),
-  UNIQUE KEY `nom` (`nom`)
+  `image` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -176,16 +164,14 @@ INSERT INTO `gamme` (`nom`, `offrePromo`, `typeIsolant`, `typeFinition`, `qualit
 -- Structure de la table `metamodule`
 --
 
-CREATE TABLE IF NOT EXISTS `metamodule` (
+CREATE TABLE `metamodule` (
   `refMetaModule` varchar(45) NOT NULL,
   `label` varchar(45) NOT NULL,
   `prixHT` int(11) NOT NULL,
   `image` blob,
   `nomGamme` varchar(45) NOT NULL,
   `taille` int(11) NOT NULL,
-  `ecart` int(11) NOT NULL,
-  PRIMARY KEY (`refMetaModule`),
-  KEY `metamodule_ibfk_1` (`nomGamme`)
+  `ecart` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -230,13 +216,11 @@ INSERT INTO `metamodule` (`refMetaModule`, `label`, `prixHT`, `image`, `nomGamme
 -- Structure de la table `metaslot`
 --
 
-CREATE TABLE IF NOT EXISTS `metaslot` (
+CREATE TABLE `metaslot` (
   `idMetaSlot` int(11) NOT NULL,
   `numSlotPosition` enum('1','2','3') NOT NULL,
   `type` enum('P','F','M') NOT NULL,
-  `refMetaModule` varchar(45) NOT NULL,
-  PRIMARY KEY (`idMetaSlot`),
-  KEY `metaslot_ibfk_1` (`refMetaModule`)
+  `refMetaModule` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -278,18 +262,14 @@ INSERT INTO `metaslot` (`idMetaSlot`, `numSlotPosition`, `type`, `refMetaModule`
 -- Structure de la table `module`
 --
 
-CREATE TABLE IF NOT EXISTS `module` (
+CREATE TABLE `module` (
   `coordonneeDebutX` int(11) NOT NULL,
   `coordonneeDebutY` int(11) NOT NULL,
   `colspan` int(11) NOT NULL,
   `rowspan` int(11) NOT NULL,
   `refMetaModule` varchar(45) NOT NULL,
   `refMetaparent` varchar(45) DEFAULT NULL,
-  `refPlan` varchar(20) NOT NULL,
-  PRIMARY KEY (`coordonneeDebutX`,`coordonneeDebutY`,`refPlan`),
-  KEY `module_ibfk_1` (`refMetaModule`),
-  KEY `module_ibfk_0` (`refMetaparent`),
-  KEY `module_ibfk_2` (`refPlan`)
+  `refPlan` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -298,7 +278,7 @@ CREATE TABLE IF NOT EXISTS `module` (
 -- Structure de la table `plan`
 --
 
-CREATE TABLE IF NOT EXISTS `plan` (
+CREATE TABLE `plan` (
   `refPlan` varchar(20) NOT NULL,
   `label` varchar(45) NOT NULL,
   `dateCreation` varchar(20) NOT NULL,
@@ -307,13 +287,7 @@ CREATE TABLE IF NOT EXISTS `plan` (
   `typeCouverture` varchar(45) NOT NULL,
   `idCoupe` int(11) NOT NULL,
   `typePlancher` varchar(45) NOT NULL,
-  `nomGamme` varchar(45) NOT NULL,
-  PRIMARY KEY (`refPlan`),
-  UNIQUE KEY `refPlan` (`refPlan`),
-  KEY `plan_ibfk_1` (`refProjet`),
-  KEY `plan_ibfk_4` (`typeCouverture`),
-  KEY `plan_ibfk_5` (`idCoupe`),
-  KEY `plan_ibfk_6` (`typePlancher`)
+  `nomGamme` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -322,12 +296,10 @@ CREATE TABLE IF NOT EXISTS `plan` (
 -- Structure de la table `plancher`
 --
 
-CREATE TABLE IF NOT EXISTS `plancher` (
+CREATE TABLE `plancher` (
   `typePlancher` varchar(45) NOT NULL,
   `prixHT` int(11) NOT NULL,
-  `image` blob NOT NULL,
-  PRIMARY KEY (`typePlancher`),
-  UNIQUE KEY `typePlancher` (`typePlancher`)
+  `image` blob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -345,19 +317,120 @@ INSERT INTO `plancher` (`typePlancher`, `prixHT`, `image`) VALUES
 -- Structure de la table `projet`
 --
 
-CREATE TABLE IF NOT EXISTS `projet` (
+CREATE TABLE `projet` (
   `refProjet` varchar(20) NOT NULL,
   `nom` varchar(45) NOT NULL,
-  `dateCreation` varchar(25) NOT NULL,
-  `dateModification` varchar(25) NOT NULL,
+  `dateCreation` varchar(40) NOT NULL,
+  `dateModification` varchar(40) NOT NULL,
   `refClient` varchar(20) NOT NULL,
-  `refCommercial` varchar(20) NOT NULL,
-  PRIMARY KEY (`refProjet`),
-  UNIQUE KEY `refProjet` (`refProjet`),
-  KEY `projet_ibfk_1` (`refClient`),
-  KEY `projet_ibfk_2` (`refCommercial`)
+  `refCommercial` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Index pour les tables exportées
+--
+
+--
+-- Index pour la table `client`
+--
+ALTER TABLE `client`
+  ADD PRIMARY KEY (`refClient`),
+  ADD UNIQUE KEY `refClient` (`refClient`);
+
+--
+-- Index pour la table `commercial`
+--
+ALTER TABLE `commercial`
+  ADD PRIMARY KEY (`refCommercial`),
+  ADD UNIQUE KEY `refCommercial` (`refCommercial`);
+
+--
+-- Index pour la table `coupeprincipe`
+--
+ALTER TABLE `coupeprincipe`
+  ADD PRIMARY KEY (`idCoupe`);
+
+--
+-- Index pour la table `couverture`
+--
+ALTER TABLE `couverture`
+  ADD PRIMARY KEY (`typeCouverture`),
+  ADD UNIQUE KEY `typeCouverture` (`typeCouverture`);
+
+--
+-- Index pour la table `devis`
+--
+ALTER TABLE `devis`
+  ADD PRIMARY KEY (`refDevis`),
+  ADD UNIQUE KEY `refDevis` (`refDevis`),
+  ADD KEY `devis_ibfk_1` (`refPlan`);
+
+--
+-- Index pour la table `gamme`
+--
+ALTER TABLE `gamme`
+  ADD PRIMARY KEY (`nom`),
+  ADD UNIQUE KEY `nom` (`nom`);
+
+--
+-- Index pour la table `metamodule`
+--
+ALTER TABLE `metamodule`
+  ADD PRIMARY KEY (`refMetaModule`),
+  ADD KEY `metamodule_ibfk_1` (`nomGamme`);
+
+--
+-- Index pour la table `metaslot`
+--
+ALTER TABLE `metaslot`
+  ADD PRIMARY KEY (`idMetaSlot`),
+  ADD KEY `metaslot_ibfk_1` (`refMetaModule`);
+
+--
+-- Index pour la table `module`
+--
+ALTER TABLE `module`
+  ADD PRIMARY KEY (`coordonneeDebutX`,`coordonneeDebutY`,`refPlan`),
+  ADD KEY `module_ibfk_1` (`refMetaModule`),
+  ADD KEY `module_ibfk_0` (`refMetaparent`),
+  ADD KEY `module_ibfk_2` (`refPlan`);
+
+--
+-- Index pour la table `plan`
+--
+ALTER TABLE `plan`
+  ADD PRIMARY KEY (`refPlan`),
+  ADD UNIQUE KEY `refPlan` (`refPlan`),
+  ADD KEY `plan_ibfk_1` (`refProjet`),
+  ADD KEY `plan_ibfk_4` (`typeCouverture`),
+  ADD KEY `plan_ibfk_5` (`idCoupe`),
+  ADD KEY `plan_ibfk_6` (`typePlancher`);
+
+--
+-- Index pour la table `plancher`
+--
+ALTER TABLE `plancher`
+  ADD PRIMARY KEY (`typePlancher`),
+  ADD UNIQUE KEY `typePlancher` (`typePlancher`);
+
+--
+-- Index pour la table `projet`
+--
+ALTER TABLE `projet`
+  ADD PRIMARY KEY (`refProjet`),
+  ADD UNIQUE KEY `refProjet` (`refProjet`),
+  ADD KEY `projet_ibfk_1` (`refClient`),
+  ADD KEY `projet_ibfk_2` (`refCommercial`);
+
+--
+-- AUTO_INCREMENT pour les tables exportées
+--
+
+--
+-- AUTO_INCREMENT pour la table `coupeprincipe`
+--
+ALTER TABLE `coupeprincipe`
+  MODIFY `idCoupe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- Contraintes pour les tables exportées
 --

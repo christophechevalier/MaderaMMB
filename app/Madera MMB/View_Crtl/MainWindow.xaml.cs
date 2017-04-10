@@ -341,7 +341,7 @@ namespace Madera_MMB.View_Crtl
                 }
                 else
                 {
-                    MessageBox.Show("Un des champs obligatoires n'est pas renseigné");
+                    MessageBox.Show("Un des paramètres obligatoires n'est pas renseigné");
                 }
             };
             // Click sur le bouton retour liste des plans pour aller dans la Vue Gestion Plan

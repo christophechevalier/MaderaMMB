@@ -384,21 +384,25 @@ namespace Madera_MMB.View_Crtl
         #region listeners
         private void cp_Button_Click(object sender, RoutedEventArgs e)
         {
-            ToggleButton btn = sender as ToggleButton;
-            if (forme.Visibility == System.Windows.Visibility.Hidden && taille.Visibility == System.Windows.Visibility.Hidden)
+            if(coupeChoisie == null)
             {
-                clearAll();
-                forme.Visibility = System.Windows.Visibility.Visible;
-                taille.Visibility = System.Windows.Visibility.Visible;
+                ToggleButton btn = sender as ToggleButton;
+                if (forme.Visibility == System.Windows.Visibility.Hidden && taille.Visibility == System.Windows.Visibility.Hidden)
+                {
+                    clearAll();
+                    forme.Visibility = System.Windows.Visibility.Visible;
+                    taille.Visibility = System.Windows.Visibility.Visible;
+                }
+                else
+                    clearAll();
+
+                disableButtons();
+                btn.IsChecked = true;
             }
             else
             {
-                clearAll();
+                MessageBox.Show("La coupe de principe est définitive !");
             }
-
-            disableButtons();
-            btn.IsChecked = true;
-
         }
 
         private void couv_Button_Click(object sender, RoutedEventArgs e)
