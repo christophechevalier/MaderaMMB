@@ -306,11 +306,18 @@ namespace Madera_MMB.View_Crtl
             // Click sur le bouton consulter le devis pour aller dans la Vue Gestion Devis
             gestionPlan.BtnConsulterDevis.Click += delegate (object sender, RoutedEventArgs e)
             {
-                if (connexion.MySQLconnected)
-                    connexion.ExpPlans();
-                this.gestionDevis = new GestionDevis(connexion, gestionPlan.plan, gestionPlan.projet.commercial, gestionPlan.projet.client);
-                Initialize_Listeners_Devis();
-                Mainframe.Content = gestionDevis;
+                if (gestionPlan.plan != null)
+                {
+                    if (connexion.MySQLconnected)
+                        connexion.ExpPlans();
+                    this.gestionDevis = new GestionDevis(connexion, gestionPlan.plan, gestionPlan.projet.commercial, gestionPlan.projet.client);
+                    Initialize_Listeners_Devis();
+                    Mainframe.Content = gestionDevis;
+                }
+                else
+                {
+                    MessageBox.Show("Vous devez sélectionner un plan pour consulter son devis !");
+                }
             };
             // Click sur le bouton retour liste de projets pour aller dans la Vue Gestion Projet
             gestionPlan.BtnRetour.Click += delegate(object sender, RoutedEventArgs e)
