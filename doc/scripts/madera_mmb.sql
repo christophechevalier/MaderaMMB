@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Sam 08 Avril 2017 à 18:00
+-- Généré le :  Lun 10 Avril 2017 à 11:00
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -48,8 +48,9 @@ CREATE TABLE IF NOT EXISTS `client` (
 INSERT INTO `client` (`refClient`, `nom`, `prenom`, `adresse`, `codePostal`, `ville`, `email`, `telephone`, `dateCreation`, `dateModification`) VALUES
 ('AT000001', 'Arthur', 'Tv', '10 chemin des Albios', 31130, 'Balma', 'arthur@gmail.com', '06-06-06-06-06', '2017-03-03', '2017-03-03'),
 ('BT000002', 'Beatrice', 'Tijuana', '9 chemin des iles', 31000, 'Toulouse', 'beatrice@gmail.com', '06-06-06-06-07', '2017-03-03', '2017-03-03'),
-('JP000004', 'Jessica', 'Palmer', '69 rue de lalimapo', 33000, 'Bordeaux', 'jess@gmail.com', '06-06-06-06-08', '2017-03-03', '2017-03-03'),
-('MP000003', 'Marco', 'Polo', '2 rue de la paume', 75000, 'Paris', 'marco@gmail.com', '06-06-06-06-08', '2017-03-03', '2017-03-06');
+('JP000004', 'Jessica', 'Palmer', '69 rue de lalimapo', 33000, 'Bordeaux', 'jess@gmail.com', '06-06-06-06-08', '2017-03-03', '2017-03-05'),
+('JW000005', 'Johny', 'Walker', '40 rue de la soif', 24000, 'Dordogne', 'johny@gmail.com', '06-06-06-06-09', '2017-03-06', '2017-03-06'),
+('MP000003', 'Marco', 'Polo', '2 rue de la paume', 75000, 'Paris', 'marco@gmail.com', '06-06-06-06-08', '2017-03-03', '2017-03-03');
 
 -- --------------------------------------------------------
 
@@ -72,8 +73,8 @@ CREATE TABLE IF NOT EXISTS `commercial` (
 --
 
 INSERT INTO `commercial` (`refCommercial`, `nom`, `prenom`, `email`, `motDePasse`) VALUES
-('002', 'Crocco', 'David', '', 'toto'),
-('COM003', 'Schwarze', 'Alexandre', '', 'titi');
+('COM002', 'Crocco', 'David', 'david@email.com', 'toto'),
+('COM003', 'Schwarze', 'Alexandre', 'alex@email.com', 'titi');
 
 -- --------------------------------------------------------
 
@@ -306,27 +307,14 @@ CREATE TABLE IF NOT EXISTS `plan` (
   `typeCouverture` varchar(45) NOT NULL,
   `idCoupe` int(11) NOT NULL,
   `typePlancher` varchar(45) NOT NULL,
-  `nomGamme` varchar(45) DEFAULT NULL,
+  `nomGamme` varchar(45) NOT NULL,
   PRIMARY KEY (`refPlan`),
   UNIQUE KEY `refPlan` (`refPlan`),
   KEY `plan_ibfk_1` (`refProjet`),
   KEY `plan_ibfk_4` (`typeCouverture`),
   KEY `plan_ibfk_5` (`idCoupe`),
-  KEY `plan_ibfk_6` (`typePlancher`),
-  KEY `plan_ibfk_7` (`nomGamme`)
+  KEY `plan_ibfk_6` (`typePlancher`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Contenu de la table `plan`
---
-
-INSERT INTO `plan` (`refPlan`, `label`, `dateCreation`, `dateModification`, `refProjet`, `typeCouverture`, `idCoupe`, `typePlancher`, `nomGamme`) VALUES
-('CCAT000001-P01', 'Test 1', '2017-03-03 16:54:30.', '2017-03-03 16:54:30.', 'CCAT000001', 'Ardoise pourpre', 3, 'Bois', 'Aluminium'),
-('CCAT000001-P02', 'Test 2', '2017-03-03 16:54:30.', '2017-03-03 16:54:30.', 'CCAT000001', 'Ardoise pourpre', 3, 'Bois', 'Aluminium'),
-('CCAT000001-P03', 'Test 3', '2017-03-03 16:54:30.', '2017-03-03 16:54:30.', 'CCAT000001', 'Ardoise pourpre', 4, 'Bois', 'Aluminium'),
-('CCAT000002-P01', 'Test 4', '2017-03-03 16:54:30.', '2017-03-03 16:54:30.', 'CCMP000002', 'Ardoise pourpre', 3, 'Bois', 'Aluminium'),
-('CCAT000002-P02', 'Test 5', '2017-03-03 16:54:30.', '2017-03-03 16:54:30.', 'CCMP000002', 'Ardoise pourpre', 3, 'Bois', 'Aluminium'),
-('CCAT000002-P03', 'Test 6', '2017-03-03 16:54:30.', '2017-03-03 16:54:30.', 'CCMP000002', 'Ardoise pourpre', 4, 'Bois', 'Aluminium');
 
 -- --------------------------------------------------------
 
@@ -371,16 +359,6 @@ CREATE TABLE IF NOT EXISTS `projet` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Contenu de la table `projet`
---
-
-INSERT INTO `projet` (`refProjet`, `nom`, `dateCreation`, `dateModification`, `refClient`, `refCommercial`) VALUES
-('CCAT000001', 'Arthur Tv', '2017-03-04', '2017-03-04', 'AT000001', 'COM003'),
-('CCBT000005', 'Beatrice Tijuana', '2017-03-08', '2017-03-08', 'BT000002', 'COM003'),
-('CCJP000004', 'Jessica Palmer', '2017-03-07', '2017-03-07', 'JP000004', 'COM003'),
-('CCMP000002', 'Marco Polo', '2017-03-05', '2017-03-05', 'MP000003', 'COM003');
-
---
 -- Contraintes pour les tables exportées
 --
 
@@ -416,8 +394,7 @@ ALTER TABLE `plan`
   ADD CONSTRAINT `plan_ibfk_1` FOREIGN KEY (`refProjet`) REFERENCES `projet` (`refProjet`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `plan_ibfk_4` FOREIGN KEY (`typeCouverture`) REFERENCES `couverture` (`typeCouverture`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `plan_ibfk_5` FOREIGN KEY (`idCoupe`) REFERENCES `coupeprincipe` (`idCoupe`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `plan_ibfk_6` FOREIGN KEY (`typePlancher`) REFERENCES `plancher` (`typePlancher`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `plan_ibfk_7` FOREIGN KEY (`nomGamme`) REFERENCES `gamme` (`nom`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `plan_ibfk_6` FOREIGN KEY (`typePlancher`) REFERENCES `plancher` (`typePlancher`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `projet`
