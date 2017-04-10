@@ -20,7 +20,8 @@
     </Style>
 
     <!-- Image Logo -->
-    <BitmapImage x:Key="Logo" UriSource="../logo_madera.png"/>
+    <ImageSource x:Key="Logo">../logo_madera.png</ImageSource>
+    <ImageSource x:Key="LogoOff">../logo_offline.png</ImageSource>
 
     <Style TargetType="{x:Type Label}">
         <Setter Property="FontSize" Value="12" />
