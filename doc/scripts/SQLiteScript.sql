@@ -93,14 +93,10 @@ CREATE TABLE plan (
   dateCreation TEXT NOT NULL,
   dateModification TEXT NOT NULL,
   refProjet TEXT NOT NULL,
-  typePlancher TEXT NOT NULL,
   typeCouverture TEXT NOT NULL,
   idCoupe INT NOT NULL,
-  nomGamme TEXT,
-  FOREIGN KEY (refProjet) REFERENCES projet,
-  FOREIGN KEY (typePlancher) REFERENCES plancher,
-  FOREIGN KEY (typeCouverture) REFERENCES couverture,
-  FOREIGN KEY (idCoupe) REFERENCES coupePrincipe
+  typePlancher TEXT NOT NULL,
+  nomGamme TEXT
 );
 
 
