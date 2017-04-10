@@ -34,6 +34,7 @@ namespace Madera_MMB.View_Crtl
             if (this.connexion.MySQLconnected)
                 this.connexion.SyncClient();
             this.clientCAD = CADclient;
+            this.clientCAD.ListAllClients();
             DataContext = connexion;
             ListeClients.ItemsSource = clientCAD.Clients;
         }
