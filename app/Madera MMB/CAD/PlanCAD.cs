@@ -1,9 +1,6 @@
 ﻿using Madera_MMB.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Madera_MMB.Lib;
 using System.Data.SQLite;
 using System.Diagnostics;
@@ -11,9 +8,6 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using MySql.Data.MySqlClient;
-using System.Collections;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Madera_MMB.Lib.Tools;
 

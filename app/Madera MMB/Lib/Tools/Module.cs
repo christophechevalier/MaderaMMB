@@ -1,9 +1,4 @@
 ﻿using Madera_MMB.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -11,6 +6,7 @@ namespace Madera_MMB.Lib.Tools
 {
     public class Module : Button
     {
+        #region Attributs
         public enum type
         {
             Mur, MurInt, Fenetre, Porte, Rien, SlotMur, SlotFen, SlotPorte, Slot
@@ -24,7 +20,19 @@ namespace Madera_MMB.Lib.Tools
         public int y { get; set; }
         public Brush texture { get; set; }
         public MetaModule meta { get; set; }
+        #endregion
 
+        #region Constructeurs
+        /// <summary>
+        /// Constructeur de la classe
+        /// </summary>
+        /// <param name="unparent"></param>
+        /// <param name="type"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="colspan"></param>
+        /// <param name="rowspan"></param>
+        /// <param name="texture"></param>
         public Module(MetaModule unparent, type type, int x, int y, int colspan, int rowspan, Brush texture)
         {
             this.parent = unparent;
@@ -36,6 +44,15 @@ namespace Madera_MMB.Lib.Tools
             this.texture = texture;
         }
 
+        /// <summary>
+        /// Constructeur de la classe
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="colspan"></param>
+        /// <param name="rowspan"></param>
+        /// <param name="texture"></param>
         public Module(type type, int x, int y, int colspan, int rowspan, Brush texture)
         {
             this.letype = type;
@@ -45,7 +62,16 @@ namespace Madera_MMB.Lib.Tools
             this.rowspan = rowspan;
             this.texture = texture;
         }
-        
+
+        /// <summary>
+        /// Constructeur de la classe
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="colspan"></param>
+        /// <param name="rowspan"></param>
+        /// <param name="meta"></param>
+        /// <param name="parent"></param>
         public Module(int x, int y, int colspan, int rowspan, MetaModule meta, MetaModule parent = null)
         {
             this.x = x;
@@ -56,7 +82,13 @@ namespace Madera_MMB.Lib.Tools
             this.parent = parent;
             checkType();
         }
+        #endregion
 
+        #region Méthode privé
+        /// <summary>
+        /// Sert à renseigner le type du module en fonction de son meta
+        /// et lui renseigne sa texture
+        /// </summary>
         private void checkType()
         {
             if (this.meta.label.Contains("Mur exterieur"))
@@ -79,5 +111,6 @@ namespace Madera_MMB.Lib.Tools
             Brush fond = new ImageBrush(this.meta.image);
             this.texture = fond;
         }
+        #endregion
     }
 }

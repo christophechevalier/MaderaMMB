@@ -7,7 +7,6 @@ using Madera_MMB.Lib.Tools;
 using Madera_MMB.Model;
 using Madera_MMB.CAD;
 using System.Windows.Media;
-using System.Windows.Input;
 using System.Windows.Controls.Primitives;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,9 +15,6 @@ namespace Madera_MMB.View_Crtl
 {
     /// <summary>
     /// Controle de la vue Modelisation
-    /// Features Restantes :
-    ///     Gestion mur ext
-    ///     Chargement auto plan
     /// </summary>
     public partial class Modelisation : Page
     {
@@ -67,6 +63,11 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Constructeurs
+        /// <summary>
+        /// Constructeur de la classe servant aux test en créant un bouchon
+        /// </summary>
+        /// <param></param>
+        /// <returns></returns>
         public Modelisation()
         {
             InitializeComponent();
@@ -90,6 +91,13 @@ namespace Madera_MMB.View_Crtl
             checkImage();
         }
 
+        /// <summary>
+        /// Constructeur de la classe prenant en paramètre une connexion, un plan et un planCAD
+        /// </summary>
+        /// <param name="con"></param>
+        /// <param name="plan"></param>
+        /// <param name="planCad"></param>
+        /// <returns></returns>
         public Modelisation(Connexion con, Plan plan, PlanCAD planCad)
         {
             this.con = con;
@@ -103,6 +111,9 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Méthodes initialisation
+        /// <summary>
+        /// Créé les composants graphiques de la vue
+        /// </summary>
         private void initialize()
         {
             grid.Margin = new Thickness(7);
@@ -143,6 +154,9 @@ namespace Madera_MMB.View_Crtl
             loadGridButton();
         }
 
+        /// <summary>
+        /// Réalise le mappage de la grille de modélisation
+        /// </summary>
         private void loadGridButton()
         {
             for (int y = 0; y < 30; y++)
@@ -163,6 +177,9 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
+        /// <summary>
+        /// Sert à placer les modules du plan passé en paramètre sur la grille
+        /// </summary>
         private void loadModules()
         {
             foreach (Module mod in this.plan.modules)
@@ -202,6 +219,10 @@ namespace Madera_MMB.View_Crtl
         #endregion
 
         #region Méthodes privées
+        /// <summary>
+        /// Sert à placer un module sur la grille en renseignant les paramètres
+        /// </summary>
+        /// <param name="but"></param>
         private void placeComponent(Module but)
         {
             listB[but.x, but.y].letype = but.letype;
@@ -261,6 +282,11 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
+        /// <summary>
+        /// Vérifie le type du bouton cliqué et du mode courant afin d'appeler une méthode correspondante
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void checkType(object sender, RoutedEventArgs e)
         {
             Module but = sender as Module;
@@ -353,6 +379,10 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
+        /// <summary>
+        /// Charge l'aperçu du module cliqué et des choix disponibles dans la zone prévue (type de module ou viadage du slot)
+        /// </summary>
+        /// <param name="but"></param>
         private void loadChoiceButton (Module but)
         {
             scrollView.Content = null;
@@ -440,6 +470,11 @@ namespace Madera_MMB.View_Crtl
             scrollView.Content = stackP;
         }
 
+        /// <summary>
+        /// Affiche les différentes gammes disponible pour le type de module choisie
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void loadFiltre(object sender, RoutedEventArgs e)
         {
             Button but = sender as Button;
@@ -485,6 +520,11 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
+        /// <summary>
+        /// Change le mode courant d'utilisation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void changeMode(object sender, RoutedEventArgs e)
         {
             ToggleButton but = sender as ToggleButton;
@@ -500,6 +540,9 @@ namespace Madera_MMB.View_Crtl
             Console.WriteLine(mode);
         }
 
+        /// <summary>
+        /// Vérifie le mode actif
+        /// </summary>
         private void checkMode()
         {
             if (mode == "tracer")
@@ -514,6 +557,9 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
+        /// <summary>
+        /// Charge et affiche la liste des murs intérieurs disponibles
+        /// </summary>
         private void loadListMur()
         {
             scrollView.Content = null;
@@ -571,6 +617,11 @@ namespace Madera_MMB.View_Crtl
             scrollView.Content = stackList;
         }
 
+        /// <summary>
+        /// Charge et affiche la liste des meta modules disponibles selon la gamme choisie
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void loadListMeta(object sender, RoutedEventArgs e)
         {
             Button butSender = sender as Button;
@@ -679,6 +730,11 @@ namespace Madera_MMB.View_Crtl
             scrollView.Content = stackList;
         }
 
+        /// <summary>
+        /// Retourne le module de mur extérieur de la grille en fonction du module cliqué
+        /// </summary>
+        /// <param name="mod"></param>
+        /// <returns type="Module"></returns>
         private Module findMurExt(Module mod)
         {
             foreach (Module modM in listMurExt)
@@ -707,6 +763,10 @@ namespace Madera_MMB.View_Crtl
             return null;
         }
 
+        /// <summary>
+        /// Modifie les paramètres de la case cliquée afin d'en faire un Module de mur intérieur
+        /// </summary>
+        /// <param name="but"></param>
         private void placeWall(Module but)
         {
             if (isInside(but) && checkAround(but) && metaChoose != null)
@@ -720,6 +780,10 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
+        /// <summary>
+        /// Modifie les paramètres de la case cliquée afin d'en faire un Module vide
+        /// </summary>
+        /// <param name="but"></param>
         private void removeWall(Module but)
         {
             if (isInside(but))
@@ -732,6 +796,9 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
+        /// <summary>
+        /// Parcoure la grille afin de placer automatiquement des slots sur les murs intérieurs
+        /// </summary>
         private void placeSlot()
         {
             for (int i = 1; i < listB.GetLength(0) - 1; i++)
@@ -775,6 +842,11 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
+        /// <summary>
+        /// Vérifie avant de placer un mur intérieur qu'il est bien mitoyen d'un autre mur
+        /// </summary>
+        /// <param name="but"></param>
+        /// <returns></returns>
         private bool checkAround(Module but)
         {
             bool around = false;
@@ -795,6 +867,9 @@ namespace Madera_MMB.View_Crtl
             return around;
         }
 
+        /// <summary>
+        /// Actualise les images des murs et slots en fonction de leur entourage
+        /// </summary>
         private void checkImage()
         {
             for (int i = 1; i < listB.GetLength(0) - 1; i++)
@@ -917,6 +992,11 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
+        /// <summary>
+        /// Vérifie qu'un module est situé dans le périmètre de la coupe de principe
+        /// </summary>
+        /// <param name="but"></param>
+        /// <returns></returns>
         private bool isInside (Module but)
         {
             bool inside = false;
@@ -955,6 +1035,11 @@ namespace Madera_MMB.View_Crtl
             return inside;
         }
 
+        /// <summary>
+        /// Affiche/Masque les textures de chacun des Modules placés sur la grille
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void afficheTexture(object sender, RoutedEventArgs e)
         {
             if (modeAffich == "tracage")
@@ -978,6 +1063,12 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
+        /// <summary>
+        /// Déselectionne les éléments graphiques d'une liste en dehors du dernier cliqué
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="depObj"></param>
+        /// <returns></returns>
         private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
         {
             if (depObj != null)
@@ -998,6 +1089,11 @@ namespace Madera_MMB.View_Crtl
             }
         }
 
+        /// <summary>
+        /// Sauvegarde la modélisation du plan actuel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void save_Click(object sender, RoutedEventArgs e)
         {
             if (listMurExt.Count == 4 && listMurExt[0].meta != null && listMurExt[1].meta != null && listMurExt[2].meta != null && listMurExt[3].meta != null)
