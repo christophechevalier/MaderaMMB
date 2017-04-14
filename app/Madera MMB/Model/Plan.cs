@@ -70,10 +70,20 @@ namespace Madera_MMB.Model
             this.gamme = unegamme;
             this.modules = modules;
         }
-        //public Plan(Projet projet)
-        //{
-        //    this.projet = projet;
-        //}
+
+        
+        public Plan(Plan plan, string reference)
+        {
+            this.projet = plan.projet;
+            this.reference = reference;
+            this.label = plan.label += "(copy)";
+            this.creation = DateTime.Now.ToString();
+            this.plancher = plan.plancher;
+            this.couverture = plan.couverture;
+            this.coupePrincipe = plan.coupePrincipe;
+            this.modules = plan.modules;
+            this.gamme = plan.gamme;
+        }
         #endregion
 
         #region Privates methods
