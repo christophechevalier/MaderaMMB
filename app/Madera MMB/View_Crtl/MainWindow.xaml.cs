@@ -241,6 +241,7 @@ namespace Madera_MMB.View_Crtl
                     MessageBox.Show("L'édition s'est effectuée avec succès !");
                     parametresClient.clientCAD.InsertClient(parametresClient.Client);
                     gestionClient = new GestionClient(connexion, parametresClient.clientCAD);
+                    this.gestionProjet.clientCAD = parametresClient.clientCAD;
                     Mainframe.Content = gestionClient;
                     Initialize_Listeners_GestionClient();
                 }
