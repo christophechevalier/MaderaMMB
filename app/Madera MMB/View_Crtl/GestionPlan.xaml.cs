@@ -96,12 +96,13 @@ namespace Madera_MMB.View_Crtl
         private void BtnCopierPlan_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
-            Plan plan2 = plan;
-            plan2.label += "(copy)";
-            plan2.reference = generateKey(projet, 1);
-            Trace.WriteLine("plan2 Reference : " + plan2.reference);
-
+            Random rand = new Random();
+            string reference = plan.reference + " " + rand.Next(0, 9999);
+            Plan plan2 = new Plan(plan, reference);
             planCAD.InsertPlan(plan2);
+            foreach (Module module in plan2.modules)
+                planCAD.insertModule(module, plan2.reference);
+            planCAD.ListAllPlansByProject();
         }
 
         private void Btn_Select_Plan_Projet_Click(object sender, RoutedEventArgs e)
