@@ -72,10 +72,10 @@ namespace Madera_MMB.Model
         }
 
         
-        public Plan(Plan plan, string reference)
+        public Plan(Plan plan, string lareference)
         {
             this.projet = plan.projet;
-            this.reference = reference;
+            this.reference = lareference;
             this.label = plan.label += "(copy)";
             this.creation = DateTime.Now.ToString();
             this.plancher = plan.plancher;
