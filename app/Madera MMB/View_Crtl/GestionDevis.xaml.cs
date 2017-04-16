@@ -164,10 +164,17 @@ namespace Madera_MMB.View_Crtl
             List<Module> modulestri = plan.modules.OrderBy(o => o.meta.label).ToList();
             int cpt = 0;
             int aggregatHT = 0;
+            int cptgamme = 0;
             for(int i=0 ; i <= modulestri.Count-1 ; i++)
             {
+
                 if(i != modulestri.Count-1)
-                {                    
+                {
+                    if (modulestri[i].meta.gamme.nom != this.plan.gamme.nom )
+                        cptgamme++;
+                    else if (modulestri[i].meta.gamme.nom != modulestri[i + 1].meta.gamme.nom)
+                        cptgamme++;
+
                     if (modulestri[i].meta.label == modulestri[i + 1].meta.label)
                         cpt++;
                     else
@@ -221,6 +228,14 @@ namespace Madera_MMB.View_Crtl
                         this.PrixTTC.Content += modulestri[i].meta.prixHT + ((modulestri[i].meta.prixHT * 20) / 100) + "\n";
                     }
                 }
+            }
+
+            if(cptgamme == 0 && this.plan.gamme != null)
+            {
+                totalHT = totalHT - ((totalHT*this.plan.gamme.offrePromo)/100);
+                totalTTC = totalTTC - ((totalTTC * this.plan.gamme.offrePromo) / 100);
+                this.Bonus.Content = "";
+                this.Bonus.Content += "Promotion Gamme : "+ this.plan.gamme.offrePromo+"%";
             }
 
             this.devis.prixTotalHT = totalHT;
