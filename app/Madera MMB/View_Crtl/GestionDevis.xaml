@@ -497,7 +497,14 @@
                     <Label x:Name="Remise"
                            Grid.Column="1"
                            Grid.Row="1"
-                           FontWeight="Bold" FontSize="14"/>
+                           FontWeight="Bold" FontSize="14"
+                           HorizontalAlignment="Left"/>
+                    
+                    <Label x:Name="Bonus"
+                           Grid.Column="1"
+                           Grid.Row="1"
+                           FontWeight="Bold" FontSize="14"
+                           HorizontalAlignment="Center"/>
 
                     <Label x:Name="LabelTotaux"
                            Grid.Column="3"

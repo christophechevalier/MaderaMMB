@@ -103,6 +103,9 @@ namespace Madera_MMB.View_Crtl
             Trace.WriteLine("plan2 Reference : " + plan2.reference);
 
             planCAD.InsertPlan(plan2);
+            foreach (Module module in plan2.modules)
+                planCAD.insertModule(module, plan2.reference);
+            planCAD.ListAllPlansByProject();
         }
 
         private void Btn_Select_Plan_Projet_Click(object sender, RoutedEventArgs e)
