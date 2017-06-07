@@ -17,20 +17,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Xps;
+using System.Windows.Xps.Packaging;
+using PdfSharp.Pdf;
+using System.IO;
+using System.IO.Packaging;
 
 namespace Madera_MMB.View_Crtl
 {
-    /// <summary>
-    /// Logique d'interaction pour GestionDevis.xaml
-    /// * Règles de gestion Devis :
-    /// - Il ne peut y avoir qu’un seul devis estimatif et dossier technique par plan
-    /// - L’état du devis ne peut être uniquement modifié par un commercial ayant les privilèges
-    /// - Un devis n’a pas obligatoirement de remise
-    /// - Un devis a un workflow spécifique :
-    /// Brouillon ➡ Valider/Accepter par le client ➡ Facturer ➡ Clôturer
-    ///           ➡ Refuser                        ➡ En Attente
-    /// - Un devis brouillon valider ou refuser peut être modifié mais retourne à un état brouillon
-    /// </summary>
 
     public partial class GestionDevis : Page
     {
@@ -160,7 +154,6 @@ namespace Madera_MMB.View_Crtl
             this.PrixTTC.Content += planchprixttc.ToString() + "\n";
 
             /// MODULES ///
-            /// 
             List<Module> modulestri = plan.modules.OrderBy(o => o.meta.label).ToList();
             int cpt = 0;
             int aggregatHT = 0;
@@ -169,7 +162,7 @@ namespace Madera_MMB.View_Crtl
             {
                 if(i != modulestri.Count-1)
                 {
-                    if (plan.gamme != null)
+                    if(plan.gamme != null)
                     {
                         if (modulestri[i].meta.gamme.nom != this.plan.gamme.nom)
                             cptgamme++;
@@ -441,7 +434,41 @@ namespace Madera_MMB.View_Crtl
         //EVENT ON "Export"
         private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
+            Grid main = (Grid)AffichageDevis.Parent;
+            main.Children.Remove(AffichageDevis);
 
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = this.devis.plan.reference; // Default file name
+            dlg.DefaultExt = "pdf"; // Default file extension
+            dlg.Filter = "PDF Document (*.pdf)|*.pdf"; // Filter files by extension
+
+            if (dlg.ShowDialog() == false)
+                return;
+
+            FixedDocument fixedDoc = new FixedDocument();
+            PageContent pageContent = new PageContent();
+            FixedPage fixedPage = new FixedPage();
+
+            //Create first page of document
+            fixedPage.Children.Add(AffichageDevis);
+            ((System.Windows.Markup.IAddChild)pageContent).AddChild(fixedPage);
+            fixedDoc.Pages.Add(pageContent);
+
+
+            string tempFilename = this.devis.plan.reference;
+            File.Delete(tempFilename);
+
+            MemoryStream lMemoryStream = new MemoryStream();
+            XpsDocument doc = new XpsDocument(tempFilename, FileAccess.Write);
+            XpsDocumentWriter writer = XpsDocument.CreateXpsDocumentWriter(doc);
+            writer.Write(fixedDoc);
+            doc.Close();
+
+            var pdfXpsDoc = PdfSharp.Xps.XpsModel.XpsDocument.Open(lMemoryStream);
+            PdfSharp.Xps.XpsConverter.Convert(tempFilename, this.devis.plan.reference, 0);
+
+            main.Children.Add(AffichageDevis);
+            
         }
 
         //EVENT ON "Voir Devis technique"
@@ -459,8 +486,7 @@ namespace Madera_MMB.View_Crtl
                 AffichageDevis.Visibility = System.Windows.Visibility.Visible;
                 AfficherDevisTechnique.Visibility = System.Windows.Visibility.Hidden;
                 BtnVoirDT.Content = "Voir Dossier Technique";
-            }
-            
+            } 
         }
 
         //EVENT ON "Retour"
