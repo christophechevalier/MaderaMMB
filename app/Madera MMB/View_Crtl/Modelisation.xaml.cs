@@ -1096,7 +1096,7 @@ namespace Madera_MMB.View_Crtl
         /// <param name="e"></param>
         private void save_Click(object sender, RoutedEventArgs e)
         {
-            if (listMurExt.Count == 4 && listMurExt[0].meta != null && listMurExt[1].meta != null && listMurExt[2].meta != null && listMurExt[3].meta != null)
+            if (listMurExt.Count >= 4 && listMurExt[0].meta != null && listMurExt[1].meta != null && listMurExt[2].meta != null && listMurExt[3].meta != null)
             {
                 this.plan.modules.Clear();
                 for (int x = 1; x < listB.GetLength(0) - 1; x++)

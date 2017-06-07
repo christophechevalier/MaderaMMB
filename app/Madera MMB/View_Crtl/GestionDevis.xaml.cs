@@ -167,18 +167,21 @@ namespace Madera_MMB.View_Crtl
             int cptgamme = 0;
             for(int i=0 ; i <= modulestri.Count-1 ; i++)
             {
-
                 if(i != modulestri.Count-1)
                 {
-                    if (modulestri[i].meta.gamme.nom != this.plan.gamme.nom )
-                        cptgamme++;
-                    else if (modulestri[i].meta.gamme.nom != modulestri[i + 1].meta.gamme.nom)
-                        cptgamme++;
+                    if (plan.gamme != null)
+                    {
+                        if (modulestri[i].meta.gamme.nom != this.plan.gamme.nom)
+                            cptgamme++;
+                        else if (modulestri[i].meta.gamme.nom != modulestri[i + 1].meta.gamme.nom)
+                            cptgamme++;
+                    }
 
                     if (modulestri[i].meta.label == modulestri[i + 1].meta.label)
                         cpt++;
                     else
                     {
+                        cpt++;
                         PrixUnitaire.Content += modulestri[i].meta.prixHT + "\n";
                         this.ListeComposants.Content += modulestri[i].meta.label + "\n";
                         this.Quantité.Content += cpt + "\n";
