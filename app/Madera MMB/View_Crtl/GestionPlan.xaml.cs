@@ -104,7 +104,7 @@ namespace Madera_MMB.View_Crtl
 
             planCAD.InsertPlan(plan2);
             foreach (Module module in plan2.modules)
-                planCAD.insertModule(module, plan2.reference);
+            planCAD.insertModule(module, plan2);
             planCAD.ListAllPlansByProject();
         }
 
