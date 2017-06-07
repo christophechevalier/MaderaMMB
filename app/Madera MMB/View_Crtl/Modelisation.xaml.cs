@@ -1117,8 +1117,9 @@ namespace Madera_MMB.View_Crtl
 
                 foreach (Module mod in this.plan.modules)
                 {
-                    planCad.insertModule(mod, this.plan.reference);
+                    planCad.insertModule(mod, this.plan);
                 }
+                this.planCad.MajDateModifPlan(this.plan);
             }
             else
             {

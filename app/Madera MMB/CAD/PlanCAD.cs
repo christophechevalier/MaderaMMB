@@ -146,68 +146,42 @@ namespace Madera_MMB.CAD
         /// <param name="plan"></param>
         public void InsertPlan(Plan plan)
         {
-            if(plan.gamme != null)
-            {
-                string SQLQuery = "REPLACE INTO plan(refPlan, label, dateCreation, dateModification, refProjet, typeCouverture, idCoupe, typePlancher, nomGamme)" +
+            string SQLQuery = "REPLACE INTO plan(refPlan, label, dateCreation, dateModification, refProjet, typeCouverture, idCoupe, typePlancher, nomGamme)" +
 "VALUES (@refPlan, @label, @dateCreation, @dateModification, @refProjet, @typeCouverture, @idCoupe, @typePlancher, @nomGamme)";
 
-                // Ouverture de la connexion
-                conn.LiteCo.Open();
-                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            // Ouverture de la connexion
+            conn.LiteCo.Open();
+            using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
+            {
+                try
                 {
-                    try
+                    command.Parameters.AddWithValue("@refPlan", plan.reference);
+                    command.Parameters.AddWithValue("@label", plan.label);
+                    command.Parameters.AddWithValue("@dateCreation", plan.creation);
+                    command.Parameters.AddWithValue("@dateModification", DateTime.Today.ToString());
+                    command.Parameters.AddWithValue("@refProjet", plan.projet.reference);
+                    command.Parameters.AddWithValue("@typeCouverture", plan.couverture.type);
+                    command.Parameters.AddWithValue("@idCoupe", plan.coupePrincipe.id);
+                    command.Parameters.AddWithValue("@typePlancher", plan.plancher.type);
+                    if (plan.gamme != null)
                     {
-                        command.Parameters.AddWithValue("@refPlan", plan.reference);
-                        command.Parameters.AddWithValue("@label", plan.label);
-                        command.Parameters.AddWithValue("@dateCreation", DateTime.Now.ToString());
-                        command.Parameters.AddWithValue("@dateModification", DateTime.Today.ToString());
-                        command.Parameters.AddWithValue("@refProjet", plan.projet.reference);
-                        command.Parameters.AddWithValue("@typeCouverture", plan.couverture.type);
-                        command.Parameters.AddWithValue("@idCoupe", plan.coupePrincipe.id);
-                        command.Parameters.AddWithValue("@typePlancher", plan.plancher.type);
                         command.Parameters.AddWithValue("@nomGamme", plan.gamme.nom);
-
-                        command.ExecuteNonQuery();
-                        Trace.WriteLine("#### INSERT NOUVEAU PLAN DATA SUCCESS ####");
                     }
-                    catch (SQLiteException ex)
+                    else
                     {
-                        Trace.WriteLine(" \n ################################################# ERREUR INSERTION NOUVEAU PLAN ################################################# \n" + ex.ToString() + "\n");
-                    }
-                }
-                conn.LiteCo.Close();
-            }
-            else
-            {
-                string SQLQuery = "REPLACE INTO plan(refPlan, label, dateCreation, dateModification, refProjet, typeCouverture, idCoupe, typePlancher, nomGamme)" +
-"VALUES (@refPlan, @label, @dateCreation, @dateModification, @refProjet, @typeCouverture, @idCoupe, @typePlancher, @nomGamme)";
-
-                // Ouverture de la connexion
-                conn.LiteCo.Open();
-                using (SQLiteCommand command = new SQLiteCommand(SQLQuery, conn.LiteCo))
-                {
-                    try
-                    {
-                        command.Parameters.AddWithValue("@refPlan", plan.reference);
-                        command.Parameters.AddWithValue("@label", plan.label);
-                        command.Parameters.AddWithValue("@dateCreation", DateTime.Today.ToString());
-                        command.Parameters.AddWithValue("@dateModification", DateTime.Today.ToString());
-                        command.Parameters.AddWithValue("@refProjet", plan.projet.reference);
-                        command.Parameters.AddWithValue("@typeCouverture", plan.couverture.type);
-                        command.Parameters.AddWithValue("@idCoupe", plan.coupePrincipe.id);
-                        command.Parameters.AddWithValue("@typePlancher", plan.plancher.type);
                         command.Parameters.AddWithValue("@nomGamme", "none");
+                    }
 
-                        command.ExecuteNonQuery();
-                        Trace.WriteLine("#### INSERT NOUVEAU PLAN DATA SUCCESS ####");
-                    }
-                    catch (SQLiteException ex)
-                    {
-                        Trace.WriteLine(" \n ################################################# ERREUR INSERTION NOUVEAU PLAN ################################################# \n" + ex.ToString() + "\n");
-                    }
+                    command.ExecuteNonQuery();
+                    Trace.WriteLine("#### INSERT NOUVEAU PLAN DATA SUCCESS ####");
                 }
-                conn.LiteCo.Close();
+                catch (SQLiteException ex)
+                {
+                    Trace.WriteLine(" \n ################################################# ERREUR INSERTION NOUVEAU PLAN ################################################# \n" + ex.ToString() + "\n");
+                }
             }
+            conn.LiteCo.Close();
+            MajDateModifPlan(plan);
             ListAllPlansByProject();
 
             //conn.InsertSQliteQuery(SQLQuery);
@@ -338,18 +312,39 @@ namespace Madera_MMB.CAD
         /// </summary>
         /// <param name="module"></param>
         /// <param name="refPlan"></param>
-        public void insertModule(Module module, string refPlan)
+        public void insertModule(Module module, Plan plan)
         {
             if (module.parent != null)
             {
                 SQLQuery = "REPLACE INTO module (coordonneeDebutX , coordonneeDebutY, colspan, rowspan, refMetaModule, refMetaparent, refPlan)" +
-                "VALUES (" + module.x + "," + module.y + "," + module.colspan + "," + module.rowspan + ",'" + module.meta.reference + "','" + module.parent.reference + "','" + refPlan + "');";
+                "VALUES (" + module.x + "," + module.y + "," + module.colspan + "," + module.rowspan + ",'" + module.meta.reference + "','" + module.parent.reference + "','" + plan.reference + "');";
             }
             else
             {
                 SQLQuery = "REPLACE INTO module (coordonneeDebutX, coordonneeDebutY, colspan, rowspan, refMetaModule, refMetaparent, refPlan)" +
-                "VALUES (" + module.x + "," + module.y + "," + module.colspan + "," + module.rowspan + ",'" + module.meta.reference + "','none','" + refPlan + "');";
+                "VALUES (" + module.x + "," + module.y + "," + module.colspan + "," + module.rowspan + ",'" + module.meta.reference + "','none','" + plan.reference + "');";
             }
+            conn.InsertSQliteQuery(SQLQuery);
+        }
+
+        /// <summary>
+        /// Met à jour la date de modification d'un plan
+        /// </summary>
+        /// <param name="plan"></param>
+        public void MajDateModifPlan(Plan plan)
+        {
+            SQLQuery = "UPDATE plan SET dateModification = '" + plan.modification + "' WHERE plan.reference = '" + plan.reference + "';";
+            conn.InsertSQliteQuery(SQLQuery);
+            MajDateModifProjet(plan);
+        }
+
+        /// <summary>
+        /// Met à jour la date de modification du projet d'un plan
+        /// </summary>
+        /// <param name="plan"></param>
+        public void MajDateModifProjet(Plan plan)
+        {
+            SQLQuery = "UPDATE projet SET dateModification = '" + plan.modification + "' WHERE projet.reference = '" + plan.projet.reference + "';";
             conn.InsertSQliteQuery(SQLQuery);
         }
 

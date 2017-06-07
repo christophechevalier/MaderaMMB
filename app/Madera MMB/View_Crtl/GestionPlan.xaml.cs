@@ -99,6 +99,7 @@ namespace Madera_MMB.View_Crtl
             Plan plan2 = plan;
             plan2.label += "(copy)";
             plan2.reference = generateKey(projet, 1);
+            plan2.creation = DateTime.Now.ToString();
             Trace.WriteLine("plan2 Reference : " + plan2.reference);
 
             planCAD.InsertPlan(plan2);
